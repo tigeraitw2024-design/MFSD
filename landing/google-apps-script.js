@@ -16,7 +16,7 @@
  * 9. 完成！
  */
 
-const SHEET_ID = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
+const SHEET_ID = '1cua3wvQo747ecj7iXA5WFh17Rf-u2sIjTEyHeTh2erk';
 const SHEET_NAME = '報名名單'; // 工作表名稱（分頁名，非 Sheet 檔名）
 
 const HEADERS = [
