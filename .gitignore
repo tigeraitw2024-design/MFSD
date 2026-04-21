@@ -1,6 +1,9 @@
 # 大型素材（mp4、pptx 等），GitHub 單檔 100MB 限制，請用雲端硬碟/NAS 同步
 資料放置區/
 
+# PPT 預覽暫存
+_preview/
+
 # Claude Code 本機設定與 skills（每台電腦各自安裝）
 .claude/
 
