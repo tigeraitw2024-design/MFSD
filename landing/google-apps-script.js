@@ -28,12 +28,14 @@ const HEADERS = [
   '公司地址',
   '資格判定',
   '姓名',
-  '職稱',
+  '角色',
   '手機',
   'Email',
-  '員工數',
-  '痛點',
-  '時段偏好',
+  '公司規模',
+  'AI 導入階段',
+  '想優先改善的場景',
+  '希望達成的目標',
+  '預計導入時程',
   '備註'
 ];
 
@@ -60,12 +62,14 @@ function doPost(e) {
       data.address || '',
       data.eligibility || '',
       data.name || '',
-      data.position || '',
+      data.role || '',
       data.phone || '',
       data.email || '',
-      data.employees || '',
-      data.problems || '',
-      data.timeslot || '',
+      data.companySize || '',
+      data.aiStage || '',
+      data.priorityScenarios || '',
+      data.aiGoals || '',
+      data.timeline || '',
       data.notes || ''
     ];
     sheet.appendRow(row);

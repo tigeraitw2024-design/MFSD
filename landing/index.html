@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="經濟部補助｜虎智科技執行｜製造業 AI 轉型培訓，限 50 家名額，輸入統編立即查詢資格">
+<meta name="description" content="製造業兩大補助方案｜免費 AI 實戰課程（工具機上下游）+ 10 萬 AI 工具補助（全 C 類製造業）｜虎智科技執行｜輸入統編立即判定資格">
 <title>製造業 AI 轉型補助｜虎智科技 TigerAI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -131,6 +131,29 @@
     .hero-title { font-size: 2.25rem !important; line-height: 1.2 !important; }
     .hero-subtitle { font-size: 1rem !important; }
   }
+  /* 漸進揭示 */
+  .progressive {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease, opacity 0.5s ease 0.1s;
+    pointer-events: none;
+  }
+  .progressive.revealed {
+    max-height: 4000px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .unlock-hint {
+    background: rgba(234, 179, 8, 0.08);
+    border: 1px dashed rgba(234, 179, 8, 0.4);
+    color: #FCD34D;
+  }
+  .unlock-hint.done {
+    background: rgba(0, 168, 150, 0.08);
+    border-color: rgba(0, 168, 150, 0.4);
+    color: #00E5CC;
+  }
 </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -166,17 +189,17 @@
   <div class="max-w-5xl mx-auto text-center relative">
     <!-- Badges -->
     <div class="inline-flex flex-wrap justify-center gap-2 mb-6 animate-fade-in">
-      <span class="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-bright text-xs sm:text-sm font-medium">政府補助</span>
-      <span class="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-bright text-xs sm:text-sm font-medium">免費培訓</span>
-      <span class="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-bright text-xs sm:text-sm font-medium">限 50 家</span>
+      <span class="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-bright text-xs sm:text-sm font-medium">免費 AI 實戰課程</span>
+      <span class="px-3 py-1 rounded-full bg-yellow-500/20 border border-yellow-500/40 text-yellow-400 text-xs sm:text-sm font-medium">最高 41 萬 AI 導入補助</span>
+      <span class="px-3 py-1 rounded-full bg-teal-500/20 border border-teal-500/40 text-teal-bright text-xs sm:text-sm font-medium">虎智一站式承辦</span>
     </div>
     <h1 class="hero-title text-4xl sm:text-5xl md:text-6xl font-black text-white mb-6 animate-fade-in-up leading-tight">
-      製造業 AI 轉型補助<br>
-      <span class="bg-gradient-to-r from-teal-bright to-teal-500 bg-clip-text text-transparent">讓你的銷售團隊 一人頂三人</span>
+      製造業 AI 轉型兩大補助<br>
+      <span class="bg-gradient-to-r from-teal-bright to-teal-500 bg-clip-text text-transparent">免費課程 + 10 萬 AI 工具</span>
     </h1>
     <p class="hero-subtitle text-lg sm:text-xl text-gray-300 mb-10 animate-fade-in-up max-w-3xl mx-auto">
-      經濟部補助｜虎智科技執行｜n8n 工作流自動化實戰課程<br class="hidden sm:block">
-      <span class="text-teal-bright">報表產製、AI 客服、通路預警</span> 全面升級，無需程式基礎
+      經濟部產業競爭力輔導團 × 中小及新創企業署｜虎智科技執行 & 工具上架<br class="hidden sm:block">
+      <span class="text-teal-bright">30 秒輸入統編，自動判定你能申請哪些方案</span>
     </p>
 
     <!-- 統編查詢框 -->
@@ -286,44 +309,82 @@
   </div>
 </section>
 
-<!-- ════════ 補助資訊 ════════ -->
+<!-- ════════ 補助資訊（兩方案）════════ -->
 <section id="subsidy" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-12">
       <div class="inline-block"><span class="floating-line"></span><span class="text-teal-bright text-sm font-medium">SUBSIDY</span></div>
-      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">50 家名額 · 免費參訓 · 手把手輔導</h2>
+      <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">兩種補助方案 · 可同時申請</h2>
+      <p class="text-gray-400 mt-3">虎智科技同時是「免費課程」執行單位，也是經濟部 AI 工具庫上架廠商</p>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="card-glass rounded-2xl p-6 text-center">
-        <div class="text-teal-bright font-black text-2xl">免費</div>
-        <div class="text-gray-400 text-sm mt-1">政府補助</div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- 方案 A -->
+      <div class="card-glass rounded-2xl p-6 sm:p-8 border-t-4 border-teal-bright">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-2 py-1 rounded-md bg-teal-500/20 text-teal-bright text-xs font-bold">方案 A</span>
+          <span class="text-gray-400 text-xs">限工具機上下游產業</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-white mb-3">免費 AI 實戰課程</h3>
+        <div class="text-teal-bright font-black text-3xl mb-1">100% 免費</div>
+        <p class="text-gray-400 text-sm mb-5">政府全額補助 · 虎智執行</p>
+        <ul class="space-y-2 text-gray-300 text-sm">
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>50 家企業 / 300 人培訓人次</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>1 天 6 小時 × 15 班次</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>當天帶走可上線的 n8n 流程</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>30 天 LINE 顧問支援</li>
+        </ul>
+        <div class="mt-5 pt-4 border-t border-teal-500/20 text-xs text-gray-500">
+          上位計畫：115 年度智慧化經營效能計畫
+        </div>
       </div>
-      <div class="card-glass rounded-2xl p-6 text-center">
-        <div class="text-teal-bright font-black text-2xl">300 人</div>
-        <div class="text-gray-400 text-sm mt-1">培訓人次</div>
-      </div>
-      <div class="card-glass rounded-2xl p-6 text-center">
-        <div class="text-teal-bright font-black text-2xl">50 家</div>
-        <div class="text-gray-400 text-sm mt-1">企業名額</div>
-      </div>
-      <div class="card-glass rounded-2xl p-6 text-center">
-        <div class="text-teal-bright font-black text-2xl">全台適用</div>
-        <div class="text-gray-400 text-sm mt-1">北中南</div>
+
+      <!-- 方案 B -->
+      <div class="card-glass rounded-2xl p-6 sm:p-8 border-t-4 border-yellow-500">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="px-2 py-1 rounded-md bg-yellow-500/20 text-yellow-400 text-xs font-bold">方案 B</span>
+          <span class="text-gray-400 text-xs">全 C 類製造業適用</span>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-white mb-3">AI 輔導診斷 + 10 萬 AI 工具</h3>
+        <div class="text-yellow-400 font-black text-3xl mb-1">最高 41 萬</div>
+        <p class="text-gray-400 text-sm mb-5">經濟部產業競爭力輔導團 · 虎智 OpenGenie 已上架</p>
+        <ul class="space-y-2 text-gray-300 text-sm">
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>專家訪視診斷 19 萬（企業自付 1 萬）</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>AI 工具採購補助 10 萬（憑單據核銷）</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>員工培訓 Coupon 上限 12 萬</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>輔導期限 4 個月為原則</li>
+        </ul>
+        <div class="mt-5 pt-4 border-t border-yellow-500/20 text-xs text-gray-500">
+          平台：<a href="https://eii.nat.gov.tw/moeai-plus/" target="_blank" class="text-yellow-400 hover:underline">eii.nat.gov.tw/moeai-plus</a>
+        </div>
       </div>
     </div>
+
     <div class="mt-8 card-glass rounded-2xl p-6 sm:p-8">
+      <div class="text-center mb-5">
+        <div class="text-teal-bright text-sm font-bold">兩方案可同時申請</div>
+        <p class="text-gray-400 text-sm mt-1">工具機上下游廠商最划算：免費上課學實戰 + 10 萬工具落地導入</p>
+      </div>
       <div class="grid md:grid-cols-2 gap-6">
         <div>
-          <div class="text-teal-bright text-sm font-medium mb-2">課程期程</div>
-          <p class="text-white font-bold">2026 年 5 月 – 10 月</p>
+          <div class="text-teal-bright text-sm font-medium mb-2">課程期程（方案 A）</div>
+          <p class="text-white font-bold">2026 年 5 月起 · 15 班次滾動開放</p>
+        </div>
+        <div>
+          <div class="text-teal-bright text-sm font-medium mb-2">輔導期（方案 B）</div>
+          <p class="text-white font-bold">送件 → 診斷 → 導入 → 核銷 · 4 個月</p>
         </div>
         <div>
           <div class="text-teal-bright text-sm font-medium mb-2">授課方式</div>
           <p class="text-white font-bold">實體 + 線上混合授課</p>
         </div>
         <div>
-          <div class="text-teal-bright text-sm font-medium mb-2">講師</div>
-          <p class="text-white font-bold">虎智科技資深 AI 導入顧問</p>
+          <div class="text-teal-bright text-sm font-medium mb-2">虎智 AI 工具</div>
+          <p class="text-white font-bold">TigerAI OpenGenie（地端 ChatGPT）</p>
+        </div>
+        <div>
+          <div class="text-teal-bright text-sm font-medium mb-2">覆蓋區域</div>
+          <p class="text-white font-bold">全台適用 · 中南部優先</p>
         </div>
         <div>
           <div class="text-teal-bright text-sm font-medium mb-2">課後支援</div>
@@ -341,26 +402,41 @@
       <div class="inline-block"><span class="floating-line"></span><span class="text-teal-bright text-sm font-medium">WHO FITS</span></div>
       <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">我們為你而來</h2>
     </div>
-    <div class="grid md:grid-cols-2 gap-6">
-      <div class="card-glass rounded-2xl p-6 sm:p-8 border-l-4 border-teal-500">
-        <h3 class="text-xl font-bold text-teal-bright mb-4 flex items-center gap-2">適合報名</h3>
-        <ul class="space-y-3 text-gray-300">
-          <li class="flex gap-2"><span class="text-teal-bright">▸</span>C 製造業（食品、金屬、機械、電子等）</li>
-          <li class="flex gap-2"><span class="text-teal-bright">▸</span>員工數 200 人以下</li>
-          <li class="flex gap-2"><span class="text-teal-bright">▸</span>資本額 1 億以下</li>
-          <li class="flex gap-2"><span class="text-teal-bright">▸</span>台灣全國皆可報名</li>
-          <li class="flex gap-2"><span class="text-teal-bright">▸</span>想用 AI 但公司沒有 IT 人員</li>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-glass rounded-2xl p-6 sm:p-8 border-l-4 border-teal-bright">
+        <div class="text-xs font-bold text-teal-bright mb-1">完全符合 · A + B 全拿</div>
+        <h3 class="text-lg font-bold text-white mb-4">工具機上下游產業</h3>
+        <ul class="space-y-2 text-gray-300 text-sm">
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>金屬鑄造 / 金屬加工 / 模具</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>機械設備 / CNC / 工具機</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>機械安裝 / 產線整合</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>汽車零件 / 電子零組件</li>
+          <li class="flex gap-2"><span class="text-teal-bright">▸</span>五金 / 機械 / 電子材料批發</li>
         </ul>
+        <div class="mt-4 pt-3 border-t border-teal-500/20 text-xs text-teal-bright">免費課程 + 10 萬 AI 工具</div>
+      </div>
+      <div class="card-glass rounded-2xl p-6 sm:p-8 border-l-4 border-yellow-500">
+        <div class="text-xs font-bold text-yellow-400 mb-1">部分符合 · 方案 B</div>
+        <h3 class="text-lg font-bold text-white mb-4">其他 C 大類製造業</h3>
+        <ul class="space-y-2 text-gray-300 text-sm">
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>食品 / 飲料 / 紡織 / 成衣</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>化工 / 塑膠 / 橡膠 / 藥品</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>電力設備 / 電腦光學</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>家具 / 紙印 / 木竹 / 其他</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>資本額 1 億以下</li>
+        </ul>
+        <div class="mt-4 pt-3 border-t border-yellow-500/20 text-xs text-yellow-400">10 萬 AI 工具補助（方案 B）</div>
       </div>
       <div class="card-glass rounded-2xl p-6 sm:p-8 border-l-4 border-red-500/50">
-        <h3 class="text-xl font-bold text-red-400 mb-4 flex items-center gap-2">不太適合</h3>
-        <ul class="space-y-3 text-gray-300">
-          <li class="flex gap-2"><span class="text-red-400">▸</span>非製造業（零售、服務業等請洽其他補助）</li>
-          <li class="flex gap-2"><span class="text-red-400">▸</span>員工數超過 200 人</li>
+        <div class="text-xs font-bold text-red-400 mb-1">暫不符合</div>
+        <h3 class="text-lg font-bold text-white mb-4">不太適合</h3>
+        <ul class="space-y-2 text-gray-300 text-sm">
+          <li class="flex gap-2"><span class="text-red-400">▸</span>非製造業（零售、服務業）</li>
           <li class="flex gap-2"><span class="text-red-400">▸</span>資本額超過 1 億</li>
+          <li class="flex gap-2"><span class="text-red-400">▸</span>歇業 / 解散 / 撤銷狀態</li>
           <li class="flex gap-2"><span class="text-red-400">▸</span>陸資企業、外商在台分公司</li>
-          <li class="flex gap-2"><span class="text-red-400">▸</span>大型集團子公司</li>
         </ul>
+        <div class="mt-4 pt-3 border-t border-red-500/20 text-xs text-red-400">服務業請改申請服務業方案</div>
       </div>
     </div>
   </div>
@@ -392,31 +468,6 @@
         <div class="text-gray-400 text-sm mt-1">政府指定單位</div>
       </div>
     </div>
-    <div class="mt-8 card-glass rounded-2xl p-6 sm:p-8">
-      <div class="text-center text-gray-300">
-        <div class="text-teal-bright text-sm font-medium mb-5">合作與背書單位</div>
-        <div class="flex flex-wrap justify-center items-start gap-6 sm:gap-10">
-          <div class="flex flex-col items-center gap-2 max-w-[180px]">
-            <div class="bg-white rounded-md px-2 py-1.5 flex items-center">
-              <img src="assets/partner-moea.png" alt="經濟部中小及新創企業署" class="h-7 sm:h-8 object-contain">
-            </div>
-            <span class="text-xs sm:text-sm leading-tight">經濟部中小及新創企業署</span>
-          </div>
-          <div class="flex flex-col items-center gap-2 max-w-[180px]">
-            <div class="bg-white rounded-md px-2 py-1.5 flex items-center">
-              <img src="assets/partner-software.png" alt="中華民國資訊軟體服務商業同業公會" class="h-7 sm:h-8 object-contain">
-            </div>
-            <span class="text-xs sm:text-sm leading-tight">中華民國資訊軟體服務商業同業公會</span>
-          </div>
-          <div class="flex flex-col items-center gap-2 max-w-[180px]">
-            <div class="bg-white rounded-md px-2 py-1.5 flex items-center">
-              <img src="assets/partner-toolmachine.png" alt="台灣工具機暨零組件工業同業公會" class="h-7 sm:h-8 object-contain">
-            </div>
-            <span class="text-xs sm:text-sm leading-tight">台灣工具機暨零組件工業同業公會</span>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -428,6 +479,34 @@
       <h2 class="text-3xl sm:text-4xl font-black text-white mt-2">常見問題</h2>
     </div>
     <div class="space-y-3">
+      <details class="card-glass rounded-xl p-5 group" open>
+        <summary class="flex justify-between items-center">
+          <span class="text-white font-bold">方案 A 和方案 B 有什麼差別？可以同時申請嗎？</span>
+          <span class="faq-icon text-teal-bright text-2xl">+</span>
+        </summary>
+        <div class="text-gray-400 mt-3 leading-relaxed space-y-2">
+          <p><span class="text-teal-bright font-bold">方案 A（免費課程）</span>：虎智標下的 240 萬培訓案，只給工具機上下游產業的 50 家企業上課，100% 免費。</p>
+          <p><span class="text-yellow-400 font-bold">方案 B（10 萬 AI 工具）</span>：經濟部產業競爭力輔導團的補助，全 C 類製造業都可申請，含 19 萬專家診斷（企業付 1 萬）+ 10 萬工具補助 + 12 萬培訓 Coupon。</p>
+          <p>工具機上下游廠商可同時申請 A + B，總效益 = 免費上課 + 41 萬補助。</p>
+        </div>
+      </details>
+      <details class="card-glass rounded-xl p-5 group">
+        <summary class="flex justify-between items-center">
+          <span class="text-white font-bold">為什麼工具機上下游才能免費上課？</span>
+          <span class="faq-icon text-teal-bright text-2xl">+</span>
+        </summary>
+        <p class="text-gray-400 mt-3 leading-relaxed">方案 A 是虎智 2025 年標下「115 年度智慧化經營效能計畫」的 240 萬培訓案，政府指定次產業為機械設備製造業（工具機上下游）。比對「所營事業資料」的營業項目代碼（CB01010、CQ01010、F113010…等），屬於工具機上下游產業鏈的企業才符合此次標案範圍。其他 C 類製造業請申請方案 B。</p>
+      </details>
+      <details class="card-glass rounded-xl p-5 group">
+        <summary class="flex justify-between items-center">
+          <span class="text-white font-bold">方案 B 的 10 萬 AI 工具補助怎麼申請？</span>
+          <span class="faq-icon text-teal-bright text-2xl">+</span>
+        </summary>
+        <div class="text-gray-400 mt-3 leading-relaxed space-y-2">
+          <p>到經濟部產業競爭力輔導團官網（<a href="https://eii.nat.gov.tw/moeai-plus/" target="_blank" class="text-teal-bright hover:underline">eii.nat.gov.tw/moeai-plus</a>）送件。流程：送件 → 資格審 5 天 → 區域分案 5 天 → 次輔導團分案 5 天 → 訪視診斷 60 天 → 工具導入 30 天 → 核銷 15 天。輔導期 4 個月。</p>
+          <p>虎智的 OpenGenie（地端 ChatGPT）已上架「AI 工具庫」人員及知識管理類，定價 NT$ 100,000 / 12 個月，剛好對應 10 萬工具額度全額核銷。</p>
+        </div>
+      </details>
       <details class="card-glass rounded-xl p-5 group">
         <summary class="flex justify-between items-center">
           <span class="text-white font-bold">我不會寫程式，可以學嗎？</span>
@@ -437,31 +516,17 @@
       </details>
       <details class="card-glass rounded-xl p-5 group">
         <summary class="flex justify-between items-center">
-          <span class="text-white font-bold">課程真的完全免費嗎？有沒有隱藏費用？</span>
-          <span class="faq-icon text-teal-bright text-2xl">+</span>
-        </summary>
-        <p class="text-gray-400 mt-3 leading-relaxed">免費。由經濟部中小及新創企業署補助，虎智科技負責執行。你只需要投入時間上課。n8n 工具本身也有免費版本可使用。</p>
-      </details>
-      <details class="card-glass rounded-xl p-5 group">
-        <summary class="flex justify-between items-center">
           <span class="text-white font-bold">課程時段怎麼安排？</span>
           <span class="faq-icon text-teal-bright text-2xl">+</span>
         </summary>
-        <p class="text-gray-400 mt-3 leading-relaxed">單日 6 小時集中授課（含午休）。共開 15 班次滾動開放，你可挑選最適合的梯次時段；顧問會依報名狀況協調最終上課日期與地點。</p>
+        <p class="text-gray-400 mt-3 leading-relaxed">方案 A 單日 6 小時集中授課（含午休）。共開 15 班次滾動開放，你可挑選最適合的梯次時段；顧問會依報名狀況協調最終上課日期與地點。</p>
       </details>
       <details class="card-glass rounded-xl p-5 group">
         <summary class="flex justify-between items-center">
           <span class="text-white font-bold">上完課之後還有支援嗎？</span>
           <span class="faq-icon text-teal-bright text-2xl">+</span>
         </summary>
-        <p class="text-gray-400 mt-3 leading-relaxed">有。課後 30 天提供 LINE 顧問諮詢、流程範本延伸使用、企業導入諮詢。虎智科技也有進階顧問方案可選購。</p>
-      </details>
-      <details class="card-glass rounded-xl p-5 group">
-        <summary class="flex justify-between items-center">
-          <span class="text-white font-bold">可以派幾個人來上課？</span>
-          <span class="faq-icon text-teal-bright text-2xl">+</span>
-        </summary>
-        <p class="text-gray-400 mt-3 leading-relaxed">每家企業建議派 2-3 位人員，分別負責業務、IT/數據、主管角色。這樣導入流程在課後落地更順利。</p>
+        <p class="text-gray-400 mt-3 leading-relaxed">有。課後 30 天提供 LINE 顧問諮詢、流程範本延伸使用、企業導入諮詢。想再升級導入方案 B 的 AI 工具也可直接由虎智協助送件。</p>
       </details>
     </div>
   </div>
@@ -478,7 +543,7 @@
     <form id="signupForm" class="card-glass rounded-2xl p-6 sm:p-8 space-y-6">
       <!-- 公司資訊區 -->
       <div>
-        <h3 class="text-teal-bright text-sm font-bold mb-3 flex items-center gap-2">公司資訊</h3>
+        <h3 class="text-teal-bright text-sm font-bold mb-3">公司資訊</h3>
         <div id="companyInfoBox" class="p-4 rounded-lg bg-navy-700/30 border border-teal-500/20">
           <p class="text-gray-400 text-sm">尚未查詢公司資料</p>
           <a href="#" onclick="document.getElementById('taxIdInput').focus();window.scrollTo({top:0,behavior:'smooth'});return false;" class="text-teal-bright text-sm hover:underline">↑ 回到上方輸入統編</a>
@@ -491,76 +556,120 @@
         <input type="hidden" id="f_eligibility" name="eligibility">
       </div>
 
-      <!-- 聯絡人資料 -->
-      <div class="grid sm:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">姓名 <span class="text-red-400">*</span></label>
-          <input type="text" id="f_name" name="name" required class="form-input w-full px-4 py-3 rounded-lg" placeholder="王大明">
+      <!-- 聯絡窗口 -->
+      <div>
+        <h3 class="text-teal-bright text-sm font-bold mb-3">聯絡窗口</h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">姓名 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_name" name="name" required class="form-input w-full px-4 py-3 rounded-lg" placeholder="王大明">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">角色 <span class="text-red-400">*</span></label>
+            <select id="f_role" name="role" required class="form-input w-full px-4 py-3 rounded-lg">
+              <option value="">請選擇</option>
+              <option value="資訊主管">資訊主管</option>
+              <option value="數位轉型負責人">數位轉型負責人</option>
+              <option value="部門主管">部門主管</option>
+              <option value="經營管理層">經營管理層</option>
+              <option value="專案窗口">專案窗口</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">手機 <span class="text-red-400">*</span></label>
+            <input type="tel" id="f_phone" name="phone" required pattern="09[0-9]{8}" class="form-input w-full px-4 py-3 rounded-lg" placeholder="0912345678">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">Email <span class="text-red-400">*</span></label>
+            <input type="email" id="f_email" name="email" required class="form-input w-full px-4 py-3 rounded-lg" placeholder="you@example.com">
+          </div>
         </div>
+      </div>
+
+      <!-- 解鎖提示 -->
+      <div id="unlockHint" class="unlock-hint rounded-xl px-4 py-3 text-sm flex items-center gap-2">
+        <span id="unlockIcon">🔒</span>
+        <span id="unlockText">完成上方公司查詢與聯絡窗口，即可進入後續需求評估</span>
+      </div>
+
+      <!-- 漸進揭示區 -->
+      <div id="progressiveArea" class="progressive space-y-6">
+
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">職稱 <span class="text-red-400">*</span></label>
-          <select id="f_position" name="position" required class="form-input w-full px-4 py-3 rounded-lg">
+          <h3 class="text-teal-bright text-sm font-bold mb-3">公司規模</h3>
+          <select id="f_companySize" name="companySize" class="form-input w-full px-4 py-3 rounded-lg">
             <option value="">請選擇</option>
-            <option value="負責人/老闆">負責人 / 老闆</option>
-            <option value="主管">主管</option>
-            <option value="專員">專員</option>
+            <option value="50人以下">50 人以下</option>
+            <option value="51-200人">51-200 人</option>
+            <option value="201-1000人">201-1000 人</option>
+            <option value="1000人以上">1000 人以上</option>
+          </select>
+        </div>
+
+        <div>
+          <h3 class="text-teal-bright text-sm font-bold mb-3">目前 AI 導入階段</h3>
+          <select id="f_aiStage" name="aiStage" class="form-input w-full px-4 py-3 rounded-lg">
+            <option value="">請選擇</option>
+            <option value="有興趣，尚未開始">有興趣，尚未開始</option>
+            <option value="已有零星試用">已有零星試用</option>
+            <option value="已有PoC">已有 PoC</option>
+            <option value="已有正式導入">已有正式導入</option>
+            <option value="已跨部門推進">已跨部門推進</option>
             <option value="其他">其他</option>
           </select>
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">手機 <span class="text-red-400">*</span></label>
-          <input type="tel" id="f_phone" name="phone" required pattern="09[0-9]{8}" class="form-input w-full px-4 py-3 rounded-lg" placeholder="0912345678">
+          <h3 class="text-teal-bright text-sm font-bold mb-3">想優先改善的場景 <span class="text-gray-500 text-xs font-normal">（可複選）</span></h3>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="報價與接單" class="accent-teal-500"><span class="text-gray-300 text-sm">報價與接單</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="自動報表" class="accent-teal-500"><span class="text-gray-300 text-sm">自動報表</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="內部知識庫" class="accent-teal-500"><span class="text-gray-300 text-sm">內部知識庫</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="文件處理" class="accent-teal-500"><span class="text-gray-300 text-sm">文件處理</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="客服助理" class="accent-teal-500"><span class="text-gray-300 text-sm">客服助理</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="跨系統流程" class="accent-teal-500"><span class="text-gray-300 text-sm">跨系統流程</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="自動通知" class="accent-teal-500"><span class="text-gray-300 text-sm">自動通知</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="內控簽核" class="accent-teal-500"><span class="text-gray-300 text-sm">內控簽核</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="營運分析" class="accent-teal-500"><span class="text-gray-300 text-sm">營運分析</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="地端AI" class="accent-teal-500"><span class="text-gray-300 text-sm">地端 AI</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="priorityScenarios" value="其他" class="accent-teal-500"><span class="text-gray-300 text-sm">其他</span></label>
+          </div>
         </div>
+
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">Email <span class="text-red-400">*</span></label>
-          <input type="email" id="f_email" name="email" required class="form-input w-full px-4 py-3 rounded-lg" placeholder="you@example.com">
+          <h3 class="text-teal-bright text-sm font-bold mb-3">希望導入 AI 後達成的目標 <span class="text-gray-500 text-xs font-normal">（可複選）</span></h3>
+          <div class="grid sm:grid-cols-2 gap-2">
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="降低人工時間" class="accent-teal-500"><span class="text-gray-300 text-sm">降低人工時間</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="評估地端部署" class="accent-teal-500"><span class="text-gray-300 text-sm">評估地端部署</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="整合分散流程" class="accent-teal-500"><span class="text-gray-300 text-sm">整合分散流程</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="提升服務效率" class="accent-teal-500"><span class="text-gray-300 text-sm">提升服務效率</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="建立治理架構" class="accent-teal-500"><span class="text-gray-300 text-sm">建立治理架構</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="改善知識流動" class="accent-teal-500"><span class="text-gray-300 text-sm">改善知識流動</span></label>
+            <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2"><input type="checkbox" name="aiGoals" value="其他" class="accent-teal-500"><span class="text-gray-300 text-sm">其他</span></label>
+          </div>
         </div>
-      </div>
 
-      <!-- 公司規模 -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">公司員工人數 <span class="text-red-400">*</span></label>
-        <select id="f_employees" name="employees" required class="form-input w-full px-4 py-3 rounded-lg">
-          <option value="">請選擇</option>
-          <option value="1-5人">1-5 人</option>
-          <option value="6-30人">6-30 人</option>
-          <option value="31-100人">31-100 人</option>
-          <option value="101-200人">101-200 人</option>
-          <option value="201人以上">201 人以上</option>
-        </select>
-      </div>
-
-      <!-- 想解決的問題 -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-3">你最想解決的問題？<span class="text-gray-500 text-xs">（可複選）</span></label>
-        <div class="grid sm:grid-cols-2 gap-2">
-          <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2">
-            <input type="checkbox" name="problems" value="銷售報表太耗時" class="accent-teal-500">
-            <span class="text-gray-300 text-sm">銷售報表太耗時</span>
-          </label>
-          <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2">
-            <input type="checkbox" name="problems" value="客服人力不足" class="accent-teal-500">
-            <span class="text-gray-300 text-sm">客服人力不足</span>
-          </label>
-          <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2">
-            <input type="checkbox" name="problems" value="多通路資料整合困難" class="accent-teal-500">
-            <span class="text-gray-300 text-sm">多通路資料整合困難</span>
-          </label>
-          <label class="checkbox-label p-3 rounded-lg cursor-pointer flex items-center gap-2">
-            <input type="checkbox" name="problems" value="不知道 AI 怎麼用" class="accent-teal-500">
-            <span class="text-gray-300 text-sm">不知道 AI 怎麼用</span>
-          </label>
+        <div>
+          <h3 class="text-teal-bright text-sm font-bold mb-3">預計導入 AI 時程</h3>
+          <select id="f_timeline" name="timeline" class="form-input w-full px-4 py-3 rounded-lg">
+            <option value="">請選擇</option>
+            <option value="立即啟動">立即啟動</option>
+            <option value="3個月內">3 個月內</option>
+            <option value="6個月內">6 個月內</option>
+            <option value="年度規劃中">年度規劃中</option>
+          </select>
         </div>
-      </div>
 
-      <!-- 備註 -->
-      <div>
-        <label class="block text-sm font-medium text-gray-300 mb-2">備註 <span class="text-gray-500 text-xs">（選填）</span></label>
-        <textarea id="f_notes" name="notes" rows="3" class="form-input w-full px-4 py-3 rounded-lg" placeholder="想了解的其他資訊..."></textarea>
+        <div>
+          <h3 class="text-teal-bright text-sm font-bold mb-3">備註 <span class="text-gray-500 text-xs font-normal">（選填）</span></h3>
+          <textarea id="f_notes" name="notes" rows="3" class="form-input w-full px-4 py-3 rounded-lg" placeholder="想了解的其他資訊..."></textarea>
+        </div>
+
       </div>
 
       <!-- 提交 -->
-      <button type="submit" id="submitBtn" class="btn-primary w-full text-white font-black text-lg py-4 rounded-xl">
+      <button type="submit" id="submitBtn" class="btn-primary w-full text-white font-black text-lg py-4 rounded-xl" disabled>
         送出報名，預約顧問回電
       </button>
       <p class="text-xs text-gray-500 text-center">送出即表示同意虎智科技蒐集與使用您的聯絡資訊</p>
@@ -612,8 +721,19 @@
 const CONFIG = {
   // Google Apps Script Web App URL（部署步驟見 README）
   SHEET_WEBHOOK: 'https://script.google.com/macros/s/AKfycbz6tXliyqtf72MPTlzLa4wbvX0ysscYNnZOibZDqlIeRQJUgRKHqwNT6dyF_Lw5lDeB-Q/exec',
-  // 製造業 C 大類中類碼（前兩碼 08-34）
+  // 製造業 C 大類中類碼（前兩碼 08-34）→ 對應方案 B：10 萬 AI 工具補助（全 C 類適用）
   MANUFACTURING_CODES: ['08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34'],
+  // 工具機上下游營業項目代碼 → 對應方案 A：免費 AI 實戰課程（限工具機上下游產業鏈）
+  TOOL_MACHINE_CODES: [
+    'CA01030', 'CA01050', 'CA02010',              // 上游：金屬材料、金屬結構
+    'CB01010', 'CB01990',                          // 上游/核心：機械設備、其他機械
+    'CC01010', 'CC01080',                          // 上游：發電輸配電機械、電子零組件
+    'CD01030',                                     // 下游：汽車及其零件
+    'CQ01010',                                     // 上游：模具
+    'C103050', 'C302010', 'C805030',              // 下游：罐頭食品、紡織製成品、塑膠日用品
+    'E604010', 'E605010',                          // 核心：機械安裝、電腦設備安裝
+    'F106010', 'F113010', 'F119010'                // 供應鏈：五金、機械、電子材料批發
+  ],
   // 資本額上限（NT$）
   CAPITAL_LIMIT: 100000000
 };
@@ -674,6 +794,20 @@ function parseCompany(data, taxId) {
   // 稅籍行業（財政部.行業 為二維陣列 [[code, name], ...]）
   const industries = Array.isArray(mof['行業']) ? mof['行業'] : [];
   const primary = industries.length > 0 ? industries[0] : ['', ''];
+  // 所營事業資料（營業項目代碼，判斷工具機上下游用）
+  // g0v 回傳格式多樣，統一整理為 [[code, desc], ...]
+  const raw = root['所營事業資料'];
+  const businessItems = [];
+  if (Array.isArray(raw)) {
+    raw.forEach(item => {
+      if (Array.isArray(item)) {
+        businessItems.push([String(item[0] || ''), String(item[1] || '')]);
+      } else if (typeof item === 'string') {
+        const m = item.match(/^([A-Z]{1,2}\d{5,6})\s*(.*)$/);
+        if (m) businessItems.push([m[1], m[2]]);
+      }
+    });
+  }
   return {
     taxId,
     name,
@@ -682,7 +816,8 @@ function parseCompany(data, taxId) {
     address,
     industryCode: String(primary[0] || ''),
     industryDesc: String(primary[1] || ''),
-    allIndustries: industries
+    allIndustries: industries,
+    businessItems
   };
 }
 
@@ -692,12 +827,35 @@ function evaluateEligibility(c) {
   const isActive = c.status && !/(歇業|解散|撤銷|廢止|停業)/.test(c.status);
   checks.push({ pass: isActive, label: '公司營業狀態正常', detail: c.status || '未知' });
 
-  // 2. 行業別：只要稅籍任一行業屬製造業 C08-C34 即符合
+  // 2. 工具機上下游：比對「所營事業資料」營業項目代碼（對應方案 A：免費課程）
+  const toolMachineItem = (c.businessItems || []).find(pair =>
+    CONFIG.TOOL_MACHINE_CODES.includes(String(pair[0] || '').toUpperCase())
+  );
+  const isToolMachine = !!toolMachineItem;
+
+  // 3. 行業別：只要稅籍任一行業屬製造業 C08-C34 即符合（方案 B：10 萬 AI 工具）
   const mfgItem = (c.allIndustries || []).find(pair => {
     const prefix = String(pair[0] || '').substring(0, 2);
     return CONFIG.MANUFACTURING_CODES.includes(prefix);
   });
   const isManufacturing = !!mfgItem;
+
+  // 方案 A 檢查顯示
+  let toolMachineDetail;
+  if (isToolMachine) {
+    toolMachineDetail = `${toolMachineItem[0]} ${toolMachineItem[1]}`;
+  } else if (c.businessItems.length === 0) {
+    toolMachineDetail = '無所營事業資料可比對';
+  } else {
+    toolMachineDetail = '所營事業未含工具機上下游代碼';
+  }
+  checks.push({
+    pass: isToolMachine,
+    label: '方案 A：工具機上下游產業（免費課程）',
+    detail: toolMachineDetail
+  });
+
+  // 方案 B 檢查顯示
   let industryDetail;
   if (c.allIndustries.length === 0) {
     industryDetail = '無稅籍行業資料';
@@ -709,11 +867,11 @@ function evaluateEligibility(c) {
   }
   checks.push({
     pass: isManufacturing,
-    label: '屬於製造業（C 大類）',
+    label: '方案 B：C 大類製造業（10 萬 AI 工具補助）',
     detail: industryDetail
   });
 
-  // 3. 資本額
+  // 4. 資本額
   const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
   checks.push({
     pass: capitalOK,
@@ -721,26 +879,33 @@ function evaluateEligibility(c) {
     detail: c.capital ? `NT$ ${formatMoney(c.capital)}` : '未知'
   });
 
-  // 總結
-  const passCount = checks.filter(x => x.pass).length;
-  let level, title, subtitle, color;
-  if (passCount === 3) {
-    level = 'green';
-    title = '完全符合資格';
-    subtitle = '歡迎立即報名';
-    color = 'teal';
-  } else if (passCount === 2) {
+  // 總結（兩段式）
+  let level, title, subtitle, programs;
+  if (isToolMachine && isActive && capitalOK) {
+    // 完全符合：A + B 都可申請
+    level = 'green_full';
+    title = '🎯 完全符合資格';
+    subtitle = '同時符合免費課程（方案 A）與 10 萬 AI 工具補助（方案 B）';
+    programs = ['免費 AI 實戰課程（100% 政府補助）', '10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon'];
+  } else if (isManufacturing && isActive && capitalOK) {
+    // 部分符合：僅符合 B（非工具機上下游的 C 類製造業）
+    level = 'green_partial';
+    title = '✅ 部分符合（方案 B）';
+    subtitle = '可申請 10 萬 AI 工具補助；免費課程資格將由顧問評估';
+    programs = ['10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon', '（免費課程：顧問評估）'];
+  } else if (isManufacturing || isToolMachine) {
+    // 是製造業但其他條件未過（狀態或資本）
     level = 'yellow';
-    title = '部分符合';
+    title = '⚠️ 部分符合';
     subtitle = '仍可報名，將由顧問評估';
-    color = 'yellow';
+    programs = ['顧問將依實際情況評估可申請方案'];
   } else {
     level = 'red';
-    title = '暫不符合';
-    subtitle = '建議聯絡虎智顧問，為你推薦其他方案';
-    color = 'red';
+    title = '❌ 暫不符合';
+    subtitle = '建議聯絡虎智顧問，為你推薦其他方案（如服務業方案）';
+    programs = [];
   }
-  return { level, title, subtitle, checks, passCount };
+  return { level, title, subtitle, checks, programs, isToolMachine, isManufacturing };
 }
 
 function formatMoney(n) {
@@ -759,18 +924,33 @@ function showResult(r) {
     return;
   }
   const { company: c, verdict: v } = r;
-  const borderClass = v.level === 'green' ? 'border-teal-500' : v.level === 'yellow' ? 'border-yellow-500' : 'border-red-500';
-  const titleClass = v.level === 'green' ? 'text-teal-bright' : v.level === 'yellow' ? 'text-yellow-400' : 'text-red-400';
+  const isGreen = v.level === 'green_full' || v.level === 'green_partial';
+  const borderClass = v.level === 'green_full' ? 'border-teal-bright'
+    : v.level === 'green_partial' ? 'border-teal-500'
+    : v.level === 'yellow' ? 'border-yellow-500'
+    : 'border-red-500';
+  const titleClass = v.level === 'green_full' ? 'text-teal-bright'
+    : v.level === 'green_partial' ? 'text-teal-bright'
+    : v.level === 'yellow' ? 'text-yellow-400'
+    : 'text-red-400';
 
   const checkHtml = v.checks.map(ch => `
     <div class="flex items-start gap-2 text-sm">
-      <span class="inline-block w-2 h-2 mt-2 rounded-full ${ch.pass ? 'bg-teal-bright' : 'bg-red-400'}"></span>
+      <span class="inline-block w-2 h-2 mt-2 rounded-full ${ch.pass ? 'bg-teal-bright' : 'bg-gray-500'}"></span>
       <div class="flex-1">
         <div class="text-gray-200 font-medium">${ch.label}</div>
         <div class="text-gray-500 text-xs">${ch.detail}</div>
       </div>
     </div>
   `).join('');
+
+  const programsHtml = (v.programs && v.programs.length > 0) ? `
+    <div class="mt-3 pt-3 border-t border-teal-500/10">
+      <div class="text-teal-bright text-xs font-bold mb-2">你可申請的方案</div>
+      <ul class="space-y-1">
+        ${v.programs.map(p => `<li class="text-gray-300 text-sm flex gap-2"><span class="text-teal-bright">▸</span><span>${p}</span></li>`).join('')}
+      </ul>
+    </div>` : '';
 
   const ctaHtml = v.level !== 'red'
     ? `<a href="#signup" onclick="fillCompanyToForm()" class="btn-primary block w-full text-center text-white font-bold py-3 rounded-lg mt-5">立即報名 / 聯絡顧問</a>`
@@ -791,6 +971,7 @@ function showResult(r) {
       <div class="space-y-2 mb-2">
         ${checkHtml}
       </div>
+      ${programsHtml}
       ${ctaHtml}
     </div>`;
 
@@ -808,8 +989,13 @@ function fillCompanyToForm() {
   document.getElementById('f_industry').value = `${c.industryCode} ${c.industryDesc}`.trim();
   document.getElementById('f_address').value = c.address;
   document.getElementById('f_eligibility').value = v.level;
-  const levelText = v.level === 'green' ? '完全符合' : v.level === 'yellow' ? '部分符合' : '暫不符合';
-  const levelColor = v.level === 'green' ? 'text-teal-bright' : v.level === 'yellow' ? 'text-yellow-400' : 'text-red-400';
+  const levelText = v.level === 'green_full' ? '完全符合 (A+B)'
+    : v.level === 'green_partial' ? '部分符合 (方案 B)'
+    : v.level === 'yellow' ? '部分符合'
+    : '暫不符合';
+  const levelColor = (v.level === 'green_full' || v.level === 'green_partial') ? 'text-teal-bright'
+    : v.level === 'yellow' ? 'text-yellow-400'
+    : 'text-red-400';
   document.getElementById('companyInfoBox').innerHTML = `
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1">
@@ -822,6 +1008,7 @@ function fillCompanyToForm() {
       </div>
       <span class="${levelColor} text-sm font-bold shrink-0">${levelText}</span>
     </div>`;
+  if (typeof refreshProgressive === 'function') refreshProgressive();
 }
 
 document.getElementById('signupForm').addEventListener('submit', async e => {
@@ -847,12 +1034,14 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     address: form.address.value,
     eligibility: form.eligibility.value,
     name: form.name.value,
-    position: form.position.value,
+    role: form.role.value,
     phone: form.phone.value,
     email: form.email.value,
-    employees: form.employees.value,
-    problems: Array.from(form.querySelectorAll('input[name="problems"]:checked')).map(x => x.value).join(', '),
-    timeslot: Array.from(form.querySelectorAll('input[name="timeslot"]:checked')).map(x => x.value).join(', '),
+    companySize: form.companySize.value,
+    aiStage: form.aiStage.value,
+    priorityScenarios: Array.from(form.querySelectorAll('input[name="priorityScenarios"]:checked')).map(x => x.value).join(', '),
+    aiGoals: Array.from(form.querySelectorAll('input[name="aiGoals"]:checked')).map(x => x.value).join(', '),
+    timeline: form.timeline.value,
     notes: form.notes.value
   };
 
@@ -883,15 +1072,75 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
   }
 });
 
-// 手機號碼即時驗證
-document.getElementById('f_phone').addEventListener('blur', e => {
-  const v = e.target.value;
-  if (v && !/^09\d{8}$/.test(v)) {
-    e.target.classList.add('error');
+// ══════════════════════ 漸進式揭示 ══════════════════════
+const progressiveArea = document.getElementById('progressiveArea');
+const unlockHint = document.getElementById('unlockHint');
+const unlockIcon = document.getElementById('unlockIcon');
+const unlockText = document.getElementById('unlockText');
+const mainSubmitBtn = document.getElementById('submitBtn');
+const contactFieldIds = ['f_name', 'f_role', 'f_phone', 'f_email'];
+
+function isCompanyQueried() {
+  return !!document.getElementById('f_taxId').value;
+}
+
+function countContactDone() {
+  let done = 0;
+  const name = document.getElementById('f_name').value.trim();
+  const role = document.getElementById('f_role').value;
+  const phone = document.getElementById('f_phone').value.trim();
+  const email = document.getElementById('f_email').value.trim();
+  if (name) done++;
+  if (role) done++;
+  if (/^09\d{8}$/.test(phone)) done++;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) done++;
+  return done;
+}
+
+function refreshProgressive() {
+  const companyDone = isCompanyQueried();
+  const contactDone = countContactDone();
+  const unlocked = companyDone && contactDone === 4;
+
+  if (unlocked) {
+    progressiveArea.classList.add('revealed');
+    unlockHint.classList.add('done');
+    unlockIcon.textContent = '✅';
+    unlockText.textContent = '已進入需求評估，填完即可送出（備註為選填）';
+    mainSubmitBtn.disabled = false;
   } else {
-    e.target.classList.remove('error');
+    progressiveArea.classList.remove('revealed');
+    unlockHint.classList.remove('done');
+    unlockIcon.textContent = '🔒';
+    const missing = [];
+    if (!companyDone) missing.push('公司查詢');
+    if (contactDone < 4) missing.push(`聯絡窗口（${contactDone}/4）`);
+    unlockText.textContent = `尚未完成：${missing.join(' · ')}`;
+    mainSubmitBtn.disabled = true;
   }
+}
+
+contactFieldIds.forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('input', refreshProgressive);
+  el.addEventListener('change', refreshProgressive);
+  el.addEventListener('blur', refreshProgressive);
 });
+
+// 手機 / Email 格式錯誤紅框
+document.getElementById('f_phone').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^09\d{8}$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+document.getElementById('f_email').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+
+refreshProgressive();
 </script>
 </body>
 </html>
