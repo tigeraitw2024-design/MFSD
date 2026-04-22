@@ -2,7 +2,7 @@
  * Google Apps Script · 報名表單後端
  *
  * ════════ 部署步驟 ════════
- * 1. 到 Google Drive 新建一個 Google Sheet，取名如「虎智補助報名名單」
+ * 1. 到 Google Drive 新建一個 Google Sheet，取名如「虎智方案報名名單」
  * 2. Sheet 第一列貼上欄位標題（複製下方 HEADERS 陣列的值，用 Tab 分隔）
  * 3. 在 Sheet 的「擴充功能」→「Apps Script」
  * 4. 把這整個檔案的內容貼進去（覆蓋預設的 Code.gs）
