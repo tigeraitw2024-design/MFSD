@@ -47,10 +47,10 @@ function doPost(e) {
     let sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) {
       sheet = ss.insertSheet(SHEET_NAME);
-      sheet.appendRow(HEADERS);
-      sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#0D1B2A').setFontColor('#00E5CC');
-      sheet.setFrozenRows(1);
     }
+
+    // 每次都確保 row 1 標題跟 HEADERS 一致；欄位增減或改名都會自動對齊
+    ensureHeaders(sheet);
 
     // 組出一列資料
     const row = [
@@ -86,4 +86,30 @@ function doPost(e) {
 
 function doGet() {
   return ContentService.createTextOutput('TigerAI 報名表單 API 運作中 ✓');
+}
+
+/**
+ * 確保第 1 列標題跟 HEADERS 陣列同步。
+ * 若長度不同、任一欄不同，就整列覆寫並重刷樣式 + 凍結首列。
+ */
+function ensureHeaders(sheet) {
+  const width = HEADERS.length;
+  const lastCol = sheet.getLastColumn();
+  let needsUpdate = false;
+
+  if (lastCol < width) {
+    needsUpdate = true;
+  } else {
+    const current = sheet.getRange(1, 1, 1, width).getValues()[0];
+    needsUpdate = HEADERS.some((h, i) => current[i] !== h);
+  }
+
+  if (needsUpdate) {
+    sheet.getRange(1, 1, 1, width).setValues([HEADERS]);
+    sheet.getRange(1, 1, 1, width)
+      .setFontWeight('bold')
+      .setBackground('#0D1B2A')
+      .setFontColor('#00E5CC');
+    sheet.setFrozenRows(1);
+  }
 }
