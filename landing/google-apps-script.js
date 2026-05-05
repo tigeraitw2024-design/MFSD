@@ -43,6 +43,12 @@ function doPost(e) {
   try {
     // 解析來自前端的 JSON
     const data = JSON.parse(e.postData.contents);
+
+    // 經銷商工具進入記錄走另一張分頁
+    if (data.type === 'dealer_access') {
+      return logDealerAccess(data);
+    }
+
     const ss = SpreadsheetApp.openById(SHEET_ID);
     let sheet = ss.getSheetByName(SHEET_NAME);
     if (!sheet) {
@@ -50,7 +56,7 @@ function doPost(e) {
     }
 
     // 每次都確保 row 1 標題跟 HEADERS 一致；欄位增減或改名都會自動對齊
-    ensureHeaders(sheet);
+    ensureHeaders(sheet, HEADERS);
 
     // 組出一列資料
     const row = [
@@ -89,11 +95,11 @@ function doGet() {
 }
 
 /**
- * 確保第 1 列標題跟 HEADERS 陣列同步。
+ * 確保第 1 列標題跟傳入的 headers 陣列同步。
  * 若長度不同、任一欄不同，就整列覆寫並重刷樣式 + 凍結首列。
  */
-function ensureHeaders(sheet) {
-  const width = HEADERS.length;
+function ensureHeaders(sheet, headers) {
+  const width = headers.length;
   const lastCol = sheet.getLastColumn();
   let needsUpdate = false;
 
@@ -101,15 +107,46 @@ function ensureHeaders(sheet) {
     needsUpdate = true;
   } else {
     const current = sheet.getRange(1, 1, 1, width).getValues()[0];
-    needsUpdate = HEADERS.some((h, i) => current[i] !== h);
+    needsUpdate = headers.some((h, i) => current[i] !== h);
   }
 
   if (needsUpdate) {
-    sheet.getRange(1, 1, 1, width).setValues([HEADERS]);
+    sheet.getRange(1, 1, 1, width).setValues([headers]);
     sheet.getRange(1, 1, 1, width)
       .setFontWeight('bold')
       .setBackground('#0D1B2A')
       .setFontColor('#00E5CC');
     sheet.setFrozenRows(1);
   }
+}
+
+// ════════ 經銷商工具進入記錄 ════════
+const DEALER_SHEET_NAME = '經銷商存取記錄';
+const DEALER_HEADERS = [
+  '時間戳',
+  'IP',
+  '國家',
+  '城市',
+  '機構 / ISP',
+  '瀏覽器'
+];
+
+function logDealerAccess(data) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(DEALER_SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(DEALER_SHEET_NAME);
+  }
+  ensureHeaders(sheet, DEALER_HEADERS);
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.ip || '',
+    data.country || '',
+    data.city || '',
+    data.org || '',
+    data.userAgent || ''
+  ]);
+  return ContentService
+    .createTextOutput(JSON.stringify({ ok: true }))
+    .setMimeType(ContentService.MimeType.JSON);
 }

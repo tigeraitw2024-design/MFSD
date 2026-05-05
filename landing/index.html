@@ -136,6 +136,40 @@
     .hero-title { font-size: 2.25rem !important; line-height: 1.2 !important; }
     .hero-subtitle { font-size: 1rem !important; }
   }
+  /* 經銷商工具：密碼框 + 全頁覆蓋 */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(10, 22, 40, 0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeIn 0.2s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .dealer-overlay {
+    position: fixed; inset: 0; z-index: 90;
+    background: #0D1B2A;
+    overflow-y: auto;
+  }
+  .dealer-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;
+  }
+  .dealer-badge-green { background: rgba(0, 229, 204, 0.15); color: #00E5CC; }
+  .dealer-badge-yellow { background: rgba(234, 179, 8, 0.15); color: #FCD34D; }
+  .dealer-badge-red { background: rgba(239, 68, 68, 0.15); color: #FCA5A5; }
+  .dealer-badge-gray { background: rgba(148, 163, 184, 0.15); color: #94A3B8; }
+  .dealer-table { border-collapse: collapse; width: 100%; }
+  .dealer-table th, .dealer-table td {
+    padding: 8px 10px; border-bottom: 1px solid rgba(0, 168, 150, 0.1);
+    text-align: left; font-size: 13px;
+  }
+  .dealer-table th {
+    color: #00E5CC; font-weight: 600; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .dealer-table tr:hover td { background: rgba(0, 168, 150, 0.04); }
+  .progress-bar { height: 8px; background: rgba(0, 168, 150, 0.15); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #00A896, #00E5CC); transition: width 0.3s ease; }
+  .filter-btn-active { background: rgba(0, 229, 204, 0.1); color: #00E5CC !important; }
   /* 漸進揭示 */
   .progressive {
     max-height: 0;
@@ -712,11 +746,149 @@
         <p class="text-gray-400 text-sm leading-relaxed">主辦：115年度提升中小企業智慧化經營效能計畫-產業 AI 應用教案<br>執行：中華民國資訊軟體服務商業同業公會</p>
       </div>
     </div>
-    <div class="pt-8 border-t border-teal-500/10 text-center text-gray-500 text-sm">
-      © 2026 虎智科技股份有限公司 TigerAI · 115年度提升中小企業智慧化經營效能計畫-產業 AI 應用教案
+    <div class="pt-8 border-t border-teal-500/10 flex flex-col sm:flex-row items-center justify-between gap-2 text-gray-500 text-sm">
+      <div>© 2026 虎智科技股份有限公司 TigerAI · 115年度提升中小企業智慧化經營效能計畫-產業 AI 應用教案</div>
+      <a href="#" id="dealerEntryBtn" class="text-gray-600 hover:text-teal-bright text-xs">經銷商工具 →</a>
     </div>
   </div>
 </footer>
+
+<!-- ════════ 經銷商密碼框 ════════ -->
+<div id="dealerPwModal" class="modal-overlay hidden">
+  <div class="card-glass rounded-2xl p-6 sm:p-8 max-w-md w-full mx-4">
+    <div class="text-center mb-5">
+      <div class="text-teal-bright text-xs font-bold mb-1">DEALER ACCESS</div>
+      <h3 class="text-xl font-black text-white">經銷商工具</h3>
+      <p class="text-gray-400 text-xs mt-2">請輸入虎智內部密碼</p>
+    </div>
+    <input id="dealerPwInput" type="password" inputmode="numeric" maxlength="8"
+      class="form-input w-full px-4 py-3 rounded-lg text-center tracking-widest text-lg" placeholder="••••••••">
+    <div id="dealerPwError" class="hidden text-red-400 text-xs mt-2 text-center"></div>
+    <div class="flex gap-2 mt-5">
+      <button id="dealerPwCancel" class="flex-1 px-4 py-2 rounded-lg border border-teal-500/30 text-gray-300 text-sm hover:bg-navy-700/40">取消</button>
+      <button id="dealerPwSubmit" class="btn-primary text-white font-bold px-4 py-2 rounded-lg flex-1">進入</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ 經銷商批次工具（覆蓋層）════════ -->
+<div id="dealerOverlay" class="dealer-overlay hidden">
+  <div class="max-w-5xl mx-auto py-6 px-4 sm:px-6">
+    <!-- 頁首 -->
+    <div class="flex items-center justify-between mb-6 pb-4 border-b border-teal-500/20">
+      <button id="dealerExitBtn" class="text-teal-bright text-sm hover:underline">← 返回主站</button>
+      <div class="text-right">
+        <div class="text-teal-bright text-xs font-bold">DEALER TOOL</div>
+        <div class="text-white text-sm font-bold">經銷商批次查詢</div>
+      </div>
+    </div>
+
+    <!-- Step 1: 文字框 -->
+    <div id="bcStepInput" class="card-glass rounded-2xl p-6 mb-6">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-teal-bright text-sm font-bold">貼上你的客戶資料</h2>
+        <div class="flex gap-2">
+          <button id="bcSampleBtn" class="text-xs text-gray-400 hover:text-teal-bright">📝 載入範例</button>
+          <button id="bcClearBtn" class="text-xs text-gray-400 hover:text-red-400">🗑️ 清空</button>
+        </div>
+      </div>
+      <textarea id="bcRawInput" rows="10"
+        class="form-input w-full px-4 py-3 rounded-lg font-mono text-sm"
+        placeholder="可貼任何格式：Excel 一欄、Word 段落、PDF 文字、純文字列表都行"></textarea>
+      <div class="flex items-center justify-between mt-3 text-xs">
+        <div class="text-gray-500">
+          <span id="bcCharCount">0</span> / 100,000 字
+          <span class="ml-3 text-gray-600">|</span>
+          <span class="ml-3">資料只在你瀏覽器處理，不會傳送</span>
+        </div>
+        <button id="bcAnalyzeBtn" class="btn-primary text-white font-bold px-5 py-2 rounded-lg">分析內容</button>
+      </div>
+      <div id="bcInputWarning" class="hidden mt-2 text-xs text-red-400"></div>
+    </div>
+
+    <!-- Step 2: 預覽 -->
+    <div id="bcStepPreview" class="card-glass rounded-2xl p-6 mb-6 hidden">
+      <h2 class="text-teal-bright text-sm font-bold mb-4">抽取結果預覽</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <div class="bg-navy-700/30 rounded-lg p-3 text-center"><div class="text-2xl font-black text-teal-bright" id="bcStatTaxId">0</div><div class="text-xs text-gray-400 mt-1">有效統編</div></div>
+        <div class="bg-navy-700/30 rounded-lg p-3 text-center"><div class="text-2xl font-black text-yellow-400" id="bcStatName">0</div><div class="text-xs text-gray-400 mt-1">公司名（搜尋）</div></div>
+        <div class="bg-navy-700/30 rounded-lg p-3 text-center"><div class="text-2xl font-black text-gray-400" id="bcStatSkip">0</div><div class="text-xs text-gray-400 mt-1">略過行</div></div>
+        <div class="bg-navy-700/30 rounded-lg p-3 text-center"><div class="text-2xl font-black text-white" id="bcStatTotal">0</div><div class="text-xs text-gray-400 mt-1">總計查詢</div></div>
+      </div>
+      <div id="bcPreviewLimitWarning" class="hidden mb-3 text-xs text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-3 py-2"></div>
+      <div class="border border-teal-500/20 rounded-lg overflow-hidden mb-5 max-h-96 overflow-y-auto">
+        <table class="dealer-table">
+          <thead class="bg-navy-700/40 sticky top-0">
+            <tr><th><input type="checkbox" id="bcSelectAll" checked class="accent-teal-500"></th><th>偵測內容</th><th>動作</th></tr>
+          </thead>
+          <tbody id="bcPreviewTableBody"></tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="text-xs text-gray-400">
+          <span id="bcEstimateText">預估時間：—</span>
+          <span class="mx-2 text-gray-600">|</span>
+          <span class="text-teal-bright">Anthropic Token 用量：0</span>
+        </div>
+        <div class="flex gap-2">
+          <button id="bcBackToInputBtn" class="px-4 py-2 rounded-lg border border-teal-500/30 text-teal-bright text-sm hover:bg-teal-500/10">返回修改</button>
+          <button id="bcRunBtn" class="btn-primary text-white font-bold px-5 py-2 rounded-lg">開始批次查詢</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: 進度 -->
+    <div id="bcStepProgress" class="card-glass rounded-2xl p-6 mb-6 hidden">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-teal-bright text-sm font-bold" id="bcProgressTitle">處理中...</h2>
+        <button id="bcStopBtn" class="text-xs text-red-400 hover:text-red-300">⏹ 中斷</button>
+      </div>
+      <div class="progress-bar mb-3"><div id="bcProgressFill" class="progress-fill" style="width: 0%"></div></div>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div><div class="text-lg font-bold text-white" id="bcPgDone">0</div><div class="text-xs text-gray-400">已完成</div></div>
+        <div><div class="text-lg font-bold text-teal-bright" id="bcPgGreen">0</div><div class="text-xs text-gray-400">符合</div></div>
+        <div><div class="text-lg font-bold text-red-400" id="bcPgRed">0</div><div class="text-xs text-gray-400">不符合</div></div>
+        <div><div class="text-lg font-bold text-gray-400" id="bcPgErr">0</div><div class="text-xs text-gray-400">查無資料</div></div>
+      </div>
+    </div>
+
+    <!-- Step 4: 結果 -->
+    <div id="bcStepResult" class="card-glass rounded-2xl p-6 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3 mb-4">
+        <h2 class="text-teal-bright text-sm font-bold">查詢結果</h2>
+        <div class="flex gap-2 flex-wrap">
+          <button data-filter="all" class="bc-filter-btn px-3 py-1 rounded-lg text-xs border border-teal-500/30 filter-btn-active">全部</button>
+          <button data-filter="green_full" class="bc-filter-btn px-3 py-1 rounded-lg text-xs border border-teal-500/30 text-gray-300 hover:bg-teal-500/10">🎯 完全符合</button>
+          <button data-filter="green_partial" class="bc-filter-btn px-3 py-1 rounded-lg text-xs border border-teal-500/30 text-gray-300 hover:bg-teal-500/10">✅ 部分符合 B</button>
+          <button data-filter="yellow" class="bc-filter-btn px-3 py-1 rounded-lg text-xs border border-teal-500/30 text-gray-300 hover:bg-teal-500/10">⚠️ 部分</button>
+          <button data-filter="red" class="bc-filter-btn px-3 py-1 rounded-lg text-xs border border-teal-500/30 text-gray-300 hover:bg-teal-500/10">❌ 不符合</button>
+        </div>
+      </div>
+      <div class="border border-teal-500/20 rounded-lg overflow-hidden mb-5 max-h-[600px] overflow-y-auto">
+        <table class="dealer-table">
+          <thead class="bg-navy-700/40 sticky top-0 z-10">
+            <tr><th>結果</th><th>統編</th><th>公司名稱</th><th>狀態</th><th>行業 / 工具機</th><th>資本額</th></tr>
+          </thead>
+          <tbody id="bcResultTableBody"></tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div class="text-xs text-gray-400">
+          共 <span id="bcResultCount">0</span> 筆 ·
+          <span class="text-teal-bright">完全符合 <span id="bcCntGreenFull">0</span></span> ·
+          <span class="text-teal-bright">部分符合 B <span id="bcCntGreenPartial">0</span></span> ·
+          <span class="text-yellow-400">部分 <span id="bcCntYellow">0</span></span> ·
+          <span class="text-red-400">不符合 <span id="bcCntRed">0</span></span>
+        </div>
+        <div class="flex gap-2 flex-wrap">
+          <button id="bcContinueBtn" class="px-4 py-2 rounded-lg border border-teal-500/30 text-teal-bright text-sm hover:bg-teal-500/10">繼續貼第二批</button>
+          <button id="bcLineBtn" class="px-4 py-2 rounded-lg bg-green-600 text-white font-bold text-sm hover:bg-green-500">📋 複製名單給虎智顧問</button>
+          <button id="bcCsvBtn" class="btn-primary text-white font-bold px-5 py-2 rounded-lg text-sm">⬇ 下載 CSV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- 浮動 LINE 按鈕 -->
 <a href="https://lin.ee/ZB5Tjkd" target="_blank" class="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white font-bold text-sm shadow-2xl hover:scale-110 transition-transform">LINE</a>
@@ -1146,6 +1318,568 @@ document.getElementById('f_email').addEventListener('blur', e => {
 });
 
 refreshProgressive();
+
+// ════════════════════════════════════════════════════════════════
+// 經銷商批次工具（密碼閘 + 批次查詢）
+// ════════════════════════════════════════════════════════════════
+(function dealerModule() {
+  const PW = '88397879';
+  const SESSION_KEY = 'dealerAccess';
+  const FAIL_KEY = 'dealerFailCount';
+  const LOCK_KEY = 'dealerLockUntil';
+  const MAX_FAILS = 3;
+  const LOCK_MS = 30000;
+
+  const $ = id => document.getElementById(id);
+  const entryBtn = $('dealerEntryBtn');
+  const pwModal = $('dealerPwModal');
+  const pwInput = $('dealerPwInput');
+  const pwError = $('dealerPwError');
+  const overlay = $('dealerOverlay');
+
+  // ─── 入口 ───
+  entryBtn.addEventListener('click', e => {
+    e.preventDefault();
+    if (sessionStorage.getItem(SESSION_KEY) === '1') {
+      openOverlay();
+    } else {
+      pwInput.value = '';
+      pwError.classList.add('hidden');
+      pwModal.classList.remove('hidden');
+      setTimeout(() => pwInput.focus(), 50);
+    }
+  });
+
+  $('dealerPwCancel').onclick = () => pwModal.classList.add('hidden');
+  $('dealerPwSubmit').onclick = verifyPw;
+  pwInput.addEventListener('keypress', e => { if (e.key === 'Enter') verifyPw(); });
+
+  function verifyPw() {
+    const lockUntil = parseInt(sessionStorage.getItem(LOCK_KEY) || '0', 10);
+    if (Date.now() < lockUntil) {
+      const sec = Math.ceil((lockUntil - Date.now()) / 1000);
+      pwError.classList.remove('hidden');
+      pwError.textContent = `已鎖定，請 ${sec} 秒後再試`;
+      return;
+    }
+    if (pwInput.value === PW) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      sessionStorage.removeItem(FAIL_KEY);
+      pwModal.classList.add('hidden');
+      logDealerAccess();
+      openOverlay();
+    } else {
+      const fails = parseInt(sessionStorage.getItem(FAIL_KEY) || '0', 10) + 1;
+      sessionStorage.setItem(FAIL_KEY, String(fails));
+      if (fails >= MAX_FAILS) {
+        sessionStorage.setItem(LOCK_KEY, String(Date.now() + LOCK_MS));
+        sessionStorage.removeItem(FAIL_KEY);
+        pwError.classList.remove('hidden');
+        pwError.textContent = `錯誤次數過多，鎖定 ${LOCK_MS / 1000} 秒`;
+      } else {
+        pwError.classList.remove('hidden');
+        pwError.textContent = `密碼錯誤（${fails}/${MAX_FAILS}）`;
+      }
+      pwInput.value = '';
+    }
+  }
+
+  function openOverlay() {
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
+  }
+
+  $('dealerExitBtn').onclick = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    overlay.classList.add('hidden');
+    document.body.style.overflow = '';
+  };
+
+  // 進入時 log（IP + 瀏覽器）
+  async function logDealerAccess() {
+    let info = { ip: '', country: '', city: '', org: '' };
+    try {
+      const r = await fetch('https://ipapi.co/json/');
+      if (r.ok) {
+        const d = await r.json();
+        info = { ip: d.ip || '', country: d.country_name || '', city: d.city || '', org: d.org || '' };
+      }
+    } catch {}
+    const payload = {
+      type: 'dealer_access',
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      ...info
+    };
+    if (CONFIG.SHEET_WEBHOOK) {
+      fetch(CONFIG.SHEET_WEBHOOK, { method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload) }).catch(() => {});
+    }
+  }
+
+  // ════════ 批次查詢核心 ════════
+  const BC = {
+    MAX_CHARS: 100000,
+    MAX_BATCH: 200,
+    REQUEST_DELAY: 500,
+    CACHE_DAYS: 7,
+    CIRCUIT_BREAKER: 5
+  };
+
+  function isValidTaxId(t) {
+    if (!/^\d{8}$/.test(t)) return false;
+    if (t === '00000000') return false;
+    const w = [1, 2, 1, 2, 1, 2, 4, 1];
+    let sum = 0;
+    for (let i = 0; i < 8; i++) {
+      const p = parseInt(t[i], 10) * w[i];
+      sum += Math.floor(p / 10) + (p % 10);
+    }
+    if (t[6] === '7') return (sum % 10 === 0) || ((sum + 1) % 10 === 0);
+    return sum % 10 === 0;
+  }
+
+  const TERMINATORS = [
+    '股份有限公司','有限合夥','兩合公司','無限公司','股份公司','有限公司',
+    '機械工廠','鐵工廠','製造廠','工作室','企業社','工程行','旅行社',
+    '工廠','商行','商號','公司'
+  ];
+  const companyKwRegex = /(公司|商[行號]|工廠|工作室|企業社|工程行|旅行社|製造廠|有限合夥|兩合)/;
+
+  function findFirstTerminator(line) {
+    for (let i = 0; i < line.length; i++) {
+      for (const t of TERMINATORS) {
+        if (line.substr(i, t.length) === t) return i + t.length;
+      }
+    }
+    return -1;
+  }
+
+  function extractName(line) {
+    let end = findFirstTerminator(line);
+    if (end < 2) return '';
+    let extended = true;
+    while (extended) {
+      extended = false;
+      for (const t of TERMINATORS) {
+        if (line.substr(end, t.length) === t) { end += t.length; extended = true; break; }
+      }
+    }
+    const validChar = /[一-龥A-Za-z0-9·•&\-]/;
+    let start = 0;
+    for (let i = end - 1; i >= 0; i--) {
+      if (!validChar.test(line[i])) { start = i + 1; break; }
+    }
+    while (start < end && /[\d\.\,\-\s\、，\(\)（）]/.test(line[start])) start++;
+    const name = line.slice(start, end).trim();
+    return name.length >= 2 ? name : '';
+  }
+
+  function normalizeText(s) {
+    return s.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+  }
+
+  function extractEntries(raw) {
+    const text = normalizeText(raw);
+    const lines = text.split(/\r?\n/);
+    const taxIds = new Set();
+    const taxIdContext = new Map();
+    const nameCandidates = [];
+
+    const taxIdRegex = /(?<![\d])(\d{8})(?![\d])/g;
+    let m;
+    while ((m = taxIdRegex.exec(text)) !== null) {
+      if (isValidTaxId(m[1])) taxIds.add(m[1]);
+    }
+    taxIds.forEach(tid => {
+      const line = lines.find(l => l.replace(/[\s-]/g, '').includes(tid));
+      taxIdContext.set(tid, line ? line.trim().slice(0, 80) : tid);
+    });
+
+    const seenNames = new Set();
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line) continue;
+      const cleanedLine = line.replace(/[\s-]/g, '');
+      let hasTaxId = false;
+      for (const tid of taxIds) { if (cleanedLine.includes(tid)) { hasTaxId = true; break; } }
+      if (hasTaxId) continue;
+      if (/^[\d\-\(\) ]+$/.test(line) && line.replace(/\D/g, '').length <= 10) continue;
+      if (/^\S+@\S+\.\S+$/.test(line)) continue;
+      if (/[路街巷弄號]/.test(line) && !companyKwRegex.test(line)) continue;
+      if (!companyKwRegex.test(line)) continue;
+      const name = extractName(line);
+      if (!name || name.length < 2) continue;
+      const dedupKey = name.replace(/[\s·•&·\-_]+/g, '').toLowerCase();
+      if (seenNames.has(dedupKey)) continue;
+      seenNames.add(dedupKey);
+      nameCandidates.push({ name, source: line.slice(0, 80) });
+    }
+
+    const nonEmpty = lines.filter(l => l.trim()).length;
+    const used = taxIds.size + nameCandidates.length;
+    return {
+      taxIds: Array.from(taxIds).map(tid => ({ type: 'taxId', taxId: tid, display: taxIdContext.get(tid) || tid, checked: true })),
+      names: nameCandidates.map(n => ({ type: 'name', name: n.name, display: n.source, checked: true })),
+      skipped: Math.max(0, nonEmpty - used)
+    };
+  }
+
+  // 公司資料 cache
+  const cache = {
+    load(taxId) {
+      try {
+        const v = JSON.parse(localStorage.getItem('cc_' + taxId));
+        if (!v) return null;
+        if (Date.now() - v.t > BC.CACHE_DAYS * 86400000) return null;
+        return v.d;
+      } catch { return null; }
+    },
+    save(taxId, data) {
+      try { localStorage.setItem('cc_' + taxId, JSON.stringify({ t: Date.now(), d: data })); } catch {}
+    }
+  };
+
+  async function fetchByTaxId(taxId) {
+    const cached = cache.load(taxId);
+    if (cached) return cached;
+    const res = await fetch(`https://company.g0v.ronny.tw/api/show/${taxId}`);
+    if (!res.ok) throw new Error('查無資料');
+    const data = await res.json();
+    const parsed = parseCompany(data, taxId);
+    cache.save(taxId, parsed);
+    return parsed;
+  }
+
+  async function searchByName(name) {
+    const res = await fetch(`https://company.g0v.ronny.tw/api/search?q=${encodeURIComponent(name)}`);
+    if (!res.ok) throw new Error('搜尋失敗');
+    const data = await res.json();
+    const list = data.data || [];
+    if (list.length === 0) return null;
+    const first = list[0];
+    const taxId = String(first['統一編號'] || first['統編'] || '');
+    if (!taxId) return null;
+    return await fetchByTaxId(taxId);
+  }
+
+  function parseCompany(data, taxId) {
+    const root = data.data || data;
+    const name = root['公司名稱'] || root['商業名稱'] || '(未知)';
+    const capitalStr = root['實收資本額(元)'] || root['資本總額(元)'] || root['資本額(元)'] || '0';
+    const capital = Number(String(capitalStr).replace(/,/g, '')) || 0;
+    const status = root['登記現況'] || root['公司狀況'] || root['商業狀況'] || '';
+    const mof = root['財政部'] || {};
+    const address = root['公司所在地'] || root['地址'] || mof['營業地址'] || '';
+    const industries = Array.isArray(mof['行業']) ? mof['行業'] : [];
+    const primary = industries.length > 0 ? industries[0] : ['', ''];
+    const raw = root['所營事業資料'];
+    const businessItems = [];
+    if (Array.isArray(raw)) {
+      raw.forEach(item => {
+        if (Array.isArray(item)) businessItems.push([String(item[0] || ''), String(item[1] || '')]);
+        else if (typeof item === 'string') {
+          const m = item.match(/^([A-Z]{1,2}\d{5,6})\s*(.*)$/);
+          if (m) businessItems.push([m[1], m[2]]);
+        }
+      });
+    }
+    return { taxId, name, capital, status, address,
+      industryCode: String(primary[0] || ''), industryDesc: String(primary[1] || ''),
+      allIndustries: industries, businessItems };
+  }
+
+  function evaluate(c) {
+    const isActive = c.status && !/(歇業|解散|撤銷|廢止|停業)/.test(c.status);
+    const tmItem = (c.businessItems || []).find(p => CONFIG.TOOL_MACHINE_CODES.includes(String(p[0] || '').toUpperCase()));
+    const isTM = !!tmItem;
+    const mfgItem = (c.allIndustries || []).find(p => CONFIG.MANUFACTURING_CODES.includes(String(p[0] || '').substring(0, 2)));
+    const isMfg = !!mfgItem;
+    const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
+    let level, label;
+    if (isTM && isActive && capitalOK) { level = 'green_full'; label = '🎯 完全符合 (A+B)'; }
+    else if (isMfg && isActive && capitalOK) { level = 'green_partial'; label = '✅ 部分符合 (B)'; }
+    else if (isMfg || isTM) { level = 'yellow'; label = '⚠️ 部分符合'; }
+    else { level = 'red'; label = '❌ 暫不符合'; }
+    return { level, label, isTM, isMfg, isActive, capitalOK,
+      tmDetail: tmItem ? `${tmItem[0]} ${tmItem[1]}` : null,
+      industryDetail: mfgItem ? `${mfgItem[0]} ${mfgItem[1]}` : (c.allIndustries[0] ? `${c.allIndustries[0][0]} ${c.allIndustries[0][1]}` : '—') };
+  }
+
+  function fmtMoney(n) {
+    if (!n) return '—';
+    if (n >= 100000000) return (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + ' 億';
+    if (n >= 10000) return (n / 10000).toFixed(0) + ' 萬';
+    return n.toLocaleString();
+  }
+
+  function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  // ────── UI 流程 ──────
+  let extracted = null, entries = [], results = [], stopRequested = false, appendMode = false;
+
+  const rawInput = $('bcRawInput'), charCount = $('bcCharCount'), warn = $('bcInputWarning');
+
+  rawInput.addEventListener('input', () => {
+    const len = rawInput.value.length;
+    charCount.textContent = len.toLocaleString();
+    if (len > BC.MAX_CHARS) {
+      rawInput.value = rawInput.value.slice(0, BC.MAX_CHARS);
+      warn.classList.remove('hidden');
+      warn.textContent = `⚠️ 已超過 ${BC.MAX_CHARS.toLocaleString()} 字上限，多餘文字已截斷`;
+      setTimeout(() => warn.classList.add('hidden'), 4000);
+    }
+  });
+
+  $('bcClearBtn').onclick = () => { rawInput.value = ''; charCount.textContent = '0'; };
+  $('bcSampleBtn').onclick = () => {
+    rawInput.value = `28220737  虎智科技股份有限公司
+鴻海精密工業股份有限公司
+22099131  台達電子工業股份有限公司
+1.永裕塑膠工業股份有限公司
+2.群創媒體有限公司
+3.華碩聯合科技股份有限公司
+4.年興紡織股份有限公司
+5.小河馬工作室有限公司
+台北市大安區基隆路四段 43 號`;
+    rawInput.dispatchEvent(new Event('input'));
+  };
+
+  $('bcAnalyzeBtn').onclick = () => {
+    const text = rawInput.value;
+    if (!text.trim()) { warn.classList.remove('hidden'); warn.textContent = '請先貼上資料'; return; }
+    warn.classList.add('hidden');
+    extracted = extractEntries(text);
+    if (extracted.taxIds.length + extracted.names.length === 0) {
+      warn.classList.remove('hidden');
+      warn.textContent = '⚠️ 找不到任何有效統編或公司名，請確認貼上的內容';
+      return;
+    }
+    showPreview();
+  };
+
+  function showPreview() {
+    $('bcStepInput').classList.add('hidden');
+    $('bcStepPreview').classList.remove('hidden');
+    $('bcStatTaxId').textContent = extracted.taxIds.length;
+    $('bcStatName').textContent = extracted.names.length;
+    $('bcStatSkip').textContent = extracted.skipped;
+    entries = [...extracted.taxIds, ...extracted.names];
+    let limitWarning = '';
+    if (entries.length > BC.MAX_BATCH) {
+      limitWarning = `⚠️ 偵測到 ${entries.length} 筆，超過單批 ${BC.MAX_BATCH} 筆上限，將只處理前 ${BC.MAX_BATCH} 筆。剩下請分批貼。`;
+      entries.forEach((e, i) => { e.checked = i < BC.MAX_BATCH; });
+    }
+    if (limitWarning) {
+      $('bcPreviewLimitWarning').classList.remove('hidden');
+      $('bcPreviewLimitWarning').textContent = limitWarning;
+    } else {
+      $('bcPreviewLimitWarning').classList.add('hidden');
+    }
+    renderPreviewTable();
+    updateEstimate();
+  }
+
+  function renderPreviewTable() {
+    const tbody = $('bcPreviewTableBody');
+    tbody.innerHTML = entries.map((e, i) => `
+      <tr>
+        <td><input type="checkbox" class="bc-row-check accent-teal-500" data-i="${i}" ${e.checked ? 'checked' : ''}></td>
+        <td class="text-gray-200 font-mono text-xs">${e.type === 'taxId' ? `<span class="dealer-badge dealer-badge-green">${e.taxId}</span> ` : '<span class="dealer-badge dealer-badge-yellow">名稱</span> '}${escapeHtml(e.display)}</td>
+        <td class="text-xs text-gray-400">${e.type === 'taxId' ? '統編查詢' : '名稱搜尋'}</td>
+      </tr>`).join('');
+    tbody.querySelectorAll('.bc-row-check').forEach(cb => {
+      cb.onchange = () => { entries[+cb.dataset.i].checked = cb.checked; updateEstimate(); };
+    });
+    $('bcSelectAll').onchange = () => {
+      const v = $('bcSelectAll').checked;
+      entries.forEach((e, i) => { if (i < BC.MAX_BATCH) e.checked = v; });
+      renderPreviewTable();
+      updateEstimate();
+    };
+  }
+
+  function updateEstimate() {
+    const n = entries.filter(e => e.checked).length;
+    $('bcStatTotal').textContent = n;
+    const seconds = Math.ceil(n * BC.REQUEST_DELAY / 1000);
+    $('bcEstimateText').textContent = `預估時間：約 ${Math.floor(seconds / 60)} 分 ${seconds % 60} 秒`;
+    $('bcRunBtn').disabled = n === 0;
+  }
+
+  $('bcBackToInputBtn').onclick = () => {
+    $('bcStepPreview').classList.add('hidden');
+    $('bcStepInput').classList.remove('hidden');
+  };
+
+  $('bcRunBtn').onclick = () => runBatch();
+
+  async function runBatch() {
+    $('bcStepPreview').classList.add('hidden');
+    $('bcStepProgress').classList.remove('hidden');
+    $('bcStepResult').classList.remove('hidden');
+    stopRequested = false;
+    if (!appendMode) {
+      results = [];
+      $('bcResultTableBody').innerHTML = '';
+    }
+    appendMode = false;
+    const todo = entries.filter(e => e.checked);
+    let done = 0, green = 0, red = 0, err = 0, fails = 0;
+    for (const entry of todo) {
+      if (stopRequested) break;
+      let result = { input: entry, ok: false };
+      try {
+        const c = entry.type === 'taxId' ? await fetchByTaxId(entry.taxId) : await searchByName(entry.name);
+        if (!c) throw new Error('查無資料');
+        const v = evaluate(c);
+        result = { input: entry, ok: true, company: c, verdict: v };
+        fails = 0;
+        if (v.level === 'green_full' || v.level === 'green_partial') green++;
+        else if (v.level === 'red') red++;
+      } catch (ex) {
+        result = { input: entry, ok: false, error: ex.message || '查詢失敗' };
+        err++;
+        fails++;
+      }
+      results.push(result);
+      appendResultRow(result);
+      done++;
+      $('bcPgDone').textContent = done;
+      $('bcPgGreen').textContent = green;
+      $('bcPgRed').textContent = red;
+      $('bcPgErr').textContent = err;
+      $('bcProgressFill').style.width = (done / todo.length * 100) + '%';
+      $('bcProgressTitle').textContent = `處理中... ${done} / ${todo.length}`;
+      if (fails >= BC.CIRCUIT_BREAKER) {
+        $('bcProgressTitle').textContent = `⚠️ 連續 ${BC.CIRCUIT_BREAKER} 筆失敗，已暫停。請檢查網路後重試。`;
+        break;
+      }
+      await new Promise(r => setTimeout(r, BC.REQUEST_DELAY));
+    }
+    $('bcProgressTitle').textContent = stopRequested ? '已中斷' : '✅ 處理完成';
+    refreshCounts();
+  }
+
+  $('bcStopBtn').onclick = () => { stopRequested = true; };
+  $('bcContinueBtn').onclick = () => {
+    appendMode = true;
+    $('bcStepProgress').classList.add('hidden');
+    $('bcStepInput').classList.remove('hidden');
+    rawInput.value = '';
+    rawInput.dispatchEvent(new Event('input'));
+    rawInput.focus();
+  };
+
+  function appendResultRow(r) {
+    const tbody = $('bcResultTableBody');
+    if (!r.ok) {
+      tbody.insertAdjacentHTML('beforeend', `
+        <tr data-level="red">
+          <td><span class="dealer-badge dealer-badge-gray">⚠️ 查無</span></td>
+          <td class="font-mono text-xs">${r.input.taxId || '—'}</td>
+          <td class="text-gray-400 text-xs">${escapeHtml(r.input.name || r.input.display)}</td>
+          <td colspan="3" class="text-red-400 text-xs">${escapeHtml(r.error)}</td>
+        </tr>`);
+      return;
+    }
+    const v = r.verdict, c = r.company;
+    const lvCls = v.level === 'green_full' ? 'dealer-badge-green' : v.level === 'green_partial' ? 'dealer-badge-green' : v.level === 'yellow' ? 'dealer-badge-yellow' : 'dealer-badge-red';
+    tbody.insertAdjacentHTML('beforeend', `
+      <tr data-level="${v.level}">
+        <td><span class="dealer-badge ${lvCls}">${escapeHtml(v.label)}</span></td>
+        <td class="font-mono text-xs">${c.taxId}</td>
+        <td class="text-gray-200 text-xs">${escapeHtml(c.name)}</td>
+        <td class="text-xs ${v.isActive ? 'text-gray-300' : 'text-red-400'}">${escapeHtml(c.status || '—')}</td>
+        <td class="text-xs">
+          <div class="text-gray-300">${escapeHtml(v.industryDetail)}</div>
+          ${v.tmDetail ? `<div class="text-teal-bright text-[10px]">⚙ ${escapeHtml(v.tmDetail)}</div>` : ''}
+        </td>
+        <td class="text-xs ${v.capitalOK ? 'text-gray-300' : 'text-yellow-400'}">${fmtMoney(c.capital)}</td>
+      </tr>`);
+  }
+
+  function refreshCounts() {
+    const c = { green_full: 0, green_partial: 0, yellow: 0, red: 0 };
+    results.forEach(r => { if (r.ok && r.verdict) c[r.verdict.level]++; else c.red++; });
+    $('bcCntGreenFull').textContent = c.green_full;
+    $('bcCntGreenPartial').textContent = c.green_partial;
+    $('bcCntYellow').textContent = c.yellow;
+    $('bcCntRed').textContent = c.red;
+    $('bcResultCount').textContent = results.length;
+  }
+
+  // 篩選按鈕
+  document.querySelectorAll('.bc-filter-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.bc-filter-btn').forEach(b => {
+        b.classList.remove('filter-btn-active'); b.classList.add('text-gray-300');
+      });
+      btn.classList.add('filter-btn-active'); btn.classList.remove('text-gray-300');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('#bcResultTableBody tr').forEach(tr => {
+        tr.style.display = (f === 'all' || tr.dataset.level === f) ? '' : 'none';
+      });
+    };
+  });
+
+  // CSV 下載
+  $('bcCsvBtn').onclick = () => {
+    const head = ['結果', '統編', '公司名稱', '狀態', '主要行業', '工具機代碼', '資本額', '地址'];
+    const rows = results.map(r => {
+      if (!r.ok) return ['查無', r.input.taxId || '', r.input.name || r.input.display || '', '', '', '', '', r.error || ''];
+      const c = r.company, v = r.verdict;
+      return [v.label, c.taxId, c.name, c.status, v.industryDetail, v.tmDetail || '', c.capital, c.address];
+    });
+    const csv = [head, ...rows].map(row => row.map(cell => `"${String(cell || '').replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `批次查詢結果_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // 一鍵複製 LINE
+  $('bcLineBtn').onclick = async () => {
+    const matched = results.filter(r => r.ok && (r.verdict.level === 'green_full' || r.verdict.level === 'green_partial'));
+    if (matched.length === 0) {
+      alert('目前沒有符合資格的客戶可轉介');
+      return;
+    }
+    const date = new Date().toLocaleDateString('zh-TW');
+    let text = `【經銷商批次查詢結果 ${date}】\n`;
+    const full = matched.filter(r => r.verdict.level === 'green_full');
+    const partial = matched.filter(r => r.verdict.level === 'green_partial');
+    if (full.length) {
+      text += `\n🎯 完全符合 (A+B) ${full.length} 家：\n`;
+      full.forEach((r, i) => { text += `${i + 1}. ${r.company.name} (${r.company.taxId})\n`; });
+    }
+    if (partial.length) {
+      text += `\n✅ 部分符合 (僅方案 B) ${partial.length} 家：\n`;
+      partial.forEach((r, i) => { text += `${i + 1}. ${r.company.name} (${r.company.taxId})\n`; });
+    }
+    text += `\n請虎智顧問接洽轉介`;
+    try {
+      await navigator.clipboard.writeText(text);
+      const orig = $('bcLineBtn').textContent;
+      $('bcLineBtn').textContent = '✅ 已複製，正開啟 LINE...';
+      setTimeout(() => { $('bcLineBtn').textContent = orig; }, 3000);
+      window.open('https://lin.ee/ZB5Tjkd', '_blank');
+    } catch {
+      // 老瀏覽器 fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      window.open('https://lin.ee/ZB5Tjkd', '_blank');
+    }
+  };
+})();
 </script>
 </body>
 </html>
