@@ -142,12 +142,10 @@ function setupSheets() {
 
   signup.activate();
 
-  SpreadsheetApp.getUi().alert(
-    '✅ 已完成：\n' +
-    '1️⃣ 報名名單\n' +
-    '2️⃣ 樞紐分析（自動以公式更新）\n' +
-    '3️⃣ 經銷商存取記錄'
-  );
+  const msg = '✅ 已完成：1️⃣ 報名名單 / 2️⃣ 樞紐分析 / 3️⃣ 經銷商存取記錄';
+  Logger.log(msg);
+  // 從 Sheet 介面執行才會有 UI；獨立編輯器執行會 throw，所以包 try
+  try { SpreadsheetApp.getUi().alert(msg); } catch (e) {}
 }
 
 // ════════════════════════════════════════════════════════════════
