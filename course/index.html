@@ -283,6 +283,8 @@
   .ax-txt-name { font-family: 'Noto Sans TC', system-ui, sans-serif; font-weight: 700; }
   @media (max-width: 1023px) {
     .ax-pyramid { max-width: 275px; }
+    /* 手機/平板：金字塔整個直接顯示，不做逐層組合動畫（避免捲過就看不到內容） */
+    .ax-level { opacity: 1 !important; transform: none !important; }
   }
 
   /* ── 開課梯次：水平捲動輪播 ── */
@@ -558,9 +560,9 @@
   <div class="gold-orb w-96 h-96 top-0 right-0 animate-float-slow"></div>
   <div class="gold-orb w-72 h-72 bottom-0 left-0 animate-float-slow" style="animation-delay:-3s"></div>
 
-  <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-6 lg:gap-10 items-center">
-    <!-- 左：講師照片 -->
-    <div class="relative flex justify-center lg:justify-start lg:col-span-6">
+  <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+    <!-- 講師照片：桌機在左、手機排在文字下方 -->
+    <div class="relative flex justify-center lg:justify-start lg:col-span-6 order-2 lg:order-1">
       <div class="relative w-72 sm:w-96 lg:w-full lg:max-w-xl">
         <div class="hero-photo-glow"></div>
         <span class="hero-corner tl"></span>
@@ -570,13 +572,17 @@
       </div>
     </div>
 
-    <!-- 右：文字 -->
-    <div class="text-center lg:text-left lg:col-span-6">
-      <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-7 animate-fade-in">
+    <!-- 文字：手機排在最上方 -->
+    <div class="text-center lg:text-left lg:col-span-6 order-1 lg:order-2">
+      <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-5 animate-fade-in">
         <span class="chapter-tag"><span class="w-1.5 h-1.5 rounded-full bg-gold-light"></span>製造業專屬</span>
         <span class="text-[11px] text-gray-500 tracking-[0.3em]">6 小時打造 3 條流程</span>
       </div>
-      <div class="text-gold-light text-xs tracking-[0.4em] mb-3 animate-fade-in-up">虎智科技｜企業課程</div>
+      <div class="inline-flex items-center gap-3 card-gold rounded-full pl-2 pr-5 py-2 mb-5 animate-fade-in-up">
+        <span class="btn-gold text-[11px] tracking-[0.25em] font-black px-3 py-1 rounded-full">講師</span>
+        <span class="text-white font-bold text-sm sm:text-base">謝侑霖 Leo Hsieh</span>
+        <span class="text-gray-400 text-xs hidden sm:inline">｜AI 應用與數位轉型顧問</span>
+      </div>
       <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl text-white mb-5 animate-fade-in-up">
         製造業銷售流程<br>
         <span class="gold-text">導入 AI 工具</span>
@@ -585,15 +591,10 @@
         <span class="block w-12 h-px bg-gold shrink-0"></span>
         <p class="text-gold-light text-sm sm:text-base tracking-[0.15em]">通路績效追蹤、銷售報表自動化與智慧客服實戰課程</p>
       </div>
-      <p class="text-base sm:text-lg text-gray-300 mb-8 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
+      <p class="text-base sm:text-lg text-gray-300 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
         製造業的 AI，<span class="text-gold-light font-bold">不是能用就好，而是不能出錯</span>。<br class="hidden sm:block">
         6 小時實戰課程，帶走可上線的自動化流程。
       </p>
-      <div class="mt-9 inline-flex items-center gap-3 card-gold rounded-full pl-2 pr-5 py-2 animate-fade-in-up">
-        <span class="btn-gold text-[11px] tracking-[0.25em] font-black px-3 py-1 rounded-full">講師</span>
-        <span class="text-white font-bold text-sm sm:text-base">謝侑霖 Leo Hsieh</span>
-        <span class="text-gray-400 text-xs hidden sm:inline">｜AI 應用與數位轉型顧問</span>
-      </div>
     </div>
   </div>
 </section>
@@ -1255,6 +1256,9 @@ const COHORTS_FALLBACK = [
   { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 20 }
 ];
 
+// 開課前幾天停止報名（含當天）
+const REG_CUTOFF_DAYS = 5;
+
 // ══════════════════════ 統編查詢 ══════════════════════
 const taxIdInput = document.getElementById('taxIdInput');
 const queryBtn = document.getElementById('queryBtn');
@@ -1564,9 +1568,19 @@ function renderCohorts(cohorts, counts) {
     const taken = counts[label] || 0;
     const remaining = Math.max(0, co.capacity - taken);
     const full = remaining <= 0;
-    const slotHtml = full
-      ? '<span class="text-right text-red-400 font-bold">已額滿</span>'
-      : `<span class="text-right"><span class="gold-text font-black">${remaining}</span> / ${co.capacity} 人</span>`;
+    const days = daysUntil(co.date);
+    const closed = days !== null && days <= REG_CUTOFF_DAYS;  // 開課前 5 天內停止報名
+    const unavailable = full || closed;
+
+    // 卡片底部的報名狀態
+    let statusHtml;
+    if (closed) {
+      statusHtml = '<span class="text-red-400 font-bold">報名已截止</span>';
+    } else if (full) {
+      statusHtml = '<span class="text-red-400 font-bold">已額滿</span>';
+    } else {
+      statusHtml = `剩餘名額 <span class="gold-text font-black">${remaining}</span> / ${co.capacity} 人`;
+    }
 
     const card = document.createElement('div');
     card.className = 'cohort-card card-glass rounded-2xl p-6 glow-border';
@@ -1576,15 +1590,17 @@ function renderCohorts(cohorts, counts) {
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">日期</span><span class="text-right">${co.date || '-'}</span></div>
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">時間</span><span class="text-right">${co.time || '-'}</span></div>
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">地點</span><span class="text-right">${co.location || '-'}</span></div>
-        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">名額</span>${slotHtml}</div>
       </div>
-      <div class="mt-4 pt-3 border-t border-gold/10 text-center">${countdownBadge(co.date)}</div>`;
+      <div class="mt-4 pt-3 border-t border-gold/10 text-center space-y-1.5">
+        <div>${countdownBadge(co.date)}</div>
+        <div class="text-sm text-gray-300">${statusHtml}</div>
+      </div>`;
     list.appendChild(card);
 
     const opt = document.createElement('option');
     opt.value = label;
-    opt.textContent = label + (full ? '（已額滿）' : '');
-    if (full) opt.disabled = true;
+    opt.textContent = label + (closed ? '（報名已截止）' : full ? '（已額滿）' : '');
+    if (unavailable) opt.disabled = true;
     select.appendChild(opt);
   });
 
