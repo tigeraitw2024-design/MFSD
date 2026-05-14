@@ -1,17 +1,22 @@
 /**
  * Google Apps Script · 報名表單後端
  *
- * 三個分頁（順序固定）：
- *   1. 報名名單 — 表單投遞原始資料
- *   2. 樞紐分析 — 自動匯總統計（用 COUNTIF 公式，會即時更新）
- *   3. 經銷商存取記錄 — 經銷商工具進入紀錄（IP / 國家 / 城市 / 機構 / 瀏覽器）
+ * 分頁說明：
+ *   報名名單 / 樞紐分析 / 經銷商存取記錄 … 既有專案的分頁（已有資料，勿動）
+ *   課程報名表單 …………………………… 課程報名資料；自動建立在所有分頁「最後面」
+ *      → 收到報名會自動寄「報名確認信」，並把寄信結果記在「寄信狀態」欄
  *
  * ════════ 部署步驟 ════════
  *   1. 把這整份貼到 Apps Script 的 Code.gs（覆蓋）
- *   2. 上方 Run 下拉選單 → 選 setupSheets → 點 Run
- *      ↑ 一次性手動執行，會建立三個分頁、排序、寫入樞紐公式
- *   3. Deploy → Manage deployments → 鉛筆 → Version: New version → Deploy
- *   4. 確認部署 URL 跟 index.html 的 SHEET_WEBHOOK 一致
+ *   2. 上方函式下拉選 setupCourseSheet → Run
+ *      ↑ 因為新增了寄信功能，這次會跳「需要新權限」→ 請全部允許（授權 Gmail 寄信）
+ *   3.（建議）函式選 testCourseEmail → Run → 會寄一封測試信到你自己信箱，確認版型
+ *   4. Deploy → Manage deployments → 鉛筆 → Version: New version → Deploy
+ *   5. 確認部署 URL 跟 index.html 的 SHEET_WEBHOOK 一致
+ *
+ *   ⚠️ 不要執行 setupSheets——那是舊專案用的，會重新排序分頁。
+ *   ※ 連設定函式都不跑也行：第一筆課程報名進來時，logCourseSignup 會自動
+ *      把「課程報名表單」分頁建在最後面並寫入＋寄信，全程不動其他分頁。
  */
 
 const SHEET_ID = '1cua3wvQo747ecj7iXA5WFh17Rf-u2sIjTEyHeTh2erk';
@@ -19,6 +24,7 @@ const SHEET_ID = '1cua3wvQo747ecj7iXA5WFh17Rf-u2sIjTEyHeTh2erk';
 const SHEET_SIGNUP = '報名名單';
 const SHEET_PIVOT  = '樞紐分析';
 const SHEET_DEALER = '經銷商存取記錄';
+const SHEET_COURSE = '課程報名表單';
 
 const SIGNUP_HEADERS = [
   '時間戳', '統編', '公司名稱', '資本額', '行業別', '公司地址', '資格判定',
@@ -28,11 +34,17 @@ const SIGNUP_HEADERS = [
 
 const DEALER_HEADERS = ['時間戳', 'IP', '國家', '城市', '機構 / ISP', '瀏覽器'];
 
+const COURSE_HEADERS = [
+  '時間戳', '統編', '公司名稱', '資格判定', '報名梯次',
+  '姓名', '職稱', '電話', 'Email', '年齡', '身分證字號', '寄信狀態'
+];
+
 // ════════ 入口 ════════
 function doPost(e) {
   try {
     const data = JSON.parse(e.postData.contents);
     if (data.type === 'dealer_access') return logDealerAccess(data);
+    if (data.type === 'course_signup') return logCourseSignup(data);
     return logSignup(data);
   } catch (err) {
     return ContentService
@@ -90,6 +102,98 @@ function logDealerAccess(data) {
   return ok();
 }
 
+// ════════ 寫入：課程報名表單（寫資料 + 寄確認信 + 記錄寄信狀態）════════
+function logCourseSignup(data) {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(SHEET_COURSE);
+  if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);  // 找不到就建在最後面
+  ensureHeaders(sheet, COURSE_HEADERS);
+  sheet.appendRow([
+    data.timestamp || new Date().toISOString(),
+    data.taxId || '',
+    data.companyName || '',
+    data.eligibility || '',
+    data.cohort || '',
+    data.name || '',
+    data.jobTitle || '',
+    data.phone || '',
+    data.email || '',
+    data.age || '',
+    data.nationalId || '',
+    ''   // 寄信狀態，下面寄完信再填回
+  ]);
+  const row = sheet.getLastRow();
+
+  // 寄送報名確認信，並把結果寫回「寄信狀態」欄
+  let mailStatus;
+  try {
+    sendCourseConfirmEmail(data);
+    mailStatus = '✅ 已寄出 ' + Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
+  } catch (err) {
+    mailStatus = '❌ 寄信失敗：' + err.message;
+  }
+  sheet.getRange(row, COURSE_HEADERS.length).setValue(mailStatus);
+
+  return ok();
+}
+
+// ════════ 寄送：報名確認信 ════════
+function sendCourseConfirmEmail(data) {
+  const to = String(data.email || '').trim();
+  if (!to) throw new Error('無 Email，未寄送');
+
+  // 「報名梯次」存的是「縣市｜日期 時間｜地點」整串，拆開來顯示
+  const parts = String(data.cohort || '').split('｜');
+  const city     = (parts[0] || '—').trim();
+  const datetime = (parts[1] || '—').trim();
+  const place    = (parts[2] || '—').trim();
+
+  const subject = '【報名確認】製造業銷售流程導入 AI 工具課程';
+  const body =
+    (data.name || '') + ' ' + (data.jobTitle || '') + ' 您好，\n\n' +
+    '感謝您報名「製造業銷售流程導入 AI 工具 —\n' +
+    '通路績效追蹤、銷售報表自動化與智慧客服實戰課程」，\n' +
+    '我們已收到您的報名資料。\n\n' +
+    '▌您的報名資訊\n' +
+    '　公司名稱：' + (data.companyName || '') + '\n' +
+    '　公司統編：' + (data.taxId || '') + '\n' +
+    '　報名學員：' + (data.name || '') + ' / ' + (data.jobTitle || '') + '\n' +
+    '　聯絡電話：' + (data.phone || '') + '\n' +
+    '　報名梯次：\n' +
+    '　　．開課縣市：' + city + '\n' +
+    '　　．上課時間：' + datetime + '\n' +
+    '　　．上課地點：' + place + '\n\n' +
+    '▌課程資訊\n' +
+    '　．單日 6 小時實戰課程\n' +
+    '　．講師：謝侑霖 Leo Hsieh（TigerAI 企業講師）\n' +
+    '　．結訓帶走 3 條可上線的自動化流程\n' +
+    '　　（自動報表 / 客服意圖分類 / 績效異常告警）\n\n' +
+    '▌行前提醒\n' +
+    '　．請攜帶個人筆電，以便現場實作\n' +
+    '　．課程當天請提早 10 分鐘報到\n' +
+    '　．如需改期或取消，請於開課 3 日前來信告知\n\n' +
+    '如有任何問題，歡迎隨時與我們聯繫，期待課堂上見！\n\n' +
+    '──────────────────\n' +
+    '虎智科技 TigerAI\n' +
+    '業務聯絡窗口｜AI 諮詢顧問 Evan Chi 紀如鴻\n' +
+    'Email：evanchi@tigerai.tw\n' +
+    '電話：886-960021437\n' +
+    'LINE ID：evanvchi\n';
+
+  MailApp.sendEmail({ to: to, subject: subject, body: body, name: '虎智科技 TigerAI' });
+}
+
+// 測試用：手動執行，寄一封範例確認信到你自己的信箱（確認版型用）
+function testCourseEmail() {
+  sendCourseConfirmEmail({
+    name: '王大明', jobTitle: '生產部經理',
+    companyName: '測試股份有限公司', taxId: '12345678',
+    phone: '0912345678', email: Session.getActiveUser().getEmail(),
+    cohort: '臺北市｜2026/6/5 10:00-17:00｜IEAT會議中心臺北市中山區松江路350號'
+  });
+  Logger.log('已寄測試信至 ' + Session.getActiveUser().getEmail());
+}
+
 function ok() {
   return ContentService.createTextOutput(JSON.stringify({ ok: true }))
     .setMimeType(ContentService.MimeType.JSON);
@@ -117,7 +221,22 @@ function ensureHeaders(sheet, headers) {
 }
 
 // ════════════════════════════════════════════════════════════════
-// 一次性設定（手動執行，整理三個分頁順序 + 重建樞紐）
+// 課程報名表單 · 安全建立分頁
+// 只建立「課程報名表單」這一個分頁並設定標題列；
+// 不排序、不碰任何其他分頁、不重建樞紐。第一次使用前手動跑一次即可（不跑也行）。
+// ════════════════════════════════════════════════════════════════
+function setupCourseSheet() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(SHEET_COURSE);
+  const created = !sheet;
+  if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);  // 新分頁建在最後面
+  ensureHeaders(sheet, COURSE_HEADERS);
+  const msg = (created ? '✅ 已建立分頁「' : '✅ 已確認分頁「') + SHEET_COURSE + '」並設定好標題列（位於最後一個分頁）';
+  Logger.log(msg);   // 結果看下方「執行記錄」即可
+}
+
+// ════════════════════════════════════════════════════════════════
+// ⚠️ 舊專案用：整理分頁順序 + 重建樞紐（會重新排序分頁，課程報名專案請勿執行）
 // ════════════════════════════════════════════════════════════════
 function setupSheets() {
   const ss = SpreadsheetApp.openById(SHEET_ID);
@@ -133,6 +252,7 @@ function setupSheets() {
   ensureHeaders(dealer, DEALER_HEADERS);
 
   // 重新排序：報名名單 (1) → 樞紐分析 (2) → 經銷商存取記錄 (3)
+  // ※ 不碰「課程報名表單 / 梯次上架資訊」等其他分頁，避免動到既有資料順序
   signup.activate();
   ss.moveActiveSheet(1);
   pivot.activate();
@@ -143,9 +263,7 @@ function setupSheets() {
   signup.activate();
 
   const msg = '✅ 已完成：1️⃣ 報名名單 / 2️⃣ 樞紐分析 / 3️⃣ 經銷商存取記錄';
-  Logger.log(msg);
-  // 從 Sheet 介面執行才會有 UI；獨立編輯器執行會 throw，所以包 try
-  try { SpreadsheetApp.getUi().alert(msg); } catch (e) {}
+  Logger.log(msg);   // 結果看下方「執行記錄」即可
 }
 
 // ════════════════════════════════════════════════════════════════
