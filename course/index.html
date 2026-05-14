@@ -296,6 +296,7 @@
     scroll-behavior: smooth;
     scroll-snap-type: x proximity;
     padding: 4px 2px 14px;
+    margin: 0 46px;            /* 左右留出箭頭空間，卡片不會被箭頭蓋住 */
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -305,7 +306,8 @@
     scroll-snap-align: start;
   }
   @media (max-width: 480px) {
-    .cohort-card { flex-basis: 84%; }
+    .cohort-card { flex-basis: 86%; }
+    .cohort-track { margin: 0 42px; }
   }
   .cohort-arrow {
     position: absolute; top: 44%;
@@ -322,8 +324,8 @@
     transition: opacity .25s ease, background .25s ease, border-color .25s ease;
   }
   .cohort-arrow:hover { background: rgba(216, 178, 90, 0.22); border-color: rgba(242, 216, 139, 0.9); }
-  .cohort-arrow.prev { left: 2px; }
-  .cohort-arrow.next { right: 2px; }
+  .cohort-arrow.prev { left: 0; }
+  .cohort-arrow.next { right: 0; }
   .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
 
   /* ── 表單 ── */
