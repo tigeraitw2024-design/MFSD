@@ -53,8 +53,29 @@ function doPost(e) {
   }
 }
 
-function doGet() {
+function doGet(e) {
+  if (e && e.parameter && e.parameter.action === 'counts') return courseCounts();
   return ContentService.createTextOutput('TigerAI 報名表單 API 運作中 ✓');
+}
+
+// 回傳各梯次目前報名人數（只回傳彙總數字，不含任何個資）
+// 課程網站用來顯示「剩餘名額」。前端呼叫：SHEET_WEBHOOK + '?action=counts'
+function courseCounts() {
+  const counts = {};
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_COURSE);
+    if (sheet && sheet.getLastRow() > 1) {
+      // 「報名梯次」= 第 5 欄
+      const values = sheet.getRange(2, 5, sheet.getLastRow() - 1, 1).getValues();
+      values.forEach(r => {
+        const key = String(r[0] || '').trim();
+        if (key) counts[key] = (counts[key] || 0) + 1;
+      });
+    }
+  } catch (err) { /* 出錯就回空物件，前端會當作 0 */ }
+  return ContentService.createTextOutput(JSON.stringify(counts))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 // ════════ 寫入：報名 ════════

@@ -285,6 +285,45 @@
     .ax-pyramid { max-width: 275px; }
   }
 
+  /* ── 開課梯次：水平捲動輪播 ── */
+  .cohort-viewport { position: relative; }
+  .cohort-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    padding: 4px 2px 14px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .cohort-track::-webkit-scrollbar { display: none; }
+  .cohort-card {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+  @media (max-width: 480px) {
+    .cohort-card { flex-basis: 84%; }
+  }
+  .cohort-arrow {
+    position: absolute; top: 44%;
+    transform: translateY(-50%);
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 9999px;
+    background: rgba(20, 16, 10, 0.88);
+    border: 1px solid rgba(216, 178, 90, 0.45);
+    color: #F2D88B;
+    font-size: 1.05rem; font-weight: 700; line-height: 1;
+    cursor: pointer; z-index: 5;
+    backdrop-filter: blur(4px);
+    transition: opacity .25s ease, background .25s ease, border-color .25s ease;
+  }
+  .cohort-arrow:hover { background: rgba(216, 178, 90, 0.22); border-color: rgba(242, 216, 139, 0.9); }
+  .cohort-arrow.prev { left: 2px; }
+  .cohort-arrow.next { right: 2px; }
+  .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
+
   /* ── 表單 ── */
   .form-input {
     background: rgba(8, 7, 12, 0.8);
@@ -977,10 +1016,14 @@
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">08 ／ 開課梯次</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">開課梯次</h2>
-      <p class="text-gray-400 mt-4 text-sm tracking-[0.18em]">6 小時 ・ 單日課程 ・ 每梯限額 40 人</p>
+      <p class="text-gray-400 mt-4 text-sm tracking-[0.18em]">6 小時 ・ 單日課程 ・ 每梯限額 20 人</p>
     </div>
-    <div id="cohortList" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，已結束的場次會自動隱藏</p>
+    <div class="cohort-viewport reveal from-up">
+      <button type="button" id="cohortPrev" class="cohort-arrow prev" aria-label="上一個梯次">&lt;</button>
+      <div id="cohortList" class="cohort-track"></div>
+      <button type="button" id="cohortNext" class="cohort-arrow next" aria-label="下一個梯次">&gt;</button>
+    </div>
+    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新、已結束或額滿的場次會自動處理</p>
   </div>
 </section>
 
@@ -1209,7 +1252,7 @@ const CONFIG = {
 
 // ── 開課梯次：讀不到 CSV 時的佔位資料 ──
 const COHORTS_FALLBACK = [
-  { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 40 }
+  { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 20 }
 ];
 
 // ══════════════════════ 統編查詢 ══════════════════════
@@ -1488,7 +1531,7 @@ function parseCohortCSV(text) {
     date: (r[12] || '').trim(),     // M 欄：課程日期
     time: (r[13] || '').trim(),     // N 欄：課程時間
     location: (r[14] || '').trim(), // O 欄：課程地點
-    capacity: 40
+    capacity: 20
   })).filter(c => c.date);
 }
 
@@ -1509,37 +1552,43 @@ function countdownBadge(dateStr) {
   return '<span class="text-gray-500 text-xs">已結束</span>';
 }
 
-function renderCohorts(cohorts) {
+function renderCohorts(cohorts, counts) {
+  counts = counts || {};
   const list = document.getElementById('cohortList');
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
 
-  cohorts.forEach((co, i) => {
+  cohorts.forEach((co) => {
+    const label = [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+    const taken = counts[label] || 0;
+    const remaining = Math.max(0, co.capacity - taken);
+    const full = remaining <= 0;
+    const slotHtml = full
+      ? '<span class="text-right text-red-400 font-bold">已額滿</span>'
+      : `<span class="text-right"><span class="gold-text font-black">${remaining}</span> / ${co.capacity} 人</span>`;
+
     const card = document.createElement('div');
-    card.className = 'card-glass rounded-2xl p-6 glow-border reveal ' +
-      (i === 0 ? 'from-left' : i === cohorts.length - 1 ? 'from-right' : 'from-up');
-    card.setAttribute('data-delay', String(Math.min(i + 1, 3)));
+    card.className = 'cohort-card card-glass rounded-2xl p-6 glow-border';
     card.innerHTML = `
       <div class="gold-text font-black text-xl mb-3">${co.city || '場次'}</div>
       <div class="space-y-2 text-sm text-gray-300">
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">日期</span><span class="text-right">${co.date || '-'}</span></div>
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">時間</span><span class="text-right">${co.time || '-'}</span></div>
         <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">地點</span><span class="text-right">${co.location || '-'}</span></div>
-        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">名額</span><span class="text-right">${co.capacity} 人</span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">名額</span>${slotHtml}</div>
       </div>
       <div class="mt-4 pt-3 border-t border-gold/10 text-center">${countdownBadge(co.date)}</div>`;
     list.appendChild(card);
 
     const opt = document.createElement('option');
-    const label = [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
     opt.value = label;
-    opt.textContent = label;
+    opt.textContent = label + (full ? '（已額滿）' : '');
+    if (full) opt.disabled = true;
     select.appendChild(opt);
   });
 
-  // 補觀察新加入的梯次卡片進場動畫
-  initRevealObserver();
+  if (window._updateCohortArrows) window._updateCohortArrows();
 }
 
 async function loadCohorts() {
@@ -1553,14 +1602,41 @@ async function loadCohorts() {
       }
     } catch (e) { /* 讀取失敗時保留佔位資料 */ }
   }
+  // 抓各梯次目前報名人數（後端只回傳彙總數字，不含任何個資）
+  let counts = {};
+  if (CONFIG.SHEET_WEBHOOK) {
+    try {
+      const r = await fetch(CONFIG.SHEET_WEBHOOK + '?action=counts');
+      if (r.ok) counts = await r.json();
+    } catch (e) { /* 抓不到就當 0，顯示滿額數字 */ }
+  }
   // 已結束的場次自動隱藏（日期無法解析者保留）
   const upcoming = cohorts.filter(c => {
     const d = daysUntil(c.date);
     return d === null || d >= 0;
   });
-  renderCohorts(upcoming.length ? upcoming : cohorts);
+  renderCohorts(upcoming.length ? upcoming : cohorts, counts);
 }
 loadCohorts();
+
+// ── 梯次水平捲動箭頭 ──
+(function cohortCarousel() {
+  const track = document.getElementById('cohortList');
+  const prev = document.getElementById('cohortPrev');
+  const next = document.getElementById('cohortNext');
+  if (!track || !prev || !next) return;
+  const step = () => Math.max(280, track.clientWidth * 0.85);
+  function update() {
+    prev.disabled = track.scrollLeft <= 4;
+    next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+  }
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  track.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  window._updateCohortArrows = update;
+  update();
+})();
 
 // 頁面載入即啟動捲動進場動畫（內容不再有資格閘門）
 initRevealObserver();
