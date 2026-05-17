@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="製造業銷售流程導入 AI 工具｜通路績效追蹤、銷售報表自動化與智慧客服實戰課程｜6 小時打造 3 條自動化流程｜虎智科技 TigerAI 企業課程｜輸入統編通過資格審核即可報名">
+<title>製造業銷售流程導入 AI 工具｜虎智科技 TigerAI</title>
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif']
+        },
+        colors: {
+          navy: {
+            900: '#070608',
+            800: '#0C0A10',
+            700: '#16131C',
+            600: '#1F1B27'
+          },
+          teal: {
+            bright: '#7CE7C7',
+            500: '#4FB89A',
+            600: '#2E8B72',
+            700: '#1F5B4C'
+          },
+          gold: {
+            light: '#F2D88B',
+            DEFAULT: '#D8B25A',
+            deep: '#8C6A1C'
+          }
+        },
+        animation: {
+          'fade-in-up': 'fadeInUp 0.6s ease-out',
+          'fade-in': 'fadeIn 0.4s ease-out',
+          'pulse-slow': 'pulse 3s ease-in-out infinite',
+          'float-slow': 'floatSlow 7s ease-in-out infinite'
+        },
+        keyframes: {
+          fadeInUp: {
+            '0%': { opacity: '0', transform: 'translateY(20px)' },
+            '100%': { opacity: '1', transform: 'translateY(0)' }
+          },
+          fadeIn: {
+            '0%': { opacity: '0' },
+            '100%': { opacity: '1' }
+          },
+          floatSlow: {
+            '0%,100%': { transform: 'translateY(0)' },
+            '50%': { transform: 'translateY(-18px)' }
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', system-ui, sans-serif;
+    background: #06060A;
+    color: #E7E1D2;
+    letter-spacing: 0.005em;
+  }
+  .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.04em; }
+
+  /* ── 主背景：暖金光 + 工程網格 ── */
+  .gold-glow-bg {
+    background:
+      radial-gradient(ellipse 55% 45% at 82% -5%, rgba(216, 178, 90, 0.22) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 8% 38%, rgba(216, 178, 90, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 92% 78%, rgba(216, 178, 90, 0.10) 0%, transparent 60%),
+      linear-gradient(180deg, #06060A 0%, #08070C 100%);
+    background-attachment: fixed;
+    position: relative;
+  }
+  .gold-glow-bg::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(216, 178, 90, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(216, 178, 90, 0.045) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .gold-orb {
+    position: absolute; border-radius: 9999px; pointer-events: none;
+    background: radial-gradient(circle, rgba(216,178,90,0.30) 0%, transparent 70%);
+    filter: blur(46px);
+  }
+  section, nav, footer { position: relative; z-index: 1; }
+
+  /* ── 卡片：黑底 + 金色細線 + 角落 L 型刻度 ── */
+  .card-glass {
+    background:
+      linear-gradient(180deg, rgba(216, 178, 90, 0.04) 0%, rgba(255,255,255,0) 30%),
+      rgba(10, 9, 14, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(216, 178, 90, 0.14);
+    position: relative;
+    border-radius: 14px;
+  }
+  .card-gold {
+    background:
+      linear-gradient(180deg, rgba(216, 178, 90, 0.10) 0%, rgba(216, 178, 90, 0.02) 35%, rgba(10, 9, 14, 0.78) 100%);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(216, 178, 90, 0.34);
+    position: relative;
+    border-radius: 14px;
+  }
+  /* 卡片四角 L 型刻度 */
+  .card-glass::before, .card-glass::after,
+  .card-gold::before, .card-gold::after {
+    content: "";
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 1px solid rgba(216, 178, 90, 0.55);
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .card-glass::before, .card-gold::before {
+    top: -1px; left: -1px;
+    border-right: none; border-bottom: none;
+  }
+  .card-glass::after, .card-gold::after {
+    bottom: -1px; right: -1px;
+    border-left: none; border-top: none;
+  }
+  .card-gold::before, .card-gold::after { border-color: rgba(242, 216, 139, 0.85); width: 18px; height: 18px; }
+
+  .glow-border { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .glow-border:hover {
+    border-color: rgba(216, 178, 90, 0.55);
+    box-shadow:
+      0 0 0 1px rgba(216, 178, 90, 0.18),
+      0 24px 64px -28px rgba(216, 178, 90, 0.45);
+    transform: translateY(-3px);
+  }
+  .glow-border:hover::before, .glow-border:hover::after {
+    width: 22px; height: 22px;
+    border-color: rgba(242, 216, 139, 1);
+  }
+
+  /* ── 按鈕：銳利金屬 + 掃光 ── */
+  .btn-primary {
+    background: linear-gradient(135deg, #2E8B72 0%, #1F5B4C 100%);
+    color: #F2EFE6;
+    border: 1px solid rgba(124, 231, 199, 0.35);
+    transition: all 0.25s ease;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #4FB89A 0%, #2E8B72 100%);
+    box-shadow: 0 8px 28px rgba(79, 184, 154, 0.28);
+    transform: translateY(-2px);
+  }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-gold {
+    background: linear-gradient(135deg, #F2D88B 0%, #D8B25A 45%, #8C6A1C 100%);
+    color: #14100A;
+    border: 1px solid rgba(242, 216, 139, 0.6);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .btn-gold::after {
+    content: "";
+    position: absolute; top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+    transform: skewX(-22deg);
+    transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-gold:hover::after { left: 130%; }
+  .btn-gold:hover {
+    box-shadow: 0 10px 30px -6px rgba(216, 178, 90, 0.55);
+    transform: translateY(-2px);
+  }
+
+  /* ── 金色漸層文字 ── */
+  .gold-text {
+    background: linear-gradient(180deg, #FBEFC0 0%, #F2D88B 30%, #D8B25A 60%, #8C6A1C 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 28px rgba(216, 178, 90, 0.18);
+  }
+
+  /* ── 區塊小標：mono + 金色刻度線 ── */
+  .floating-line {
+    display: inline-block;
+    width: 2.25rem; height: 1px;
+    background: linear-gradient(90deg, transparent, #D8B25A 30%, #D8B25A 70%, transparent);
+    margin-right: 0.75rem;
+    vertical-align: middle;
+  }
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    color: #F2D88B;
+    font-size: 0.82rem;
+    letter-spacing: 0.32em;
+  }
+  .section-title {
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: #FFFFFF;
+  }
+  .section-title .gold-text { letter-spacing: -0.01em; }
+
+  /* ── Bracket 修飾（出現在重要區塊角落）── */
+  .bracket-frame {
+    position: relative;
+  }
+  .bracket-frame::before, .bracket-frame::after {
+    content: "";
+    position: absolute;
+    width: 26px; height: 26px;
+    border-color: rgba(216, 178, 90, 0.55);
+    border-style: solid;
+    border-width: 0;
+  }
+  .bracket-frame::before {
+    top: -8px; left: -8px;
+    border-top-width: 1px; border-left-width: 1px;
+  }
+  .bracket-frame::after {
+    bottom: -8px; right: -8px;
+    border-bottom-width: 1px; border-right-width: 1px;
+  }
+
+  /* ── 任務序號（巨大描邊數字）── */
+  .task-numeral {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 5.5rem;
+    line-height: 0.85;
+    -webkit-text-stroke: 1px rgba(216, 178, 90, 0.55);
+    color: transparent;
+    letter-spacing: -0.04em;
+  }
+  .task-card { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+  .task-card:hover .task-numeral {
+    -webkit-text-stroke-color: rgba(242, 216, 139, 1);
+    color: rgba(216, 178, 90, 0.08);
+  }
+
+  /* ── AX 金字塔（立體 SVG · 捲動逐層組合 + 滑過高亮）── */
+  .ax-pyramid {
+    display: block;
+    width: 100%;
+    max-width: 363px;
+    margin: 0 auto;
+    overflow: visible;
+  }
+  .ax-level {
+    opacity: 0;
+    transform: translateY(64px);
+    transition: opacity .6s ease, transform .8s cubic-bezier(.22,1,.36,1), filter .35s ease;
+  }
+  .ax-level.built { opacity: 1; transform: translateY(0); }
+  .ax-level polygon, .ax-level text { transition: fill .3s ease, stroke .3s ease; }
+  .ax-apex { filter: drop-shadow(0 0 11px rgba(216,178,90,0.55)); }
+  .ax-level.active { filter: drop-shadow(0 0 22px rgba(216,178,90,0.85)); }
+  .ax-level.active .ax-front { fill: url(#axGoldFront); stroke: #F8E4A8; stroke-opacity: 0.8; }
+  .ax-level.active .ax-top   { fill: url(#axGoldTop);   stroke: #F8E4A8; stroke-opacity: 0.8; }
+  .ax-level.active .ax-txt-code,
+  .ax-level.active .ax-txt-name { fill: #1A1308; }
+  .ax-txt-code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
+  .ax-txt-name { font-family: 'Noto Sans TC', system-ui, sans-serif; font-weight: 700; }
+  @media (max-width: 1023px) {
+    .ax-pyramid { max-width: 275px; }
+    /* 手機/平板：金字塔整個直接顯示，不做逐層組合動畫（避免捲過就看不到內容） */
+    .ax-level { opacity: 1 !important; transform: none !important; }
+  }
+
+  /* ── 開課梯次：水平捲動輪播 ── */
+  .cohort-viewport { position: relative; }
+  .cohort-track {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    padding: 4px 2px 14px;
+    margin: 0 46px;            /* 左右留出箭頭空間，卡片不會被箭頭蓋住 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .cohort-track::-webkit-scrollbar { display: none; }
+  .cohort-card {
+    flex: 0 0 300px;
+    scroll-snap-align: start;
+  }
+  @media (max-width: 480px) {
+    .cohort-card { flex-basis: 86%; }
+    .cohort-track { margin: 0 42px; }
+  }
+  .cohort-arrow {
+    position: absolute; top: 44%;
+    transform: translateY(-50%);
+    width: 38px; height: 38px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 9999px;
+    background: rgba(20, 16, 10, 0.88);
+    border: 1px solid rgba(216, 178, 90, 0.45);
+    color: #F2D88B;
+    font-size: 1.05rem; font-weight: 700; line-height: 1;
+    cursor: pointer; z-index: 5;
+    backdrop-filter: blur(4px);
+    transition: opacity .25s ease, background .25s ease, border-color .25s ease;
+  }
+  .cohort-arrow:hover { background: rgba(216, 178, 90, 0.22); border-color: rgba(242, 216, 139, 0.9); }
+  .cohort-arrow.prev { left: 0; }
+  .cohort-arrow.next { right: 0; }
+  .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
+
+  /* ── 表單 ── */
+  .form-input {
+    background: rgba(8, 7, 12, 0.8);
+    border: 1px solid rgba(216, 178, 90, 0.22);
+    color: #F2EFE6;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    font-family: inherit;
+  }
+  .form-input::placeholder { color: rgba(231, 225, 210, 0.32); }
+  .form-input:focus {
+    outline: none;
+    border-color: #F2D88B;
+    background: rgba(8, 7, 12, 0.95);
+    box-shadow: 0 0 0 3px rgba(216, 178, 90, 0.18);
+  }
+  .form-input.error {
+    border-color: #E26B5C;
+    box-shadow: 0 0 0 3px rgba(226, 107, 92, 0.18);
+  }
+  #taxIdInput {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 1.4rem;
+    letter-spacing: 0.5em;
+    padding-left: 0.5em;
+  }
+
+  /* ── 導覽列 ── */
+  .nav-link {
+    transition: color 0.2s ease;
+    position: relative;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -6px;
+    width: 0; height: 1px;
+    background: #F2D88B;
+    transition: width 0.3s ease;
+  }
+  .nav-link:hover { color: #F2D88B; }
+  .nav-link:hover::after { width: 100%; }
+
+  /* ── FAQ ── */
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+  details[open] .faq-icon { transform: rotate(45deg); }
+  .faq-icon { transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
+  /* ── 浮動報名按鈕：直立刻度條 ── */
+  .floating-cta {
+    position: fixed;
+    right: 0; top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
+    writing-mode: vertical-rl;
+    padding: 1.25rem 0.8rem;
+    border-radius: 14px 0 0 14px;
+    letter-spacing: 0.4em;
+    font-size: 0.95rem;
+    box-shadow:
+      -6px 0 32px -8px rgba(216, 178, 90, 0.55),
+      inset 0 0 0 1px rgba(242, 216, 139, 0.4);
+    animation: ctaPulse 3s ease-in-out infinite;
+  }
+  @keyframes ctaPulse {
+    0%, 100% {
+      box-shadow:
+        -6px 0 28px -10px rgba(216, 178, 90, 0.45),
+        inset 0 0 0 1px rgba(242, 216, 139, 0.4);
+    }
+    50% {
+      box-shadow:
+        -6px 0 40px -6px rgba(242, 216, 139, 0.85),
+        inset 0 0 0 1px rgba(242, 216, 139, 0.7);
+    }
+  }
+  @media (max-width: 640px) {
+    .floating-cta {
+      writing-mode: horizontal-tb;
+      top: auto; bottom: 1.25rem; right: 1rem;
+      transform: none;
+      border-radius: 9999px;
+      padding: 0.8rem 1.6rem;
+      letter-spacing: 0.12em;
+    }
+  }
+
+  /* ── 捲動進場：保留 from-left / from-right / from-up ── */
+  .reveal {
+    opacity: 0;
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.from-left  { transform: translateX(-70px); }
+  .reveal.from-right { transform: translateX(70px); }
+  .reveal.from-up    { transform: translateY(48px); }
+  .reveal.in-view    { opacity: 1; transform: translate(0, 0); }
+  .reveal[data-delay="1"] { transition-delay: 0.12s; }
+  .reveal[data-delay="2"] { transition-delay: 0.24s; }
+  .reveal[data-delay="3"] { transition-delay: 0.36s; }
+
+  /* ── 講師圖片 ── */
+  .instructor-img {
+    opacity: 0;
+    transform: translateX(160px) scale(0.94);
+    transition: opacity 1s ease, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .instructor-img.in-view { opacity: 1; transform: translateX(0) scale(1); }
+  .instructor-halo {
+    position: absolute; inset: -10% -8% -4% -8%;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(216,178,90,0.42) 0%, rgba(216,178,90,0.10) 48%, transparent 72%);
+    filter: blur(22px);
+    z-index: 0;
+  }
+
+  /* ── Hero 講師照片 ── */
+  .hero-photo-glow {
+    position: absolute; inset: -12% -10% -16% -10%;
+    background: radial-gradient(ellipse at center, rgba(216,178,90,0.42) 0%, rgba(216,178,90,0.12) 46%, transparent 72%);
+    filter: blur(32px);
+    z-index: 0;
+  }
+  .hero-photo {
+    animation: heroPhotoIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.6));
+  }
+  @keyframes heroPhotoIn {
+    0% { opacity: 0; transform: translateX(-40px) scale(0.96); }
+    100% { opacity: 1; transform: translateX(0) scale(1); }
+  }
+
+  /* ── 大數字計時徽章 ── */
+  .countdown-num {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1;
+  }
+
+  /* ── Hero 主標：金箔疊字 ── */
+  .hero-title {
+    font-weight: 900;
+    letter-spacing: -0.015em;
+    line-height: 1.05;
+  }
+  .hero-corner {
+    position: absolute;
+    width: 56px; height: 56px;
+    border: 1px solid rgba(216, 178, 90, 0.5);
+    pointer-events: none;
+  }
+  .hero-corner.tl { top: -12px; left: -12px; border-right: none; border-bottom: none; }
+  .hero-corner.br { bottom: -12px; right: -12px; border-left: none; border-top: none; }
+
+  /* ── 章節編號徽章 ── */
+  .chapter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    color: #F2D88B;
+    padding: 0.4rem 0.85rem;
+    border: 1px solid rgba(216, 178, 90, 0.32);
+    border-radius: 999px;
+    background: rgba(216, 178, 90, 0.05);
+  }
+
+  /* ── 統編輸入區裝飾 ── */
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.24em;
+    color: #0E0B05;
+    background: linear-gradient(135deg, #F2D88B 0%, #D8B25A 100%);
+    padding: 0.35rem 0.95rem;
+    border-radius: 999px;
+    font-weight: 800;
+  }
+
+  /* ── 細刻度標記 ── */
+  .tick-row {
+    display: flex; gap: 4px; align-items: center;
+    margin-top: 8px;
+  }
+  .tick-row span {
+    flex: 1; height: 2px; background: rgba(216, 178, 90, 0.18);
+  }
+  .tick-row span.on { background: linear-gradient(90deg, #F2D88B, #D8B25A); }
+
+  @media (max-width: 640px) {
+    .hero-title { font-size: 2.5rem !important; }
+    .task-numeral { font-size: 4rem; }
+    .reveal.from-left, .reveal.from-right { transform: translateY(45px); }
+    .instructor-img { transform: translateY(60px) scale(0.96); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .instructor-img, .ax-level { transition: opacity 0.3s ease; transform: none !important; }
+    .floating-cta { animation: none; }
+  }
+</style>
+</head>
+<body class="gold-glow-bg min-h-screen">
+
+<!-- ════════ NAV ════════ -->
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-navy-900/85 border-b border-gold/15">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img src="assets/logo.png" alt="虎智科技 TigerAI" class="w-9 h-9 object-contain">
+      <div class="leading-tight">
+        <div class="text-white font-bold text-sm sm:text-base tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
+        <div class="text-[10px] sm:text-[11px] text-gold-light/70 tracking-widest">製造業 AI 自動化</div>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-7 text-sm text-gray-300">
+      <a href="#why" class="nav-link">為什麼上課</a>
+      <a href="#tasks" class="nav-link">課程架構</a>
+      <a href="#instructor" class="nav-link">講師</a>
+      <a href="#cohorts" class="nav-link">梯次</a>
+      <a href="#signup" class="btn-gold px-4 py-2 rounded-lg font-bold text-xs tracking-[0.3em]">立即報名</a>
+    </div>
+    <a href="#signup" class="md:hidden btn-gold px-3 py-2 rounded-lg text-sm font-bold">報名</a>
+  </div>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<section class="pt-32 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <div class="gold-orb w-96 h-96 top-0 right-0 animate-float-slow"></div>
+  <div class="gold-orb w-72 h-72 bottom-0 left-0 animate-float-slow" style="animation-delay:-3s"></div>
+
+  <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+    <!-- 講師照片：桌機在左、手機排在文字下方 -->
+    <div class="relative flex justify-center lg:justify-start lg:col-span-6 order-2 lg:order-1">
+      <div class="relative w-72 sm:w-96 lg:w-full lg:max-w-xl">
+        <div class="hero-photo-glow"></div>
+        <span class="hero-corner tl"></span>
+        <span class="hero-corner br"></span>
+        <img src="assets/leo-hero.png" alt="講師 謝侑霖 Leo Hsieh"
+          class="hero-photo relative z-10 w-full">
+      </div>
+    </div>
+
+    <!-- 文字：手機排在最上方 -->
+    <div class="text-center lg:text-left lg:col-span-6 order-1 lg:order-2">
+      <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-5 animate-fade-in">
+        <span class="chapter-tag"><span class="w-1.5 h-1.5 rounded-full bg-gold-light"></span>製造業專屬</span>
+        <span class="text-[11px] text-gray-500 tracking-[0.3em]">6 小時打造 3 條流程</span>
+      </div>
+      <div class="inline-flex items-center gap-3 card-gold rounded-full pl-2 pr-5 py-2 mb-5 animate-fade-in-up">
+        <span class="btn-gold text-[11px] tracking-[0.25em] font-black px-3 py-1 rounded-full">講師</span>
+        <span class="text-white font-bold text-sm sm:text-base">謝侑霖 Leo Hsieh</span>
+        <span class="text-gray-400 text-xs hidden sm:inline">｜AI 應用與數位轉型顧問</span>
+      </div>
+      <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl text-white mb-5 animate-fade-in-up">
+        製造業銷售流程<br>
+        <span class="gold-text">導入 AI 工具</span>
+      </h1>
+      <div class="flex items-center gap-3 justify-center lg:justify-start mb-6">
+        <span class="block w-12 h-px bg-gold shrink-0"></span>
+        <p class="text-gold-light text-sm sm:text-base tracking-[0.15em]">通路績效追蹤、銷售報表自動化與智慧客服實戰課程</p>
+      </div>
+      <p class="text-base sm:text-lg text-gray-300 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
+        20 年慣性循環，缺的從來不是 AI 工具，是<span class="text-gold-light font-bold">產品思維</span>。<br class="hidden sm:block">
+        6 小時實戰，把 AI 關進可追溯、可驗收的 Harness 裡。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 為什麼要上這堂課 ════════ -->
+<section id="why" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">01 ／ 為什麼上這堂課</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">為什麼製造業<br class="sm:hidden">一定要上這堂課</h2>
+      <p class="text-gray-400 mt-4 text-sm tracking-[0.18em]">零容錯 ・ 可追溯 ・ 可治理</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card-glass p-7 sm:p-8 glow-border reveal from-left" data-delay="1">
+        <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 01</div>
+        <h3 class="text-xl font-bold text-white mb-3">20 年慣性循環</h3>
+        <p class="text-gray-400 leading-relaxed">ERP 半套用、MES 對接失敗、CRM 業務不願用、BI 報表沒人看。AI 來了，不能再多一個黑箱。</p>
+        <div class="tick-row"><span class="on"></span><span></span><span></span></div>
+      </div>
+      <div class="card-glass p-7 sm:p-8 glow-border reveal from-up" data-delay="2">
+        <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 02</div>
+        <h3 class="text-xl font-bold text-white mb-3">製造業 ≠ 服務業</h3>
+        <p class="text-gray-400 leading-relaxed">服務業客服答錯能道歉；製造業排程錯就交期延誤、品管錯就良率崩潰。零容錯，容不下「自由發揮的 AI」。</p>
+        <div class="tick-row"><span class="on"></span><span class="on"></span><span></span></div>
+      </div>
+      <div class="card-glass p-7 sm:p-8 glow-border reveal from-right" data-delay="3">
+        <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 03</div>
+        <h3 class="text-xl font-bold text-white mb-3">黑箱無法交代</h3>
+        <p class="text-gray-400 leading-relaxed">客戶問「AI 為什麼這樣判斷？」拿不出 Log 與追溯紀錄，法規、內部、客戶通通過不去。</p>
+        <div class="tick-row"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+      </div>
+    </div>
+
+    <div class="mt-10 card-gold p-8 sm:p-10 reveal from-up">
+      <div class="flex items-center gap-3 mb-5">
+        <span class="block w-10 h-px bg-gold"></span>
+        <div class="text-gold-light text-sm tracking-[0.25em]">課後你會得到</div>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-6">
+        <div class="flex items-start gap-3">
+          <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
+          <div>
+            <div class="text-white font-bold">AI 可控</div>
+            <div class="text-gray-400 text-sm mt-1">不是黑箱，每一步可追蹤</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
+          <div>
+            <div class="text-white font-bold">流程可追溯</div>
+            <div class="text-gray-400 text-sm mt-1">每一步都有 Log 記錄</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
+          <div>
+            <div class="text-white font-bold">決策可驗收</div>
+            <div class="text-gray-400 text-sm mt-1">責任歸屬清晰，有人負責</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 課程核心定位 ════════ -->
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">02 ／ 課程核心定位</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">課程核心定位</h2>
+    </div>
+
+    <div class="card-glass p-8 sm:p-12 reveal from-left">
+      <div class="text-gold-light text-sm tracking-[0.25em] mb-5">課程定位</div>
+      <p class="text-gray-300 leading-loose text-lg">
+        工具是載體，<span class="text-gold-light font-bold">產品思維才是核心</span>。n8n、WebUI、RAG、MCP 各有角色，但都會改版；我們教的是把<br class="hidden md:inline">
+        <span class="gold-text font-bold">製造業人的規格思維</span>遷移到 AI 工具設計上 —— 學員學完換一套工具照樣能用，因為他們學的是<span class="gold-text font-bold">思維</span>，不是按鈕位置。
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5 mt-6">
+      <div class="card-glass p-7 glow-border reveal from-left" data-delay="1">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 01</div>
+        <h3 class="text-lg font-bold text-white mb-2">接地氣</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">從製造業現場提煉的課程，不是從技術推演出來的；情境、用詞、痛點都是車間裡真的會遇到的事。</p>
+      </div>
+      <div class="card-glass p-7 glow-border reveal from-up" data-delay="2">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 02</div>
+        <h3 class="text-lg font-bold text-white mb-2">可驗收</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">每門課同時教「能力」與「治理」，學員回去能用也能管 —— 知道流程怎麼跑、誰負責、出錯怎麼處理。</p>
+      </div>
+      <div class="card-glass p-7 glow-border reveal from-right" data-delay="3">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 03</div>
+        <h3 class="text-lg font-bold text-white mb-2">長期有效</h3>
+        <p class="text-gray-400 text-sm leading-relaxed">五級成熟度架構 + n8n 官方大使背景，工具改版思維不過時，企業有清晰的升級路徑可走。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 五大核心任務 ════════ -->
+<section id="tasks" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">03 ／ 課程架構</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">課程單元 · 6 小時</h2>
+      <p class="text-gray-400 mt-4">n8n 為核心 ・ 視覺化零程式門檻 ・ 帶走 3 條自動化流程</p>
+    </div>
+
+    <div class="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-start">
+
+      <!-- 左：五張任務卡 -->
+      <div class="space-y-5 order-2 lg:order-1">
+      <div class="card-glass task-card p-7 sm:p-9 glow-border reveal from-left" data-level="0">
+        <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
+          <div class="task-numeral">01</div>
+          <div>
+            <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">U1 ・ 0.5 小時</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">銷售流程現況解析</h3>
+            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>市場資料分散：通路、訂單、客戶分屬不同系統</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>通路績效難彙總：多家經銷商、不同回報格式</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>客需判讀不一致：銷售、客服、產品各說各話</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass task-card p-7 sm:p-9 glow-border reveal from-right" data-level="1">
+        <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
+          <div class="task-numeral">02</div>
+          <div>
+            <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">U2 ・ 1 小時</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">n8n 平台基本操作</h3>
+            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>視覺化工作流程：節點、連線、資料傳遞</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>節點設計：Trigger / Logic / Output</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>三種觸發方式實作：Manual / Cron / Webhook</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass task-card p-7 sm:p-9 glow-border reveal from-left" data-level="2">
+        <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
+          <div class="task-numeral">03</div>
+          <div>
+            <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">U3 ・ 1 小時</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">銷售數據與報表自動化</h3>
+            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>資料整合：讀取 Excel / Google Sheets</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>AI 節點摘要：把銷售數據變成可讀的分析</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>週報自動 Email 發送：每週準時送到主管信箱</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-gold task-card p-7 sm:p-9 glow-border reveal from-right" data-level="3">
+        <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
+          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(242,216,139,0.9); color: rgba(216,178,90,0.08);">04</div>
+          <div>
+            <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">★ U4 ・ 2 小時 ・ 核心</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">n8n 銷售自動化實戰 <span class="text-gold-light text-sm font-medium">（核心）</span></h3>
+            <ul class="text-gray-300 space-y-2 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 01 ]</span>自動報表流程：數據 → AI 分析 → 自動輸出</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 02 ]</span>客服意圖分類：客戶訊息 → AI 判讀 → 自動分類</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 03 ]</span>績效異常告警：數據異常 → AI 判斷 → 即時通知</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-glass task-card p-7 sm:p-9 glow-border reveal from-left" data-level="4">
+        <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
+          <div class="task-numeral">05</div>
+          <div>
+            <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">U5 ・ 1 小時</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">場景演練與小組討論</h3>
+            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>兩個情境演練：動手套用課程學到的流程</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>小組設計解法流程圖：用 n8n 拉出可運行版本</li>
+              <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>分享與回饋：結訓即帶走可上線的設計</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      </div><!-- /任務卡 -->
+
+      <!-- 右：AX 成熟度金字塔（立體 SVG · 捲動逐層蓋好 + 滑過任務卡高亮）-->
+      <div class="order-1 lg:order-2 lg:sticky lg:top-28 mb-10 lg:mb-0">
+        <div class="text-center mb-4">
+          <span class="section-eyebrow">AX 成熟度模型　L0 → L4</span>
+        </div>
+        <svg class="ax-pyramid" viewBox="0 0 340 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="axDarkFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3a362f" stop-opacity="0.86"/><stop offset="1" stop-color="#0d0b09" stop-opacity="0.66"/>
+            </linearGradient>
+            <linearGradient id="axDarkTop" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#524c43" stop-opacity="0.9"/><stop offset="1" stop-color="#2b2822" stop-opacity="0.74"/>
+            </linearGradient>
+            <linearGradient id="axGoldFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#F0D27A"/><stop offset="1" stop-color="#9E7826"/>
+            </linearGradient>
+            <linearGradient id="axGoldTop" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FBEBB0"/><stop offset="1" stop-color="#DEBB66"/>
+            </linearGradient>
+            <linearGradient id="axApexL" x1="0" y1="0" x2="1" y2="0.5">
+              <stop offset="0" stop-color="#FBEBB0"/><stop offset="1" stop-color="#D8B25A"/>
+            </linearGradient>
+            <linearGradient id="axApexR" x1="0" y1="0" x2="1" y2="0.6">
+              <stop offset="0" stop-color="#CDA34E"/><stop offset="1" stop-color="#7E5F1E"/>
+            </linearGradient>
+          </defs>
+
+          <!-- L0 -->
+          <g class="ax-level">
+            <polygon class="ax-top"   points="42,560 298,560 292.5,543 47.5,543" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <polygon class="ax-front" points="42,560 298,560 325,672 15,672" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <text class="ax-txt-code" x="170" y="613" text-anchor="middle" font-size="36" fill="#EFE7D4">L0</text>
+            <text class="ax-txt-name" x="170" y="640" text-anchor="middle" font-size="16" fill="#B7AE9A">AI 識讀・風險認知</text>
+          </g>
+
+          <!-- L1 -->
+          <g class="ax-level">
+            <polygon class="ax-top"   points="71.1,439 268.9,439 263.4,422 76.6,422" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <polygon class="ax-front" points="71.1,439 268.9,439 295.9,551 44.1,551" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <text class="ax-txt-code" x="170" y="491" text-anchor="middle" font-size="34" fill="#EFE7D4">L1</text>
+            <text class="ax-txt-name" x="170" y="516" text-anchor="middle" font-size="15" fill="#B7AE9A">AI 協作・資安管控</text>
+          </g>
+
+          <!-- L2 -->
+          <g class="ax-level">
+            <polygon class="ax-top"   points="100.2,318 239.8,318 234.3,301 105.7,301" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <polygon class="ax-front" points="100.2,318 239.8,318 266.8,430 73.2,430" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <text class="ax-txt-code" x="170" y="370" text-anchor="middle" font-size="30" fill="#EFE7D4">L2</text>
+            <text class="ax-txt-name" x="170" y="392" text-anchor="middle" font-size="14" fill="#B7AE9A">流程自動化</text>
+          </g>
+
+          <!-- L3 -->
+          <g class="ax-level">
+            <polygon class="ax-top"   points="129.3,197 210.7,197 205.2,180 134.8,180" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <polygon class="ax-front" points="129.3,197 210.7,197 237.6,309 102.4,309" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
+            <text class="ax-txt-code" x="170" y="250" text-anchor="middle" font-size="27" fill="#EFE7D4">L3</text>
+            <text class="ax-txt-name" x="170" y="270" text-anchor="middle" font-size="13" fill="#B7AE9A">決策支援</text>
+          </g>
+
+          <!-- L4 apex -->
+          <g class="ax-level ax-apex">
+            <polygon class="ax-apex-face" points="170,28 170,188 131.5,188" fill="url(#axApexL)" stroke="#F8E4A8" stroke-opacity="0.6"/>
+            <polygon class="ax-apex-face" points="170,28 208.5,188 170,188" fill="url(#axApexR)" stroke="#F8E4A8" stroke-opacity="0.6"/>
+            <text class="ax-txt-code" x="170" y="151" text-anchor="middle" font-size="22" fill="#1A1308">L4</text>
+            <text class="ax-txt-name" x="170" y="171" text-anchor="middle" font-size="11" fill="#1A1308">自主營運</text>
+          </g>
+        </svg>
+        <div class="text-center text-[11px] text-gray-500 tracking-[0.18em] mt-5">滑過左側任務卡，對應層級會亮起</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 課程特色 ════════ -->
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">04 ／ 課程特色</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">課程特色</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div class="card-glass p-6 glow-border reveal from-left" data-delay="1">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 01</div>
+        <h3 class="text-white font-bold text-base mb-2">製造業專屬</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">非通用 AI 課程，聚焦製造業實場景</p>
+      </div>
+      <div class="card-glass p-6 glow-border reveal from-up" data-delay="1">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 02</div>
+        <h3 class="text-white font-bold text-base mb-2">可控 AI 架構</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">業界稀缺，Log × 驗收 × 治理</p>
+      </div>
+      <div class="card-glass p-6 glow-border reveal from-up" data-delay="2">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 03</div>
+        <h3 class="text-white font-bold text-base mb-2">三條自動化流程</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">實戰帶走，回公司即可上線</p>
+      </div>
+      <div class="card-glass p-6 glow-border reveal from-up" data-delay="3">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 04</div>
+        <h3 class="text-white font-bold text-base mb-2">視覺化操作</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">零程式門檻，拖拉式設計</p>
+      </div>
+      <div class="card-glass p-6 glow-border reveal from-right" data-delay="3">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 05</div>
+        <h3 class="text-white font-bold text-base mb-2">AX 成熟度模型</h3>
+        <p class="text-gray-500 text-xs leading-relaxed">有方法、有路徑，持續升級</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 學習成果 ════════ -->
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">05 ／ 學習成果</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">學習成果</h2>
+      <p class="text-gray-400 mt-4">學完帶走實戰能力，回公司就能用</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="card-glass p-7 glow-border reveal from-left" data-delay="1">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-gold-light font-bold text-lg">流程自動化能力</h3>
+          <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 01</span>
+        </div>
+        <p class="text-gray-400 leading-relaxed">獨立設計 n8n 自動化流程，讓報表、客服、告警自動運作</p>
+      </div>
+      <div class="card-glass p-7 glow-border reveal from-right" data-delay="1">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-gold-light font-bold text-lg">AI 應用能力</h3>
+          <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 02</span>
+        </div>
+        <p class="text-gray-400 leading-relaxed">善用 AI 分析與分類，提升銷售洞察與決策效率</p>
+      </div>
+      <div class="card-glass p-7 glow-border reveal from-left" data-delay="2">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-gold-light font-bold text-lg">可控 AI 系統</h3>
+          <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 03</span>
+        </div>
+        <p class="text-gray-400 leading-relaxed">具備 Log、驗收、治理能力，確保 AI 決策可追溯、可驗收、可管理</p>
+      </div>
+      <div class="card-glass p-7 glow-border reveal from-right" data-delay="2">
+        <div class="flex items-baseline justify-between mb-3">
+          <h3 class="text-gold-light font-bold text-lg">企業導入藍圖</h3>
+          <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 04</span>
+        </div>
+        <p class="text-gray-400 leading-relaxed">掌握 AX 成熟度模型，從 L0 → L2 的 AI 導入路徑與方法</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 適合對象 ════════ -->
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">06 ／ 適合對象</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">適合對象</h2>
+      <p class="text-gray-400 mt-4">不管你是誰，這堂課都能幫你解決問題</p>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div class="card-glass p-6 sm:p-7 glow-border reveal from-left" data-delay="1">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 01</div>
+        <h3 class="text-white font-bold text-lg mb-2">製造業主管 ／ 老闆</h3>
+        <div class="w-8 h-px bg-gold/50 mb-3"></div>
+        <p class="text-gray-400 text-sm leading-relaxed">想導入 AI，但不想踩雷</p>
+      </div>
+      <div class="card-glass p-6 sm:p-7 glow-border reveal from-up" data-delay="2">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 02</div>
+        <h3 class="text-white font-bold text-lg mb-2">業務 ／ 行銷人員</h3>
+        <div class="w-8 h-px bg-gold/50 mb-3"></div>
+        <p class="text-gray-400 text-sm leading-relaxed">需要自動化報表與客戶分析</p>
+      </div>
+      <div class="card-glass p-6 sm:p-7 glow-border reveal from-up" data-delay="3">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 03</div>
+        <h3 class="text-white font-bold text-lg mb-2">資訊 ／ IT 部門</h3>
+        <div class="w-8 h-px bg-gold/50 mb-3"></div>
+        <p class="text-gray-400 text-sm leading-relaxed">負責企業系統與流程整合</p>
+      </div>
+      <div class="card-glass p-6 sm:p-7 glow-border reveal from-right" data-delay="3">
+        <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 04</div>
+        <h3 class="text-white font-bold text-lg mb-2">行政 ／ PM</h3>
+        <div class="w-8 h-px bg-gold/50 mb-3"></div>
+        <p class="text-gray-400 text-sm leading-relaxed">想提升效率、減少人工作業</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 講師介紹 ════════ -->
+<section id="instructor" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <div class="gold-orb w-80 h-80 top-10 right-10 animate-float-slow"></div>
+  <div class="max-w-6xl mx-auto relative">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">07 ／ 講師介紹</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">講師介紹</h2>
+    </div>
+    <div class="grid md:grid-cols-12 gap-10 items-center">
+      <div class="reveal from-left order-2 md:order-1 md:col-span-6">
+        <div class="text-gold-light text-xs tracking-[0.3em] mb-2">謝侑霖 ／ 虎智科技講師</div>
+        <h3 class="text-3xl sm:text-4xl font-black text-white mb-2 leading-tight">謝侑霖 <span class="gold-text">Leo Hsieh</span></h3>
+        <p class="text-gold-light font-medium mb-6 text-sm tracking-wide">TigerAI 企業講師 ｜ AI 應用與數位轉型顧問</p>
+        <p class="text-gray-300 leading-relaxed mb-6">
+          專注於 AI 應用與數位轉型的產品規劃者與顧問講師。超過 <span class="gold-text font-black mono">20</span> 年系統建置與創新經驗，從電信級到新創，協助企業從開源工具導入到知識自動化——不只導入軟硬體，更打造能真正使用 AI 的組織。
+        </p>
+        <ul class="space-y-3 text-sm text-gray-400">
+          <li class="flex gap-3"><span class="mono text-gold shrink-0 mt-0.5">○</span><span>清華大學（北京）媒介經濟與管理碩士、世新大學廣播電視電影學士</span></li>
+          <li class="flex gap-3"><span class="mono text-gold shrink-0 mt-0.5">○</span><span>亞太行動開台團隊，負責 App 平台產品規劃與經營</span></li>
+          <li class="flex gap-3"><span class="mono text-gold shrink-0 mt-0.5">○</span><span>創業獲微軟特別獎 / Qualcomm 企業獎，擁有 <span class="text-gold-light font-bold">5 項發明專利</span></span></li>
+          <li class="flex gap-3"><span class="mono text-gold shrink-0 mt-0.5">○</span><span>專長 n8n + Python 低程式架構、自動化知識管理（RAG / 向量搜尋）</span></li>
+          <li class="flex gap-3"><span class="mono text-gold shrink-0 mt-0.5">○</span><span>協助多家企業導入工作自動化與知識管理系統</span></li>
+        </ul>
+      </div>
+      <div class="relative order-1 md:order-2 md:col-span-6 flex justify-center">
+        <div class="relative w-80 sm:w-96 md:w-full md:max-w-lg">
+          <div class="instructor-halo"></div>
+          <span class="hero-corner tl" style="top:-16px;left:-16px;width:42px;height:42px;"></span>
+          <span class="hero-corner br" style="bottom:-16px;right:-16px;width:42px;height:42px;"></span>
+          <img id="instructorImg" src="assets/leo.png" alt="Leo Hsieh 謝侑霖 講師" class="instructor-img relative z-10 w-full">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 開課梯次 ════════ -->
+<section id="cohorts" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-14 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">08 ／ 開課梯次</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">開課梯次</h2>
+      <p class="text-gray-400 mt-4 text-sm tracking-[0.18em]">6 小時 ・ 單日課程 ・ 每梯限額 20 人</p>
+    </div>
+    <div class="cohort-viewport reveal from-up">
+      <button type="button" id="cohortPrev" class="cohort-arrow prev" aria-label="上一個梯次">&lt;</button>
+      <div id="cohortList" class="cohort-track"></div>
+      <button type="button" id="cohortNext" class="cohort-arrow next" aria-label="下一個梯次">&gt;</button>
+    </div>
+    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新、已結束或額滿的場次會自動處理</p>
+  </div>
+</section>
+
+<!-- ════════ 報名表單 ════════ -->
+<section id="signup" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">09 ／ 課程報名</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">課程報名</h2>
+      <p class="text-gray-400 mt-4">本課程僅開放完全符合資格之企業，請先輸入統編驗證資格</p>
+    </div>
+
+    <!-- STEP 1：統編驗證 -->
+    <div class="card-gold p-7 sm:p-10 reveal from-up">
+      <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
+        <span class="step-pill">第 1 步 ・ 統編驗證</span>
+        <span class="text-[12px] text-gold-light/70 tracking-[0.24em]">資格審核</span>
+      </div>
+      <h3 class="text-white font-bold text-lg mb-5">輸入您的公司統一編號</h3>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <input
+          id="taxIdInput"
+          type="text"
+          inputmode="numeric"
+          maxlength="8"
+          placeholder="00000000"
+          class="form-input flex-1 px-5 py-4 text-center sm:text-left"
+        >
+        <button id="queryBtn" class="btn-gold font-black px-7 py-4 rounded-lg whitespace-nowrap tracking-widest">
+          驗證資格
+        </button>
+      </div>
+      <div class="flex items-center gap-2 mt-4 text-[12px] text-gray-500 tracking-[0.18em]">
+        <span class="block w-6 h-px bg-gold/40"></span>
+        資料來源：經濟部公開商工登記資料
+      </div>
+      <div id="resultArea" class="mt-6 hidden"></div>
+    </div>
+
+    <!-- STEP 2：報名資料 -->
+    <form id="signupForm" class="card-gold p-7 sm:p-10 space-y-7 mt-6 hidden">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <span class="step-pill">第 2 步 ・ 填寫報名資料</span>
+        <span class="text-[12px] text-gold-light/70 tracking-[0.24em]">報名表單</span>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+          <span class="block w-1 h-4 bg-gold"></span>
+          公司資訊 <span class="text-gold-light/70 text-xs ml-2 tracking-[0.2em]">已通過資格審核</span>
+        </h3>
+        <div id="companyInfoBox" class="p-5 rounded-lg bg-navy-800/60 border border-gold/20">
+          <p class="text-gray-400 text-sm">尚未查詢公司資料</p>
+        </div>
+        <input type="hidden" id="f_taxId" name="taxId">
+        <input type="hidden" id="f_companyName" name="companyName">
+        <input type="hidden" id="f_eligibility" name="eligibility">
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+          <span class="block w-1 h-4 bg-gold"></span>
+          選擇報名梯次 <span class="text-red-400 ml-1">*</span>
+        </h3>
+        <select id="f_cohort" name="cohort" required class="form-input w-full px-5 py-4">
+          <option value="">— 請選擇梯次 —</option>
+        </select>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-base mb-4 flex items-center gap-2">
+          <span class="block w-1 h-4 bg-gold"></span>
+          聯絡窗口
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">姓名 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_name" name="name" required class="form-input w-full px-4 py-3" placeholder="王大明">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">職稱 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_jobTitle" name="jobTitle" required class="form-input w-full px-4 py-3" placeholder="生產部經理">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">電話 <span class="text-red-400">*</span></label>
+            <input type="tel" id="f_phone" name="phone" required class="form-input w-full px-4 py-3" placeholder="0912345678 或 02-12345678">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">信箱 <span class="text-red-400">*</span></label>
+            <input type="email" id="f_email" name="email" required class="form-input w-full px-4 py-3" placeholder="you@example.com">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">年齡 <span class="text-red-400">*</span></label>
+            <select id="f_age" name="age" required class="form-input w-full px-4 py-3">
+              <option value="">— 請選擇 —</option>
+              <option value="18歲以下">18 歲以下</option>
+              <option value="19~30歲">19~30 歲</option>
+              <option value="31~45歲">31~45 歲</option>
+              <option value="46~65歲">46~65 歲</option>
+              <option value="66歲以上">66 歲以上</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">身分證字號 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_nationalId" name="nationalId" required maxlength="10" pattern="[A-Za-z][0-9]{9}" class="form-input w-full px-4 py-3" placeholder="A123456789">
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-gold w-full font-black text-lg py-4 rounded-xl tracking-widest">
+        送出報名 ▸
+      </button>
+      <p class="text-[11px] text-gray-500 text-center tracking-[0.18em]">送出即表示同意虎智科技蒐集與使用您的聯絡資訊</p>
+    </form>
+
+    <!-- 成功訊息 -->
+    <div id="successBox" class="hidden mt-8 card-gold p-10 text-center">
+      <div class="text-gold-light text-sm tracking-[0.3em] mb-5">報名已確認</div>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border border-gold/50 bg-gold/10 mb-5">
+        <span class="gold-text text-3xl font-black">✓</span>
+      </div>
+      <h3 class="text-3xl font-black text-white mb-3">報名成功</h3>
+      <p class="text-gray-300 mb-7 leading-relaxed">虎智科技將於 <span class="text-gold-light font-bold">1 個工作日</span> 內與您聯繫確認課程細節</p>
+      <div class="grid sm:grid-cols-2 gap-3">
+        <a href="https://lin.ee/ZB5Tjkd" target="_blank" class="btn-gold py-3 rounded-lg font-bold tracking-wider">加入 LINE 官方帳號</a>
+        <a href="https://www.tigerai.info" target="_blank" class="block py-3 rounded-lg font-bold bg-navy-700/60 border border-gold/30 text-gold-light hover:bg-gold/10 transition tracking-wider">了解更多虎智方案</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FAQ ════════ -->
+<section id="faq" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-12 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">10 ／ 常見問題</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-4xl sm:text-5xl mt-4">常見問題</h2>
+    </div>
+    <div class="space-y-4">
+      <details class="card-glass p-6 group reveal from-left">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-gold-light text-xs tracking-[0.25em]">問題 01</span>
+            <span class="text-white font-bold">需要程式基礎嗎？</span>
+          </div>
+          <span class="faq-icon text-gold text-2xl">＋</span>
+        </summary>
+        <p class="text-gray-400 mt-4 leading-relaxed pl-14">不需要。本課程專為非技術背景的企業主、主管與行政同仁設計，全程以視覺化拖拉操作 n8n，零程式門檻。</p>
+      </details>
+      <details class="card-glass p-6 group reveal from-right">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-gold-light text-xs tracking-[0.25em]">問題 02</span>
+            <span class="text-white font-bold">課程多長？會帶走什麼？</span>
+          </div>
+          <span class="faq-icon text-gold text-2xl">＋</span>
+        </summary>
+        <p class="text-gray-400 mt-4 leading-relaxed pl-14">單日 6 小時集中授課。結訓當天即可帶走 3 條可上線的自動化流程（自動報表、客服意圖分類、績效異常告警）。</p>
+      </details>
+      <details class="card-glass p-6 group reveal from-left">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-gold-light text-xs tracking-[0.25em]">問題 03</span>
+            <span class="text-white font-bold">為什麼報名要輸入統編？</span>
+          </div>
+          <span class="faq-icon text-gold text-2xl">＋</span>
+        </summary>
+        <p class="text-gray-400 mt-4 leading-relaxed pl-14">課程內容開放所有人瀏覽；報名則僅開放完全符合資格之企業。在報名區輸入統編，系統會以經濟部公開資料自動判定資格，通過後即可直接填寫梯次與聯絡資料。</p>
+      </details>
+      <details class="card-glass p-6 group reveal from-right">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-gold-light text-xs tracking-[0.25em]">問題 04</span>
+            <span class="text-white font-bold">上完課之後還有支援嗎？</span>
+          </div>
+          <span class="faq-icon text-gold text-2xl">＋</span>
+        </summary>
+        <p class="text-gray-400 mt-4 leading-relaxed pl-14">有。結訓後提供基於課程內容的 24h AI 助教，隨時解決你的實作疑問。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 浮動報名按鈕 ════════ -->
+<a href="#signup" class="floating-cta btn-gold font-black">立即報名 ▸</a>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="border-t border-gold/15 py-12 px-4 sm:px-6 lg:px-8 mt-8">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
+    <div class="flex items-center gap-3">
+      <img src="assets/logo.png" alt="虎智科技 TigerAI" class="w-9 h-9 object-contain">
+      <div>
+        <div class="text-white font-bold text-sm tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
+        <div class="text-gray-500 text-[11px] tracking-[0.2em] mt-0.5">製造業 AI 自動化課程</div>
+      </div>
+    </div>
+    <a href="../landing/index.html" class="text-gold-light hover:text-white text-sm font-bold tracking-wider transition">查詢公司是否有資格 →</a>
+    <div class="text-gray-500 text-xs text-center sm:text-right">
+      <div class="tracking-[0.18em]">© 2026 虎智科技 TigerAI · 版權所有</div>
+      <div class="mt-1.5"><a href="https://www.tigerai.info" target="_blank" class="text-gold-light hover:text-white transition tracking-wider">www.tigerai.info</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════ 設定 ══════════════════════
+const CONFIG = {
+  // 與 landing/ 共用同一個 Apps Script Web App，POST body 帶 type:'course_signup' 路由到新分頁
+  SHEET_WEBHOOK: 'https://script.google.com/macros/s/AKfycbyJZoW-u2r35MBf4r7c5qhJ2kqi7AIUkuleYWhUSzP91F1Y4CD5e05knMhkAu5fR6FV3w/exec',
+  MANUFACTURING_CODES: ['08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34'],
+  TOOL_MACHINE_CODES: [
+    'CA01030', 'CA01050', 'CA02010',
+    'CB01010', 'CB01990',
+    'CC01010', 'CC01080',
+    'CD01030',
+    'CQ01010',
+    'C103050', 'C302010', 'C805030',
+    'E604010', 'E605010',
+    'F106010', 'F113010', 'F119010'
+  ],
+  CAPITAL_LIMIT: 100000000,
+  // 梯次資料來源：課程場次分頁「發布到網路」的 CSV 連結
+  // 讀 M 欄=課程日期、N 欄=課程時間、O 欄=課程地點，資料自第 2 列起
+  COHORTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQWoX_zvGuKX8uoPJGVraMSxVevr3LS5tUjaBPKhWS-Bb64_GAIaSeHFRlV8BxiCyPyGncFs-i8ukHD/pub?gid=1753505078&single=true&output=csv'
+};
+
+// ── 開課梯次：讀不到 CSV 時的佔位資料 ──
+const COHORTS_FALLBACK = [
+  { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 20 }
+];
+
+// 開課前幾天停止報名（含當天）
+const REG_CUTOFF_DAYS = 5;
+
+// ══════════════════════ 統編查詢 ══════════════════════
+const taxIdInput = document.getElementById('taxIdInput');
+const queryBtn = document.getElementById('queryBtn');
+const resultArea = document.getElementById('resultArea');
+
+taxIdInput.addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+});
+queryBtn.addEventListener('click', queryCompany);
+taxIdInput.addEventListener('keypress', e => { if (e.key === 'Enter') queryCompany(); });
+
+async function queryCompany() {
+  const taxId = taxIdInput.value.trim();
+  if (!/^\d{8}$/.test(taxId)) {
+    showResult({ error: '請輸入 8 位數統編' });
+    return;
+  }
+  queryBtn.disabled = true;
+  queryBtn.innerHTML = '查詢中...';
+  resultArea.classList.remove('hidden');
+  resultArea.innerHTML = `
+    <div class="card-glass rounded-2xl p-6 animate-fade-in text-center">
+      <div class="text-gold-light animate-pulse">正在查詢 ${taxId}...</div>
+    </div>`;
+
+  try {
+    const res = await fetch(`https://company.g0v.ronny.tw/api/show/${taxId}`);
+    if (!res.ok) throw new Error('查無資料');
+    const data = await res.json();
+    const company = parseCompany(data, taxId);
+    const verdict = evaluateEligibility(company);
+    showResult({ company, verdict });
+  } catch (err) {
+    showResult({ error: '查無此統編或系統暫時無法連線，請確認統編正確' });
+  } finally {
+    queryBtn.disabled = false;
+    queryBtn.innerHTML = '立即查詢';
+  }
+}
+
+function parseCompany(data, taxId) {
+  const root = data.data || data;
+  const name = root['公司名稱'] || root['商業名稱'] || '(未知)';
+  const capitalStr = root['實收資本額(元)'] || root['資本總額(元)'] || root['資本額(元)'] || '0';
+  const capital = Number(String(capitalStr).replace(/,/g, '')) || 0;
+  const status = root['登記現況'] || root['公司狀況'] || root['商業狀況'] || '';
+  const mof = root['財政部'] || {};
+  const address = root['公司所在地'] || root['地址'] || root['商業所在地'] || mof['營業地址'] || '';
+  const industries = Array.isArray(mof['行業']) ? mof['行業'] : [];
+  const primary = industries.length > 0 ? industries[0] : ['', ''];
+  const raw = root['所營事業資料'];
+  const businessItems = [];
+  if (Array.isArray(raw)) {
+    raw.forEach(item => {
+      if (Array.isArray(item)) {
+        businessItems.push([String(item[0] || ''), String(item[1] || '')]);
+      } else if (typeof item === 'string') {
+        const m = item.match(/^([A-Z]{1,2}\d{5,6})\s*(.*)$/);
+        if (m) businessItems.push([m[1], m[2]]);
+      }
+    });
+  }
+  return {
+    taxId, name, capital, status, address,
+    industryCode: String(primary[0] || ''),
+    industryDesc: String(primary[1] || ''),
+    allIndustries: industries,
+    businessItems
+  };
+}
+
+function evaluateEligibility(c) {
+  const checks = [];
+  const isActive = c.status && !/(歇業|解散|撤銷|廢止|停業)/.test(c.status);
+  checks.push({ pass: isActive, label: '公司營業狀態正常', detail: c.status || '未知' });
+
+  const toolMachineItem = (c.businessItems || []).find(pair =>
+    CONFIG.TOOL_MACHINE_CODES.includes(String(pair[0] || '').toUpperCase())
+  );
+  const isToolMachine = !!toolMachineItem;
+
+  const mfgItem = (c.allIndustries || []).find(pair => {
+    const prefix = String(pair[0] || '').substring(0, 2);
+    return CONFIG.MANUFACTURING_CODES.includes(prefix);
+  });
+  const isManufacturing = !!mfgItem;
+
+  let toolMachineDetail;
+  if (isToolMachine) {
+    toolMachineDetail = `${toolMachineItem[0]} ${toolMachineItem[1]}`;
+  } else if (c.businessItems.length === 0) {
+    toolMachineDetail = '無所營事業資料可比對';
+  } else {
+    toolMachineDetail = '所營事業未含工具機上下游代碼';
+  }
+  checks.push({ pass: isToolMachine, label: '工具機上下游產業', detail: toolMachineDetail });
+
+  let industryDetail;
+  if (c.allIndustries.length === 0) {
+    industryDetail = '無稅籍行業資料';
+  } else if (isManufacturing) {
+    industryDetail = `${mfgItem[0]} ${mfgItem[1]}`;
+  } else {
+    const first = c.allIndustries[0];
+    industryDetail = `${first[0]} ${first[1]}（非製造業）`;
+  }
+  checks.push({ pass: isManufacturing, label: 'C 大類製造業', detail: industryDetail });
+
+  const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
+  checks.push({
+    pass: capitalOK,
+    label: '資本額 1 億以下',
+    detail: c.capital ? `NT$ ${formatMoney(c.capital)}` : '未知'
+  });
+
+  // 完全符合資格：工具機上下游 + 營業中 + 資本額符合
+  let level, title, subtitle;
+  if (isToolMachine && isActive && capitalOK) {
+    level = 'green_full';
+    title = '🎯 完全符合資格';
+    subtitle = '您的公司符合本課程報名資格，下方完整課程內容已解鎖';
+  } else if (isManufacturing && isActive && capitalOK) {
+    level = 'green_partial';
+    title = '⚠️ 部分符合（未達完全符合）';
+    subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
+  } else if (isManufacturing || isToolMachine) {
+    level = 'yellow';
+    title = '⚠️ 部分符合（未達完全符合）';
+    subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
+  } else {
+    level = 'red';
+    title = '❌ 暫不符合資格';
+    subtitle = '本課程僅開放完全符合資格之企業報名，建議聯絡虎智顧問';
+  }
+  return { level, title, subtitle, checks };
+}
+
+function formatMoney(n) {
+  if (n >= 100000000) return (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + ' 億';
+  if (n >= 10000) return (n / 10000).toFixed(0) + ' 萬';
+  return n.toLocaleString();
+}
+
+function showResult(r) {
+  if (r.error) {
+    resultArea.innerHTML = `
+      <div class="card-glass rounded-2xl p-6 animate-fade-in border-l-4 border-red-500">
+        <div class="text-red-400 font-bold mb-1">查詢失敗</div>
+        <div class="text-gray-300 text-sm">${r.error}</div>
+      </div>`;
+    return;
+  }
+  const { company: c, verdict: v } = r;
+  const isFull = v.level === 'green_full';
+  const borderClass = isFull ? 'border-gold'
+    : v.level === 'red' ? 'border-red-500' : 'border-yellow-500';
+  const titleClass = isFull ? 'gold-text'
+    : v.level === 'red' ? 'text-red-400' : 'text-yellow-400';
+
+  const checkHtml = v.checks.map(ch => `
+    <div class="flex items-start gap-2 text-sm">
+      <span class="inline-block w-2 h-2 mt-2 rounded-full ${ch.pass ? 'bg-gold' : 'bg-gray-500'}"></span>
+      <div class="flex-1">
+        <div class="text-gray-200 font-medium">${ch.label}</div>
+        <div class="text-gray-500 text-xs">${ch.detail}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const ctaHtml = isFull
+    ? `<div class="text-center text-gold-light text-sm font-bold mt-4">✓ 報名表單已為你開啟，請繼續填寫 STEP 2 ↓</div>`
+    : `<a href="https://lin.ee/ZB5Tjkd" target="_blank" class="block w-full text-center py-3 rounded-lg mt-5 bg-navy-700/50 border border-gold/30 text-gold-light font-bold">聯絡虎智顧問評估</a>`;
+
+  resultArea.innerHTML = `
+    <div class="card-glass rounded-2xl p-6 animate-fade-in-up border-l-4 ${borderClass}">
+      <div class="mb-3">
+        <div class="${titleClass} font-black text-lg">${v.title}</div>
+        <div class="text-gray-400 text-sm">${v.subtitle}</div>
+      </div>
+      <div class="pt-3 border-t border-gold/10 mb-3">
+        <div class="text-white font-bold text-lg">${c.name}</div>
+        <div class="text-gray-400 text-sm">統編 ${c.taxId}　${c.address || '(地址未知)'}</div>
+      </div>
+      <div class="space-y-2 mb-2">${checkHtml}</div>
+      ${ctaHtml}
+    </div>`;
+
+  window._queriedCompany = { company: c, verdict: v };
+
+  if (isFull) {
+    revealSignupForm();
+  } else {
+    // 改查到不符合資格時，收起已開啟的報名表單
+    document.getElementById('signupForm').classList.add('hidden');
+  }
+}
+
+// ══════════════════════ 開啟報名表單（STEP 2）══════════════════════
+function revealSignupForm() {
+  if (!window._queriedCompany || window._queriedCompany.verdict.level !== 'green_full') return;
+  const { company: c, verdict: v } = window._queriedCompany;
+
+  document.getElementById('f_taxId').value = c.taxId;
+  document.getElementById('f_companyName').value = c.name;
+  document.getElementById('f_eligibility').value = v.level;
+  document.getElementById('companyInfoBox').innerHTML = `
+    <div class="flex items-start justify-between gap-3">
+      <div class="flex-1">
+        <div class="text-white font-bold text-lg mb-1">${c.name}</div>
+        <div class="text-gray-400 text-xs space-y-1">
+          <div>統編 ${c.taxId}　資本額 NT$ ${formatMoney(c.capital) || '-'}</div>
+          <div>${c.address || ''}</div>
+        </div>
+      </div>
+      <span class="gold-text text-sm font-bold shrink-0">完全符合資格</span>
+    </div>`;
+
+  const form = document.getElementById('signupForm');
+  form.classList.remove('hidden');
+  form.classList.add('animate-fade-in-up');
+  setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+}
+
+// ══════════════════════ 捲動進場動畫 ══════════════════════
+let revealObserver = null;
+function initRevealObserver() {
+  const targets = document.querySelectorAll('.reveal:not(.in-view), .instructor-img:not(.in-view)');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(el => el.classList.add('in-view'));
+    return;
+  }
+  revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  targets.forEach(el => revealObserver.observe(el));
+}
+
+// ══════════════════════ 開課梯次 ══════════════════════
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') { cell += '"'; i++; }
+        else inQuotes = false;
+      } else cell += ch;
+    } else if (ch === '"') {
+      inQuotes = true;
+    } else if (ch === ',') {
+      row.push(cell); cell = '';
+    } else if (ch === '\n') {
+      row.push(cell); rows.push(row); row = []; cell = '';
+    } else if (ch !== '\r') {
+      cell += ch;
+    }
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+// 讀取試算表 D 欄(開課縣市)/ M 欄(課程日期)/ N 欄(課程時間)/ O 欄(課程地點)，資料自第 2 列起
+function parseCohortCSV(text) {
+  const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+  if (rows.length < 2) return [];
+  return rows.slice(1).map(r => ({
+    city: (r[3] || '').trim(),      // D 欄：開課縣市
+    date: (r[12] || '').trim(),     // M 欄：課程日期
+    time: (r[13] || '').trim(),     // N 欄：課程時間
+    location: (r[14] || '').trim(), // O 欄：課程地點
+    capacity: 20
+  })).filter(c => c.date);
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(String(dateStr).replace(/[.\-]/g, '/'));
+  if (isNaN(d.getTime())) return null;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / 86400000);
+}
+
+function countdownBadge(dateStr) {
+  const days = daysUntil(dateStr);
+  if (days === null) return '<span class="text-gray-500 text-xs">日期待定</span>';
+  if (days > 0) return `<span class="gold-text font-black">距開課還有 ${days} 天</span>`;
+  if (days === 0) return '<span class="gold-text font-black">今天開課</span>';
+  return '<span class="text-gray-500 text-xs">已結束</span>';
+}
+
+function renderCohorts(cohorts, counts) {
+  counts = counts || {};
+  const list = document.getElementById('cohortList');
+  const select = document.getElementById('f_cohort');
+  list.innerHTML = '';
+  select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+
+  cohorts.forEach((co) => {
+    const label = [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+    const taken = counts[label] || 0;
+    const remaining = Math.max(0, co.capacity - taken);
+    const full = remaining <= 0;
+    const days = daysUntil(co.date);
+    const closed = days !== null && days <= REG_CUTOFF_DAYS;  // 開課前 5 天內停止報名
+    const unavailable = full || closed;
+
+    // 卡片底部的報名狀態
+    let statusHtml;
+    if (closed) {
+      statusHtml = '<span class="text-red-400 font-bold">報名已截止</span>';
+    } else if (full) {
+      statusHtml = '<span class="text-red-400 font-bold">已額滿</span>';
+    } else {
+      statusHtml = `剩餘名額 <span class="gold-text font-black">${remaining}</span> / ${co.capacity} 人`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'cohort-card card-glass rounded-2xl p-6 glow-border';
+    card.innerHTML = `
+      <div class="gold-text font-black text-xl mb-3">${co.city || '場次'}</div>
+      <div class="space-y-2 text-sm text-gray-300">
+        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">日期</span><span class="text-right">${co.date || '-'}</span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">時間</span><span class="text-right">${co.time || '-'}</span></div>
+        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">地點</span><span class="text-right">${co.location || '-'}</span></div>
+      </div>
+      <div class="mt-4 pt-3 border-t border-gold/10 text-center space-y-1.5">
+        <div>${countdownBadge(co.date)}</div>
+        <div class="text-sm text-gray-300">${statusHtml}</div>
+      </div>`;
+    list.appendChild(card);
+
+    const opt = document.createElement('option');
+    opt.value = label;
+    opt.textContent = label + (closed ? '（報名已截止）' : full ? '（已額滿）' : '');
+    if (unavailable) opt.disabled = true;
+    select.appendChild(opt);
+  });
+
+  if (window._updateCohortArrows) window._updateCohortArrows();
+}
+
+async function loadCohorts() {
+  let cohorts = COHORTS_FALLBACK;
+  if (CONFIG.COHORTS_CSV_URL) {
+    try {
+      const res = await fetch(CONFIG.COHORTS_CSV_URL);
+      if (res.ok) {
+        const parsed = parseCohortCSV(await res.text());
+        if (parsed.length) cohorts = parsed;
+      }
+    } catch (e) { /* 讀取失敗時保留佔位資料 */ }
+  }
+  // 抓各梯次目前報名人數（後端只回傳彙總數字，不含任何個資）
+  let counts = {};
+  if (CONFIG.SHEET_WEBHOOK) {
+    try {
+      const r = await fetch(CONFIG.SHEET_WEBHOOK + '?action=counts');
+      if (r.ok) counts = await r.json();
+    } catch (e) { /* 抓不到就當 0，顯示滿額數字 */ }
+  }
+  // 已結束的場次自動隱藏（日期無法解析者保留）
+  const upcoming = cohorts.filter(c => {
+    const d = daysUntil(c.date);
+    return d === null || d >= 0;
+  });
+  renderCohorts(upcoming.length ? upcoming : cohorts, counts);
+}
+loadCohorts();
+
+// ── 梯次水平捲動箭頭 ──
+(function cohortCarousel() {
+  const track = document.getElementById('cohortList');
+  const prev = document.getElementById('cohortPrev');
+  const next = document.getElementById('cohortNext');
+  if (!track || !prev || !next) return;
+  const step = () => Math.max(280, track.clientWidth * 0.85);
+  function update() {
+    prev.disabled = track.scrollLeft <= 4;
+    next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+  }
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  track.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  window._updateCohortArrows = update;
+  update();
+})();
+
+// 頁面載入即啟動捲動進場動畫（內容不再有資格閘門）
+initRevealObserver();
+
+// ══════════════════════ 表單送出 ══════════════════════
+document.getElementById('signupForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = document.getElementById('submitBtn');
+
+  if (!document.getElementById('f_taxId').value) {
+    alert('請先完成 STEP 1 統編驗證');
+    document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+
+  // 身分證字號驗證：1 碼英文字母 + 9 碼數字
+  const nationalId = form.nationalId.value.trim().toUpperCase();
+  if (!/^[A-Z]\d{9}$/.test(nationalId)) {
+    alert('身分證字號格式錯誤（需 1 碼英文字母 + 9 碼數字）');
+    const nidEl = document.getElementById('f_nationalId');
+    nidEl.classList.add('error');
+    nidEl.focus();
+    return;
+  }
+
+  const data = {
+    type: 'course_signup',
+    timestamp: new Date().toISOString(),
+    taxId: form.taxId.value,
+    companyName: form.companyName.value,
+    eligibility: form.eligibility.value,
+    cohort: form.cohort.value,
+    name: form.name.value,
+    jobTitle: form.jobTitle.value,
+    phone: form.phone.value,
+    email: form.email.value,
+    age: form.age.value,
+    nationalId: nationalId
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '送出中...';
+
+  try {
+    if (CONFIG.SHEET_WEBHOOK && CONFIG.SHEET_WEBHOOK !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+      await fetch(CONFIG.SHEET_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+    } else {
+      console.warn('[DEMO 模式] 未設定 Apps Script URL，僅 log：', data);
+    }
+    form.classList.add('hidden');
+    const success = document.getElementById('successBox');
+    success.classList.remove('hidden');
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    alert('送出失敗，請稍後再試或直接聯絡虎智科技');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '送出報名';
+  }
+});
+
+// 格式錯誤紅框
+document.getElementById('f_email').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+document.getElementById('f_phone').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[\d\-+()\s]{7,}$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+// 身分證字號：自動轉大寫，限制第 1 碼英文、其餘數字
+document.getElementById('f_nationalId').addEventListener('input', e => {
+  let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.length > 0) {
+    v = v.charAt(0).replace(/[^A-Z]/g, '') + v.slice(1).replace(/\D/g, '');
+  }
+  e.target.value = v.slice(0, 10);
+});
+document.getElementById('f_nationalId').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[A-Z]\d{9}$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+
+// ══════════════════════ AX 金字塔：捲動逐層蓋好 + 滑過任務卡高亮 ══════════════════════
+(function axPyramid() {
+  const levels = Array.from(document.querySelectorAll('.ax-level'));
+  const cards = Array.from(document.querySelectorAll('#tasks .task-card'));
+  if (!levels.length || !cards.length) return;
+
+  // 捲動：對應的任務卡進入畫面 → 該層蓋好（由 L0 往 L4）
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          const lv = Number(en.target.dataset.level);
+          if (levels[lv]) levels[lv].classList.add('built');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    cards.forEach(c => io.observe(c));
+  } else {
+    levels.forEach(l => l.classList.add('built'));
+  }
+
+  // 滑鼠移到任務卡 → 對應層級高亮
+  cards.forEach(c => {
+    const lv = Number(c.dataset.level);
+    c.addEventListener('mouseenter', () => {
+      levels.forEach((el, i) => el.classList.toggle('active', i === lv));
+    });
+    c.addEventListener('mouseleave', () => {
+      levels.forEach(el => el.classList.remove('active'));
+    });
+  });
+})();
+</script>
+</body>
+</html>
