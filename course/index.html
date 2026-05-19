@@ -1583,6 +1583,23 @@ function renderCohorts(cohorts, counts) {
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
 
+  // 顯示順序：可報名的排前面（依日期由近到遠）→ 已額滿 / 已截止往後排
+  const labelOf = (co) => [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+  const isUnavail = (co) => {
+    const d = daysUntil(co.date);
+    const taken = counts[labelOf(co)] || 0;
+    return (taken >= co.capacity) || (d !== null && d <= REG_CUTOFF_DAYS);
+  };
+  cohorts = cohorts.slice().sort((a, b) => {
+    const aUn = isUnavail(a), bUn = isUnavail(b);
+    if (aUn !== bUn) return aUn ? 1 : -1;   // 可報名的先
+    const aD = daysUntil(a.date), bD = daysUntil(b.date);
+    if (aD === null && bD === null) return 0;
+    if (aD === null) return 1;              // 日期未定的擺最後
+    if (bD === null) return -1;
+    return aD - bD;                          // 同組內：日期越近越前
+  });
+
   cohorts.forEach((co) => {
     const label = [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
     const taken = counts[label] || 0;
