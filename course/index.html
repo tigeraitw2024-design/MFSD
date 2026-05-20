@@ -1559,13 +1559,49 @@ function parseCohortCSV(text) {
   })).filter(c => c.date);
 }
 
+// 彈性日期解析：支援 2026/6/5、2026-6-5、2026年6月5日、6月5日、6/5 等格式
+function parseFlexDate(str) {
+  if (!str) return null;
+  const s = String(str).trim();
+  let y, m, d, mt;
+  if ((mt = s.match(/(\d{4})\s*[\/\-.年]\s*(\d{1,2})\s*[\/\-.月]\s*(\d{1,2})/))) {
+    y = +mt[1]; m = +mt[2]; d = +mt[3];
+  } else if ((mt = s.match(/(\d{1,2})\s*[\/\-月]\s*(\d{1,2})/))) {
+    m = +mt[1]; d = +mt[2];                       // 沒給年份
+  } else {
+    const dd = new Date(s);
+    return isNaN(dd.getTime()) ? null : dd;
+  }
+  if (y === undefined) {
+    const now = new Date();
+    y = now.getFullYear();
+    if ((new Date(y, m - 1, d) - now) / 86400000 < -30) y += 1;  // 已過很久 → 視為明年
+  }
+  const out = new Date(y, m - 1, d);
+  return isNaN(out.getTime()) ? null : out;
+}
+
 function daysUntil(dateStr) {
-  if (!dateStr) return null;
-  const d = new Date(String(dateStr).replace(/[.\-]/g, '/'));
-  if (isNaN(d.getTime())) return null;
+  const d = parseFlexDate(dateStr);
+  if (!d) return null;
   const today = new Date(); today.setHours(0, 0, 0, 0);
   d.setHours(0, 0, 0, 0);
   return Math.round((d - today) / 86400000);
+}
+
+// 把「縣市｜日期 時間｜地點」標籤裡的日期正規化成 YYYY-M-D，
+// 讓不同日期格式（2026/6/5 vs 6月5日）也能比對到同一個梯次的報名人數
+function normCohortKey(label) {
+  const parts = String(label).split('｜');
+  if (parts.length < 2) return String(label);
+  const dt = (parts[1] || '').trim();
+  const sp = dt.indexOf(' ');
+  const datePart = sp >= 0 ? dt.slice(0, sp) : dt;
+  const rest = sp >= 0 ? dt.slice(sp + 1) : '';
+  const pd = parseFlexDate(datePart);
+  const norm = pd ? (pd.getFullYear() + '-' + (pd.getMonth() + 1) + '-' + pd.getDate()) : datePart;
+  parts[1] = (norm + (rest ? ' ' + rest : '')).trim();
+  return parts.join('｜');
 }
 
 function countdownBadge(dateStr) {
@@ -1583,12 +1619,19 @@ function renderCohorts(cohorts, counts) {
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
 
-  // 顯示順序：可報名的排前面（依日期由近到遠）→ 已額滿 / 已截止往後排
+  // 把後端回傳的報名人數正規化：key 內的日期格式不同也能對到同一梯次
+  const normCounts = {};
+  Object.keys(counts).forEach(k => {
+    const nk = normCohortKey(k);
+    normCounts[nk] = (normCounts[nk] || 0) + counts[k];
+  });
   const labelOf = (co) => [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+  const takenOf = (co) => normCounts[normCohortKey(labelOf(co))] || 0;
+
+  // 顯示順序：可報名的排前面（依日期由近到遠）→ 已額滿 / 已截止往後排
   const isUnavail = (co) => {
     const d = daysUntil(co.date);
-    const taken = counts[labelOf(co)] || 0;
-    return (taken >= co.capacity) || (d !== null && d <= REG_CUTOFF_DAYS);
+    return (takenOf(co) >= co.capacity) || (d !== null && d <= REG_CUTOFF_DAYS);
   };
   cohorts = cohorts.slice().sort((a, b) => {
     const aUn = isUnavail(a), bUn = isUnavail(b);
@@ -1601,8 +1644,8 @@ function renderCohorts(cohorts, counts) {
   });
 
   cohorts.forEach((co) => {
-    const label = [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
-    const taken = counts[label] || 0;
+    const label = labelOf(co);
+    const taken = takenOf(co);
     const remaining = Math.max(0, co.capacity - taken);
     const full = remaining <= 0;
     const days = daysUntil(co.date);
