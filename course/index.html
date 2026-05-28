@@ -1398,19 +1398,19 @@ function evaluateEligibility(c) {
   let level, title, subtitle;
   if (isToolMachine && isActive && capitalOK) {
     level = 'green_full';
-    title = '🎯 完全符合資格';
+    title = '完全符合資格';
     subtitle = '您的公司符合本課程報名資格，下方完整課程內容已解鎖';
   } else if (isManufacturing && isActive && capitalOK) {
     level = 'green_partial';
-    title = '⚠️ 部分符合（未達完全符合）';
+    title = '部分符合（未達完全符合）';
     subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
   } else if (isManufacturing || isToolMachine) {
     level = 'yellow';
-    title = '⚠️ 部分符合（未達完全符合）';
+    title = '部分符合（未達完全符合）';
     subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
   } else {
     level = 'red';
-    title = '❌ 暫不符合資格';
+    title = '暫不符合資格';
     subtitle = '本課程僅開放完全符合資格之企業報名，建議聯絡虎智顧問';
   }
   return { level, title, subtitle, checks };
@@ -1449,7 +1449,7 @@ function showResult(r) {
   `).join('');
 
   const ctaHtml = isFull
-    ? `<div class="text-center text-gold-light text-sm font-bold mt-4">✓ 報名表單已為你開啟，請繼續填寫 STEP 2 ↓</div>`
+    ? `<div class="text-center text-gold-light text-sm font-bold mt-4">報名表單已為你開啟，請繼續填寫 STEP 2</div>`
     : `<a href="https://lin.ee/ZB5Tjkd" target="_blank" class="block w-full text-center py-3 rounded-lg mt-5 bg-navy-700/50 border border-gold/30 text-gold-light font-bold">聯絡虎智顧問評估</a>`;
 
   resultArea.innerHTML = `
