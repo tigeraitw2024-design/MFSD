@@ -1044,7 +1044,7 @@
       <div id="cohortList" class="cohort-track"></div>
       <button type="button" id="cohortNext" class="cohort-arrow next" aria-label="下一個梯次">&gt;</button>
     </div>
-    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新、已結束或額滿的場次會自動處理</p>
+    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新；額滿後仍可登記候補，若有缺額將依序遞補</p>
   </div>
 </section>
 
@@ -1628,14 +1628,16 @@ function renderCohorts(cohorts, counts) {
   const labelOf = (co) => [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
   const takenOf = (co) => normCounts[normCohortKey(labelOf(co))] || 0;
 
-  // 顯示順序：可報名的排前面（依日期由近到遠）→ 已額滿 / 已截止往後排
-  const isUnavail = (co) => {
+  // 顯示順序：有名額(0) → 額滿候補(1) → 報名截止(2)；同組內依日期由近到遠
+  const rankOf = (co) => {
     const d = daysUntil(co.date);
-    return (takenOf(co) >= co.capacity) || (d !== null && d <= REG_CUTOFF_DAYS);
+    if (d !== null && d <= REG_CUTOFF_DAYS) return 2;   // 報名截止
+    if (takenOf(co) >= co.capacity) return 1;           // 額滿，開放候補
+    return 0;                                            // 有名額
   };
   cohorts = cohorts.slice().sort((a, b) => {
-    const aUn = isUnavail(a), bUn = isUnavail(b);
-    if (aUn !== bUn) return aUn ? 1 : -1;   // 可報名的先
+    const ra = rankOf(a), rb = rankOf(b);
+    if (ra !== rb) return ra - rb;
     const aD = daysUntil(a.date), bD = daysUntil(b.date);
     if (aD === null && bD === null) return 0;
     if (aD === null) return 1;              // 日期未定的擺最後
@@ -1650,14 +1652,12 @@ function renderCohorts(cohorts, counts) {
     const full = remaining <= 0;
     const days = daysUntil(co.date);
     const closed = days !== null && days <= REG_CUTOFF_DAYS;  // 開課前 5 天內停止報名
-    const unavailable = full || closed;
-
-    // 卡片底部的報名狀態
+    // 卡片底部的報名狀態（額滿仍開放候補登記，只有報名截止才完全擋下）
     let statusHtml;
     if (closed) {
       statusHtml = '<span class="text-red-400 font-bold">報名已截止</span>';
     } else if (full) {
-      statusHtml = '<span class="text-red-400 font-bold">已額滿</span>';
+      statusHtml = '<span class="text-gold-light font-bold">已額滿 · 開放候補</span>';
     } else {
       statusHtml = `剩餘名額 <span class="gold-text font-black">${remaining}</span> / ${co.capacity} 人`;
     }
@@ -1679,8 +1679,8 @@ function renderCohorts(cohorts, counts) {
 
     const opt = document.createElement('option');
     opt.value = label;
-    opt.textContent = label + (closed ? '（報名已截止）' : full ? '（已額滿）' : '');
-    if (unavailable) opt.disabled = true;
+    opt.textContent = label + (closed ? '（報名已截止）' : full ? '（候補）' : '');
+    if (closed) opt.disabled = true;   // 只有報名截止不能選；額滿可候補登記
     select.appendChild(opt);
   });
 
