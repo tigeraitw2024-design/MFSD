@@ -1276,8 +1276,8 @@ const COHORTS_FALLBACK = [
   { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 20 }
 ];
 
-// 開課前幾天停止報名（含當天）
-const REG_CUTOFF_DAYS = 5;
+// 報名截止：開課當天起停止報名（前一天 23:59 仍可報）
+const REG_CUTOFF_DAYS = 0;
 
 // ══════════════════════ 統編查詢 ══════════════════════
 const taxIdInput = document.getElementById('taxIdInput');
@@ -1651,7 +1651,7 @@ function renderCohorts(cohorts, counts) {
     const remaining = Math.max(0, co.capacity - taken);
     const full = remaining <= 0;
     const days = daysUntil(co.date);
-    const closed = days !== null && days <= REG_CUTOFF_DAYS;  // 開課前 5 天內停止報名
+    const closed = days !== null && days <= REG_CUTOFF_DAYS;  // 開課當天起停止報名
     // 卡片底部的報名狀態（額滿仍開放候補登記，只有報名截止才完全擋下）
     let statusHtml;
     if (closed) {
