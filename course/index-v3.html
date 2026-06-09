@@ -746,8 +746,8 @@
         <p class="text-gold-light text-sm sm:text-base tracking-[0.15em]">通路績效追蹤、銷售報表自動化與智慧客服實戰課程</p>
       </div>
       <p class="text-base sm:text-lg text-gray-300 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
-        20 年慣性循環，缺的從來不是 AI 工具，是<span class="text-gold-light font-bold">產品思維</span>。<br class="hidden sm:block">
-        6 小時實戰，把 AI 關進可追溯、可驗收的 Harness 裡。
+        缺的不是 AI 工具，是把它<span class="text-gold-light font-bold">接到日常流程裡</span>的方法。<br class="hidden sm:block">
+        6 小時實戰，帶走 <span class="text-gold-light font-bold">3 條馬上能上線的自動化流程</span>，每一步看得到、查得到、改得動，不是黑箱。
       </p>
     </div>
   </div>
@@ -1011,6 +1011,293 @@
       </div>
 
     </div>
+  </div>
+</section>
+
+<!-- ════════ U4 三條自動化流程 詳細展開 ════════ -->
+<style>
+  .flow-card { background: linear-gradient(180deg, rgba(31,23,9,0.7) 0%, rgba(14,10,5,0.9) 100%); border: 1px solid rgba(216,178,90,0.32); border-radius: 14px; }
+  .flow-pain { background: rgba(216,178,90,0.06); border-left: 3px solid #D8B25A; padding: 12px 16px; border-radius: 0 8px 8px 0; }
+  .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(216,178,90,0.32); padding: 14px 16px; border-radius: 10px; }
+  .flow-checklist li { display:flex; gap:10px; align-items:flex-start; }
+  .flow-checklist li::before { content:'✓'; color:#F2D88B; font-weight:900; flex-shrink:0; margin-top:2px; }
+  .flow-svg { background: radial-gradient(ellipse at center, rgba(216,178,90,0.08) 0%, rgba(11,8,5,0) 70%); border-radius: 12px; }
+</style>
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-12 reveal from-up">
+      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">★ U4 詳細展開</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+      <h2 class="section-title text-3xl sm:text-4xl mt-4">三條自動化流程，<br class="sm:hidden">你實際帶走什麼</h2>
+      <p class="text-gray-400 mt-4 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">不講術語，講你公司每天真正在發生的事。<br class="hidden sm:block">下面三條流程，課後直接帶回公司、複製貼上就能跑。</p>
+    </div>
+
+    <!-- 流程 01：自動報表 -->
+    <div class="flow-card p-6 sm:p-9 mb-8 reveal from-up">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">流程 01</span>
+            <span class="text-gold-light text-sm font-medium">自動週報</span>
+            <span class="text-gray-500 text-xs">執行頻率：每週一 08:00</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">每週一早上 8 點，<br>主管信箱自動收到上週銷售週報</h3>
+
+          <div class="flow-pain mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
+            <p class="text-gray-300 text-sm leading-relaxed">業助每週一早上花 1.5 小時手動拉 Excel、拼數字、做 PPT，主管開晨會前還在等。</p>
+          </div>
+
+          <div class="flow-story mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
+            <p class="text-gray-200 text-sm leading-relaxed">
+              王經理以前週一 7:30 進辦公室拼週報，拼到 9:30 才能開晨會。<br>
+              <span class="text-gold-light">課後第二週，他直接 8:00 打開信箱：</span>「上週訂單 327 筆、Top 3 客戶、本週需注意的 5 個品項」一封信全在裡面，9:00 直接帶進晨會用。
+            </p>
+          </div>
+
+          <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
+          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+            <li>一個 n8n 流程檔，每週一自動執行，不用人按</li>
+            <li>從 Google Sheets / Excel 抓上週訂單，AI 自動分類整理</li>
+            <li>產出固定格式的 HTML 週報，直接寄到指定主管信箱</li>
+            <li>失敗會自動 LINE 通知你，不會默默漏掉</li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-5">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="自動週報流程圖">
+            <defs>
+              <linearGradient id="flowGoldA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F2D88B"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+            </defs>
+            <!-- Step 1: 試算表 -->
+            <g transform="translate(40, 30)">
+              <rect x="0" y="0" width="90" height="70" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldA)" stroke-width="1.8"/>
+              <rect x="8" y="10" width="74" height="6" fill="rgba(216,178,90,0.5)"/>
+              <rect x="8" y="22" width="74" height="4" fill="rgba(216,178,90,0.3)"/>
+              <rect x="8" y="30" width="50" height="4" fill="rgba(216,178,90,0.3)"/>
+              <rect x="8" y="38" width="60" height="4" fill="rgba(216,178,90,0.3)"/>
+              <rect x="8" y="46" width="40" height="4" fill="rgba(216,178,90,0.3)"/>
+              <rect x="8" y="54" width="70" height="4" fill="rgba(216,178,90,0.3)"/>
+              <text x="45" y="92" text-anchor="middle" fill="#F2D88B" font-size="11" font-family="JetBrains Mono, monospace">Sheets</text>
+              <text x="45" y="106" text-anchor="middle" fill="#cccccc" font-size="11">上週訂單</text>
+            </g>
+            <!-- 箭頭 1 -->
+            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none">
+              <line x1="135" y1="65" x2="180" y2="65" stroke-dasharray="4 4"/>
+              <polygon points="180,60 190,65 180,70" fill="url(#flowGoldA)"/>
+            </g>
+            <text x="157" y="55" text-anchor="middle" fill="rgba(216,178,90,0.85)" font-size="9" font-family="JetBrains Mono, monospace">每週一 8:00</text>
+            <!-- Step 2: n8n + AI -->
+            <g transform="translate(195, 25)">
+              <rect x="0" y="0" width="110" height="80" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldA)" stroke-width="2"/>
+              <circle cx="30" cy="40" r="14" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
+              <text x="30" y="44" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">n8n</text>
+              <circle cx="78" cy="40" r="14" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
+              <text x="78" y="44" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">AI</text>
+              <line x1="44" y1="40" x2="64" y2="40" stroke="url(#flowGoldA)" stroke-width="1.4" stroke-dasharray="2 2"/>
+              <text x="55" y="97" text-anchor="middle" fill="#cccccc" font-size="11">整理 + 摘要</text>
+            </g>
+            <!-- 箭頭 2 -->
+            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none">
+              <line x1="310" y1="65" x2="345" y2="65" stroke-dasharray="4 4"/>
+              <polygon points="345,60 355,65 345,70" fill="url(#flowGoldA)"/>
+            </g>
+            <!-- Step 3: Email 信封 -->
+            <g transform="translate(305, 175)">
+              <rect x="0" y="0" width="90" height="60" rx="4" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldA)" stroke-width="1.8"/>
+              <polyline points="0,0 45,32 90,0" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
+              <text x="45" y="80" text-anchor="middle" fill="#F2D88B" font-size="11" font-family="JetBrains Mono, monospace">Email</text>
+              <text x="45" y="94" text-anchor="middle" fill="#cccccc" font-size="11">主管信箱</text>
+            </g>
+            <!-- 主流程下半連線 -->
+            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none" opacity="0.85">
+              <path d="M 250 110 L 250 175 L 305 200" stroke-dasharray="4 5"/>
+              <polygon points="298,196 308,200 300,206" fill="url(#flowGoldA)"/>
+            </g>
+            <text x="200" y="160" fill="rgba(216,178,90,0.85)" font-size="9" font-family="JetBrains Mono, monospace">產出週報</text>
+            <!-- 標題 -->
+            <text x="200" y="290" text-anchor="middle" fill="rgba(216,178,90,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">WEEKLY · AUTO · REPORT</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 流程 02：客服意圖分類 -->
+    <div class="flow-card p-6 sm:p-9 mb-8 reveal from-up">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-5 order-2 lg:order-1">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="客服意圖分類流程圖">
+            <defs>
+              <linearGradient id="flowGoldB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F2D88B"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+            </defs>
+            <!-- Step 1: LINE / Email 訊息 -->
+            <g transform="translate(30, 120)">
+              <rect x="0" y="0" width="90" height="60" rx="14" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.8"/>
+              <text x="45" y="26" text-anchor="middle" fill="#F2D88B" font-size="13" font-weight="bold">💬</text>
+              <text x="45" y="44" text-anchor="middle" fill="#cccccc" font-size="10">客戶訊息</text>
+              <text x="45" y="80" text-anchor="middle" fill="rgba(216,178,90,0.85)" font-size="10" font-family="JetBrains Mono, monospace">LINE / Email</text>
+            </g>
+            <!-- 箭頭進 AI -->
+            <g stroke="url(#flowGoldB)" stroke-width="1.6" fill="none">
+              <line x1="125" y1="150" x2="160" y2="150" stroke-dasharray="4 4"/>
+              <polygon points="160,145 170,150 160,155" fill="url(#flowGoldB)"/>
+            </g>
+            <text x="143" y="140" text-anchor="middle" fill="rgba(216,178,90,0.85)" font-size="9" font-family="JetBrains Mono, monospace">30 秒</text>
+            <!-- Step 2: AI 分類器 -->
+            <g transform="translate(170, 115)">
+              <rect x="0" y="0" width="80" height="70" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldB)" stroke-width="2"/>
+              <circle cx="40" cy="30" r="16" fill="none" stroke="url(#flowGoldB)" stroke-width="1.8"/>
+              <text x="40" y="35" text-anchor="middle" fill="#F2D88B" font-size="11" font-weight="bold">AI</text>
+              <text x="40" y="58" text-anchor="middle" fill="#cccccc" font-size="10">判讀意圖</text>
+            </g>
+            <!-- 三條分岔到不同人 -->
+            <g stroke="url(#flowGoldB)" stroke-width="1.4" fill="none" stroke-dasharray="3 4">
+              <path d="M 250 130 L 310 50"/>
+              <path d="M 250 150 L 310 150"/>
+              <path d="M 250 170 L 310 250"/>
+            </g>
+            <!-- 三類目的地 -->
+            <g transform="translate(310, 30)">
+              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
+              <text x="40" y="17" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">報價/規格</text>
+              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 業務</text>
+            </g>
+            <g transform="translate(310, 130)">
+              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
+              <text x="40" y="17" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">出貨進度</text>
+              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 業助</text>
+            </g>
+            <g transform="translate(310, 230)">
+              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
+              <text x="40" y="17" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">客訴/緊急</text>
+              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 主管</text>
+            </g>
+            <text x="200" y="290" text-anchor="middle" fill="rgba(216,178,90,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">CLASSIFY · ROUTE · NOTIFY</text>
+          </svg>
+        </div>
+
+        <div class="lg:col-span-7 order-1 lg:order-2">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">流程 02</span>
+            <span class="text-gold-light text-sm font-medium">客服訊息自動分流</span>
+            <span class="text-gray-500 text-xs">執行頻率：訊息進來即時觸發</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">客戶 LINE 訊息進來，<br>30 秒內自動轉到對的人手上</h3>
+
+          <div class="flow-pain mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
+            <p class="text-gray-300 text-sm leading-relaxed">官方 LINE 跟客服信箱每天進 30~50 封，報價、催貨、抱怨混在一起，業助一封一封手動轉，常常卡 2-3 小時才送到正確窗口。</p>
+          </div>
+
+          <div class="flow-story mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
+            <p class="text-gray-200 text-sm leading-relaxed">
+              客戶上午 10:00 在官方 LINE 留言「上次那批貨什麼時候到？」<br>
+              <span class="text-gold-light">10:00:30 系統判讀為「出貨進度詢問」</span>，自動推給業助群組，並貼上客戶名 + 最近 3 張訂單編號。業助 10:05 就回完。客戶等待從半天縮到 5 分鐘。
+            </p>
+          </div>
+
+          <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
+          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+            <li>一個 n8n 流程，串接 LINE 官方帳號 / Email / 表單</li>
+            <li>AI 自動判讀 5 種意圖類別（報價、規格、出貨、客訴、其他）</li>
+            <li>不同類別自動轉到對應部門的 LINE 群組，並附上客戶歷史摘要</li>
+            <li>「緊急/抱怨」類別會額外 push 給主管，不會被漏接</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 流程 03：績效異常告警 -->
+    <div class="flow-card p-6 sm:p-9 mb-4 reveal from-up">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">流程 03</span>
+            <span class="text-gold-light text-sm font-medium">異常即時告警</span>
+            <span class="text-gray-500 text-xs">執行頻率：每天凌晨自動掃描</span>
+          </div>
+          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">大客戶連續一週沒下單，<br>隔天早上 LINE 就跳出來</h3>
+
+          <div class="flow-pain mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
+            <p class="text-gray-300 text-sm leading-relaxed">月底結算才發現大客戶 A 已經連兩週沒下單、品項 B 的退貨率突然飆 3 倍。等發現都晚了，業務才開始補救。</p>
+          </div>
+
+          <div class="flow-story mb-5">
+            <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
+            <p class="text-gray-200 text-sm leading-relaxed">
+              週二早上 9:00，業務組長 LINE 跳出通知：<br>
+              <span class="text-gold-light">「⚠ 客戶 A 已 7 天無新訂單，上月同期 12 單。建議今天致電。」</span><br>
+              當天下午就打過去關心，發現是窗口換人——比月底才發現整整早了 3 週。
+            </p>
+          </div>
+
+          <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
+          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+            <li>一個 n8n 流程，每天凌晨自動讀 ERP / Sheets 訂單資料</li>
+            <li>用你設定的規則 + AI 判斷異常（單量驟降、退貨飆高、應收逾期）</li>
+            <li>有異常的當天早上 LINE 推播主管，附帶對比數字</li>
+            <li>沒異常的日子不會打擾——只有真的要看才會跳</li>
+          </ul>
+        </div>
+
+        <div class="lg:col-span-5">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="績效異常告警流程圖">
+            <defs>
+              <linearGradient id="flowGoldC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F2D88B"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+            </defs>
+            <!-- Step 1: ERP 資料庫 -->
+            <g transform="translate(30, 110)">
+              <ellipse cx="45" cy="10" rx="40" ry="8" fill="none" stroke="url(#flowGoldC)" stroke-width="1.8"/>
+              <path d="M 5 10 L 5 60 A 40 8 0 0 0 85 60 L 85 10" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldC)" stroke-width="1.8"/>
+              <ellipse cx="45" cy="30" rx="40" ry="8" fill="none" stroke="rgba(216,178,90,0.5)" stroke-width="1"/>
+              <ellipse cx="45" cy="50" rx="40" ry="8" fill="none" stroke="rgba(216,178,90,0.5)" stroke-width="1"/>
+              <text x="45" y="84" text-anchor="middle" fill="#F2D88B" font-size="11" font-family="JetBrains Mono, monospace">ERP</text>
+              <text x="45" y="98" text-anchor="middle" fill="#cccccc" font-size="10">訂單 / 退貨</text>
+            </g>
+            <!-- 箭頭 -->
+            <g stroke="url(#flowGoldC)" stroke-width="1.6" fill="none">
+              <line x1="125" y1="150" x2="160" y2="150" stroke-dasharray="4 4"/>
+              <polygon points="160,145 170,150 160,155" fill="url(#flowGoldC)"/>
+            </g>
+            <text x="143" y="140" text-anchor="middle" fill="rgba(216,178,90,0.85)" font-size="9" font-family="JetBrains Mono, monospace">凌晨自動</text>
+            <!-- Step 2: 判斷 -->
+            <g transform="translate(170, 110)">
+              <rect x="0" y="0" width="90" height="80" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldC)" stroke-width="2"/>
+              <text x="45" y="22" text-anchor="middle" fill="#F2D88B" font-size="11" font-weight="bold">規則 + AI</text>
+              <line x1="10" y1="32" x2="80" y2="32" stroke="rgba(216,178,90,0.4)" stroke-width="0.8"/>
+              <text x="45" y="48" text-anchor="middle" fill="#cccccc" font-size="9">比對昨日</text>
+              <text x="45" y="62" text-anchor="middle" fill="#cccccc" font-size="9">比對上週</text>
+              <text x="45" y="76" text-anchor="middle" fill="#cccccc" font-size="9">→ 找異常</text>
+            </g>
+            <!-- 分岔：正常 vs 異常 -->
+            <g stroke="url(#flowGoldC)" stroke-width="1.4" fill="none" stroke-dasharray="3 4">
+              <path d="M 260 130 L 320 70"/>
+              <path d="M 260 170 L 320 230"/>
+            </g>
+            <text x="288" y="98" text-anchor="middle" fill="rgba(216,178,90,0.6)" font-size="9">沒事</text>
+            <text x="288" y="208" text-anchor="middle" fill="#F2D88B" font-size="9" font-weight="bold">有異常</text>
+            <!-- 正常：靜音 -->
+            <g transform="translate(320, 50)">
+              <rect x="0" y="0" width="70" height="40" rx="6" fill="rgba(31,23,9,0.5)" stroke="rgba(216,178,90,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
+              <text x="35" y="17" text-anchor="middle" fill="#888" font-size="10">不打擾</text>
+              <text x="35" y="31" text-anchor="middle" fill="#666" font-size="9">— silent —</text>
+            </g>
+            <!-- 異常：LINE 推播 -->
+            <g transform="translate(320, 210)">
+              <rect x="0" y="0" width="70" height="50" rx="10" fill="rgba(216,178,90,0.12)" stroke="url(#flowGoldC)" stroke-width="1.8"/>
+              <text x="35" y="20" text-anchor="middle" fill="#F2D88B" font-size="14" font-weight="bold">⚠</text>
+              <text x="35" y="36" text-anchor="middle" fill="#F2D88B" font-size="10" font-weight="bold">LINE</text>
+              <text x="35" y="48" text-anchor="middle" fill="#cccccc" font-size="9">主管推播</text>
+            </g>
+            <text x="200" y="290" text-anchor="middle" fill="rgba(216,178,90,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">DETECT · ALERT · ACT</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.18em]">※ 三條流程的 n8n 範本與設定步驟，課程現場交給你帶回公司，不是只看簡報。</p>
   </div>
 </section>
 
