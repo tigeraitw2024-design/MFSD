@@ -1539,6 +1539,16 @@
             <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">身分證字號 <span class="text-red-400">*</span></label>
             <input type="text" id="f_nationalId" name="nationalId" required maxlength="10" pattern="[A-Za-z][0-9]{9}" class="form-input w-full px-4 py-3" placeholder="A123456789">
           </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">公司人數 <span class="text-red-400">*</span></label>
+            <select id="f_companySize" name="companySize" required class="form-input w-full px-4 py-3">
+              <option value="">— 請選擇 —</option>
+              <option value="1~30人">1~30 人</option>
+              <option value="31~100人">31~100 人</option>
+              <option value="101~199人">101~199 人</option>
+              <option value="200人以上">200 人以上</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -2159,7 +2169,8 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     phone: form.phone.value,
     email: form.email.value,
     age: form.age.value,
-    nationalId: nationalId
+    nationalId: nationalId,
+    companySize: form.companySize.value
   };
 
   submitBtn.disabled = true;

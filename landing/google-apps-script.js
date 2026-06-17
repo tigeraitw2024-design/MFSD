@@ -36,8 +36,9 @@ const DEALER_HEADERS = ['時間戳', 'IP', '國家', '城市', '機構 / ISP', '
 
 const COURSE_HEADERS = [
   '時間戳', '統編', '公司名稱', '資格判定', '報名梯次',
-  '姓名', '職稱', '電話', 'Email', '年齡', '身分證字號', '寄信狀態'
+  '姓名', '職稱', '電話', 'Email', '年齡', '身分證字號', '寄信狀態', '公司人數'
 ];
+const COURSE_MAIL_STATUS_COL = 12;   // 寄信狀態固定在第 12 欄
 
 // ════════ 入口 ════════
 function doPost(e) {
@@ -141,7 +142,8 @@ function logCourseSignup(data) {
     data.email || '',
     data.age || '',
     data.nationalId || '',
-    ''   // 寄信狀態，下面寄完信再填回
+    '',                       // 寄信狀態，下面寄完信再填回
+    data.companySize || ''    // 公司人數（最後一欄）
   ]);
   const row = sheet.getLastRow();
 
@@ -153,7 +155,7 @@ function logCourseSignup(data) {
   } catch (err) {
     mailStatus = '❌ 寄信失敗：' + err.message;
   }
-  sheet.getRange(row, COURSE_HEADERS.length).setValue(mailStatus);
+  sheet.getRange(row, COURSE_MAIL_STATUS_COL).setValue(mailStatus);
 
   return ok();
 }
