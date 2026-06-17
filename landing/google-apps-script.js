@@ -27,7 +27,7 @@ const SHEET_DEALER = '經銷商存取記錄';
 const SHEET_COURSE = '課程報名表單';
 
 const SIGNUP_HEADERS = [
-  '時間戳', '統編', '公司名稱', '資本額', '行業別', '公司地址', '資格判定',
+  '時間戳', '統編', '公司名稱', '勞工投保人數(200以下)', '行業別', '公司地址', '資格判定',
   '姓名', '角色', '手機', 'Email', '公司規模', 'AI 導入階段',
   '想優先改善的場景', '希望達成的目標', '預計導入時程', '備註'
 ];
@@ -89,7 +89,7 @@ function logSignup(data) {
     data.timestamp || new Date().toISOString(),
     data.taxId || '',
     data.companyName || '',
-    data.capital || '',
+    data.laborInsurance || '',
     data.industry || '',
     data.address || '',
     data.eligibility || '',
@@ -324,10 +324,10 @@ function rebuildPivot(sheet) {
     ['', '', ''],
 
     ['🏢 公司規模', '人數', ''],
-    ['50 人以下', `=COUNTIF(${SRC}!L:L, "50人以下")`, ''],
-    ['51-200 人', `=COUNTIF(${SRC}!L:L, "51-200人")`, ''],
-    ['201-1000 人', `=COUNTIF(${SRC}!L:L, "201-1000人")`, ''],
-    ['1000 人以上', `=COUNTIF(${SRC}!L:L, "1000人以上")`, ''],
+    ['1~30 人', `=COUNTIF(${SRC}!L:L, "1~30人")`, ''],
+    ['31~100 人', `=COUNTIF(${SRC}!L:L, "31~100人")`, ''],
+    ['101~199 人', `=COUNTIF(${SRC}!L:L, "101~199人")`, ''],
+    ['200 人以上', `=COUNTIF(${SRC}!L:L, "200人以上")`, ''],
     ['', '', ''],
 
     ['🤖 AI 導入階段', '人數', ''],

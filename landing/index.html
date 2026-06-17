@@ -280,7 +280,11 @@
           立即查詢
         </button>
       </div>
-      <p class="text-xs text-gray-400 mt-3">資料來源：經濟部公開商工登記資料</p>
+      <label class="flex items-center gap-2 mt-4 cursor-pointer select-none">
+        <input type="checkbox" id="under200Check" class="accent-teal-500 w-4 h-4">
+        <span class="text-sm text-gray-300">本公司勞工投保人數 <span class="text-teal-bright font-bold">200 人以下</span></span>
+      </label>
+      <p class="text-xs text-gray-400 mt-3">資料來源：經濟部公開商工登記資料（投保人數由貴公司自行勾選）</p>
     </div>
 
     <!-- 查詢結果區 -->
@@ -485,7 +489,7 @@
           <li class="flex gap-2"><span class="text-yellow-400">▸</span>化工 / 塑膠 / 橡膠 / 藥品</li>
           <li class="flex gap-2"><span class="text-yellow-400">▸</span>電力設備 / 電腦光學</li>
           <li class="flex gap-2"><span class="text-yellow-400">▸</span>家具 / 紙印 / 木竹 / 其他</li>
-          <li class="flex gap-2"><span class="text-yellow-400">▸</span>資本額 1 億以下</li>
+          <li class="flex gap-2"><span class="text-yellow-400">▸</span>勞工投保人數 200 人以下</li>
         </ul>
         <div class="mt-4 pt-3 border-t border-yellow-500/20 text-xs text-yellow-400">10 萬 AI 工具方案（方案 B）</div>
       </div>
@@ -494,7 +498,6 @@
         <h3 class="text-lg font-bold text-white mb-4">不太適合</h3>
         <ul class="space-y-2 text-gray-300 text-sm">
           <li class="flex gap-2"><span class="text-red-400">▸</span>非製造業（零售、服務業）</li>
-          <li class="flex gap-2"><span class="text-red-400">▸</span>資本額超過 1 億</li>
           <li class="flex gap-2"><span class="text-red-400">▸</span>歇業 / 解散 / 撤銷狀態</li>
           <li class="flex gap-2"><span class="text-red-400">▸</span>陸資企業、外商在台分公司</li>
         </ul>
@@ -612,7 +615,7 @@
         </div>
         <input type="hidden" id="f_taxId" name="taxId">
         <input type="hidden" id="f_companyName" name="companyName">
-        <input type="hidden" id="f_capital" name="capital">
+        <input type="hidden" id="f_laborInsurance" name="laborInsurance">
         <input type="hidden" id="f_industry" name="industry">
         <input type="hidden" id="f_address" name="address">
         <input type="hidden" id="f_eligibility" name="eligibility">
@@ -662,10 +665,10 @@
           <h3 class="text-teal-bright text-sm font-bold mb-3">公司規模</h3>
           <select id="f_companySize" name="companySize" class="form-input w-full px-4 py-3 rounded-lg">
             <option value="">請選擇</option>
-            <option value="50人以下">50 人以下</option>
-            <option value="51-200人">51-200 人</option>
-            <option value="201-1000人">201-1000 人</option>
-            <option value="1000人以上">1000 人以上</option>
+            <option value="1~30人">1~30 人</option>
+            <option value="31~100人">31~100 人</option>
+            <option value="101~199人">101~199 人</option>
+            <option value="200人以上">200 人以上</option>
           </select>
         </div>
 
@@ -955,6 +958,15 @@ taxIdInput.addEventListener('input', e => {
 queryBtn.addEventListener('click', queryCompany);
 taxIdInput.addEventListener('keypress', e => { if (e.key === 'Enter') queryCompany(); });
 
+// 勾選「200 人以下」後，若已查過公司就即時重算判定結果
+document.getElementById('under200Check').addEventListener('change', () => {
+  if (window._queriedCompany) {
+    const c = window._queriedCompany.company;
+    const verdict = evaluateEligibility(c, document.getElementById('under200Check').checked);
+    showResult({ company: c, verdict });
+  }
+});
+
 async function queryCompany() {
   const taxId = taxIdInput.value.trim();
   if (!/^\d{8}$/.test(taxId)) {
@@ -974,7 +986,8 @@ async function queryCompany() {
     if (!res.ok) throw new Error('查無資料');
     const data = await res.json();
     const company = parseCompany(data, taxId);
-    const verdict = evaluateEligibility(company);
+    const under200 = document.getElementById('under200Check').checked;
+    const verdict = evaluateEligibility(company, under200);
     showResult({ company, verdict });
   } catch (err) {
     showResult({ error: '查無此統編或系統暫時無法連線，請確認統編正確' });
@@ -1026,7 +1039,7 @@ function parseCompany(data, taxId) {
   };
 }
 
-function evaluateEligibility(c) {
+function evaluateEligibility(c, under200) {
   const checks = [];
   // 1. 狀態
   const isActive = c.status && !/(歇業|解散|撤銷|廢止|停業)/.test(c.status);
@@ -1076,33 +1089,33 @@ function evaluateEligibility(c) {
     detail: industryDetail
   });
 
-  // 4. 資本額
-  const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
+  // 4. 勞工投保人數（由貴公司自行勾選，無法用統編自動查詢）
   checks.push({
-    pass: capitalOK,
-    label: '資本額 1 億以下',
-    detail: c.capital ? `NT$ ${formatMoney(c.capital)}` : '未知'
+    pass: !!under200,
+    label: '公司勞工投保人數 200 人以下',
+    detail: under200 ? '✓ 已勾選' : '未勾選（未勾選不影響報名，由顧問評估）'
   });
 
   // 總結（兩段式）
+  // 勾選「200 人以下」= 完全符合；未勾選最多到部分符合
   let level, title, subtitle, programs;
-  if (isToolMachine && isActive && capitalOK) {
+  if (isToolMachine && isActive && under200) {
     // 完全符合：A + B 都可申請
     level = 'green_full';
     title = '🎯 完全符合資格';
     subtitle = '同時符合免費課程（方案 A）與 10 萬 AI 工具方案（方案 B）';
     programs = ['免費 AI 實戰課程（100% 政府方案）', '10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon'];
-  } else if (isManufacturing && isActive && capitalOK) {
+  } else if (isManufacturing && isActive && under200) {
     // 部分符合：僅符合 B（非工具機上下游的 C 類製造業）
     level = 'green_partial';
     title = '✅ 部分符合（方案 B）';
     subtitle = '可申請 10 萬 AI 工具方案；免費課程資格將由顧問評估';
     programs = ['10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon', '（免費課程：顧問評估）'];
   } else if (isManufacturing || isToolMachine) {
-    // 是製造業但其他條件未過（狀態或資本）
+    // 是製造業但未勾選 200 人以下（或狀態異常）
     level = 'yellow';
     title = '⚠️ 部分符合';
-    subtitle = '仍可報名，將由顧問評估';
+    subtitle = '仍可報名，將由顧問評估（如勞工投保人數 200 人以下，請勾選上方選項）';
     programs = ['顧問將依實際情況評估可申請方案'];
   } else {
     level = 'red';
@@ -1190,7 +1203,8 @@ function fillCompanyToForm() {
   const { company: c, verdict: v } = window._queriedCompany;
   document.getElementById('f_taxId').value = c.taxId;
   document.getElementById('f_companyName').value = c.name;
-  document.getElementById('f_capital').value = c.capital;
+  document.getElementById('f_laborInsurance').value =
+    document.getElementById('under200Check').checked ? '200人以下' : '未勾選';
   document.getElementById('f_industry').value = `${c.industryCode} ${c.industryDesc}`.trim();
   document.getElementById('f_address').value = c.address;
   document.getElementById('f_eligibility').value = v.level;
@@ -1206,7 +1220,7 @@ function fillCompanyToForm() {
       <div class="flex-1">
         <div class="text-white font-bold text-lg mb-1">${c.name}</div>
         <div class="text-gray-400 text-xs space-y-1">
-          <div>統編 ${c.taxId} · 資本額 NT$ ${formatMoney(c.capital) || '-'}</div>
+          <div>統編 ${c.taxId} · 勞工投保人數：${document.getElementById('under200Check').checked ? '200 人以下' : '未勾選'}</div>
           <div>${c.industryCode} ${c.industryDesc}</div>
           <div>${c.address || ''}</div>
         </div>
@@ -1234,7 +1248,7 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     timestamp: new Date().toISOString(),
     taxId: form.taxId.value,
     companyName: form.companyName.value,
-    capital: form.capital.value,
+    laborInsurance: form.laborInsurance.value,
     industry: form.industry.value,
     address: form.address.value,
     eligibility: form.eligibility.value,
