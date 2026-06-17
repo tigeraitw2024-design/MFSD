@@ -1176,11 +1176,9 @@ function showResult(r) {
 
   resultArea.innerHTML = `
     <div class="card-glass rounded-2xl p-6 animate-fade-in-up border-l-4 ${borderClass}">
-      <div class="flex items-start justify-between flex-wrap gap-2 mb-3">
-        <div>
-          <div class="${titleClass} font-black text-lg">${v.title}</div>
-          <div class="text-gray-400 text-sm">${v.subtitle}</div>
-        </div>
+      <div class="text-center mb-3">
+        <div class="${titleClass} font-black text-lg">${v.title}</div>
+        <div class="text-gray-400 text-sm">${v.subtitle}</div>
       </div>
       <div class="pt-3 border-t border-teal-500/10 mb-3">
         <div class="text-white font-bold text-lg">${c.name}</div>
