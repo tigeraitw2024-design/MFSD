@@ -1785,20 +1785,13 @@ function evaluateEligibility(c) {
   }
   checks.push({ pass: isManufacturing, label: 'C 大類製造業', detail: industryDetail });
 
-  const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
-  checks.push({
-    pass: capitalOK,
-    label: '資本額 1 億以下',
-    detail: c.capital ? `NT$ ${formatMoney(c.capital)}` : '未知'
-  });
-
-  // 完全符合資格：工具機上下游 + 營業中 + 資本額符合
+  // 完全符合資格：工具機上下游 + 營業中
   let level, title, subtitle;
-  if (isToolMachine && isActive && capitalOK) {
+  if (isToolMachine && isActive) {
     level = 'green_full';
     title = '完全符合資格';
     subtitle = '您的公司符合本課程報名資格，下方完整課程內容已解鎖';
-  } else if (isManufacturing && isActive && capitalOK) {
+  } else if (isManufacturing && isActive) {
     level = 'green_partial';
     title = '部分符合（未達完全符合）';
     subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
