@@ -1475,7 +1475,6 @@
         >
         <span class="text-gold-light text-sm sm:text-base font-medium leading-relaxed">
           本公司勞工投保人數 <span class="text-white font-black">200 人</span>以下
-          <span class="block text-[11px] text-gray-500 tracking-[0.18em] mt-1 font-normal">未勾選將無法取得「完全符合資格」</span>
         </span>
       </label>
 
@@ -1833,8 +1832,8 @@ function evaluateEligibility(c) {
     subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
   } else if ((isToolMachine || isManufacturing) && isActive && !laborOK) {
     level = 'yellow';
-    title = '部分符合（請勾選勞保條件）';
-    subtitle = '請勾選上方「本公司勞工投保人數 200 人以下」，再按一次「驗證資格」';
+    title = '部分符合（未達完全符合）';
+    subtitle = '本課程僅開放勞工投保人數 200 人以下之企業報名；若貴公司符合，請勾選上方欄位。';
   } else if (isManufacturing || isToolMachine) {
     level = 'yellow';
     title = '部分符合（未達完全符合）';
