@@ -1465,9 +1465,23 @@
           驗證資格
         </button>
       </div>
-      <div class="flex items-center gap-2 mt-4 text-[12px] text-gray-500 tracking-[0.18em]">
-        <span class="block w-6 h-px bg-gold/40"></span>
-        資料來源：經濟部公開商工登記資料
+
+      <label for="laborInsuranceCheck" class="mt-5 flex items-start gap-3 cursor-pointer select-none group p-4 rounded-lg bg-navy-800/40 border border-gold/20 hover:border-gold/40 transition">
+        <input
+          id="laborInsuranceCheck"
+          type="checkbox"
+          class="mt-0.5 w-5 h-5 shrink-0 cursor-pointer"
+          style="accent-color: #D8B25A;"
+        >
+        <span class="text-gold-light text-sm sm:text-base font-medium leading-relaxed">
+          本公司勞工投保人數 <span class="text-white font-black">200 人</span>以下
+          <span class="block text-[11px] text-gray-500 tracking-[0.18em] mt-1 font-normal">未勾選將無法取得「完全符合資格」</span>
+        </span>
+      </label>
+
+      <div class="flex items-start gap-2 mt-4 text-[12px] text-gray-500 tracking-[0.18em] leading-relaxed">
+        <span class="block w-6 h-px bg-gold/40 mt-2 shrink-0"></span>
+        <span>資料來源：經濟部公開商工登記資料<br>（投保人數由貴公司自行勾選）</span>
       </div>
       <div id="resultArea" class="mt-6 hidden"></div>
     </div>
@@ -1681,12 +1695,24 @@ const REG_CUTOFF_DAYS = 0;
 const taxIdInput = document.getElementById('taxIdInput');
 const queryBtn = document.getElementById('queryBtn');
 const resultArea = document.getElementById('resultArea');
+const laborInsuranceCheck = document.getElementById('laborInsuranceCheck');
+
+// 快取最後一次成功查到的公司，讓勾選變動可以即時重跑判定
+let lastQueriedCompany = null;
 
 taxIdInput.addEventListener('input', e => {
   e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
 });
 queryBtn.addEventListener('click', queryCompany);
 taxIdInput.addEventListener('keypress', e => { if (e.key === 'Enter') queryCompany(); });
+
+// 勾選 / 取消勾選勞保條件 → 用快取的公司資料即時重跑判定
+laborInsuranceCheck.addEventListener('change', () => {
+  if (lastQueriedCompany) {
+    const verdict = evaluateEligibility(lastQueriedCompany);
+    showResult({ company: lastQueriedCompany, verdict });
+  }
+});
 
 async function queryCompany() {
   const taxId = taxIdInput.value.trim();
@@ -1707,9 +1733,11 @@ async function queryCompany() {
     if (!res.ok) throw new Error('查無資料');
     const data = await res.json();
     const company = parseCompany(data, taxId);
+    lastQueriedCompany = company;
     const verdict = evaluateEligibility(company);
     showResult({ company, verdict });
   } catch (err) {
+    lastQueriedCompany = null;
     showResult({ error: '查無此統編或系統暫時無法連線，請確認統編正確' });
   } finally {
     queryBtn.disabled = false;
@@ -1785,16 +1813,28 @@ function evaluateEligibility(c) {
   }
   checks.push({ pass: isManufacturing, label: 'C 大類製造業', detail: industryDetail });
 
-  // 完全符合資格：工具機上下游 + 營業中
+  // 勞工投保人數 ≤ 200 由使用者自行勾選（經濟部公開資料無此欄位）
+  const laborOK = !!(document.getElementById('laborInsuranceCheck') || {}).checked;
+  checks.push({
+    pass: laborOK,
+    label: '勞工投保人數 200 人以下',
+    detail: laborOK ? '已勾選' : '尚未勾選'
+  });
+
+  // 完全符合資格：工具機上下游 + 營業中 + 勞工投保人數 ≤ 200（自行勾選）
   let level, title, subtitle;
-  if (isToolMachine && isActive) {
+  if (isToolMachine && isActive && laborOK) {
     level = 'green_full';
     title = '完全符合資格';
     subtitle = '您的公司符合本課程報名資格，下方完整課程內容已解鎖';
-  } else if (isManufacturing && isActive) {
+  } else if (isManufacturing && isActive && laborOK) {
     level = 'green_partial';
     title = '部分符合（未達完全符合）';
     subtitle = '本課程僅開放「完全符合資格」之企業報名，請聯絡虎智顧問評估';
+  } else if ((isToolMachine || isManufacturing) && isActive && !laborOK) {
+    level = 'yellow';
+    title = '部分符合（請勾選勞保條件）';
+    subtitle = '請勾選上方「本公司勞工投保人數 200 人以下」，再按一次「驗證資格」';
   } else if (isManufacturing || isToolMachine) {
     level = 'yellow';
     title = '部分符合（未達完全符合）';
