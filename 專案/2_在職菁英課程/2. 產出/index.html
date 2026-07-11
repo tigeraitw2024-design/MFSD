@@ -307,9 +307,9 @@
   .section-title {
     font-weight: 900;
     letter-spacing: -0.01em;
-    color: #FFFFFF;
+    color: #0A0906;
   }
-  .section-title .gold-text { letter-spacing: -0.01em; }
+  .section-title .gold-text { letter-spacing: -0.01em; color: #0A0906; }
 
   /* ── Bracket 修飾（出現在重要區塊角落）── */
   .bracket-frame {
@@ -418,21 +418,22 @@
   .cohort-arrow.next { right: 0; }
   .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
 
-  /* ── 表單 ── */
+  /* ── 表單 · 白底黑字 · MIID 印刷風 ── */
   .form-input {
-    background: rgba(8, 7, 12, 0.8);
-    border: 1px solid rgba(10, 9, 6, 0.22);
-    color: #F2EFE6;
+    background: #FFFFFF;
+    border: 1.5px solid #0A0906;
+    color: #0A0906;
     transition: all 0.2s ease;
-    border-radius: 8px;
+    border-radius: 0;
     font-family: inherit;
+    font-weight: 500;
   }
-  .form-input::placeholder { color: rgba(231, 225, 210, 0.32); }
+  .form-input::placeholder { color: rgba(10, 9, 6, 0.35); }
   .form-input:focus {
     outline: none;
     border-color: #E62828;
-    background: rgba(8, 7, 12, 0.95);
-    box-shadow: 0 0 0 3px rgba(10, 9, 6, 0.18);
+    background: #FFFFFF;
+    box-shadow: 3px 3px 0 #E62828;
   }
   .form-input.error {
     border-color: #E26B5C;
@@ -979,18 +980,217 @@
   </div>
 </section>
 
-<!-- ════════ 五大核心任務 ════════ -->
-<section id="tasks" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
+<!-- ════════ 課程架構 · 6 模組 MIID 風 ════════ -->
+<style>
+  /* MIID 課程模組卡:斜切 + 大黑數字 + 紅角條紋 */
+  .mod-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1.5px solid #0A0906;
+    box-shadow: 5px 5px 0 rgba(10,9,6,0.12);
+    transition: all 0.25s ease;
+    overflow: hidden;
+  }
+  .mod-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 rgba(10,9,6,0.20);
+  }
+  .mod-card.core {
+    background: #0A0906;
+    color: #FFFFFF;
+    box-shadow: 5px 5px 0 #E62828;
+  }
+  .mod-card.core:hover { box-shadow: 8px 8px 0 #E62828; }
+  .mod-card.core .text-ink-900,
+  .mod-card.core .text-ink-800,
+  .mod-card.core .text-ink-700,
+  .mod-card.core .text-ink-600 { color: #FFFFFF !important; }
+  .mod-card.core .text-ink-500 { color: #B0AA9A !important; }
+
+  /* 大數字左邊 · 斜切 */
+  .mod-numeral {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-weight: 900;
+    font-size: 5.5rem;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    color: #0A0906;
+    display: block;
+  }
+  .mod-card.core .mod-numeral { color: #E62828; }
+  .mod-card .core-star {
+    display: inline-block;
+    background: #E62828;
+    color: #FFFFFF;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.24em;
+    padding: 3px 10px;
+    text-transform: uppercase;
+  }
+  /* 卡片右上紅斜條紋角 */
+  .mod-card::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; width: 42px; height: 42px;
+    background: repeating-linear-gradient(-45deg, #E62828 0 2px, transparent 2px 6px);
+    pointer-events: none;
+  }
+  .mod-card.core::after { background: repeating-linear-gradient(-45deg, #FFFFFF 0 2px, transparent 2px 6px); opacity: 0.7; }
+</style>
+<section id="tasks" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <!-- 紅斜條紋裝飾 -->
+  <div class="absolute top-10 right-0 w-40 h-24 red-stripes opacity-40 hidden lg:block"></div>
+
   <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-14 reveal from-up">
-      <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">03 ／ 課程架構</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
-      <h2 class="section-title text-4xl sm:text-5xl mt-4">6 大模組 · 30 小時</h2>
-      <p class="text-ink-600 mt-4 text-sm sm:text-base">從 AI 內容產出 → 企業自己的工具 → 部門級架構 · 逐步升級 · 每組 6 小時</p>
+    <!-- 標題區:左對齊 MIID 感 -->
+    <div class="mb-12 reveal from-up">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="block w-10 h-1 bg-rd"></span>
+        <span class="section-eyebrow">03 / COURSE STRUCTURE</span>
+      </div>
+      <h2 class="text-ink-900 font-black leading-none mb-3" style="font-size: clamp(2.25rem, 5vw, 3.75rem); letter-spacing: -0.03em;">
+        6 <span class="text-rd">MODULES</span> · 30h
+      </h2>
+      <p class="text-ink-700 text-sm sm:text-base max-w-2xl">
+        從 AI 內容產出 → 企業自己的工具 → 部門級架構 · 逐步升級
+        <span class="font-black text-ink-900">每組 6 小時 · 4 天完成</span>
+      </p>
     </div>
 
-    <div class="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-start">
+    <!-- 6 模組:2 欄格線 -->
+    <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
 
-      <!-- 左:六個模組卡 -->
+      <!-- 模組 01 · AI 內容策略 -->
+      <div class="mod-card p-6 sm:p-8 reveal from-left" data-level="1">
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">01</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 1 · 6h · Content</div>
+            <h3 class="font-black text-ink-900 text-lg leading-tight mb-3">行銷策略 + AI 文案與圖片</h3>
+            <ul class="text-ink-700 space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>自媒體平台特色 · 用 AI 定行銷策略</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>LLM 提示詞技巧 · 寫吸睛貼文</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>自動智慧圖文生成器</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模組 02 · 圖像影音 -->
+      <div class="mod-card p-6 sm:p-8 reveal from-right" data-level="2">
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">02</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 2 · 6h · Media</div>
+            <h3 class="font-black text-ink-900 text-lg leading-tight mb-3">AI 圖像與影音創作實戰</h3>
+            <ul class="text-ink-700 space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>AI 圖像生成 · 商業貼文圖設計</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>實作 5-10 篇文案對應圖片</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>Meta / Google Flow · 5-20 秒短影音</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模組 03 · 生成式發表 -->
+      <div class="mod-card p-6 sm:p-8 reveal from-left" data-level="2">
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">03</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 3 · 3h · Showcase</div>
+            <h3 class="font-black text-ink-900 text-lg leading-tight mb-3">生成式 AI 成果發表與交流</h3>
+            <ul class="text-ink-700 space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>學員成果整理 · 專題彙整 · 簡報</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>把學習歷程變成專題內容</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>講師回饋 · 同儕交流</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模組 04 · 核心 -->
+      <div class="mod-card core p-6 sm:p-8 reveal from-right" data-level="3">
+        <div class="mb-3"><span class="core-star">★ Core Module</span></div>
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">04</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 4 · 6h · SDD + Agent</div>
+            <h3 class="font-black text-lg leading-tight mb-3">用 AI 做出企業自己的工具</h3>
+            <ul class="space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>規格驅動開發 SDD 演練</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>安全可控的 AI 導入 · Low-Code</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>做出第一個 AI Agent</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模組 05 · 核心 -->
+      <div class="mod-card core p-6 sm:p-8 reveal from-left" data-level="4">
+        <div class="mb-3"><span class="core-star">★ Core Module</span></div>
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">05</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 5 · 6h · RAG + MCP</div>
+            <h3 class="font-black text-lg leading-tight mb-3">部門級 AI 導入架構</h3>
+            <ul class="space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>Low-Code RAG · 讓 AI 讀公司資料</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>部門 MCP Server · 跨系統串接</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>Human-in-the-Loop · 人工核決</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 模組 06 · 結業發表 -->
+      <div class="mod-card p-6 sm:p-8 reveal from-right" data-level="4">
+        <div class="grid grid-cols-[auto_1fr] gap-5 items-start">
+          <div class="mod-numeral">06</div>
+          <div>
+            <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-2">Module 6 · 3h · Graduation</div>
+            <h3 class="font-black text-ink-900 text-lg leading-tight mb-3">AI Agent 成果發表與交流</h3>
+            <ul class="text-ink-700 space-y-1.5 text-[13px] leading-relaxed">
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>Agent 專題彙整 · 成果簡報</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>作品完整性 · 可行性回饋</li>
+              <li class="flex gap-2"><span class="text-rd shrink-0 font-black">/</span>強化未來導入 AI 的信心</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid 6 modules -->
+
+    <!-- 30 小時進度小條(替代舊金字塔)-->
+    <div class="mt-12 border-2 border-ink-900 p-5 sm:p-6 bg-white reveal from-up">
+      <div class="flex items-center justify-between flex-wrap gap-4 mb-4">
+        <div>
+          <div class="font-mono text-[11px] tracking-[0.28em] text-rd font-bold uppercase mb-1">Total · Track</div>
+          <div class="text-ink-900 text-2xl font-black">30 小時 · 4 天完成</div>
+        </div>
+        <div class="text-right">
+          <div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Day 1 → Day 4</div>
+          <div class="text-ink-900 text-sm font-bold mt-1">週末上課 09:00-17:00</div>
+        </div>
+      </div>
+      <!-- 6 段進度條 -->
+      <div class="grid grid-cols-6 gap-1">
+        <div class="h-6 bg-ink-900 text-white text-[10px] font-mono font-bold flex items-center justify-center">01 · 6h</div>
+        <div class="h-6 bg-ink-900 text-white text-[10px] font-mono font-bold flex items-center justify-center">02 · 6h</div>
+        <div class="h-6 bg-ink-900/50 text-white text-[10px] font-mono font-bold flex items-center justify-center">03 · 3h</div>
+        <div class="h-6 bg-rd text-white text-[10px] font-mono font-bold flex items-center justify-center">★04 · 6h</div>
+        <div class="h-6 bg-rd text-white text-[10px] font-mono font-bold flex items-center justify-center">★05 · 6h</div>
+        <div class="h-6 bg-ink-900/50 text-white text-[10px] font-mono font-bold flex items-center justify-center">06 · 3h</div>
+      </div>
+      <div class="mt-2 text-[10px] font-mono tracking-widest text-ink-500 flex justify-between">
+        <span>基礎</span><span>發表</span><span class="text-rd font-black">↑ 核心</span><span>結業</span>
+      </div>
+    </div>
+
+    <!-- 舊金字塔區塊完全隱藏 -->
+    <div class="hidden">
+      <div class="space-y-5"><!-- 舊 sticky sidebar 相關 wrapper hidden -->
       <div class="space-y-5 order-2 lg:order-1">
       <div class="card-glass task-card p-7 sm:p-9 glow-border reveal from-left" data-level="1">
         <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
