@@ -168,8 +168,13 @@
     position: relative;
     border-radius: 0;
   }
-  .card-gold * { color: inherit; }
+  /* card-gold 內部 text 一律翻白/紅 */
+  .card-gold .text-ink-900, .card-gold .text-ink-800 { color: #FFFFFF !important; }
+  .card-gold .text-ink-700, .card-gold .text-ink-600 { color: #E0DDD3 !important; }
+  .card-gold .text-ink-500 { color: #A8A395 !important; }
   .card-gold .text-gold-light, .card-gold .text-gold { color: #E62828 !important; }
+  .card-gold .bg-gold { background: #E62828 !important; }
+  .card-gold .border-gold\/50, .card-gold .border-gold\/20 { border-color: rgba(230,40,40,0.5) !important; }
 
   /* 卡片四角 L 刻度換成:紅色右上角小三角(MIID 那種紅斜條紋) */
   .card-glass::before, .card-gold::before { display: none; }
@@ -402,18 +407,18 @@
   .cohort-arrow {
     position: absolute; top: 44%;
     transform: translateY(-50%);
-    width: 38px; height: 38px;
+    width: 40px; height: 40px;
     display: flex; align-items: center; justify-content: center;
-    border-radius: 9999px;
-    background: rgba(20, 16, 10, 0.88);
-    border: 1px solid rgba(10, 9, 6, 0.45);
-    color: #E62828;
-    font-size: 1.05rem; font-weight: 700; line-height: 1;
+    border-radius: 0;
+    background: #0A0906;
+    border: 1.5px solid #0A0906;
+    color: #FFFFFF;
+    font-size: 1.05rem; font-weight: 900; line-height: 1;
     cursor: pointer; z-index: 5;
-    backdrop-filter: blur(4px);
-    transition: opacity .25s ease, background .25s ease, border-color .25s ease;
+    box-shadow: 3px 3px 0 #E62828;
+    transition: all .2s ease;
   }
-  .cohort-arrow:hover { background: rgba(10, 9, 6, 0.22); border-color: rgba(230, 40, 40, 0.9); }
+  .cohort-arrow:hover { background: #E62828; box-shadow: 3px 3px 0 #0A0906; transform: translate(-1px, -1px) translateY(-50%); }
   .cohort-arrow.prev { left: 0; }
   .cohort-arrow.next { right: 0; }
   .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
@@ -1385,7 +1390,16 @@
 
 <!-- ════════ U4 三條自動化流程 詳細展開 ════════ -->
 <style>
-  .flow-card { background: linear-gradient(180deg, rgba(255, 255, 255,0.7) 0%, rgba(251, 248, 241,0.9) 100%); border: 1px solid rgba(10, 9, 6,0.32); border-radius: 14px; }
+  .flow-card { background: #FFFFFF; border: 1.5px solid #0A0906; border-radius: 0; box-shadow: 6px 6px 0 rgba(10,9,6,0.12); position: relative; }
+  .flow-card::after { content: ""; position: absolute; top: 0; right: 0; width: 48px; height: 48px; background: repeating-linear-gradient(-45deg, #E62828 0 3px, transparent 3px 8px); pointer-events: none; }
+  .flow-visual { background: #FBF8F1; border: 1.5px solid #0A0906; padding: 20px; border-radius: 0; }
+  .flow-visual .huge-num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 900; font-size: 5.5rem; line-height: 0.85; color: #E62828; letter-spacing: -0.03em; }
+  .flow-visual .flow-band { display: inline-block; background: #0A0906; color: #FFFFFF; padding: 6px 16px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; letter-spacing: 0.24em; font-weight: 800; text-transform: uppercase; transform: skewX(-8deg); }
+  .flow-visual .flow-band > span { display: inline-block; transform: skewX(8deg); }
+  .flow-visual .flow-step { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px dashed rgba(10,9,6,0.15); }
+  .flow-visual .flow-step:last-child { border-bottom: none; }
+  .flow-visual .flow-step-icon { flex-shrink: 0; width: 34px; height: 34px; background: #0A0906; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 900; font-size: 12px; }
+  .flow-visual .flow-step.accent .flow-step-icon { background: #E62828; }
   .flow-pain { background: rgba(10, 9, 6,0.06); border-left: 3px solid #0A0906; padding: 12px 16px; border-radius: 0 8px 8px 0; }
   .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(10, 9, 6,0.32); padding: 14px 16px; border-radius: 10px; }
   .flow-checklist li { display:flex; gap:10px; align-items:flex-start; }
@@ -1434,7 +1448,33 @@
         </div>
 
         <div class="lg:col-span-5">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 內容產出流程圖">
+          <!-- MIID 風視覺 · 大 01 + 斜切 band + 3 步驟(取代舊 SVG)-->
+          <div class="flow-visual">
+            <div class="flex items-start justify-between mb-4">
+              <div class="huge-num">01</div>
+              <div class="flow-band"><span>Content Ops</span></div>
+            </div>
+            <div class="mt-4 space-y-0">
+              <div class="flow-step">
+                <div class="flow-step-icon">IN</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Input</div><div class="text-ink-900 font-bold text-sm">「新設備上市」關鍵字</div></div>
+              </div>
+              <div class="flow-step accent">
+                <div class="flow-step-icon">AI</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-rd font-bold uppercase">Process</div><div class="text-ink-900 font-bold text-sm">內容生成引擎(提示詞 · 生成)</div></div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-step-icon">✓</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Output</div><div class="text-ink-900 font-bold text-sm">貼文 · 圖片 · 5-20 秒短影音</div></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-ink-900 flex justify-between items-baseline">
+              <span class="font-mono text-[9px] tracking-[0.28em] text-ink-500 uppercase">Prompt · Generate · Publish</span>
+              <span class="text-rd font-black text-xs">5~10 篇/週</span>
+            </div>
+          </div>
+          <!-- 舊 SVG 藏起備用 -->
+          <svg class="hidden" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="flowA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
               <linearGradient id="flowAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
@@ -1499,7 +1539,35 @@
     <div class="flow-card p-6 sm:p-9 mb-8 reveal from-up">
       <div class="grid lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-5 order-2 lg:order-1">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="企業自己的 AI 工具流程圖">
+          <div class="flow-visual">
+            <div class="flex items-start justify-between mb-4">
+              <div class="huge-num">02</div>
+              <div class="flow-band" style="background:#E62828"><span>★ Core · AI Agent</span></div>
+            </div>
+            <div class="mt-4 space-y-0">
+              <div class="flow-step">
+                <div class="flow-step-icon">P</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Pain</div><div class="text-ink-900 font-bold text-sm">30 頁規格 PDF · 業助每天翻</div></div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-step-icon">S</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">SDD Spec</div><div class="text-ink-900 font-bold text-sm">規格書:輸入 / 規則 / 輸出</div></div>
+              </div>
+              <div class="flow-step accent">
+                <div class="flow-step-icon">B</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-rd font-bold uppercase">Build</div><div class="text-ink-900 font-bold text-sm">Low-Code AI Agent(不寫程式)</div></div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-step-icon">✓</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Deploy</div><div class="text-ink-900 font-bold text-sm">員工用得動的公司內部工具</div></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-ink-900 flex justify-between items-baseline">
+              <span class="font-mono text-[9px] tracking-[0.28em] text-ink-500 uppercase">Spec · Build · Deploy</span>
+              <span class="text-rd font-black text-xs">3 天完成</span>
+            </div>
+          </div>
+          <svg class="hidden" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="flowB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
               <linearGradient id="flowBAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
@@ -1654,7 +1722,35 @@
         </div>
 
         <div class="lg:col-span-5">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="部門 RAG 知識庫流程圖">
+          <div class="flow-visual">
+            <div class="flex items-start justify-between mb-4">
+              <div class="huge-num">03</div>
+              <div class="flow-band" style="background:#E62828"><span>★ Core · Dept RAG</span></div>
+            </div>
+            <div class="mt-4 space-y-0">
+              <div class="flow-step">
+                <div class="flow-step-icon">D</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Docs</div><div class="text-ink-900 font-bold text-sm">部門 200+ 份案例 / SOP / 規範</div></div>
+              </div>
+              <div class="flow-step accent">
+                <div class="flow-step-icon">V</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-rd font-bold uppercase">Vector Store</div><div class="text-ink-900 font-bold text-sm">Pinecone RAG · 向量索引</div></div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-step-icon">Q</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">Query</div><div class="text-ink-900 font-bold text-sm">一句話問答 · 附案例來源</div></div>
+              </div>
+              <div class="flow-step">
+                <div class="flow-step-icon">H</div>
+                <div class="flex-1"><div class="text-[10px] font-mono tracking-widest text-ink-500 uppercase">HITL</div><div class="text-ink-900 font-bold text-sm">關鍵決策由人審核</div></div>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-ink-900 flex justify-between items-baseline">
+              <span class="font-mono text-[9px] tracking-[0.28em] text-ink-500 uppercase">Index · Ask · Cite</span>
+              <span class="text-rd font-black text-xs">跨系統串接</span>
+            </div>
+          </div>
+          <svg class="hidden" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <linearGradient id="flowC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
               <linearGradient id="flowCAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
