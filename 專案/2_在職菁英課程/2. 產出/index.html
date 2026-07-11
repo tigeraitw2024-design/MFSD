@@ -39,25 +39,38 @@
           sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif']
         },
         colors: {
+          // 亮色系 · 未漂白紙 + 深墨 + 橄欖強調
+          cream: {
+            50:  '#FDFAF2',   // 卡片底(最亮)
+            100: '#F6F1E4',   // 頁面主底
+            200: '#EBE3CD',   // 次深
+            300: '#DED4B7'    // 分隔線
+          },
+          ink: {
+            500: '#7A7367',
+            600: '#5B5449',
+            700: '#3F3830',
+            800: '#28221C',
+            900: '#181410'
+          },
+          // 保留舊 navy class name 兼容(值改成 cream)
           navy: {
-            // 深橄欖底(不撞金黑)
-            900: '#0E1310',
-            800: '#131A15',
-            700: '#1B2419',
-            600: '#252F22'
+            900: '#F6F1E4',
+            800: '#FDFAF2',
+            700: '#EBE3CD',
+            600: '#DED4B7'
           },
           teal: {
-            // 鼠尾草綠 sage,section eyebrow 用
-            bright: '#B0C99B',
-            500: '#7CA85F',
-            600: '#5D8A44',
-            700: '#3E5C2E'
+            bright: '#8DAA6E',
+            500: '#5A8A44',
+            600: '#3F6B2C',
+            700: '#274A18'
           },
           gold: {
-            // 從奢華金 → 土黃(#E89B2C 從設計風格.md),仍走高對比暖色
-            light: '#F5BE5F',
-            DEFAULT: '#E89B2C',
-            deep: '#8C6A1C'
+            // 現在 gold class 對應到「深橄欖強調」,不是奢華金
+            light: '#B8760F',   // 土黃(bright 那級)
+            DEFAULT: '#2F5D3C', // 深橄欖(主強調)
+            deep: '#1F3D26'
           }
         },
         animation: {
@@ -88,19 +101,19 @@
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Noto Sans TC', system-ui, sans-serif;
-    background: #06060A;
-    color: #E7E1D2;
+    background: #F6F1E4;
+    color: #3F3830;
     letter-spacing: 0.005em;
   }
   .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.04em; }
 
-  /* ── 主背景：暖金光 + 工程網格 ── */
+  /* ── 主背景:未漂白紙 + 輕綠光 + 微網格 ── */
   .gold-glow-bg {
     background:
-      radial-gradient(ellipse 55% 45% at 82% -5%, rgba(232, 155, 44, 0.22) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 8% 38%, rgba(232, 155, 44, 0.08) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 45% at 92% 78%, rgba(232, 155, 44, 0.10) 0%, transparent 60%),
-      linear-gradient(180deg, #06060A 0%, #08070C 100%);
+      radial-gradient(ellipse 55% 45% at 82% -5%, rgba(47, 93, 60, 0.10) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 8% 38%, rgba(184, 118, 15, 0.06) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 92% 78%, rgba(47, 93, 60, 0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #F6F1E4 0%, #F0EBDA 100%);
     background-attachment: fixed;
     position: relative;
   }
@@ -108,8 +121,8 @@
     content: "";
     position: fixed; inset: 0;
     background-image:
-      linear-gradient(rgba(232, 155, 44, 0.045) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(232, 155, 44, 0.045) 1px, transparent 1px);
+      linear-gradient(rgba(47, 93, 60, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 93, 60, 0.04) 1px, transparent 1px);
     background-size: 72px 72px;
     mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
     -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
@@ -118,26 +131,28 @@
   }
   .gold-orb {
     position: absolute; border-radius: 9999px; pointer-events: none;
-    background: radial-gradient(circle, rgba(232, 155, 44,0.30) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(184, 118, 15, 0.20) 0%, transparent 70%);
     filter: blur(46px);
   }
   section, nav, footer { position: relative; z-index: 1; }
 
-  /* ── 卡片：黑底 + 金色細線 + 角落 L 型刻度 ── */
+  /* ── 卡片:白底 + 深橄欖細線 + 角落 L 型刻度 ── */
   .card-glass {
     background:
-      linear-gradient(180deg, rgba(232, 155, 44, 0.04) 0%, rgba(255,255,255,0) 30%),
-      rgba(10, 9, 14, 0.72);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(232, 155, 44, 0.14);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255,255,255,0.85) 30%),
+      #FDFAF2;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(47, 93, 60, 0.14);
+    box-shadow: 0 2px 12px rgba(47, 93, 60, 0.05);
     position: relative;
     border-radius: 14px;
   }
   .card-gold {
     background:
-      linear-gradient(180deg, rgba(232, 155, 44, 0.10) 0%, rgba(232, 155, 44, 0.02) 35%, rgba(10, 9, 14, 0.78) 100%);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(232, 155, 44, 0.34);
+      linear-gradient(180deg, rgba(184, 118, 15, 0.08) 0%, rgba(47, 93, 60, 0.02) 35%, #FDFAF2 100%);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(47, 93, 60, 0.32);
+    box-shadow: 0 4px 20px rgba(47, 93, 60, 0.08);
     position: relative;
     border-radius: 14px;
   }
@@ -147,7 +162,7 @@
     content: "";
     position: absolute;
     width: 14px; height: 14px;
-    border: 1px solid rgba(232, 155, 44, 0.55);
+    border: 1px solid rgba(47, 93, 60, 0.55);
     pointer-events: none;
     transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -159,80 +174,80 @@
     bottom: -1px; right: -1px;
     border-left: none; border-top: none;
   }
-  .card-gold::before, .card-gold::after { border-color: rgba(245, 190, 95, 0.85); width: 18px; height: 18px; }
+  .card-gold::before, .card-gold::after { border-color: rgba(31, 61, 38, 0.85); width: 18px; height: 18px; }
 
   .glow-border { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
   .glow-border:hover {
-    border-color: rgba(232, 155, 44, 0.55);
+    border-color: rgba(47, 93, 60, 0.55);
     box-shadow:
-      0 0 0 1px rgba(232, 155, 44, 0.18),
-      0 24px 64px -28px rgba(232, 155, 44, 0.45);
+      0 0 0 1px rgba(47, 93, 60, 0.14),
+      0 24px 64px -28px rgba(47, 93, 60, 0.35);
     transform: translateY(-3px);
   }
   .glow-border:hover::before, .glow-border:hover::after {
     width: 22px; height: 22px;
-    border-color: rgba(245, 190, 95, 1);
+    border-color: rgba(31, 61, 38, 1);
   }
 
-  /* ── 按鈕：銳利金屬 + 掃光 ── */
+  /* ── 按鈕:實作 CTA ── */
   .btn-primary {
-    background: linear-gradient(135deg, #2E8B72 0%, #1F5B4C 100%);
-    color: #F2EFE6;
-    border: 1px solid rgba(124, 231, 199, 0.35);
+    background: linear-gradient(135deg, #5A8A44 0%, #3F6B2C 100%);
+    color: #FDFAF2;
+    border: 1px solid rgba(90, 138, 68, 0.35);
     transition: all 0.25s ease;
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #4FB89A 0%, #2E8B72 100%);
-    box-shadow: 0 8px 28px rgba(79, 184, 154, 0.28);
+    background: linear-gradient(135deg, #6DA351 0%, #5A8A44 100%);
+    box-shadow: 0 8px 28px rgba(90, 138, 68, 0.28);
     transform: translateY(-2px);
   }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
   .btn-gold {
-    background: linear-gradient(135deg, #F5BE5F 0%, #E89B2C 45%, #8C6A1C 100%);
-    color: #14100A;
-    border: 1px solid rgba(245, 190, 95, 0.6);
+    background: linear-gradient(135deg, #3F6B2C 0%, #2F5D3C 45%, #1F3D26 100%);
+    color: #FDFAF2;
+    border: 1px solid rgba(47, 93, 60, 0.6);
     position: relative;
     overflow: hidden;
     transition: all 0.3s ease;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.18);
   }
   .btn-gold::after {
     content: "";
     position: absolute; top: 0; left: -120%;
     width: 60%; height: 100%;
-    background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+    background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
     transform: skewX(-22deg);
     transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .btn-gold:hover::after { left: 130%; }
   .btn-gold:hover {
-    box-shadow: 0 10px 30px -6px rgba(232, 155, 44, 0.55);
+    box-shadow: 0 10px 30px -6px rgba(47, 93, 60, 0.55);
     transform: translateY(-2px);
   }
 
-  /* ── 金色漸層文字 ── */
+  /* ── 標題深橄欖漸層字 ── */
   .gold-text {
-    background: linear-gradient(180deg, #FBEFC0 0%, #F5BE5F 30%, #E89B2C 60%, #8C6A1C 100%);
+    background: linear-gradient(180deg, #5A8A44 0%, #2F5D3C 50%, #1F3D26 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    text-shadow: 0 0 28px rgba(232, 155, 44, 0.18);
   }
 
-  /* ── 區塊小標：mono + 金色刻度線 ── */
+  /* ── 區塊小標:mono + 橄欖刻度線 ── */
   .floating-line {
     display: inline-block;
     width: 2.25rem; height: 1px;
-    background: linear-gradient(90deg, transparent, #E89B2C 30%, #E89B2C 70%, transparent);
+    background: linear-gradient(90deg, transparent, #2F5D3C 30%, #2F5D3C 70%, transparent);
     margin-right: 0.75rem;
     vertical-align: middle;
   }
   .section-eyebrow {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
-    color: #F5BE5F;
+    color: #B8760F;
     font-size: 0.82rem;
     letter-spacing: 0.32em;
+    font-weight: 700;
   }
   .section-title {
     font-weight: 900;
@@ -249,7 +264,7 @@
     content: "";
     position: absolute;
     width: 26px; height: 26px;
-    border-color: rgba(232, 155, 44, 0.55);
+    border-color: rgba(47, 93, 60, 0.55);
     border-style: solid;
     border-width: 0;
   }
@@ -268,14 +283,14 @@
     font-weight: 700;
     font-size: 5.5rem;
     line-height: 0.85;
-    -webkit-text-stroke: 1px rgba(232, 155, 44, 0.55);
+    -webkit-text-stroke: 1px rgba(47, 93, 60, 0.55);
     color: transparent;
     letter-spacing: -0.04em;
   }
   .task-card { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
   .task-card:hover .task-numeral {
-    -webkit-text-stroke-color: rgba(245, 190, 95, 1);
-    color: rgba(232, 155, 44, 0.08);
+    -webkit-text-stroke-color: rgba(184, 118, 15, 1);
+    color: rgba(47, 93, 60, 0.08);
   }
 
   /* ── AX 金字塔（立體 SVG · 捲動逐層組合 + 滑過高亮）── */
@@ -293,12 +308,12 @@
   }
   .ax-level.built { opacity: 1; transform: translateY(0); }
   .ax-level polygon, .ax-level text { transition: fill .3s ease, stroke .3s ease; }
-  .ax-apex { filter: drop-shadow(0 0 11px rgba(232, 155, 44,0.55)); }
-  .ax-level.active { filter: drop-shadow(0 0 22px rgba(232, 155, 44,0.85)); }
-  .ax-level.active .ax-front { fill: url(#axGoldFront); stroke: #F8E4A8; stroke-opacity: 0.8; }
-  .ax-level.active .ax-top   { fill: url(#axGoldTop);   stroke: #F8E4A8; stroke-opacity: 0.8; }
+  .ax-apex { filter: drop-shadow(0 0 11px rgba(47, 93, 60,0.55)); }
+  .ax-level.active { filter: drop-shadow(0 0 22px rgba(47, 93, 60,0.85)); }
+  .ax-level.active .ax-front { fill: url(#axGoldFront); stroke: #5A8A44; stroke-opacity: 0.8; }
+  .ax-level.active .ax-top   { fill: url(#axGoldTop);   stroke: #5A8A44; stroke-opacity: 0.8; }
   .ax-level.active .ax-txt-code,
-  .ax-level.active .ax-txt-name { fill: #1A1308; }
+  .ax-level.active .ax-txt-name { fill: #FDFAF2; }
   .ax-txt-code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
   .ax-txt-name { font-family: 'Noto Sans TC', system-ui, sans-serif; font-weight: 700; }
   @media (max-width: 1023px) {
@@ -336,14 +351,14 @@
     display: flex; align-items: center; justify-content: center;
     border-radius: 9999px;
     background: rgba(20, 16, 10, 0.88);
-    border: 1px solid rgba(232, 155, 44, 0.45);
-    color: #F5BE5F;
+    border: 1px solid rgba(47, 93, 60, 0.45);
+    color: #B8760F;
     font-size: 1.05rem; font-weight: 700; line-height: 1;
     cursor: pointer; z-index: 5;
     backdrop-filter: blur(4px);
     transition: opacity .25s ease, background .25s ease, border-color .25s ease;
   }
-  .cohort-arrow:hover { background: rgba(232, 155, 44, 0.22); border-color: rgba(245, 190, 95, 0.9); }
+  .cohort-arrow:hover { background: rgba(47, 93, 60, 0.22); border-color: rgba(184, 118, 15, 0.9); }
   .cohort-arrow.prev { left: 0; }
   .cohort-arrow.next { right: 0; }
   .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
@@ -351,7 +366,7 @@
   /* ── 表單 ── */
   .form-input {
     background: rgba(8, 7, 12, 0.8);
-    border: 1px solid rgba(232, 155, 44, 0.22);
+    border: 1px solid rgba(47, 93, 60, 0.22);
     color: #F2EFE6;
     transition: all 0.2s ease;
     border-radius: 8px;
@@ -360,9 +375,9 @@
   .form-input::placeholder { color: rgba(231, 225, 210, 0.32); }
   .form-input:focus {
     outline: none;
-    border-color: #F5BE5F;
+    border-color: #B8760F;
     background: rgba(8, 7, 12, 0.95);
-    box-shadow: 0 0 0 3px rgba(232, 155, 44, 0.18);
+    box-shadow: 0 0 0 3px rgba(47, 93, 60, 0.18);
   }
   .form-input.error {
     border-color: #E26B5C;
@@ -385,10 +400,10 @@
     position: absolute;
     left: 0; bottom: -6px;
     width: 0; height: 1px;
-    background: #F5BE5F;
+    background: #B8760F;
     transition: width 0.3s ease;
   }
-  .nav-link:hover { color: #F5BE5F; }
+  .nav-link:hover { color: #B8760F; }
   .nav-link:hover::after { width: 100%; }
 
   /* ── FAQ ── */
@@ -409,20 +424,20 @@
     letter-spacing: 0.4em;
     font-size: 0.95rem;
     box-shadow:
-      -6px 0 32px -8px rgba(232, 155, 44, 0.55),
-      inset 0 0 0 1px rgba(245, 190, 95, 0.4);
+      -6px 0 32px -8px rgba(47, 93, 60, 0.55),
+      inset 0 0 0 1px rgba(184, 118, 15, 0.4);
     animation: ctaPulse 3s ease-in-out infinite;
   }
   @keyframes ctaPulse {
     0%, 100% {
       box-shadow:
-        -6px 0 28px -10px rgba(232, 155, 44, 0.45),
-        inset 0 0 0 1px rgba(245, 190, 95, 0.4);
+        -6px 0 28px -10px rgba(47, 93, 60, 0.45),
+        inset 0 0 0 1px rgba(184, 118, 15, 0.4);
     }
     50% {
       box-shadow:
-        -6px 0 40px -6px rgba(245, 190, 95, 0.85),
-        inset 0 0 0 1px rgba(245, 190, 95, 0.7);
+        -6px 0 40px -6px rgba(184, 118, 15, 0.85),
+        inset 0 0 0 1px rgba(184, 118, 15, 0.7);
     }
   }
   @media (max-width: 640px) {
@@ -453,7 +468,7 @@
   /* ── Hero 主視覺光暈 ── */
   .hero-photo-glow {
     position: absolute; inset: -12% -10% -16% -10%;
-    background: radial-gradient(ellipse at center, rgba(232, 155, 44,0.42) 0%, rgba(232, 155, 44,0.12) 46%, transparent 72%);
+    background: radial-gradient(ellipse at center, rgba(47, 93, 60,0.42) 0%, rgba(47, 93, 60,0.12) 46%, transparent 72%);
     filter: blur(32px);
     z-index: 0;
   }
@@ -483,7 +498,7 @@
   .hero-corner {
     position: absolute;
     width: 56px; height: 56px;
-    border: 1px solid rgba(232, 155, 44, 0.5);
+    border: 1px solid rgba(47, 93, 60, 0.5);
     pointer-events: none;
   }
   .hero-corner.tl { top: -12px; left: -12px; border-right: none; border-bottom: none; }
@@ -496,11 +511,11 @@
     gap: 0.6rem;
     font-size: 0.72rem;
     letter-spacing: 0.32em;
-    color: #F5BE5F;
+    color: #B8760F;
     padding: 0.4rem 0.85rem;
-    border: 1px solid rgba(232, 155, 44, 0.32);
+    border: 1px solid rgba(47, 93, 60, 0.32);
     border-radius: 999px;
-    background: rgba(232, 155, 44, 0.05);
+    background: rgba(47, 93, 60, 0.05);
   }
 
   /* ── 統編輸入區裝飾 ── */
@@ -510,8 +525,8 @@
     gap: 0.5rem;
     font-size: 0.78rem;
     letter-spacing: 0.24em;
-    color: #0E0B05;
-    background: linear-gradient(135deg, #F5BE5F 0%, #E89B2C 100%);
+    color: #FDFAF2;
+    background: linear-gradient(135deg, #B8760F 0%, #2F5D3C 100%);
     padding: 0.35rem 0.95rem;
     border-radius: 999px;
     font-weight: 800;
@@ -523,9 +538,9 @@
     margin-top: 8px;
   }
   .tick-row span {
-    flex: 1; height: 2px; background: rgba(232, 155, 44, 0.18);
+    flex: 1; height: 2px; background: rgba(47, 93, 60, 0.18);
   }
-  .tick-row span.on { background: linear-gradient(90deg, #F5BE5F, #E89B2C); }
+  .tick-row span.on { background: linear-gradient(90deg, #B8760F, #2F5D3C); }
 
   @media (max-width: 640px) {
     .hero-title { font-size: 2.5rem !important; }
@@ -541,16 +556,16 @@
 <body class="gold-glow-bg min-h-screen">
 
 <!-- ════════ NAV ════════ -->
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-navy-900/85 border-b border-gold/15">
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-cream-100/85 border-b border-gold/15">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <img src="assets/logo.png" alt="虎智科技 TigerAI" class="w-9 h-9 object-contain">
       <div class="leading-tight">
-        <div class="text-white font-bold text-sm sm:text-base tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
+        <div class="text-ink-900 font-bold text-sm sm:text-base tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
         <div class="text-[10px] sm:text-[11px] text-gold-light/70 tracking-widest">在職菁英 · 感測 / 機械產業</div>
       </div>
     </div>
-    <div class="hidden md:flex items-center gap-7 text-sm text-gray-300">
+    <div class="hidden md:flex items-center gap-7 text-sm text-ink-700">
       <a href="https://www.tigerai.info/category/all-products" target="_blank" rel="noopener" class="nav-link">虎智學習中心 ↗</a>
       <a href="#why" class="nav-link">為什麼上課</a>
       <a href="#tasks" class="nav-link">課程架構</a>
@@ -573,163 +588,145 @@
         <div class="hero-photo-glow"></div>
         <span class="hero-corner tl"></span>
         <span class="hero-corner br"></span>
-        <!-- 之後想換真實照片：把下面 <svg> 整段換成 <img src="assets/hero-manufacturing.png" alt="製造業 AI 應用" class="hero-photo relative z-10 w-full"> -->
-        <svg viewBox="0 0 600 600" class="hero-photo relative z-10 w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="製造業 AI 應用主視覺">
+        <!-- Hero SVG:6 個模組聚合到 1 個 AI 中樞,3 個成果從中放射出來(藍圖風) -->
+        <svg viewBox="0 0 600 600" class="hero-photo relative z-10 w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="在職菁英課程主視覺 · 6 模組 3 成果">
           <defs>
-            <radialGradient id="bgGlow" cx="50%" cy="42%" r="62%">
-              <stop offset="0%" stop-color="#1E3020" stop-opacity="0.95"/>
-              <stop offset="55%" stop-color="#131A15" stop-opacity="0.9"/>
-              <stop offset="100%" stop-color="#0A130C" stop-opacity="1"/>
-            </radialGradient>
-            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#F5BE5F"/>
-              <stop offset="100%" stop-color="#A07A2E"/>
+            <linearGradient id="oliveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#5A8A44"/>
+              <stop offset="100%" stop-color="#1F3D26"/>
             </linearGradient>
-            <linearGradient id="panelGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#182018"/>
-              <stop offset="100%" stop-color="#0D140F"/>
+            <linearGradient id="mustardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D89928"/>
+              <stop offset="100%" stop-color="#8C5A0A"/>
             </linearGradient>
-            <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(232, 155, 44,0.07)" stroke-width="0.8"/>
+            <pattern id="blueprintGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(47,93,60,0.08)" stroke-width="0.6"/>
             </pattern>
+            <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+              <feOffset dx="0" dy="1" result="offsetblur"/>
+              <feComponentTransfer><feFuncA type="linear" slope="0.15"/></feComponentTransfer>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
           </defs>
 
-          <circle cx="300" cy="300" r="290" fill="url(#bgGlow)"/>
-          <circle cx="300" cy="300" r="290" fill="url(#grid)"/>
-          <circle cx="300" cy="300" r="289" fill="none" stroke="rgba(232, 155, 44,0.28)" stroke-width="1.2"/>
-          <circle cx="300" cy="300" r="270" fill="none" stroke="rgba(232, 155, 44,0.12)" stroke-width="1" stroke-dasharray="2 6"/>
+          <!-- 底層網格 -->
+          <rect x="0" y="0" width="600" height="600" fill="url(#blueprintGrid)"/>
 
-          <g opacity="0.55">
-            <circle cx="300" cy="300" r="248" fill="none" stroke="rgba(232, 155, 44,0.18)" stroke-width="0.6"/>
-            <g stroke="#E89B2C" stroke-width="1.4" stroke-linecap="round">
-              <line x1="300" y1="52" x2="300" y2="68"/>
-              <line x1="548" y1="300" x2="532" y2="300"/>
-              <line x1="300" y1="548" x2="300" y2="532"/>
-              <line x1="52" y1="300" x2="68" y2="300"/>
+          <!-- 外環 · 大三格弧線(3 個成果區) -->
+          <g fill="none" stroke="rgba(47,93,60,0.18)" stroke-width="1">
+            <circle cx="300" cy="300" r="270" stroke-dasharray="3 8"/>
+            <circle cx="300" cy="300" r="215"/>
+          </g>
+
+          <!-- 標題角落 · 藍圖式 -->
+          <g fill="#5A8A44" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.20em">
+            <text x="40" y="52">115 · 在職菁英</text>
+            <line x1="40" y1="60" x2="200" y2="60" stroke="#5A8A44" stroke-width="0.6"/>
+            <text x="40" y="76" font-size="8" fill="#7A7367" letter-spacing="0.16em">感測 / 機械產業 · 30h</text>
+          </g>
+          <g fill="rgba(47,93,60,0.6)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="0.18em" text-anchor="end">
+            <text x="560" y="558">6 模組 · 3 成果</text>
+            <line x1="440" y1="548" x2="560" y2="548" stroke="rgba(47,93,60,0.6)" stroke-width="0.6"/>
+          </g>
+
+          <!-- 中央 AI Agent 樞紐 -->
+          <g transform="translate(300, 300)" filter="url(#softShadow)">
+            <circle r="72" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="2.4"/>
+            <circle r="55" fill="none" stroke="rgba(47,93,60,0.2)" stroke-width="1" stroke-dasharray="2 4"/>
+            <circle r="16" fill="url(#oliveGrad)"/>
+            <text y="4" text-anchor="middle" fill="#FDFAF2" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">AI</text>
+            <text y="52" text-anchor="middle" fill="#2F5D3C" font-family="Noto Sans TC" font-size="12" font-weight="700">Agent 樞紐</text>
+          </g>
+
+          <!-- 6 個模組(內圈,環繞中央) -->
+          <g font-family="Noto Sans TC" font-size="11" font-weight="600" text-anchor="middle">
+            <!-- 模組 1 · 上 -->
+            <g transform="translate(300, 145)" filter="url(#softShadow)">
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 1</text>
+              <text y="15" fill="#28221C">AI 文案圖片</text>
+            </g>
+            <!-- 模組 2 · 右上 -->
+            <g transform="translate(465, 200)" filter="url(#softShadow)">
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 2</text>
+              <text y="15" fill="#28221C">圖像 · 短影音</text>
+            </g>
+            <!-- 模組 3 · 右下 -->
+            <g transform="translate(465, 400)" filter="url(#softShadow)">
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 3</text>
+              <text y="15" fill="#28221C">生成式發表</text>
+            </g>
+            <!-- 模組 4 · 下(核心)-->
+            <g transform="translate(300, 455)" filter="url(#softShadow)">
+              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#F7EEDA" stroke="url(#mustardGrad)" stroke-width="2.2"/>
+              <text y="-3" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 4 · 核心</text>
+              <text y="15" fill="#28221C" font-weight="700">SDD + Low-Code</text>
+            </g>
+            <!-- 模組 5 · 左下(核心)-->
+            <g transform="translate(135, 400)" filter="url(#softShadow)">
+              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#F7EEDA" stroke="url(#mustardGrad)" stroke-width="2.2"/>
+              <text y="-3" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 5 · 核心</text>
+              <text y="15" fill="#28221C" font-weight="700">RAG + MCP</text>
+            </g>
+            <!-- 模組 6 · 左上 -->
+            <g transform="translate(135, 200)" filter="url(#softShadow)">
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 6</text>
+              <text y="15" fill="#28221C">Agent 發表</text>
             </g>
           </g>
 
-          <!-- 廠房群剪影 -->
-          <g transform="translate(120, 320)">
-            <path d="M 0 140 L 0 70 L 60 30 L 120 70 L 120 140 Z" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="2"/>
-            <path d="M 0 70 L 60 30 L 120 70" fill="none" stroke="rgba(232, 155, 44,0.85)" stroke-width="1.5"/>
-            <g fill="rgba(232, 155, 44,0.55)">
-              <rect x="14" y="86" width="14" height="14"/>
-              <rect x="38" y="86" width="14" height="14"/>
-              <rect x="62" y="86" width="14" height="14"/>
-              <rect x="86" y="86" width="14" height="14"/>
-              <rect x="14" y="110" width="14" height="14"/>
-              <rect x="38" y="110" width="14" height="14"/>
-              <rect x="62" y="110" width="14" height="14"/>
-              <rect x="86" y="110" width="14" height="14"/>
-            </g>
-
-            <g transform="translate(130, 50)">
-              <path d="M 0 120 L 0 50 L 25 25 L 50 50 L 75 25 L 100 50 L 125 25 L 150 50 L 150 120 Z" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="2"/>
-              <g fill="rgba(232, 155, 44,0.45)">
-                <rect x="10" y="70" width="10" height="20"/>
-                <rect x="35" y="70" width="10" height="20"/>
-                <rect x="60" y="70" width="10" height="20"/>
-                <rect x="85" y="70" width="10" height="20"/>
-                <rect x="110" y="70" width="10" height="20"/>
-                <rect x="135" y="70" width="10" height="20"/>
-              </g>
-              <line x1="0" y1="120" x2="150" y2="120" stroke="url(#goldGrad)" stroke-width="2"/>
-            </g>
-
-            <rect x="40" y="-10" width="14" height="42" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="1.5"/>
-            <rect x="38" y="-14" width="18" height="6" fill="url(#goldGrad)"/>
-            <g fill="none" stroke="rgba(232, 155, 44,0.35)" stroke-width="1.4" stroke-linecap="round">
-              <path d="M 47 -22 Q 41 -36 50 -50 Q 58 -64 48 -78"/>
-              <path d="M 55 -22 Q 62 -38 53 -52 Q 45 -66 56 -82" opacity="0.55"/>
-            </g>
-
-            <line x1="-30" y1="142" x2="320" y2="142" stroke="url(#goldGrad)" stroke-width="1.5"/>
-            <line x1="-30" y1="148" x2="320" y2="148" stroke="rgba(232, 155, 44,0.22)" stroke-width="0.8"/>
+          <!-- 6 個模組 → 中央的細連線 -->
+          <g stroke="rgba(47,93,60,0.35)" stroke-width="1.2" fill="none" stroke-dasharray="3 4">
+            <line x1="300" y1="169" x2="300" y2="228"/>
+            <line x1="411" y1="212" x2="358" y2="256"/>
+            <line x1="411" y1="388" x2="358" y2="344"/>
+            <line x1="300" y1="431" x2="300" y2="372"/>
+            <line x1="189" y1="388" x2="242" y2="344"/>
+            <line x1="189" y1="212" x2="242" y2="256"/>
           </g>
 
-          <!-- 中央齒輪 -->
-          <g transform="translate(420, 200)">
-            <g>
-              <circle cx="0" cy="0" r="56" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="2.4"/>
-              <circle cx="0" cy="0" r="22" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
-              <circle cx="0" cy="0" r="8" fill="url(#goldGrad)"/>
-              <g fill="url(#goldGrad)">
-                <rect x="-6" y="-72" width="12" height="16" rx="2"/>
-                <rect x="-6" y="56" width="12" height="16" rx="2"/>
-                <rect x="56" y="-6" width="16" height="12" rx="2"/>
-                <rect x="-72" y="-6" width="16" height="12" rx="2"/>
-                <g transform="rotate(45)"><rect x="-6" y="-72" width="12" height="16" rx="2"/></g>
-                <g transform="rotate(-45)"><rect x="-6" y="-72" width="12" height="16" rx="2"/></g>
-                <g transform="rotate(45)"><rect x="-6" y="56" width="12" height="16" rx="2"/></g>
-                <g transform="rotate(-45)"><rect x="-6" y="56" width="12" height="16" rx="2"/></g>
-              </g>
-              <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="22s" repeatCount="indefinite"/>
+          <!-- 資料流節點 -->
+          <g fill="#B8760F">
+            <circle cx="300" cy="200" r="3">
+              <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="380" cy="240" r="3">
+              <animate attributeName="r" values="3;5;3" dur="3.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="220" cy="240" r="3">
+              <animate attributeName="r" values="3;5;3" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+
+          <!-- 3 個成果 · 外環放射式標籤 -->
+          <g font-family="Noto Sans TC" font-size="11" font-weight="700">
+            <!-- 成果 1 · 右邊 -->
+            <g transform="translate(535, 300)">
+              <line x1="-40" y1="0" x2="0" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
+              <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
+              <text x="-46" y="-4" text-anchor="end" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 01</text>
+              <text x="-46" y="12" text-anchor="end" fill="#28221C">AI 內容產出</text>
+            </g>
+            <!-- 成果 2 · 左下 -->
+            <g transform="translate(65, 470)">
+              <line x1="0" y1="0" x2="40" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
+              <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
+              <text x="46" y="-4" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 02</text>
+              <text x="46" y="12" fill="#28221C">企業 AI 工具</text>
+            </g>
+            <!-- 成果 3 · 右下 -->
+            <g transform="translate(535, 470)">
+              <line x1="-40" y1="0" x2="0" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
+              <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
+              <text x="-46" y="-4" text-anchor="end" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 03</text>
+              <text x="-46" y="12" text-anchor="end" fill="#28221C">部門 RAG 知識庫</text>
             </g>
           </g>
 
-          <!-- 小齒輪 -->
-          <g transform="translate(120, 200)">
-            <g>
-              <circle cx="0" cy="0" r="28" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="1.8"/>
-              <circle cx="0" cy="0" r="6" fill="url(#goldGrad)"/>
-              <g fill="url(#goldGrad)">
-                <rect x="-4" y="-40" width="8" height="12" rx="1.5"/>
-                <rect x="-4" y="28" width="8" height="12" rx="1.5"/>
-                <rect x="28" y="-4" width="12" height="8" rx="1.5"/>
-                <rect x="-40" y="-4" width="12" height="8" rx="1.5"/>
-              </g>
-              <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="14s" repeatCount="indefinite"/>
-            </g>
-          </g>
-
-          <!-- AI 資料流節點與連線 -->
-          <g stroke="url(#goldGrad)" stroke-width="1.6" fill="none" opacity="0.85">
-            <path d="M 148 200 L 220 160 L 300 180 L 380 160 L 420 200" stroke-dasharray="4 5">
-              <animate attributeName="stroke-dashoffset" from="0" to="-18" dur="2.2s" repeatCount="indefinite"/>
-            </path>
-            <path d="M 420 248 L 380 320 L 300 340 L 220 320 L 148 360" stroke-dasharray="4 5">
-              <animate attributeName="stroke-dashoffset" from="0" to="18" dur="2.6s" repeatCount="indefinite"/>
-            </path>
-          </g>
-          <g fill="#F5BE5F">
-            <circle cx="220" cy="160" r="4"/>
-            <circle cx="300" cy="180" r="4"/>
-            <circle cx="380" cy="160" r="4"/>
-            <circle cx="220" cy="320" r="4"/>
-            <circle cx="300" cy="340" r="4"/>
-            <circle cx="380" cy="320" r="4"/>
-          </g>
-
-          <!-- 監控面板 -->
-          <g transform="translate(360, 380)">
-            <rect x="0" y="0" width="170" height="100" rx="6" fill="url(#panelGrad)" stroke="url(#goldGrad)" stroke-width="1.8"/>
-            <line x1="10" y1="22" x2="160" y2="22" stroke="rgba(232, 155, 44,0.4)" stroke-width="0.8"/>
-            <g fill="rgba(232, 155, 44,0.85)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="0.12em">
-              <text x="10" y="16">AI · MES · ERP</text>
-            </g>
-            <polyline points="10,80 30,68 50,72 70,54 90,60 110,42 130,48 160,32" fill="none" stroke="url(#goldGrad)" stroke-width="2"/>
-            <g fill="#F5BE5F">
-              <circle cx="30" cy="68" r="2.2"/>
-              <circle cx="70" cy="54" r="2.2"/>
-              <circle cx="110" cy="42" r="2.2"/>
-              <circle cx="160" cy="32" r="2.2"/>
-            </g>
-            <g fill="rgba(232, 155, 44,0.55)">
-              <rect x="10" y="85" width="22" height="6" rx="1"/>
-              <rect x="36" y="85" width="40" height="6" rx="1"/>
-              <rect x="80" y="85" width="14" height="6" rx="1"/>
-              <rect x="98" y="85" width="28" height="6" rx="1"/>
-            </g>
-          </g>
-
-          <g transform="translate(60, 80)" fill="url(#goldGrad)" font-family="JetBrains Mono, monospace" font-size="11" letter-spacing="0.18em">
-            <text x="0" y="0">AI × 機械</text>
-            <line x1="0" y1="8" x2="78" y2="8" stroke="url(#goldGrad)" stroke-width="0.8"/>
-          </g>
-          <g transform="translate(540, 540)" fill="rgba(232, 155, 44,0.75)" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.16em" text-anchor="end">
-            <text x="0" y="0">/ 在職菁英</text>
-          </g>
         </svg>
       </div>
     </div>
@@ -738,9 +735,9 @@
     <div class="text-center lg:text-left lg:col-span-6 order-1 lg:order-2">
       <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-5 animate-fade-in">
         <span class="chapter-tag"><span class="w-1.5 h-1.5 rounded-full bg-gold-light"></span>感測 / 機械產業</span>
-        <span class="text-[11px] text-gray-500 tracking-[0.3em]">30 小時 · 政府辦理培訓</span>
+        <span class="text-[11px] text-ink-500 tracking-[0.3em]">30 小時 · 政府辦理培訓</span>
       </div>
-      <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl text-white mb-5 animate-fade-in-up">
+      <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl text-ink-900 mb-5 animate-fade-in-up">
         用 AI 做出<br>
         <span class="gold-text">機械業自己的工具</span>
       </h1>
@@ -748,7 +745,7 @@
         <span class="block w-12 h-px bg-gold shrink-0"></span>
         <p class="text-gold-light text-sm sm:text-base tracking-[0.15em]">30 小時實戰 ・ 4 天完成 ・ 完全免費</p>
       </div>
-      <p class="text-base sm:text-lg text-gray-300 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
+      <p class="text-base sm:text-lg text-ink-700 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
         30 小時實戰，把 <span class="text-gold-light font-bold">Low-Code、RAG、AI Agent</span> 帶回工廠——<br class="hidden sm:block">
         產出公司自己的行銷內容、做出企業自己的 AI 工具、打造部門級的知識庫。<br class="hidden sm:block">
         <span class="text-gold-light font-bold">經濟部產業發展署</span> 115 年度在職菁英課程 · 政府辦理培訓。
@@ -763,26 +760,26 @@
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">01 ／ 為什麼上這堂課</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">為什麼製造業<br class="sm:hidden">一定要上這堂課</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base">做錯一次客戶就跑 ・ 老闆問了答得出來 ・ 出包知道誰要修</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base">做錯一次客戶就跑 ・ 老闆問了答得出來 ・ 出包知道誰要修</p>
     </div>
 
     <div class="grid md:grid-cols-3 gap-6">
       <div class="card-glass p-7 sm:p-8 glow-border reveal from-left" data-delay="1">
         <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 01</div>
-        <h3 class="text-xl font-bold text-white mb-3">系統一堆，沒人用得起來</h3>
-        <p class="text-gray-400 leading-relaxed">ERP 只用一半、MES 接不通、CRM 業務嫌麻煩不填、BI 報表沒人看。再多買一個 AI 工具，下場一樣。</p>
+        <h3 class="text-xl font-bold text-ink-900 mb-3">系統一堆，沒人用得起來</h3>
+        <p class="text-ink-600 leading-relaxed">ERP 只用一半、MES 接不通、CRM 業務嫌麻煩不填、BI 報表沒人看。再多買一個 AI 工具，下場一樣。</p>
         <div class="tick-row"><span class="on"></span><span></span><span></span></div>
       </div>
       <div class="card-glass p-7 sm:p-8 glow-border reveal from-up" data-delay="2">
         <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 02</div>
-        <h3 class="text-xl font-bold text-white mb-3">製造業錯一次就賠很大</h3>
-        <p class="text-gray-400 leading-relaxed">服務業答錯能道歉，製造業排程錯就交期延誤、品管錯就良率崩潰。AI 不能拿你公司的訂單去亂試。</p>
+        <h3 class="text-xl font-bold text-ink-900 mb-3">製造業錯一次就賠很大</h3>
+        <p class="text-ink-600 leading-relaxed">服務業答錯能道歉，製造業排程錯就交期延誤、品管錯就良率崩潰。AI 不能拿你公司的訂單去亂試。</p>
         <div class="tick-row"><span class="on"></span><span class="on"></span><span></span></div>
       </div>
       <div class="card-glass p-7 sm:p-8 glow-border reveal from-right" data-delay="3">
         <div class="text-gold-light text-xs tracking-[0.3em] mb-4">風險 ／ 03</div>
-        <h3 class="text-xl font-bold text-white mb-3">AI 出錯，沒人說得出為什麼</h3>
-        <p class="text-gray-400 leading-relaxed">客戶問「AI 為什麼這樣判斷？」如果你拿不出當時 AI 收到什麼、做了什麼的紀錄，法規、客戶、老闆通通過不去。</p>
+        <h3 class="text-xl font-bold text-ink-900 mb-3">AI 出錯，沒人說得出為什麼</h3>
+        <p class="text-ink-600 leading-relaxed">客戶問「AI 為什麼這樣判斷？」如果你拿不出當時 AI 收到什麼、做了什麼的紀錄，法規、客戶、老闆通通過不去。</p>
         <div class="tick-row"><span class="on"></span><span class="on"></span><span class="on"></span></div>
       </div>
     </div>
@@ -796,22 +793,22 @@
         <div class="flex items-start gap-3">
           <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
           <div>
-            <div class="text-white font-bold">AI 做了什麼，看得到</div>
-            <div class="text-gray-400 text-sm mt-1">不是黑箱，AI 每次處理什麼訊息、回了什麼，全留紀錄</div>
+            <div class="text-ink-900 font-bold">AI 做了什麼，看得到</div>
+            <div class="text-ink-600 text-sm mt-1">不是黑箱，AI 每次處理什麼訊息、回了什麼，全留紀錄</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
           <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
           <div>
-            <div class="text-white font-bold">出包能倒帶查</div>
-            <div class="text-gray-400 text-sm mt-1">客戶投訴、主管追問，隨時打開系統就能看到當時發生什麼</div>
+            <div class="text-ink-900 font-bold">出包能倒帶查</div>
+            <div class="text-ink-600 text-sm mt-1">客戶投訴、主管追問，隨時打開系統就能看到當時發生什麼</div>
           </div>
         </div>
         <div class="flex items-start gap-3">
           <span class="mono text-gold text-2xl leading-none font-black mt-1">▣</span>
           <div>
-            <div class="text-white font-bold">不會「電腦說的」沒人扛</div>
-            <div class="text-gray-400 text-sm mt-1">每條流程誰設計、誰維護、出錯找誰修，都寫清楚</div>
+            <div class="text-ink-900 font-bold">不會「電腦說的」沒人扛</div>
+            <div class="text-ink-600 text-sm mt-1">每條流程誰設計、誰維護、出錯找誰修，都寫清楚</div>
           </div>
         </div>
       </div>
@@ -820,17 +817,17 @@
 </section>
 
 <!-- ════════ 課程核心定位 ════════ -->
-<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">02 ／ 我們的教法</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">這堂課不是教你學新軟體</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base">是教你怎麼把 AI 接到公司現有的流程上</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base">是教你怎麼把 AI 接到公司現有的流程上</p>
     </div>
 
     <div class="card-glass p-8 sm:p-12 reveal from-left">
       <div class="text-gold-light text-sm tracking-[0.25em] mb-5">為什麼這樣設計</div>
-      <p class="text-gray-300 leading-loose text-base sm:text-lg">
+      <p class="text-ink-700 leading-loose text-base sm:text-lg">
         AI 工具明年都會改版 —— n8n、ChatGPT、Claude 一年改三次，按鈕位置永遠在動。<br class="hidden md:inline">
         所以我們不只教按按鈕。我們把製造業已經很熟的事 —— <span class="text-gold-light font-bold">「一張規格、一份 SOP、最後要驗收」</span> —— 直接套到 AI 工具設計上。<br class="hidden md:inline">
         學完換一套工具一樣能做，因為你學的是<span class="gold-text font-bold">怎麼設計流程</span>，不是哪個按鈕在哪。
@@ -840,18 +837,18 @@
     <div class="grid md:grid-cols-3 gap-5 mt-6">
       <div class="card-glass p-7 glow-border reveal from-left" data-delay="1">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 01</div>
-        <h3 class="text-lg font-bold text-white mb-2">講你公司的事</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">範例不是「線上書店訂單」這種網路課常見題，是機械業會遇到的:設備規格 PDF 查詢、客戶詢價 LINE 分流、部門 SOP 知識庫 —— 感測 / 機械現場每天在發生的事。</p>
+        <h3 class="text-lg font-bold text-ink-900 mb-2">講你公司的事</h3>
+        <p class="text-ink-600 text-sm leading-relaxed">範例不是「線上書店訂單」這種網路課常見題，是機械業會遇到的:設備規格 PDF 查詢、客戶詢價 LINE 分流、部門 SOP 知識庫 —— 感測 / 機械現場每天在發生的事。</p>
       </div>
       <div class="card-glass p-7 glow-border reveal from-up" data-delay="2">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 02</div>
-        <h3 class="text-lg font-bold text-white mb-2">不只會用，還能管</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">每條流程都教你 ① 怎麼跑 ② 誰負責 ③ 出錯怎麼查。回公司不會變成「只有一個人會用、那人請假就停擺」。</p>
+        <h3 class="text-lg font-bold text-ink-900 mb-2">不只會用，還能管</h3>
+        <p class="text-ink-600 text-sm leading-relaxed">每條流程都教你 ① 怎麼跑 ② 誰負責 ③ 出錯怎麼查。回公司不會變成「只有一個人會用、那人請假就停擺」。</p>
       </div>
       <div class="card-glass p-7 glow-border reveal from-right" data-delay="3">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 ／ 03</div>
-        <h3 class="text-lg font-bold text-white mb-2">工具改版也不用重學</h3>
-        <p class="text-gray-400 text-sm leading-relaxed">學的是「怎麼把一個重複動作拆成流程」，這套方法 5 年內都不會過時。明年 n8n 換成別的，你照樣能用。</p>
+        <h3 class="text-lg font-bold text-ink-900 mb-2">工具改版也不用重學</h3>
+        <p class="text-ink-600 text-sm leading-relaxed">學的是「怎麼把一個重複動作拆成流程」，這套方法 5 年內都不會過時。明年 n8n 換成別的，你照樣能用。</p>
       </div>
     </div>
   </div>
@@ -863,7 +860,7 @@
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">03 ／ 課程架構</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">6 大模組 · 30 小時</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base">從 AI 內容產出 → 企業自己的工具 → 部門級架構 · 逐步升級 · 每組 6 小時</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base">從 AI 內容產出 → 企業自己的工具 → 部門級架構 · 逐步升級 · 每組 6 小時</p>
     </div>
 
     <div class="grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-start">
@@ -875,8 +872,8 @@
           <div class="task-numeral">01</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">模組 1 ・ 6 小時 ・ 實作/講授</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">行銷策略 + AI 文案與圖片</h3>
-            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">行銷策略 + AI 文案與圖片</h3>
+            <ul class="text-ink-600 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>自媒體平台特色 · 用 AI 制定行銷策略</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>大語言模型註冊 · 提示詞技巧</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>寫吸睛貼文標題與內文 · 自動智慧圖文生成器</li>
@@ -890,8 +887,8 @@
           <div class="task-numeral">02</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">模組 2 ・ 6 小時 ・ 實作/講授</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">AI 圖像與影音創作實戰</h3>
-            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">AI 圖像與影音創作實戰</h3>
+            <ul class="text-ink-600 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>AI 圖像生成 · 商業貼文圖設計</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>實作 5-10 篇文案對應圖片</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>Meta / Google Flow · 5-20 秒商品短影音</li>
@@ -905,8 +902,8 @@
           <div class="task-numeral">03</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">模組 3 ・ 3 小時 ・ 專題發表</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">生成式 AI 成果發表與交流</h3>
-            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">生成式 AI 成果發表與交流</h3>
+            <ul class="text-ink-600 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>學員成果整理 · 專題彙整 · 成果簡報</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>把學習歷程轉為可清楚表達的專題內容</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>講師回饋機制 · 同儕交流</li>
@@ -917,11 +914,11 @@
 
       <div class="card-gold task-card p-7 sm:p-9 glow-border reveal from-right" data-level="3">
         <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
-          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(245, 190, 95,0.9); color: rgba(232, 155, 44,0.08);">04</div>
+          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(184, 118, 15,0.9); color: rgba(47, 93, 60,0.08);">04</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">★ 模組 4 ・ 6 小時 ・ 核心</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">用 AI 做出企業自己的工具 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
-            <ul class="text-gray-300 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">用 AI 做出企業自己的工具 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
+            <ul class="text-ink-700 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 01 ]</span>規格驅動開發 SDD 演練</li>
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 02 ]</span>安全可控的 AI 導入 · Low-Code 工具</li>
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 03 ]</span>做出第一個 AI Agent · 學員自己動手</li>
@@ -932,11 +929,11 @@
 
       <div class="card-gold task-card p-7 sm:p-9 glow-border reveal from-left" data-level="4">
         <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
-          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(245, 190, 95,0.9); color: rgba(232, 155, 44,0.08);">05</div>
+          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(184, 118, 15,0.9); color: rgba(47, 93, 60,0.08);">05</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">★ 模組 5 ・ 6 小時 ・ 核心</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">部門級 AI 導入架構 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
-            <ul class="text-gray-300 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">部門級 AI 導入架構 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
+            <ul class="text-ink-700 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 01 ]</span>Low-Code RAG 入門實作 · 讓 AI 理解公司資料</li>
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 02 ]</span>部門 MCP Server 運用 · 跨系統串接</li>
               <li class="flex gap-3"><span class="text-gold shrink-0 font-bold">[ 03 ]</span>Human-in-the-Loop 設計 · AI 加人工核決</li>
@@ -950,8 +947,8 @@
           <div class="task-numeral">06</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">模組 6 ・ 3 小時 ・ 專題發表</div>
-            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3">AI Agent 成果發表與交流</h3>
-            <ul class="text-gray-400 space-y-2 text-sm leading-relaxed">
+            <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">AI Agent 成果發表與交流</h3>
+            <ul class="text-ink-600 space-y-2 text-sm leading-relaxed">
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>Agent 專題彙整 · 成果簡報 · 口頭發表</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>作品完整性檢視 · 可行性回饋</li>
               <li class="flex gap-3"><span class="text-gold shrink-0">▸</span>強化未來在工作場域導入 AI 的信心</li>
@@ -964,71 +961,97 @@
       <!-- 右：AX 成熟度金字塔（立體 SVG · 捲動逐層蓋好 + 滑過任務卡高亮）-->
       <div class="order-1 lg:order-2 lg:sticky lg:top-28 mb-10 lg:mb-0">
         <div class="text-center mb-4">
-          <span class="section-eyebrow">AX 成熟度模型　L0 → L4</span>
+          <span class="section-eyebrow">30 小時 · 6 模組旅程</span>
         </div>
         <svg class="ax-pyramid" viewBox="0 0 340 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
-            <linearGradient id="axDarkFront" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#3a362f" stop-opacity="0.86"/><stop offset="1" stop-color="#0d0b09" stop-opacity="0.66"/>
+            <linearGradient id="oliveNode" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7CA85F"/><stop offset="1" stop-color="#2F5D3C"/>
             </linearGradient>
-            <linearGradient id="axDarkTop" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#524c43" stop-opacity="0.9"/><stop offset="1" stop-color="#2b2822" stop-opacity="0.74"/>
-            </linearGradient>
-            <linearGradient id="axGoldFront" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#F0D27A"/><stop offset="1" stop-color="#9E7826"/>
-            </linearGradient>
-            <linearGradient id="axGoldTop" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#FBEBB0"/><stop offset="1" stop-color="#DEBB66"/>
-            </linearGradient>
-            <linearGradient id="axApexL" x1="0" y1="0" x2="1" y2="0.5">
-              <stop offset="0" stop-color="#FBEBB0"/><stop offset="1" stop-color="#E89B2C"/>
-            </linearGradient>
-            <linearGradient id="axApexR" x1="0" y1="0" x2="1" y2="0.6">
-              <stop offset="0" stop-color="#CDA34E"/><stop offset="1" stop-color="#7E5F1E"/>
+            <linearGradient id="mustardCore" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#D89928"/><stop offset="1" stop-color="#8C5A0A"/>
             </linearGradient>
           </defs>
 
-          <!-- L0 -->
-          <g class="ax-level">
-            <polygon class="ax-top"   points="42,560 298,560 292.5,543 47.5,543" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <polygon class="ax-front" points="42,560 298,560 325,672 15,672" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <text class="ax-txt-code" x="170" y="613" text-anchor="middle" font-size="36" fill="#EFE7D4">L0</text>
-            <text class="ax-txt-name" x="170" y="640" text-anchor="middle" font-size="16" fill="#B7AE9A">AI 識讀・風險認知</text>
+          <!-- 中央垂直軸(旅程主線) -->
+          <line x1="170" y1="60" x2="170" y2="640" stroke="rgba(47,93,60,0.25)" stroke-width="2" stroke-dasharray="3 6"/>
+
+          <!-- 模組 1 · 起點(底部)-->
+          <g class="ax-level" data-level="1">
+            <line x1="170" y1="605" x2="230" y2="605" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="605" r="14" fill="#FDFAF2" stroke="url(#oliveNode)" stroke-width="2.5"/>
+            <text x="170" y="609" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#2F5D3C">01</text>
+            <text x="242" y="602" font-size="12" font-weight="700" fill="#28221C">AI 文案圖片</text>
+            <text x="242" y="618" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 1 · 6h</text>
           </g>
 
-          <!-- L1 -->
-          <g class="ax-level">
-            <polygon class="ax-top"   points="71.1,439 268.9,439 263.4,422 76.6,422" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <polygon class="ax-front" points="71.1,439 268.9,439 295.9,551 44.1,551" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <text class="ax-txt-code" x="170" y="491" text-anchor="middle" font-size="34" fill="#EFE7D4">L1</text>
-            <text class="ax-txt-name" x="170" y="516" text-anchor="middle" font-size="15" fill="#B7AE9A">AI 協作・資安管控</text>
+          <!-- 模組 2 -->
+          <g class="ax-level" data-level="2">
+            <line x1="170" y1="510" x2="230" y2="510" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="510" r="14" fill="#FDFAF2" stroke="url(#oliveNode)" stroke-width="2.5"/>
+            <text x="170" y="514" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#2F5D3C">02</text>
+            <text x="242" y="507" font-size="12" font-weight="700" fill="#28221C">圖像 · 短影音</text>
+            <text x="242" y="523" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 2 · 6h</text>
           </g>
 
-          <!-- L2 -->
-          <g class="ax-level">
-            <polygon class="ax-top"   points="100.2,318 239.8,318 234.3,301 105.7,301" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <polygon class="ax-front" points="100.2,318 239.8,318 266.8,430 73.2,430" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <text class="ax-txt-code" x="170" y="370" text-anchor="middle" font-size="30" fill="#EFE7D4">L2</text>
-            <text class="ax-txt-name" x="170" y="392" text-anchor="middle" font-size="14" fill="#B7AE9A">流程自動化</text>
+          <!-- 模組 3(小發表 · 稍淡色)-->
+          <g class="ax-level" data-level="3">
+            <line x1="170" y1="415" x2="230" y2="415" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="415" r="11" fill="#FDFAF2" stroke="rgba(47,93,60,0.55)" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="170" y="419" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" fill="#3F6B2C">03</text>
+            <text x="242" y="412" font-size="12" font-weight="600" fill="#3F3830">生成式發表</text>
+            <text x="242" y="428" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 3 · 3h · 專題</text>
           </g>
 
-          <!-- L3 -->
-          <g class="ax-level">
-            <polygon class="ax-top"   points="129.3,197 210.7,197 205.2,180 134.8,180" fill="url(#axDarkTop)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <polygon class="ax-front" points="129.3,197 210.7,197 237.6,309 102.4,309" fill="url(#axDarkFront)" stroke="#C8CDD8" stroke-opacity="0.34"/>
-            <text class="ax-txt-code" x="170" y="250" text-anchor="middle" font-size="27" fill="#EFE7D4">L3</text>
-            <text class="ax-txt-name" x="170" y="270" text-anchor="middle" font-size="13" fill="#B7AE9A">決策支援</text>
+          <!-- 模組 4 · 核心 -->
+          <g class="ax-level" data-level="4">
+            <line x1="170" y1="315" x2="230" y2="315" stroke="rgba(184,118,15,0.55)" stroke-width="1.4"/>
+            <circle cx="170" cy="315" r="18" fill="#F7EEDA" stroke="url(#mustardCore)" stroke-width="3"/>
+            <polygon points="170,299 172,306 179,306 173.5,311 175.5,318 170,313 164.5,318 166.5,311 161,306 168,306" fill="url(#mustardCore)"/>
+            <text x="242" y="311" font-size="12" font-weight="900" fill="#8C5A0A">★ SDD + Low-Code</text>
+            <text x="242" y="327" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 4 · 6h · 核心</text>
           </g>
 
-          <!-- L4 apex -->
-          <g class="ax-level ax-apex">
-            <polygon class="ax-apex-face" points="170,28 170,188 131.5,188" fill="url(#axApexL)" stroke="#F8E4A8" stroke-opacity="0.6"/>
-            <polygon class="ax-apex-face" points="170,28 208.5,188 170,188" fill="url(#axApexR)" stroke="#F8E4A8" stroke-opacity="0.6"/>
-            <text class="ax-txt-code" x="170" y="151" text-anchor="middle" font-size="22" fill="#1A1308">L4</text>
-            <text class="ax-txt-name" x="170" y="171" text-anchor="middle" font-size="11" fill="#1A1308">自主營運</text>
+          <!-- 模組 5 · 核心 -->
+          <g class="ax-level" data-level="5">
+            <line x1="170" y1="215" x2="230" y2="215" stroke="rgba(184,118,15,0.55)" stroke-width="1.4"/>
+            <circle cx="170" cy="215" r="18" fill="#F7EEDA" stroke="url(#mustardCore)" stroke-width="3"/>
+            <polygon points="170,199 172,206 179,206 173.5,211 175.5,218 170,213 164.5,218 166.5,211 161,206 168,206" fill="url(#mustardCore)"/>
+            <text x="242" y="211" font-size="12" font-weight="900" fill="#8C5A0A">★ RAG + MCP</text>
+            <text x="242" y="227" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 5 · 6h · 核心</text>
+          </g>
+
+          <!-- 模組 6 · 頂端(結業)-->
+          <g class="ax-level" data-level="6">
+            <line x1="170" y1="120" x2="230" y2="120" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="120" r="14" fill="#2F5D3C" stroke="#1F3D26" stroke-width="2.5"/>
+            <text x="170" y="124" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#FDFAF2">06</text>
+            <text x="242" y="117" font-size="12" font-weight="700" fill="#28221C">Agent 發表</text>
+            <text x="242" y="133" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 6 · 3h · 結業</text>
+          </g>
+
+          <!-- Day 標記(左邊)-->
+          <g font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="0.12em" fill="#7A7367" text-anchor="end">
+            <text x="150" y="609">Day 1</text>
+            <text x="150" y="514">Day 2</text>
+            <text x="150" y="419">·</text>
+            <text x="150" y="319">Day 3</text>
+            <text x="150" y="219">Day 4</text>
+            <text x="150" y="124">·</text>
+          </g>
+
+          <!-- 頂端徽記 -->
+          <g transform="translate(170, 45)">
+            <circle r="20" fill="#FDFAF2" stroke="url(#mustardCore)" stroke-width="1.6" stroke-dasharray="2 3"/>
+            <text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#8C5A0A" font-family="JetBrains Mono, monospace">30h</text>
+          </g>
+
+          <!-- 底部 base -->
+          <g transform="translate(170, 660)">
+            <text y="0" text-anchor="middle" font-size="10" fill="#7A7367" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">START</text>
           </g>
         </svg>
-        <div class="text-center text-[11px] text-gray-500 tracking-[0.18em] mt-5">滑過左側任務卡，對應層級會亮起</div>
+        <div class="text-center text-[11px] text-ink-500 tracking-[0.18em] mt-5">滑過左側模組卡,對應節點會亮起</div>
       </div>
 
     </div>
@@ -1037,19 +1060,19 @@
 
 <!-- ════════ U4 三條自動化流程 詳細展開 ════════ -->
 <style>
-  .flow-card { background: linear-gradient(180deg, rgba(31,23,9,0.7) 0%, rgba(14,10,5,0.9) 100%); border: 1px solid rgba(232, 155, 44,0.32); border-radius: 14px; }
-  .flow-pain { background: rgba(232, 155, 44,0.06); border-left: 3px solid #E89B2C; padding: 12px 16px; border-radius: 0 8px 8px 0; }
-  .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(232, 155, 44,0.32); padding: 14px 16px; border-radius: 10px; }
+  .flow-card { background: linear-gradient(180deg, rgba(253,250,242,0.7) 0%, rgba(246,241,228,0.9) 100%); border: 1px solid rgba(47, 93, 60,0.32); border-radius: 14px; }
+  .flow-pain { background: rgba(47, 93, 60,0.06); border-left: 3px solid #2F5D3C; padding: 12px 16px; border-radius: 0 8px 8px 0; }
+  .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(47, 93, 60,0.32); padding: 14px 16px; border-radius: 10px; }
   .flow-checklist li { display:flex; gap:10px; align-items:flex-start; }
-  .flow-checklist li::before { content:'✓'; color:#F5BE5F; font-weight:900; flex-shrink:0; margin-top:2px; }
-  .flow-svg { background: radial-gradient(ellipse at center, rgba(232, 155, 44,0.08) 0%, rgba(11,8,5,0) 70%); border-radius: 12px; }
+  .flow-checklist li::before { content:'✓'; color:#B8760F; font-weight:900; flex-shrink:0; margin-top:2px; }
+  .flow-svg { background: radial-gradient(ellipse at center, rgba(47, 93, 60,0.08) 0%, rgba(246,241,228,0) 70%); border-radius: 12px; }
 </style>
 <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-12 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">★ 核心成果</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-3xl sm:text-4xl mt-4">30 小時課後，<br class="sm:hidden">你實際帶走什麼</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">不講術語,講你公司每天真的會用到的事。<br class="hidden sm:block">下面三個成果,課後直接帶回公司就能運行。</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">不講術語,講你公司每天真的會用到的事。<br class="hidden sm:block">下面三個成果,課後直接帶回公司就能運行。</p>
     </div>
 
     <!-- 成果 01：AI 產出公司自己的行銷內容 -->
@@ -1059,25 +1082,25 @@
           <div class="flex flex-wrap items-center gap-3 mb-4">
             <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">成果 01</span>
             <span class="text-gold-light text-sm font-medium">AI 內容產出</span>
-            <span class="text-gray-500 text-xs">課綱模組 1+2 · 12 小時</span>
+            <span class="text-ink-500 text-xs">課綱模組 1+2 · 12 小時</span>
           </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">用 AI 自己做<br>公司的行銷內容</h3>
+          <h3 class="text-2xl sm:text-3xl font-black text-ink-900 mb-4 leading-tight">用 AI 自己做<br>公司的行銷內容</h3>
 
           <div class="flow-pain mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
-            <p class="text-gray-300 text-sm leading-relaxed">發一則社群貼文要等外部設計師畫圖、業助寫文案,一週卡三、四天;短影音更是必須外包,一支要跑一個月。展會、新品上市經常來不及做完內容。</p>
+            <p class="text-ink-700 text-sm leading-relaxed">發一則社群貼文要等外部設計師畫圖、業助寫文案,一週卡三、四天;短影音更是必須外包,一支要跑一個月。展會、新品上市經常來不及做完內容。</p>
           </div>
 
           <div class="flow-story mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
-            <p class="text-gray-200 text-sm leading-relaxed">
+            <p class="text-ink-800 text-sm leading-relaxed">
               王工程師負責新設備的市場推廣。以前每次要發社群貼文都要跨部門排設計師兩天。<br>
               <span class="text-gold-light">課後第二週,他一天內就自己產出 8 篇貼文 + 對應圖片</span>,展會前一週把整個月的社群內容都排完了——不用等別人。
             </p>
           </div>
 
           <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
-          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+          <ul class="flow-checklist space-y-2 text-ink-700 text-sm leading-relaxed">
             <li>一套適用自己產業的 AI 文案 + 圖片提示詞範本</li>
             <li>5~10 篇實作出來的商業貼文 + AI 生成配圖</li>
             <li>一支 5~20 秒的 AI 短影音(可以直接跑 Meta / Google Ads)</li>
@@ -1086,58 +1109,62 @@
         </div>
 
         <div class="lg:col-span-5">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="自動週報流程圖">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 內容產出流程圖">
             <defs>
-              <linearGradient id="flowGoldA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5BE5F"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+              <linearGradient id="flowA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
+              <linearGradient id="flowAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
             </defs>
-            <!-- Step 1: 試算表 -->
-            <g transform="translate(40, 30)">
-              <rect x="0" y="0" width="90" height="70" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldA)" stroke-width="1.8"/>
-              <rect x="8" y="10" width="74" height="6" fill="rgba(232, 155, 44,0.5)"/>
-              <rect x="8" y="22" width="74" height="4" fill="rgba(232, 155, 44,0.3)"/>
-              <rect x="8" y="30" width="50" height="4" fill="rgba(232, 155, 44,0.3)"/>
-              <rect x="8" y="38" width="60" height="4" fill="rgba(232, 155, 44,0.3)"/>
-              <rect x="8" y="46" width="40" height="4" fill="rgba(232, 155, 44,0.3)"/>
-              <rect x="8" y="54" width="70" height="4" fill="rgba(232, 155, 44,0.3)"/>
-              <text x="45" y="92" text-anchor="middle" fill="#F5BE5F" font-size="11" font-family="JetBrains Mono, monospace">Sheets</text>
-              <text x="45" y="106" text-anchor="middle" fill="#cccccc" font-size="11">上週訂單</text>
+
+            <!-- Step 1: 主題 / 提示詞輸入 -->
+            <g transform="translate(30, 130)">
+              <rect x="0" y="0" width="86" height="60" rx="8" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.8"/>
+              <text x="43" y="24" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">主題</text>
+              <text x="43" y="42" text-anchor="middle" fill="#5B5449" font-size="9">「新設備上市」</text>
+              <text x="43" y="78" text-anchor="middle" fill="#7A7367" font-size="9" font-family="JetBrains Mono, monospace">你只給關鍵字</text>
             </g>
-            <!-- 箭頭 1 -->
-            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none">
-              <line x1="135" y1="65" x2="180" y2="65" stroke-dasharray="4 4"/>
-              <polygon points="180,60 190,65 180,70" fill="url(#flowGoldA)"/>
+
+            <!-- 箭頭 -->
+            <g stroke="url(#flowA)" stroke-width="1.6" fill="none">
+              <line x1="122" y1="160" x2="160" y2="160" stroke-dasharray="4 4"/>
+              <polygon points="160,155 170,160 160,165" fill="url(#flowA)"/>
             </g>
-            <text x="157" y="55" text-anchor="middle" fill="rgba(232, 155, 44,0.85)" font-size="9" font-family="JetBrains Mono, monospace">每週一 8:00</text>
-            <!-- Step 2: n8n + AI -->
-            <g transform="translate(195, 25)">
-              <rect x="0" y="0" width="110" height="80" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldA)" stroke-width="2"/>
-              <circle cx="30" cy="40" r="14" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
-              <text x="30" y="44" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">n8n</text>
-              <circle cx="78" cy="40" r="14" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
-              <text x="78" y="44" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">AI</text>
-              <line x1="44" y1="40" x2="64" y2="40" stroke="url(#flowGoldA)" stroke-width="1.4" stroke-dasharray="2 2"/>
-              <text x="55" y="97" text-anchor="middle" fill="#cccccc" font-size="11">整理 + 摘要</text>
+            <text x="141" y="150" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace">提示詞</text>
+
+            <!-- Step 2: AI 生成引擎 -->
+            <g transform="translate(170, 120)">
+              <rect x="0" y="0" width="80" height="80" rx="12" fill="#F7EEDA" stroke="url(#flowAcc)" stroke-width="2.4"/>
+              <circle cx="40" cy="34" r="15" fill="none" stroke="url(#flowAcc)" stroke-width="1.6"/>
+              <text x="40" y="39" text-anchor="middle" fill="#8C5A0A" font-size="12" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
+              <line x1="12" y1="56" x2="68" y2="56" stroke="rgba(184,118,15,0.35)" stroke-width="0.8"/>
+              <text x="40" y="70" text-anchor="middle" fill="#3F3830" font-size="10">內容生成引擎</text>
             </g>
-            <!-- 箭頭 2 -->
-            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none">
-              <line x1="310" y1="65" x2="345" y2="65" stroke-dasharray="4 4"/>
-              <polygon points="345,60 355,65 345,70" fill="url(#flowGoldA)"/>
+
+            <!-- 箭頭到 3 個輸出 -->
+            <g stroke="url(#flowA)" stroke-width="1.4" fill="none" stroke-dasharray="3 4">
+              <path d="M 260 145 L 310 65"/>
+              <path d="M 260 160 L 310 160"/>
+              <path d="M 260 175 L 310 250"/>
             </g>
-            <!-- Step 3: Email 信封 -->
-            <g transform="translate(305, 175)">
-              <rect x="0" y="0" width="90" height="60" rx="4" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldA)" stroke-width="1.8"/>
-              <polyline points="0,0 45,32 90,0" fill="none" stroke="url(#flowGoldA)" stroke-width="1.6"/>
-              <text x="45" y="80" text-anchor="middle" fill="#F5BE5F" font-size="11" font-family="JetBrains Mono, monospace">Email</text>
-              <text x="45" y="94" text-anchor="middle" fill="#cccccc" font-size="11">主管信箱</text>
+
+            <!-- 3 個輸出 tile -->
+            <g transform="translate(310, 40)">
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">貼文</text>
+              <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">5~10 篇/週</text>
             </g>
-            <!-- 主流程下半連線 -->
-            <g stroke="url(#flowGoldA)" stroke-width="1.6" fill="none" opacity="0.85">
-              <path d="M 250 110 L 250 175 L 305 200" stroke-dasharray="4 5"/>
-              <polygon points="298,196 308,200 300,206" fill="url(#flowGoldA)"/>
+            <g transform="translate(310, 135)">
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">圖片</text>
+              <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">AI 生成配圖</text>
             </g>
-            <text x="200" y="160" fill="rgba(232, 155, 44,0.85)" font-size="9" font-family="JetBrains Mono, monospace">產出週報</text>
-            <!-- 標題 -->
-            <text x="200" y="290" text-anchor="middle" fill="rgba(232, 155, 44,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">WEEKLY · AUTO · REPORT</text>
+            <g transform="translate(310, 225)">
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">短影音</text>
+              <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">5~20 秒</text>
+            </g>
+
+            <!-- 底標 -->
+            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">PROMPT · GENERATE · PUBLISH</text>
           </svg>
         </div>
       </div>
@@ -1147,53 +1174,92 @@
     <div class="flow-card p-6 sm:p-9 mb-8 reveal from-up">
       <div class="grid lg:grid-cols-12 gap-8 items-center">
         <div class="lg:col-span-5 order-2 lg:order-1">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="客服意圖分類流程圖">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="企業自己的 AI 工具流程圖">
             <defs>
-              <linearGradient id="flowGoldB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5BE5F"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+              <linearGradient id="flowB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
+              <linearGradient id="flowBAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
             </defs>
-            <!-- Step 1: LINE / Email 訊息 -->
-            <g transform="translate(30, 120)">
-              <rect x="0" y="0" width="90" height="60" rx="14" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.8"/>
-              <text x="45" y="26" text-anchor="middle" fill="#F5BE5F" font-size="13" font-weight="bold">💬</text>
-              <text x="45" y="44" text-anchor="middle" fill="#cccccc" font-size="10">客戶訊息</text>
-              <text x="45" y="80" text-anchor="middle" fill="rgba(232, 155, 44,0.85)" font-size="10" font-family="JetBrains Mono, monospace">LINE / Email</text>
+
+            <!-- Step 1: 痛點文件(PDF)-->
+            <g transform="translate(20, 128)">
+              <rect x="0" y="0" width="66" height="80" rx="4" fill="#FDFAF2" stroke="url(#flowB)" stroke-width="1.6"/>
+              <path d="M 46 0 L 46 20 L 66 20" fill="#EBE3CD" stroke="url(#flowB)" stroke-width="1.6"/>
+              <line x1="10" y1="34" x2="56" y2="34" stroke="rgba(47,93,60,0.4)" stroke-width="0.8"/>
+              <line x1="10" y1="44" x2="50" y2="44" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="52" x2="56" y2="52" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="60" x2="42" y2="60" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="68" x2="52" y2="68" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
+              <text x="33" y="97" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">痛點</text>
+              <text x="33" y="112" text-anchor="middle" fill="#7A7367" font-size="9">30 頁 PDF</text>
             </g>
-            <!-- 箭頭進 AI -->
-            <g stroke="url(#flowGoldB)" stroke-width="1.6" fill="none">
-              <line x1="125" y1="150" x2="160" y2="150" stroke-dasharray="4 4"/>
-              <polygon points="160,145 170,150 160,155" fill="url(#flowGoldB)"/>
+
+            <!-- 箭頭 -->
+            <g stroke="url(#flowB)" stroke-width="1.5" fill="none">
+              <line x1="94" y1="160" x2="118" y2="160" stroke-dasharray="4 4"/>
+              <polygon points="118,155 128,160 118,165" fill="url(#flowB)"/>
             </g>
-            <text x="143" y="140" text-anchor="middle" fill="rgba(232, 155, 44,0.85)" font-size="9" font-family="JetBrains Mono, monospace">30 秒</text>
-            <!-- Step 2: AI 分類器 -->
-            <g transform="translate(170, 115)">
-              <rect x="0" y="0" width="80" height="70" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldB)" stroke-width="2"/>
-              <circle cx="40" cy="30" r="16" fill="none" stroke="url(#flowGoldB)" stroke-width="1.8"/>
-              <text x="40" y="35" text-anchor="middle" fill="#F5BE5F" font-size="11" font-weight="bold">AI</text>
-              <text x="40" y="58" text-anchor="middle" fill="#cccccc" font-size="10">判讀意圖</text>
+
+            <!-- Step 2: SDD 規格書 -->
+            <g transform="translate(130, 128)">
+              <rect x="0" y="0" width="70" height="80" rx="6" fill="#F7EEDA" stroke="url(#flowBAcc)" stroke-width="1.8"/>
+              <text x="35" y="20" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">SDD</text>
+              <line x1="10" y1="28" x2="60" y2="28" stroke="rgba(184,118,15,0.4)" stroke-width="0.6"/>
+              <text x="35" y="44" text-anchor="middle" fill="#28221C" font-size="10" font-weight="700">規格書</text>
+              <text x="35" y="60" text-anchor="middle" fill="#5B5449" font-size="8">Input/Rule</text>
+              <text x="35" y="72" text-anchor="middle" fill="#5B5449" font-size="8">Output</text>
+              <text x="35" y="97" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace">寫得清楚</text>
+              <text x="35" y="112" text-anchor="middle" fill="#7A7367" font-size="9">才能做</text>
             </g>
-            <!-- 三條分岔到不同人 -->
-            <g stroke="url(#flowGoldB)" stroke-width="1.4" fill="none" stroke-dasharray="3 4">
-              <path d="M 250 130 L 310 50"/>
-              <path d="M 250 150 L 310 150"/>
-              <path d="M 250 170 L 310 250"/>
+
+            <!-- 箭頭 -->
+            <g stroke="url(#flowB)" stroke-width="1.5" fill="none">
+              <line x1="208" y1="160" x2="232" y2="160" stroke-dasharray="4 4"/>
+              <polygon points="232,155 242,160 232,165" fill="url(#flowB)"/>
             </g>
-            <!-- 三類目的地 -->
-            <g transform="translate(310, 30)">
-              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
-              <text x="40" y="17" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">報價/規格</text>
-              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 業務</text>
+
+            <!-- Step 3: Low-Code Agent -->
+            <g transform="translate(245, 118)">
+              <rect x="0" y="0" width="90" height="100" rx="10" fill="#F7EEDA" stroke="url(#flowBAcc)" stroke-width="2.4"/>
+              <!-- Low-Code 節點示意 -->
+              <g fill="none" stroke="url(#flowBAcc)" stroke-width="1.4">
+                <circle cx="20" cy="24" r="6"/>
+                <circle cx="45" cy="24" r="6"/>
+                <circle cx="70" cy="24" r="6"/>
+                <circle cx="32" cy="50" r="6"/>
+                <circle cx="58" cy="50" r="6"/>
+                <circle cx="45" cy="76" r="8"/>
+              </g>
+              <g stroke="rgba(184,118,15,0.5)" stroke-width="1" fill="none">
+                <line x1="20" y1="30" x2="32" y2="44"/>
+                <line x1="45" y1="30" x2="45" y2="44"/>
+                <line x1="45" y1="30" x2="32" y2="44"/>
+                <line x1="70" y1="30" x2="58" y2="44"/>
+                <line x1="45" y1="30" x2="58" y2="44"/>
+                <line x1="32" y1="56" x2="45" y2="68"/>
+                <line x1="58" y1="56" x2="45" y2="68"/>
+              </g>
+              <text x="45" y="80" text-anchor="middle" fill="#8C5A0A" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
+              <text x="45" y="118" text-anchor="middle" fill="#28221C" font-size="10" font-weight="700" font-family="JetBrains Mono, monospace">Low-Code Agent</text>
             </g>
-            <g transform="translate(310, 130)">
-              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
-              <text x="40" y="17" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">出貨進度</text>
-              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 業助</text>
+
+            <!-- 箭頭 -->
+            <g stroke="url(#flowB)" stroke-width="1.5" fill="none">
+              <line x1="342" y1="150" x2="356" y2="150" stroke-dasharray="4 4" opacity="0.7"/>
+              <polygon points="356,145 366,150 356,155" fill="url(#flowB)" opacity="0.7"/>
             </g>
-            <g transform="translate(310, 230)">
-              <rect x="0" y="0" width="80" height="40" rx="6" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldB)" stroke-width="1.6"/>
-              <text x="40" y="17" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">客訴/緊急</text>
-              <text x="40" y="32" text-anchor="middle" fill="#cccccc" font-size="9">→ 主管</text>
+
+            <!-- 完成:員工用 icon -->
+            <g transform="translate(360, 140)">
+              <circle cx="16" cy="8" r="7" fill="none" stroke="url(#flowB)" stroke-width="1.6"/>
+              <path d="M 4 30 Q 4 18 16 18 Q 28 18 28 30" fill="none" stroke="url(#flowB)" stroke-width="1.6"/>
+              <text x="16" y="52" text-anchor="middle" fill="#2F5D3C" font-size="8" font-family="JetBrains Mono, monospace">用戶</text>
             </g>
-            <text x="200" y="290" text-anchor="middle" fill="rgba(232, 155, 44,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">CLASSIFY · ROUTE · NOTIFY</text>
+
+            <!-- 時間標記 -->
+            <text x="200" y="42" text-anchor="middle" fill="#8C5A0A" font-size="11" font-weight="900" font-family="JetBrains Mono, monospace">3 天完成 · 不用寫程式</text>
+
+            <!-- 底標 -->
+            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">SPEC · BUILD · DEPLOY</text>
           </svg>
         </div>
 
@@ -1201,25 +1267,25 @@
           <div class="flex flex-wrap items-center gap-3 mb-4">
             <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">成果 02</span>
             <span class="text-gold-light text-sm font-medium">企業自己的 AI 工具</span>
-            <span class="text-gray-500 text-xs">課綱模組 4 · 6 小時</span>
+            <span class="text-ink-500 text-xs">課綱模組 4 · 6 小時</span>
           </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">3 天做出企業自己的<br>AI 工具(不用寫程式)</h3>
+          <h3 class="text-2xl sm:text-3xl font-black text-ink-900 mb-4 leading-tight">3 天做出企業自己的<br>AI 工具(不用寫程式)</h3>
 
           <div class="flow-pain mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
-            <p class="text-gray-300 text-sm leading-relaxed">老闆說要「數位轉型導入 AI」,問廠商都是 6 個月起跳、報價百萬的套裝方案。想自己做又不會寫程式,只能眼看時機一直溜走。</p>
+            <p class="text-ink-700 text-sm leading-relaxed">老闆說要「數位轉型導入 AI」,問廠商都是 6 個月起跳、報價百萬的套裝方案。想自己做又不會寫程式,只能眼看時機一直溜走。</p>
           </div>
 
           <div class="flow-story mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
-            <p class="text-gray-200 text-sm leading-relaxed">
+            <p class="text-ink-800 text-sm leading-relaxed">
               陳課長想解決「業助每天翻 30 頁規格 PDF 回答客戶」的問題。以前想到的解法是找 IT 開發客服機器人,<span class="text-gold-light">3 個月 + 80 萬預算</span>。<br>
               課後他用 <span class="text-gold-light">3 天時間</span>,自己用 Low-Code 拉出一個 AI Agent,自動查規格 PDF 回答客戶,員工不用學新介面。
             </p>
           </div>
 
           <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
-          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+          <ul class="flow-checklist space-y-2 text-ink-700 text-sm leading-relaxed">
             <li>一份 SDD 規格書(把公司真實痛點寫成可執行的規格)</li>
             <li>用 Low-Code 拉出來的 AI Agent 原型,回公司可以直接改成正式版</li>
             <li>「安全可控」的 AI 導入架構——有 Log、有審核、不是黑盒</li>
@@ -1236,25 +1302,25 @@
           <div class="flex flex-wrap items-center gap-3 mb-4">
             <span class="btn-gold text-[11px] tracking-[0.28em] font-black px-3 py-1 rounded-full">成果 03</span>
             <span class="text-gold-light text-sm font-medium">部門級知識庫</span>
-            <span class="text-gray-500 text-xs">課綱模組 5 · 6 小時</span>
+            <span class="text-ink-500 text-xs">課綱模組 5 · 6 小時</span>
           </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight">部門的資料<br>變成「一句話問得到」</h3>
+          <h3 class="text-2xl sm:text-3xl font-black text-ink-900 mb-4 leading-tight">部門的資料<br>變成「一句話問得到」</h3>
 
           <div class="flow-pain mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-1">公司現況</div>
-            <p class="text-gray-300 text-sm leading-relaxed">公司幾百份 SOP、規範、案例散在資料夾裡,新人要問老手,老手離職就斷。ERP、CRM、Google Drive 各講各的,沒辦法互相串起來。</p>
+            <p class="text-ink-700 text-sm leading-relaxed">公司幾百份 SOP、規範、案例散在資料夾裡,新人要問老手,老手離職就斷。ERP、CRM、Google Drive 各講各的,沒辦法互相串起來。</p>
           </div>
 
           <div class="flow-story mb-5">
             <div class="text-gold-light text-xs tracking-[0.22em] mb-2">使用情境</div>
-            <p class="text-gray-200 text-sm leading-relaxed">
+            <p class="text-ink-800 text-sm leading-relaxed">
               張經理想把部門過去 3 年的客戶案例變成「一句話問得到」。以前只能翻資料夾找。<br>
               課後他把 <span class="text-gold-light">200 份案例 PDF 建成 RAG 系統</span>,新人問「客戶 A 上次做了什麼」直接回答並列出來源——不用再打擾老手。
             </p>
           </div>
 
           <div class="text-gold-light text-xs tracking-[0.22em] mb-2">你帶走的成品</div>
-          <ul class="flow-checklist space-y-2 text-gray-300 text-sm leading-relaxed">
+          <ul class="flow-checklist space-y-2 text-ink-700 text-sm leading-relaxed">
             <li>自己部門的 RAG 知識庫(用 Pinecone 向量資料庫,私有安全)</li>
             <li>MCP Server 串接內部工具(ERP / CRM / 檔案系統可以互相對話)</li>
             <li>Human-in-the-Loop 設計(關鍵決策有人審)</li>
@@ -1263,66 +1329,110 @@
         </div>
 
         <div class="lg:col-span-5">
-          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="績效異常告警流程圖">
+          <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="部門 RAG 知識庫流程圖">
             <defs>
-              <linearGradient id="flowGoldC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#F5BE5F"/><stop offset="100%" stop-color="#A07A2E"/></linearGradient>
+              <linearGradient id="flowC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
+              <linearGradient id="flowCAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
             </defs>
-            <!-- Step 1: ERP 資料庫 -->
-            <g transform="translate(30, 110)">
-              <ellipse cx="45" cy="10" rx="40" ry="8" fill="none" stroke="url(#flowGoldC)" stroke-width="1.8"/>
-              <path d="M 5 10 L 5 60 A 40 8 0 0 0 85 60 L 85 10" fill="rgba(31,23,9,0.85)" stroke="url(#flowGoldC)" stroke-width="1.8"/>
-              <ellipse cx="45" cy="30" rx="40" ry="8" fill="none" stroke="rgba(232, 155, 44,0.5)" stroke-width="1"/>
-              <ellipse cx="45" cy="50" rx="40" ry="8" fill="none" stroke="rgba(232, 155, 44,0.5)" stroke-width="1"/>
-              <text x="45" y="84" text-anchor="middle" fill="#F5BE5F" font-size="11" font-family="JetBrains Mono, monospace">ERP</text>
-              <text x="45" y="98" text-anchor="middle" fill="#cccccc" font-size="10">訂單 / 退貨</text>
+
+            <!-- Step 1: 一疊文件 -->
+            <g transform="translate(24, 100)">
+              <!-- 疊 3 個 PDF icon 表示大量 -->
+              <g transform="translate(0, 4)">
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4" opacity="0.5"/>
+              </g>
+              <g transform="translate(6, 2)">
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4" opacity="0.75"/>
+              </g>
+              <g transform="translate(12, 0)">
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.6"/>
+                <path d="M 36 0 L 36 14 L 52 14" fill="#EBE3CD" stroke="url(#flowC)" stroke-width="1.4"/>
+                <line x1="6" y1="24" x2="44" y2="24" stroke="rgba(47,93,60,0.4)" stroke-width="0.7"/>
+                <line x1="6" y1="32" x2="38" y2="32" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
+                <line x1="6" y1="40" x2="42" y2="40" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
+                <line x1="6" y1="48" x2="32" y2="48" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
+              </g>
+              <text x="38" y="88" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">部門文件</text>
+              <text x="38" y="102" text-anchor="middle" fill="#7A7367" font-size="9">200+ PDF</text>
             </g>
+
             <!-- 箭頭 -->
-            <g stroke="url(#flowGoldC)" stroke-width="1.6" fill="none">
-              <line x1="125" y1="150" x2="160" y2="150" stroke-dasharray="4 4"/>
-              <polygon points="160,145 170,150 160,155" fill="url(#flowGoldC)"/>
+            <g stroke="url(#flowC)" stroke-width="1.5" fill="none">
+              <line x1="98" y1="140" x2="122" y2="140" stroke-dasharray="4 4"/>
+              <polygon points="122,135 132,140 122,145" fill="url(#flowC)"/>
             </g>
-            <text x="143" y="140" text-anchor="middle" fill="rgba(232, 155, 44,0.85)" font-size="9" font-family="JetBrains Mono, monospace">凌晨自動</text>
-            <!-- Step 2: 判斷 -->
-            <g transform="translate(170, 110)">
-              <rect x="0" y="0" width="90" height="80" rx="8" fill="rgba(31,23,9,0.9)" stroke="url(#flowGoldC)" stroke-width="2"/>
-              <text x="45" y="22" text-anchor="middle" fill="#F5BE5F" font-size="11" font-weight="bold">規則 + AI</text>
-              <line x1="10" y1="32" x2="80" y2="32" stroke="rgba(232, 155, 44,0.4)" stroke-width="0.8"/>
-              <text x="45" y="48" text-anchor="middle" fill="#cccccc" font-size="9">比對昨日</text>
-              <text x="45" y="62" text-anchor="middle" fill="#cccccc" font-size="9">比對上週</text>
-              <text x="45" y="76" text-anchor="middle" fill="#cccccc" font-size="9">→ 找異常</text>
+            <text x="110" y="130" text-anchor="middle" fill="rgba(47, 93, 60, 0.85)" font-size="8" font-family="JetBrains Mono, monospace">向量化</text>
+
+            <!-- Step 2: Pinecone 向量資料庫(格子點陣)-->
+            <g transform="translate(138, 108)">
+              <rect x="0" y="0" width="90" height="80" rx="8" fill="#F7EEDA" stroke="url(#flowCAcc)" stroke-width="2"/>
+              <!-- 格子點陣示意 vector store -->
+              <g fill="url(#flowCAcc)">
+                <circle cx="14" cy="24" r="2"/>
+                <circle cx="28" cy="24" r="2.5"/>
+                <circle cx="42" cy="24" r="2"/>
+                <circle cx="56" cy="24" r="2"/>
+                <circle cx="70" cy="24" r="3"/>
+                <circle cx="14" cy="40" r="2"/>
+                <circle cx="28" cy="40" r="3"/>
+                <circle cx="42" cy="40" r="2"/>
+                <circle cx="56" cy="40" r="2.5"/>
+                <circle cx="70" cy="40" r="2"/>
+                <circle cx="14" cy="56" r="2.5"/>
+                <circle cx="28" cy="56" r="2"/>
+                <circle cx="42" cy="56" r="3"/>
+                <circle cx="56" cy="56" r="2"/>
+                <circle cx="70" cy="56" r="2"/>
+              </g>
+              <text x="45" y="103" text-anchor="middle" fill="#8C5A0A" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">Pinecone RAG</text>
             </g>
-            <!-- 分岔：正常 vs 異常 -->
-            <g stroke="url(#flowGoldC)" stroke-width="1.4" fill="none" stroke-dasharray="3 4">
-              <path d="M 260 130 L 320 70"/>
-              <path d="M 260 170 L 320 230"/>
+
+            <!-- 箭頭 -->
+            <g stroke="url(#flowC)" stroke-width="1.5" fill="none">
+              <line x1="234" y1="140" x2="258" y2="140" stroke-dasharray="4 4"/>
+              <polygon points="258,135 268,140 258,145" fill="url(#flowC)"/>
             </g>
-            <text x="288" y="98" text-anchor="middle" fill="rgba(232, 155, 44,0.6)" font-size="9">沒事</text>
-            <text x="288" y="208" text-anchor="middle" fill="#F5BE5F" font-size="9" font-weight="bold">有異常</text>
-            <!-- 正常：靜音 -->
-            <g transform="translate(320, 50)">
-              <rect x="0" y="0" width="70" height="40" rx="6" fill="rgba(31,23,9,0.5)" stroke="rgba(232, 155, 44,0.3)" stroke-width="1" stroke-dasharray="3 3"/>
-              <text x="35" y="17" text-anchor="middle" fill="#888" font-size="10">不打擾</text>
-              <text x="35" y="31" text-anchor="middle" fill="#666" font-size="9">— silent —</text>
+
+            <!-- Step 3: 一句話問答對話框 -->
+            <g transform="translate(275, 90)">
+              <!-- 問題 bubble(小)-->
+              <g transform="translate(0, 0)">
+                <rect x="0" y="0" width="105" height="30" rx="14" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.6"/>
+                <text x="52" y="19" text-anchor="middle" fill="#3F3830" font-size="9">「客戶 A 上次做了什麼?」</text>
+              </g>
+              <!-- 答 bubble(下,較大)-->
+              <g transform="translate(0, 42)">
+                <rect x="0" y="0" width="115" height="66" rx="10" fill="#F7EEDA" stroke="url(#flowCAcc)" stroke-width="1.8"/>
+                <text x="57" y="19" text-anchor="middle" fill="#8C5A0A" font-size="9" font-weight="900" font-family="JetBrains Mono, monospace">AI 答</text>
+                <line x1="12" y1="26" x2="103" y2="26" stroke="rgba(184,118,15,0.35)" stroke-width="0.6"/>
+                <text x="57" y="41" text-anchor="middle" fill="#28221C" font-size="9">2023 年 6 月訂 X 型號</text>
+                <text x="57" y="53" text-anchor="middle" fill="#5B5449" font-size="8">來源:案例 A-072.pdf</text>
+              </g>
             </g>
-            <!-- 異常：LINE 推播 -->
-            <g transform="translate(320, 210)">
-              <rect x="0" y="0" width="70" height="50" rx="10" fill="rgba(232, 155, 44,0.12)" stroke="url(#flowGoldC)" stroke-width="1.8"/>
-              <text x="35" y="20" text-anchor="middle" fill="#F5BE5F" font-size="14" font-weight="bold">⚠</text>
-              <text x="35" y="36" text-anchor="middle" fill="#F5BE5F" font-size="10" font-weight="bold">LINE</text>
-              <text x="35" y="48" text-anchor="middle" fill="#cccccc" font-size="9">主管推播</text>
+
+            <!-- Human-in-the-Loop 標記 -->
+            <g transform="translate(200, 232)">
+              <line x1="-60" y1="0" x2="60" y2="0" stroke="rgba(47,93,60,0.35)" stroke-width="0.6" stroke-dasharray="2 3"/>
+              <circle cx="0" cy="0" r="10" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4"/>
+              <path d="M -4 0 Q -4 -4 0 -4 Q 4 -4 4 0" fill="none" stroke="#2F5D3C" stroke-width="1.4"/>
+              <line x1="-3" y1="4" x2="3" y2="4" stroke="#2F5D3C" stroke-width="1.4"/>
+              <text x="0" y="26" text-anchor="middle" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">HITL 審核</text>
+              <text x="0" y="38" text-anchor="middle" fill="#7A7367" font-size="8">關鍵決策有人把關</text>
             </g>
-            <text x="200" y="290" text-anchor="middle" fill="rgba(232, 155, 44,0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">DETECT · ALERT · ACT</text>
+
+            <!-- 底標 -->
+            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">INDEX · ASK · CITE</text>
           </svg>
         </div>
       </div>
     </div>
 
-    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.18em]">※ 三條流程的 n8n 範本與設定步驟，課程現場交給你帶回公司，不是只看簡報。</p>
+    <p class="text-center text-[11px] text-ink-500 mt-8 tracking-[0.18em]">※ 三條流程的 n8n 範本與設定步驟，課程現場交給你帶回公司，不是只看簡報。</p>
   </div>
 </section>
 
 <!-- ════════ 課程特色 ════════ -->
-<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">04 ／ 課程特色</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
@@ -1331,28 +1441,28 @@
     <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
       <div class="card-glass p-6 glow-border reveal from-left" data-delay="1">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 01</div>
-        <h3 class="text-white font-bold text-base mb-2">範例都是製造業</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">不是線上書店、不是電商客服，是機械業設備規格、部門知識庫那種事</p>
+        <h3 class="text-ink-900 font-bold text-base mb-2">範例都是製造業</h3>
+        <p class="text-ink-500 text-xs leading-relaxed">不是線上書店、不是電商客服，是機械業設備規格、部門知識庫那種事</p>
       </div>
       <div class="card-glass p-6 glow-border reveal from-up" data-delay="1">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 02</div>
-        <h3 class="text-white font-bold text-base mb-2">AI 不會亂跑</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">每一步都有紀錄，主管和客戶問起來都答得出來</p>
+        <h3 class="text-ink-900 font-bold text-base mb-2">AI 不會亂跑</h3>
+        <p class="text-ink-500 text-xs leading-relaxed">每一步都有紀錄，主管和客戶問起來都答得出來</p>
       </div>
       <div class="card-glass p-6 glow-border reveal from-up" data-delay="2">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 03</div>
-        <h3 class="text-white font-bold text-base mb-2">3 個成果帶回去</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">課程結束打開電腦就能用，不是只看簡報回家自己想</p>
+        <h3 class="text-ink-900 font-bold text-base mb-2">3 個成果帶回去</h3>
+        <p class="text-ink-500 text-xs leading-relaxed">課程結束打開電腦就能用，不是只看簡報回家自己想</p>
       </div>
       <div class="card-glass p-6 glow-border reveal from-up" data-delay="3">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 04</div>
-        <h3 class="text-white font-bold text-base mb-2">不用寫程式</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">滑鼠拉一拉就能設計流程，業務、行政都能上手</p>
+        <h3 class="text-ink-900 font-bold text-base mb-2">不用寫程式</h3>
+        <p class="text-ink-500 text-xs leading-relaxed">滑鼠拉一拉就能設計流程，業務、行政都能上手</p>
       </div>
       <div class="card-glass p-6 glow-border reveal from-right" data-delay="3">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-3">特色 05</div>
-        <h3 class="text-white font-bold text-base mb-2">5 級學習地圖</h3>
-        <p class="text-gray-500 text-xs leading-relaxed">L0 到 L4，每一級該學什麼、該做到什麼，講清楚</p>
+        <h3 class="text-ink-900 font-bold text-base mb-2">5 級學習地圖</h3>
+        <p class="text-ink-500 text-xs leading-relaxed">L0 到 L4，每一級該學什麼、該做到什麼，講清楚</p>
       </div>
     </div>
   </div>
@@ -1364,7 +1474,7 @@
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">05 ／ 學習成果</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">課完，你能做這些事</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base">不是「習得能力」這種廢話，是具體你回公司能做出來的東西</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base">不是「習得能力」這種廢話，是具體你回公司能做出來的東西</p>
     </div>
     <div class="grid md:grid-cols-2 gap-5">
       <div class="card-glass p-7 glow-border reveal from-left" data-delay="1">
@@ -1372,84 +1482,84 @@
           <h3 class="text-gold-light font-bold text-lg">自己拉新的流程出來</h3>
           <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 01</span>
         </div>
-        <p class="text-gray-400 leading-relaxed">課上的 3 個成果只是起點。看過怎麼設計後，你可以照樣自己做「設備維修知識庫」、「新產品規劃書 AI 生成」這種公司專屬的工具。</p>
+        <p class="text-ink-600 leading-relaxed">課上的 3 個成果只是起點。看過怎麼設計後，你可以照樣自己做「設備維修知識庫」、「新產品規劃書 AI 生成」這種公司專屬的工具。</p>
       </div>
       <div class="card-glass p-7 glow-border reveal from-right" data-delay="1">
         <div class="flex items-baseline justify-between mb-3">
           <h3 class="text-gold-light font-bold text-lg">把 AI 接到你現在用的工具</h3>
           <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 02</span>
         </div>
-        <p class="text-gray-400 leading-relaxed">不是再多買一個系統。是讓 AI 跟你現在已經在用的 Google Sheets / LINE / Email / ERP 直接串起來，員工不用學新介面。</p>
+        <p class="text-ink-600 leading-relaxed">不是再多買一個系統。是讓 AI 跟你現在已經在用的 Google Sheets / LINE / Email / ERP 直接串起來，員工不用學新介面。</p>
       </div>
       <div class="card-glass p-7 glow-border reveal from-left" data-delay="2">
         <div class="flex items-baseline justify-between mb-3">
           <h3 class="text-gold-light font-bold text-lg">出包能倒帶看是哪一步壞了</h3>
           <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 03</span>
         </div>
-        <p class="text-gray-400 leading-relaxed">每次 AI 收到什麼、回了什麼，全部留紀錄。客戶說「你們 AI 亂回」時，你可以打開系統看當時實際發生什麼。</p>
+        <p class="text-ink-600 leading-relaxed">每次 AI 收到什麼、回了什麼，全部留紀錄。客戶說「你們 AI 亂回」時，你可以打開系統看當時實際發生什麼。</p>
       </div>
       <div class="card-glass p-7 glow-border reveal from-right" data-delay="2">
         <div class="flex items-baseline justify-between mb-3">
           <h3 class="text-gold-light font-bold text-lg">知道下一步該學什麼</h3>
           <span class="text-gold-light/60 text-xs tracking-[0.3em]">成果 04</span>
         </div>
-        <p class="text-gray-400 leading-relaxed">這堂課帶你從 L0（還沒用 AI）走到 L2（部分流程自動化）。L3、L4 該做什麼、要花多久，都告訴你，不用自己摸索。</p>
+        <p class="text-ink-600 leading-relaxed">這堂課帶你從 L0（還沒用 AI）走到 L2（部分流程自動化）。L3、L4 該做什麼、要花多久，都告訴你，不用自己摸索。</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ════════ 適合對象 ════════ -->
-<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+<section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">06 ／ 適合對象</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">這堂課給誰上</h2>
-      <p class="text-gray-400 mt-4 text-sm sm:text-base">老闆、業務、客服、行政都能上手，不用會程式</p>
+      <p class="text-ink-600 mt-4 text-sm sm:text-base">老闆、業務、客服、行政都能上手，不用會程式</p>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <div class="card-glass p-6 sm:p-7 glow-border reveal from-left" data-delay="1">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 01</div>
-        <h3 class="text-white font-bold text-lg mb-2">製造業主管 ／ 老闆</h3>
+        <h3 class="text-ink-900 font-bold text-lg mb-2">製造業主管 ／ 老闆</h3>
         <div class="w-8 h-px bg-gold/50 mb-3"></div>
-        <p class="text-gray-400 text-sm leading-relaxed">想導入 AI，但不想踩雷</p>
+        <p class="text-ink-600 text-sm leading-relaxed">想導入 AI，但不想踩雷</p>
       </div>
       <div class="card-glass p-6 sm:p-7 glow-border reveal from-up" data-delay="2">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 02</div>
-        <h3 class="text-white font-bold text-lg mb-2">業務 ／ 行銷人員</h3>
+        <h3 class="text-ink-900 font-bold text-lg mb-2">業務 ／ 行銷人員</h3>
         <div class="w-8 h-px bg-gold/50 mb-3"></div>
-        <p class="text-gray-400 text-sm leading-relaxed">需要自動化報表與客戶分析</p>
+        <p class="text-ink-600 text-sm leading-relaxed">需要自動化報表與客戶分析</p>
       </div>
       <div class="card-glass p-6 sm:p-7 glow-border reveal from-up" data-delay="3">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 03</div>
-        <h3 class="text-white font-bold text-lg mb-2">資訊 ／ IT 部門</h3>
+        <h3 class="text-ink-900 font-bold text-lg mb-2">資訊 ／ IT 部門</h3>
         <div class="w-8 h-px bg-gold/50 mb-3"></div>
-        <p class="text-gray-400 text-sm leading-relaxed">負責企業系統與流程整合</p>
+        <p class="text-ink-600 text-sm leading-relaxed">負責企業系統與流程整合</p>
       </div>
       <div class="card-glass p-6 sm:p-7 glow-border reveal from-right" data-delay="3">
         <div class="text-gold-light text-[11px] tracking-[0.3em] mb-4">對象 04</div>
-        <h3 class="text-white font-bold text-lg mb-2">行政 ／ PM</h3>
+        <h3 class="text-ink-900 font-bold text-lg mb-2">行政 ／ PM</h3>
         <div class="w-8 h-px bg-gold/50 mb-3"></div>
-        <p class="text-gray-400 text-sm leading-relaxed">想提升效率、減少人工作業</p>
+        <p class="text-ink-600 text-sm leading-relaxed">想提升效率、減少人工作業</p>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ════════ 開課梯次 ════════ -->
-<section id="cohorts" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+<section id="cohorts" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-14 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">07 ／ 開課梯次</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">開課梯次</h2>
-      <p class="text-gray-400 mt-4 text-sm tracking-[0.18em]">30 小時 ・ 4 天課程 ・ 每梯限額 60 人</p>
+      <p class="text-ink-600 mt-4 text-sm tracking-[0.18em]">30 小時 ・ 4 天課程 ・ 每梯限額 60 人</p>
     </div>
     <div class="cohort-viewport reveal from-up">
       <button type="button" id="cohortPrev" class="cohort-arrow prev" aria-label="上一個梯次">&lt;</button>
       <div id="cohortList" class="cohort-track"></div>
       <button type="button" id="cohortNext" class="cohort-arrow next" aria-label="下一個梯次">&gt;</button>
     </div>
-    <p class="text-center text-[11px] text-gray-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新；額滿後仍可登記候補，若有缺額將依序遞補</p>
+    <p class="text-center text-[11px] text-ink-500 mt-8 tracking-[0.22em]">※ 梯次資訊自試算表自動同步，名額即時更新；額滿後仍可登記候補，若有缺額將依序遞補</p>
   </div>
 </section>
 
@@ -1459,7 +1569,7 @@
     <div class="text-center mb-12 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">08 ／ 課程報名</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">課程報名</h2>
-      <p class="text-gray-400 mt-4">本課程僅開放完全符合資格之企業，請先輸入統編驗證資格</p>
+      <p class="text-ink-600 mt-4">本課程僅開放完全符合資格之企業，請先輸入統編驗證資格</p>
     </div>
 
     <!-- STEP 1：統編驗證 -->
@@ -1468,7 +1578,7 @@
         <span class="step-pill">第 1 步 ・ 統編驗證</span>
         <span class="text-[12px] text-gold-light/70 tracking-[0.24em]">資格審核</span>
       </div>
-      <h3 class="text-white font-bold text-lg mb-5">輸入您的公司統一編號</h3>
+      <h3 class="text-ink-900 font-bold text-lg mb-5">輸入您的公司統一編號</h3>
       <div class="flex flex-col sm:flex-row gap-3">
         <input
           id="taxIdInput"
@@ -1483,7 +1593,7 @@
         </button>
       </div>
 
-      <div class="flex items-start gap-2 mt-4 text-[12px] text-gray-500 tracking-[0.18em] leading-relaxed">
+      <div class="flex items-start gap-2 mt-4 text-[12px] text-ink-500 tracking-[0.18em] leading-relaxed">
         <span class="block w-6 h-px bg-gold/40 mt-2 shrink-0"></span>
         <span>資料來源：經濟部公開商工登記資料</span>
       </div>
@@ -1498,12 +1608,12 @@
       </div>
 
       <div>
-        <h3 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+        <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
           公司資訊 <span class="text-gold-light/70 text-xs ml-2 tracking-[0.2em]">已通過資格審核</span>
         </h3>
-        <div id="companyInfoBox" class="p-5 rounded-lg bg-navy-800/60 border border-gold/20">
-          <p class="text-gray-400 text-sm">尚未查詢公司資料</p>
+        <div id="companyInfoBox" class="p-5 rounded-lg bg-cream-50/60 border border-gold/20">
+          <p class="text-ink-600 text-sm">尚未查詢公司資料</p>
         </div>
         <input type="hidden" id="f_taxId" name="taxId">
         <input type="hidden" id="f_companyName" name="companyName">
@@ -1511,7 +1621,7 @@
       </div>
 
       <div>
-        <h3 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+        <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
           選擇報名梯次 <span class="text-red-400 ml-1">*</span>
         </h3>
@@ -1521,7 +1631,7 @@
       </div>
 
       <div>
-        <h3 class="text-white font-bold text-base mb-4 flex items-center gap-2">
+        <h3 class="text-ink-900 font-bold text-base mb-4 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
           聯絡窗口
         </h3>
@@ -1562,7 +1672,7 @@
       <button type="submit" id="submitBtn" class="btn-gold w-full font-black text-lg py-4 rounded-xl tracking-widest">
         送出報名 ▸
       </button>
-      <p class="text-[11px] text-gray-500 text-center tracking-[0.18em]">送出即表示同意虎智科技蒐集與使用您的聯絡資訊</p>
+      <p class="text-[11px] text-ink-500 text-center tracking-[0.18em]">送出即表示同意虎智科技蒐集與使用您的聯絡資訊</p>
     </form>
 
     <!-- 成功訊息 -->
@@ -1571,18 +1681,18 @@
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-full border border-gold/50 bg-gold/10 mb-5">
         <span class="gold-text text-3xl font-black">✓</span>
       </div>
-      <h3 class="text-3xl font-black text-white mb-3">報名成功</h3>
-      <p class="text-gray-300 mb-7 leading-relaxed">虎智科技將於 <span class="text-gold-light font-bold">1 個工作日</span> 內與您聯繫確認課程細節</p>
+      <h3 class="text-3xl font-black text-ink-900 mb-3">報名成功</h3>
+      <p class="text-ink-700 mb-7 leading-relaxed">虎智科技將於 <span class="text-gold-light font-bold">1 個工作日</span> 內與您聯繫確認課程細節</p>
       <div class="grid sm:grid-cols-2 gap-3">
         <a href="https://lin.ee/ZB5Tjkd" target="_blank" class="btn-gold py-3 rounded-lg font-bold tracking-wider">加入 LINE 官方帳號</a>
-        <a href="https://www.tigerai.info" target="_blank" class="block py-3 rounded-lg font-bold bg-navy-700/60 border border-gold/30 text-gold-light hover:bg-gold/10 transition tracking-wider">了解更多虎智方案</a>
+        <a href="https://www.tigerai.info" target="_blank" class="block py-3 rounded-lg font-bold bg-cream-200/60 border border-gold/30 text-gold-light hover:bg-gold/10 transition tracking-wider">了解更多虎智方案</a>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ════════ FAQ ════════ -->
-<section id="faq" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
+<section id="faq" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-3xl mx-auto">
     <div class="text-center mb-12 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">09 ／ 常見問題</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
@@ -1593,41 +1703,41 @@
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
             <span class="text-gold-light text-xs tracking-[0.25em]">問題 01</span>
-            <span class="text-white font-bold">需要程式基礎嗎？</span>
+            <span class="text-ink-900 font-bold">需要程式基礎嗎？</span>
           </div>
           <span class="faq-icon text-gold text-2xl">＋</span>
         </summary>
-        <p class="text-gray-400 mt-4 leading-relaxed pl-14">不需要。本課程專為非技術背景的企業主、主管與行政同仁設計，全程以視覺化拖拉操作 n8n，零程式門檻。</p>
+        <p class="text-ink-600 mt-4 leading-relaxed pl-14">不需要。本課程專為非技術背景的企業主、主管與行政同仁設計，全程以視覺化拖拉操作 n8n，零程式門檻。</p>
       </details>
       <details class="card-glass p-6 group reveal from-right">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
             <span class="text-gold-light text-xs tracking-[0.25em]">問題 02</span>
-            <span class="text-white font-bold">課程多長？會帶走什麼？</span>
+            <span class="text-ink-900 font-bold">課程多長？會帶走什麼？</span>
           </div>
           <span class="faq-icon text-gold text-2xl">＋</span>
         </summary>
-        <p class="text-gray-400 mt-4 leading-relaxed pl-14">4 天 30 小時實體課程(2 週 × 週末各 2 天)。結訓當天即可帶走 3 個成果:公司行銷內容產能、企業自己的 AI Agent、部門級 RAG 知識庫。</p>
+        <p class="text-ink-600 mt-4 leading-relaxed pl-14">4 天 30 小時實體課程(2 週 × 週末各 2 天)。結訓當天即可帶走 3 個成果:公司行銷內容產能、企業自己的 AI Agent、部門級 RAG 知識庫。</p>
       </details>
       <details class="card-glass p-6 group reveal from-left">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
             <span class="text-gold-light text-xs tracking-[0.25em]">問題 03</span>
-            <span class="text-white font-bold">為什麼報名要輸入統編？</span>
+            <span class="text-ink-900 font-bold">為什麼報名要輸入統編？</span>
           </div>
           <span class="faq-icon text-gold text-2xl">＋</span>
         </summary>
-        <p class="text-gray-400 mt-4 leading-relaxed pl-14">課程內容開放所有人瀏覽；報名則僅開放完全符合資格之企業。在報名區輸入統編，系統會以經濟部公開資料自動判定資格，通過後即可直接填寫梯次與聯絡資料。</p>
+        <p class="text-ink-600 mt-4 leading-relaxed pl-14">課程內容開放所有人瀏覽；報名則僅開放完全符合資格之企業。在報名區輸入統編，系統會以經濟部公開資料自動判定資格，通過後即可直接填寫梯次與聯絡資料。</p>
       </details>
       <details class="card-glass p-6 group reveal from-right">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
             <span class="text-gold-light text-xs tracking-[0.25em]">問題 04</span>
-            <span class="text-white font-bold">上完課之後還有支援嗎？</span>
+            <span class="text-ink-900 font-bold">上完課之後還有支援嗎？</span>
           </div>
           <span class="faq-icon text-gold text-2xl">＋</span>
         </summary>
-        <p class="text-gray-400 mt-4 leading-relaxed pl-14">有。結訓後提供基於課程內容的 24h AI 助教，隨時解決你的實作疑問。</p>
+        <p class="text-ink-600 mt-4 leading-relaxed pl-14">有。結訓後提供基於課程內容的 24h AI 助教，隨時解決你的實作疑問。</p>
       </details>
     </div>
   </div>
@@ -1642,14 +1752,14 @@
     <div class="flex items-center gap-3">
       <img src="assets/logo.png" alt="虎智科技 TigerAI" class="w-9 h-9 object-contain">
       <div>
-        <div class="text-white font-bold text-sm tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
-        <div class="text-gray-500 text-[11px] tracking-[0.2em] mt-0.5">製造業 AI 自動化課程</div>
+        <div class="text-ink-900 font-bold text-sm tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
+        <div class="text-ink-500 text-[11px] tracking-[0.2em] mt-0.5">製造業 AI 自動化課程</div>
       </div>
     </div>
-    <a href="../landing/index.html" class="text-gold-light hover:text-white text-sm font-bold tracking-wider transition">查詢公司是否有資格 →</a>
-    <div class="text-gray-500 text-xs text-center sm:text-right">
+    <a href="../landing/index.html" class="text-gold-light hover:text-ink-900 text-sm font-bold tracking-wider transition">查詢公司是否有資格 →</a>
+    <div class="text-ink-500 text-xs text-center sm:text-right">
       <div class="tracking-[0.18em]">© 2026 虎智科技 TigerAI · 版權所有</div>
-      <div class="mt-1.5"><a href="https://www.tigerai.info" target="_blank" class="text-gold-light hover:text-white transition tracking-wider">www.tigerai.info</a></div>
+      <div class="mt-1.5"><a href="https://www.tigerai.info" target="_blank" class="text-gold-light hover:text-ink-900 transition tracking-wider">www.tigerai.info</a></div>
     </div>
   </div>
 </footer>
@@ -1778,7 +1888,7 @@ function showResult(r) {
     resultArea.innerHTML = `
       <div class="card-glass rounded-2xl p-6 animate-fade-in border-l-4 border-red-500">
         <div class="text-red-400 font-bold mb-1">查詢失敗</div>
-        <div class="text-gray-300 text-sm">${r.error}</div>
+        <div class="text-ink-700 text-sm">${r.error}</div>
       </div>`;
     return;
   }
@@ -1793,25 +1903,25 @@ function showResult(r) {
     <div class="flex items-start gap-2 text-sm">
       <span class="inline-block w-2 h-2 mt-2 rounded-full ${ch.pass ? 'bg-gold' : 'bg-gray-500'}"></span>
       <div class="flex-1">
-        <div class="text-gray-200 font-medium">${ch.label}</div>
-        <div class="text-gray-500 text-xs">${ch.detail}</div>
+        <div class="text-ink-800 font-medium">${ch.label}</div>
+        <div class="text-ink-500 text-xs">${ch.detail}</div>
       </div>
     </div>
   `).join('');
 
   const ctaHtml = isFull
     ? `<div class="text-center text-gold-light text-sm font-bold mt-4">報名表單已為你開啟，請繼續填寫 STEP 2</div>`
-    : `<a href="https://lin.ee/ZB5Tjkd" target="_blank" class="block w-full text-center py-3 rounded-lg mt-5 bg-navy-700/50 border border-gold/30 text-gold-light font-bold">聯絡虎智顧問評估</a>`;
+    : `<a href="https://lin.ee/ZB5Tjkd" target="_blank" class="block w-full text-center py-3 rounded-lg mt-5 bg-cream-200/50 border border-gold/30 text-gold-light font-bold">聯絡虎智顧問評估</a>`;
 
   resultArea.innerHTML = `
     <div class="card-glass rounded-2xl p-6 animate-fade-in-up border-l-4 ${borderClass}">
       <div class="mb-3">
         <div class="${titleClass} font-black text-lg">${v.title}</div>
-        <div class="text-gray-400 text-sm">${v.subtitle}</div>
+        <div class="text-ink-600 text-sm">${v.subtitle}</div>
       </div>
       <div class="pt-3 border-t border-gold/10 mb-3">
-        <div class="text-white font-bold text-lg">${c.name}</div>
-        <div class="text-gray-400 text-sm">統編 ${c.taxId}　${c.address || '(地址未知)'}</div>
+        <div class="text-ink-900 font-bold text-lg">${c.name}</div>
+        <div class="text-ink-600 text-sm">統編 ${c.taxId}　${c.address || '(地址未知)'}</div>
       </div>
       <div class="space-y-2 mb-2">${checkHtml}</div>
       ${ctaHtml}
@@ -1838,8 +1948,8 @@ function revealSignupForm() {
   document.getElementById('companyInfoBox').innerHTML = `
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1">
-        <div class="text-white font-bold text-lg mb-1">${c.name}</div>
-        <div class="text-gray-400 text-xs space-y-1">
+        <div class="text-ink-900 font-bold text-lg mb-1">${c.name}</div>
+        <div class="text-ink-600 text-xs space-y-1">
           <div>統編 ${c.taxId}　資本額 NT$ ${formatMoney(c.capital) || '-'}</div>
           <div>${c.address || ''}</div>
         </div>
@@ -1957,10 +2067,10 @@ function normCohortKey(label) {
 
 function countdownBadge(dateStr) {
   const days = daysUntil(dateStr);
-  if (days === null) return '<span class="text-gray-500 text-xs">日期待定</span>';
+  if (days === null) return '<span class="text-ink-500 text-xs">日期待定</span>';
   if (days > 0) return `<span class="gold-text font-black">距開課還有 ${days} 天</span>`;
   if (days === 0) return '<span class="gold-text font-black">今天開課</span>';
-  return '<span class="text-gray-500 text-xs">已結束</span>';
+  return '<span class="text-ink-500 text-xs">已結束</span>';
 }
 
 function renderCohorts(cohorts, counts) {
@@ -2017,14 +2127,14 @@ function renderCohorts(cohorts, counts) {
     card.className = 'cohort-card card-glass rounded-2xl p-6 glow-border';
     card.innerHTML = `
       <div class="gold-text font-black text-xl mb-3">${co.city || '場次'}</div>
-      <div class="space-y-2 text-sm text-gray-300">
-        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">日期</span><span class="text-right">${co.date || '-'}</span></div>
-        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">時間</span><span class="text-right">${co.time || '-'}</span></div>
-        <div class="flex justify-between gap-3"><span class="text-gray-500 shrink-0">地點</span><span class="text-right">${co.location || '-'}</span></div>
+      <div class="space-y-2 text-sm text-ink-700">
+        <div class="flex justify-between gap-3"><span class="text-ink-500 shrink-0">日期</span><span class="text-right">${co.date || '-'}</span></div>
+        <div class="flex justify-between gap-3"><span class="text-ink-500 shrink-0">時間</span><span class="text-right">${co.time || '-'}</span></div>
+        <div class="flex justify-between gap-3"><span class="text-ink-500 shrink-0">地點</span><span class="text-right">${co.location || '-'}</span></div>
       </div>
       <div class="mt-4 pt-3 border-t border-gold/10 text-center space-y-1.5">
         <div>${countdownBadge(co.date)}</div>
-        <div class="text-sm text-gray-300">${statusHtml}</div>
+        <div class="text-sm text-ink-700">${statusHtml}</div>
       </div>`;
     list.appendChild(card);
 
