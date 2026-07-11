@@ -39,38 +39,49 @@
           sans: ['"Noto Sans TC"', 'system-ui', 'sans-serif']
         },
         colors: {
-          // 亮色系 · 未漂白紙 + 深墨 + 橄欖強調
-          cream: {
-            50:  '#FDFAF2',   // 卡片底(最亮)
-            100: '#F6F1E4',   // 頁面主底
-            200: '#EBE3CD',   // 次深
-            300: '#DED4B7'    // 分隔線
+          // MIID REKA 風格 · 純白 + 極黑 + 紅色
+          paper: {
+            DEFAULT: '#FFFFFF',
+            warm:    '#FBF8F1',
+            gray:    '#F1EEE6'
           },
           ink: {
-            500: '#7A7367',
-            600: '#5B5449',
-            700: '#3F3830',
-            800: '#28221C',
-            900: '#181410'
+            500: '#8A8477',
+            600: '#5C5850',
+            700: '#2E2A24',
+            800: '#161311',
+            900: '#0A0906'
           },
-          // 保留舊 navy class name 兼容(值改成 cream)
+          rd: {
+            DEFAULT: '#E62828',
+            deep:    '#B01414',
+            light:   '#FCEBEB'
+          },
+          rule: '#E5E1D8',
+          // 兼容舊 class name(這些名字散落 HTML,值全部改成新色盤;避免破 markup)
           navy: {
-            900: '#F6F1E4',
-            800: '#FDFAF2',
-            700: '#EBE3CD',
-            600: '#DED4B7'
+            900: '#FFFFFF',
+            800: '#FBF8F1',
+            700: '#F1EEE6',
+            600: '#E5E1D8'
+          },
+          cream: {
+            50:  '#FFFFFF',
+            100: '#FBF8F1',
+            200: '#F1EEE6',
+            300: '#E5E1D8'
           },
           teal: {
-            bright: '#8DAA6E',
-            500: '#5A8A44',
-            600: '#3F6B2C',
-            700: '#274A18'
+            bright: '#E62828',
+            500:    '#E62828',
+            600:    '#B01414',
+            700:    '#7A0F0F'
           },
+          // gold class 現在 = 紅+黑,用來取代舊金色標題/邊框
           gold: {
-            // 現在 gold class 對應到「深橄欖強調」,不是奢華金
-            light: '#B8760F',   // 土黃(bright 那級)
-            DEFAULT: '#2F5D3C', // 深橄欖(主強調)
-            deep: '#1F3D26'
+            light:   '#E62828',   // 用來加強紅色的地方
+            DEFAULT: '#0A0906',   // 主色改成極黑(標題、線條)
+            deep:    '#E62828'    // deep 也給紅
           }
         },
         animation: {
@@ -101,153 +112,197 @@
   html { scroll-behavior: smooth; }
   body {
     font-family: 'Noto Sans TC', system-ui, sans-serif;
-    background: #F6F1E4;
-    color: #3F3830;
+    background: #FBF8F1;
+    color: #2E2A24;
     letter-spacing: 0.005em;
   }
   .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.04em; }
 
-  /* ── 主背景:未漂白紙 + 輕綠光 + 微網格 ── */
+  /* ══════════ MIID REKA 風格 · 純白 + 極黑 + 紅 ══════════ */
+
+  /* 主背景:純白 + 微點陣紋(雜誌感) */
   .gold-glow-bg {
-    background:
-      radial-gradient(ellipse 55% 45% at 82% -5%, rgba(47, 93, 60, 0.10) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 8% 38%, rgba(184, 118, 15, 0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 45% at 92% 78%, rgba(47, 93, 60, 0.08) 0%, transparent 60%),
-      linear-gradient(180deg, #F6F1E4 0%, #F0EBDA 100%);
+    background: #FBF8F1;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(10,9,6,0.10) 1px, transparent 0);
+    background-size: 22px 22px;
     background-attachment: fixed;
     position: relative;
   }
   .gold-glow-bg::before {
     content: "";
     position: fixed; inset: 0;
-    background-image:
-      linear-gradient(rgba(47, 93, 60, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 93, 60, 0.04) 1px, transparent 1px);
-    background-size: 72px 72px;
-    mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 75%);
+    background:
+      radial-gradient(ellipse 50% 40% at 0% 0%, rgba(255,255,255,0.85) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 100% 100%, rgba(255,255,255,0.75) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
+  /* orbs 拿掉發光,改成純紅斜條紋圖案裝飾 */
   .gold-orb {
-    position: absolute; border-radius: 9999px; pointer-events: none;
-    background: radial-gradient(circle, rgba(184, 118, 15, 0.20) 0%, transparent 70%);
-    filter: blur(46px);
+    position: absolute; pointer-events: none;
+    background-image: repeating-linear-gradient(
+      -45deg,
+      #E62828 0px, #E62828 4px,
+      transparent 4px, transparent 12px
+    );
+    opacity: 0.65;
+    mix-blend-mode: multiply;
+    border-radius: 0;
   }
   section, nav, footer { position: relative; z-index: 1; }
 
-  /* ── 卡片:白底 + 深橄欖細線 + 角落 L 型刻度 ── */
+  /* ══════════ 卡片:純白 + 黑框 + 硬陰影(MIID 印刷感)══════════ */
   .card-glass {
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255,255,255,0.85) 30%),
-      #FDFAF2;
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(47, 93, 60, 0.14);
-    box-shadow: 0 2px 12px rgba(47, 93, 60, 0.05);
+    background: #FFFFFF;
+    border: 1.5px solid #0A0906;
+    box-shadow: 6px 6px 0 rgba(10,9,6,0.08);
     position: relative;
-    border-radius: 14px;
+    border-radius: 0;   /* 尖角,不圓 */
   }
   .card-gold {
-    background:
-      linear-gradient(180deg, rgba(184, 118, 15, 0.08) 0%, rgba(47, 93, 60, 0.02) 35%, #FDFAF2 100%);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(47, 93, 60, 0.32);
-    box-shadow: 0 4px 20px rgba(47, 93, 60, 0.08);
+    background: #0A0906;
+    color: #FBF8F1;
+    border: 1.5px solid #0A0906;
+    box-shadow: 6px 6px 0 #E62828;
     position: relative;
-    border-radius: 14px;
+    border-radius: 0;
   }
-  /* 卡片四角 L 型刻度 */
-  .card-glass::before, .card-glass::after,
-  .card-gold::before, .card-gold::after {
+  .card-gold * { color: inherit; }
+  .card-gold .text-gold-light, .card-gold .text-gold { color: #E62828 !important; }
+
+  /* 卡片四角 L 刻度換成:紅色右上角小三角(MIID 那種紅斜條紋) */
+  .card-glass::before, .card-gold::before { display: none; }
+  .card-glass::after {
     content: "";
     position: absolute;
-    width: 14px; height: 14px;
-    border: 1px solid rgba(47, 93, 60, 0.55);
+    top: 0; right: 0; width: 34px; height: 34px;
+    background: repeating-linear-gradient(-45deg, #E62828 0 2px, transparent 2px 6px);
     pointer-events: none;
-    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .card-glass::before, .card-gold::before {
-    top: -1px; left: -1px;
-    border-right: none; border-bottom: none;
-  }
-  .card-glass::after, .card-gold::after {
-    bottom: -1px; right: -1px;
-    border-left: none; border-top: none;
-  }
-  .card-gold::before, .card-gold::after { border-color: rgba(31, 61, 38, 0.85); width: 18px; height: 18px; }
-
-  .glow-border { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
-  .glow-border:hover {
-    border-color: rgba(47, 93, 60, 0.55);
-    box-shadow:
-      0 0 0 1px rgba(47, 93, 60, 0.14),
-      0 24px 64px -28px rgba(47, 93, 60, 0.35);
-    transform: translateY(-3px);
-  }
-  .glow-border:hover::before, .glow-border:hover::after {
-    width: 22px; height: 22px;
-    border-color: rgba(31, 61, 38, 1);
-  }
-
-  /* ── 按鈕:實作 CTA ── */
-  .btn-primary {
-    background: linear-gradient(135deg, #5A8A44 0%, #3F6B2C 100%);
-    color: #FDFAF2;
-    border: 1px solid rgba(90, 138, 68, 0.35);
     transition: all 0.25s ease;
   }
+  .card-gold::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; width: 34px; height: 34px;
+    background: repeating-linear-gradient(-45deg, #E62828 0 2px, transparent 2px 6px);
+    pointer-events: none;
+    transition: all 0.25s ease;
+  }
+
+  .glow-border { transition: all 0.25s ease; }
+  .glow-border:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0 rgba(10,9,6,0.14);
+  }
+  .card-gold.glow-border:hover { box-shadow: 9px 9px 0 #E62828; }
+  .glow-border:hover::after {
+    width: 48px; height: 48px;
+  }
+
+  /* ══════════ 按鈕:黑底白字 + 紅 hover ══════════ */
+  .btn-primary {
+    background: #0A0906;
+    color: #FFFFFF;
+    border: 1.5px solid #0A0906;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #6DA351 0%, #5A8A44 100%);
-    box-shadow: 0 8px 28px rgba(90, 138, 68, 0.28);
-    transform: translateY(-2px);
+    background: #E62828;
+    border-color: #E62828;
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 #0A0906;
   }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
   .btn-gold {
-    background: linear-gradient(135deg, #3F6B2C 0%, #2F5D3C 45%, #1F3D26 100%);
-    color: #FDFAF2;
-    border: 1px solid rgba(47, 93, 60, 0.6);
+    background: #E62828;
+    color: #FFFFFF !important;
+    border: 1.5px solid #0A0906;
+    border-radius: 0;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.18);
+    transition: all 0.2s ease;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    box-shadow: 3px 3px 0 #0A0906;
+    text-shadow: none;
   }
-  .btn-gold::after {
-    content: "";
-    position: absolute; top: 0; left: -120%;
-    width: 60%; height: 100%;
-    background: linear-gradient(100deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
-    transform: skewX(-22deg);
-    transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-gold:hover::after { left: 130%; }
   .btn-gold:hover {
-    box-shadow: 0 10px 30px -6px rgba(47, 93, 60, 0.55);
-    transform: translateY(-2px);
+    background: #0A0906;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #E62828;
   }
+  .btn-gold::after { display: none; }
 
-  /* ── 標題深橄欖漸層字 ── */
+  /* ══════════ 標題:極黑,不用漸層 ══════════ */
   .gold-text {
-    background: linear-gradient(180deg, #5A8A44 0%, #2F5D3C 50%, #1F3D26 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: #0A0906;
+    font-weight: 900;
+    letter-spacing: -0.02em;
   }
+  /* 手動加紅色 accent 版本:.gold-text-red */
+  .accent-red { color: #E62828; }
+  .accent-black { color: #0A0906; }
 
-  /* ── 區塊小標:mono + 橄欖刻度線 ── */
+  /* ══════════ 區塊小標 · Mono 紅色 + 短紅線 ══════════ */
   .floating-line {
     display: inline-block;
-    width: 2.25rem; height: 1px;
-    background: linear-gradient(90deg, transparent, #2F5D3C 30%, #2F5D3C 70%, transparent);
+    width: 2.25rem; height: 3px;
+    background: #E62828;
     margin-right: 0.75rem;
     vertical-align: middle;
   }
   .section-eyebrow {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
-    color: #B8760F;
+    color: #E62828;
     font-size: 0.82rem;
     letter-spacing: 0.32em;
-    font-weight: 700;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  /* ══════════ MIID REKA 斜切平行四邊形 · 主要視覺裝置 ══════════ */
+  .slant-frame {
+    display: inline-block;
+    transform: skewX(-14deg);
+    background: #0A0906;
+    color: #FFFFFF;
+    padding: 0.5rem 2rem;
+    box-shadow: 4px 4px 0 #E62828;
+  }
+  .slant-frame > * { transform: skewX(14deg); display: inline-block; }
+  .slant-frame.red { background: #E62828; box-shadow: 4px 4px 0 #0A0906; }
+  .slant-frame.white { background: #FFFFFF; color: #0A0906; border: 1.5px solid #0A0906; box-shadow: 4px 4px 0 #E62828; }
+
+  /* 一整塊斜切:類似 MIID judge card */
+  .slant-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1.5px solid #0A0906;
+    transform: skewX(-8deg);
+    padding: 1.25rem 2.5rem;
+    box-shadow: 5px 5px 0 #0A0906;
+    transition: all 0.25s ease;
+  }
+  .slant-card > .content { transform: skewX(8deg); }
+  .slant-card:hover {
+    transform: skewX(-8deg) translate(-3px, -3px);
+    box-shadow: 8px 8px 0 #E62828;
+  }
+  .slant-card.dark { background: #0A0906; color: #FFFFFF; box-shadow: 5px 5px 0 #E62828; }
+  .slant-card.dark:hover { box-shadow: 8px 8px 0 #E62828; }
+
+  /* 紅斜條紋方塊(獨立裝飾用) */
+  .red-stripes {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      #E62828 0px, #E62828 5px,
+      transparent 5px, transparent 14px
+    );
   }
   .section-title {
     font-weight: 900;
@@ -264,7 +319,7 @@
     content: "";
     position: absolute;
     width: 26px; height: 26px;
-    border-color: rgba(47, 93, 60, 0.55);
+    border-color: rgba(10, 9, 6, 0.55);
     border-style: solid;
     border-width: 0;
   }
@@ -283,14 +338,14 @@
     font-weight: 700;
     font-size: 5.5rem;
     line-height: 0.85;
-    -webkit-text-stroke: 1px rgba(47, 93, 60, 0.55);
+    -webkit-text-stroke: 1px rgba(10, 9, 6, 0.55);
     color: transparent;
     letter-spacing: -0.04em;
   }
   .task-card { transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
   .task-card:hover .task-numeral {
-    -webkit-text-stroke-color: rgba(184, 118, 15, 1);
-    color: rgba(47, 93, 60, 0.08);
+    -webkit-text-stroke-color: rgba(230, 40, 40, 1);
+    color: rgba(10, 9, 6, 0.08);
   }
 
   /* ── AX 金字塔（立體 SVG · 捲動逐層組合 + 滑過高亮）── */
@@ -308,12 +363,12 @@
   }
   .ax-level.built { opacity: 1; transform: translateY(0); }
   .ax-level polygon, .ax-level text { transition: fill .3s ease, stroke .3s ease; }
-  .ax-apex { filter: drop-shadow(0 0 11px rgba(47, 93, 60,0.55)); }
-  .ax-level.active { filter: drop-shadow(0 0 22px rgba(47, 93, 60,0.85)); }
-  .ax-level.active .ax-front { fill: url(#axGoldFront); stroke: #5A8A44; stroke-opacity: 0.8; }
-  .ax-level.active .ax-top   { fill: url(#axGoldTop);   stroke: #5A8A44; stroke-opacity: 0.8; }
+  .ax-apex { filter: drop-shadow(0 0 11px rgba(10, 9, 6,0.55)); }
+  .ax-level.active { filter: drop-shadow(0 0 22px rgba(10, 9, 6,0.85)); }
+  .ax-level.active .ax-front { fill: url(#axGoldFront); stroke: #0A0906; stroke-opacity: 0.8; }
+  .ax-level.active .ax-top   { fill: url(#axGoldTop);   stroke: #0A0906; stroke-opacity: 0.8; }
   .ax-level.active .ax-txt-code,
-  .ax-level.active .ax-txt-name { fill: #FDFAF2; }
+  .ax-level.active .ax-txt-name { fill: #FFFFFF; }
   .ax-txt-code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-weight: 700; }
   .ax-txt-name { font-family: 'Noto Sans TC', system-ui, sans-serif; font-weight: 700; }
   @media (max-width: 1023px) {
@@ -351,14 +406,14 @@
     display: flex; align-items: center; justify-content: center;
     border-radius: 9999px;
     background: rgba(20, 16, 10, 0.88);
-    border: 1px solid rgba(47, 93, 60, 0.45);
-    color: #B8760F;
+    border: 1px solid rgba(10, 9, 6, 0.45);
+    color: #E62828;
     font-size: 1.05rem; font-weight: 700; line-height: 1;
     cursor: pointer; z-index: 5;
     backdrop-filter: blur(4px);
     transition: opacity .25s ease, background .25s ease, border-color .25s ease;
   }
-  .cohort-arrow:hover { background: rgba(47, 93, 60, 0.22); border-color: rgba(184, 118, 15, 0.9); }
+  .cohort-arrow:hover { background: rgba(10, 9, 6, 0.22); border-color: rgba(230, 40, 40, 0.9); }
   .cohort-arrow.prev { left: 0; }
   .cohort-arrow.next { right: 0; }
   .cohort-arrow:disabled { opacity: 0; pointer-events: none; }
@@ -366,7 +421,7 @@
   /* ── 表單 ── */
   .form-input {
     background: rgba(8, 7, 12, 0.8);
-    border: 1px solid rgba(47, 93, 60, 0.22);
+    border: 1px solid rgba(10, 9, 6, 0.22);
     color: #F2EFE6;
     transition: all 0.2s ease;
     border-radius: 8px;
@@ -375,9 +430,9 @@
   .form-input::placeholder { color: rgba(231, 225, 210, 0.32); }
   .form-input:focus {
     outline: none;
-    border-color: #B8760F;
+    border-color: #E62828;
     background: rgba(8, 7, 12, 0.95);
-    box-shadow: 0 0 0 3px rgba(47, 93, 60, 0.18);
+    box-shadow: 0 0 0 3px rgba(10, 9, 6, 0.18);
   }
   .form-input.error {
     border-color: #E26B5C;
@@ -400,10 +455,10 @@
     position: absolute;
     left: 0; bottom: -6px;
     width: 0; height: 1px;
-    background: #B8760F;
+    background: #E62828;
     transition: width 0.3s ease;
   }
-  .nav-link:hover { color: #B8760F; }
+  .nav-link:hover { color: #E62828; }
   .nav-link:hover::after { width: 100%; }
 
   /* ── FAQ ── */
@@ -424,20 +479,20 @@
     letter-spacing: 0.4em;
     font-size: 0.95rem;
     box-shadow:
-      -6px 0 32px -8px rgba(47, 93, 60, 0.55),
-      inset 0 0 0 1px rgba(184, 118, 15, 0.4);
+      -6px 0 32px -8px rgba(10, 9, 6, 0.55),
+      inset 0 0 0 1px rgba(230, 40, 40, 0.4);
     animation: ctaPulse 3s ease-in-out infinite;
   }
   @keyframes ctaPulse {
     0%, 100% {
       box-shadow:
-        -6px 0 28px -10px rgba(47, 93, 60, 0.45),
-        inset 0 0 0 1px rgba(184, 118, 15, 0.4);
+        -6px 0 28px -10px rgba(10, 9, 6, 0.45),
+        inset 0 0 0 1px rgba(230, 40, 40, 0.4);
     }
     50% {
       box-shadow:
-        -6px 0 40px -6px rgba(184, 118, 15, 0.85),
-        inset 0 0 0 1px rgba(184, 118, 15, 0.7);
+        -6px 0 40px -6px rgba(230, 40, 40, 0.85),
+        inset 0 0 0 1px rgba(230, 40, 40, 0.7);
     }
   }
   @media (max-width: 640px) {
@@ -468,7 +523,7 @@
   /* ── Hero 主視覺光暈 ── */
   .hero-photo-glow {
     position: absolute; inset: -12% -10% -16% -10%;
-    background: radial-gradient(ellipse at center, rgba(47, 93, 60,0.42) 0%, rgba(47, 93, 60,0.12) 46%, transparent 72%);
+    background: radial-gradient(ellipse at center, rgba(10, 9, 6,0.42) 0%, rgba(10, 9, 6,0.12) 46%, transparent 72%);
     filter: blur(32px);
     z-index: 0;
   }
@@ -498,7 +553,7 @@
   .hero-corner {
     position: absolute;
     width: 56px; height: 56px;
-    border: 1px solid rgba(47, 93, 60, 0.5);
+    border: 1px solid rgba(10, 9, 6, 0.5);
     pointer-events: none;
   }
   .hero-corner.tl { top: -12px; left: -12px; border-right: none; border-bottom: none; }
@@ -511,11 +566,11 @@
     gap: 0.6rem;
     font-size: 0.72rem;
     letter-spacing: 0.32em;
-    color: #B8760F;
+    color: #E62828;
     padding: 0.4rem 0.85rem;
-    border: 1px solid rgba(47, 93, 60, 0.32);
+    border: 1px solid rgba(10, 9, 6, 0.32);
     border-radius: 999px;
-    background: rgba(47, 93, 60, 0.05);
+    background: rgba(10, 9, 6, 0.05);
   }
 
   /* ── 統編輸入區裝飾 ── */
@@ -525,8 +580,8 @@
     gap: 0.5rem;
     font-size: 0.78rem;
     letter-spacing: 0.24em;
-    color: #FDFAF2;
-    background: linear-gradient(135deg, #B8760F 0%, #2F5D3C 100%);
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #E62828 0%, #0A0906 100%);
     padding: 0.35rem 0.95rem;
     border-radius: 999px;
     font-weight: 800;
@@ -538,9 +593,9 @@
     margin-top: 8px;
   }
   .tick-row span {
-    flex: 1; height: 2px; background: rgba(47, 93, 60, 0.18);
+    flex: 1; height: 2px; background: rgba(10, 9, 6, 0.18);
   }
-  .tick-row span.on { background: linear-gradient(90deg, #B8760F, #2F5D3C); }
+  .tick-row span.on { background: linear-gradient(90deg, #E62828, #0A0906); }
 
   @media (max-width: 640px) {
     .hero-title { font-size: 2.5rem !important; }
@@ -556,51 +611,144 @@
 <body class="gold-glow-bg min-h-screen">
 
 <!-- ════════ NAV ════════ -->
-<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-cream-100/85 border-b border-gold/15">
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/95 border-b-2 border-ink-900">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <img src="assets/logo.png" alt="虎智科技 TigerAI" class="w-9 h-9 object-contain">
       <div class="leading-tight">
-        <div class="text-ink-900 font-bold text-sm sm:text-base tracking-wide">虎智科技 <span class="mono text-gold-light text-xs">TigerAI</span></div>
-        <div class="text-[10px] sm:text-[11px] text-gold-light/70 tracking-widest">在職菁英 · 感測 / 機械產業</div>
+        <div class="text-ink-900 font-black text-sm sm:text-base tracking-wide">虎智科技 <span class="mono text-rd text-xs font-bold">TigerAI</span></div>
+        <div class="text-[10px] sm:text-[11px] text-ink-600 tracking-widest font-mono uppercase">In-Service Elite</div>
       </div>
     </div>
-    <div class="hidden md:flex items-center gap-7 text-sm text-ink-700">
-      <a href="https://www.tigerai.info/category/all-products" target="_blank" rel="noopener" class="nav-link">虎智學習中心 ↗</a>
-      <a href="#why" class="nav-link">為什麼上課</a>
-      <a href="#tasks" class="nav-link">課程架構</a>
-      <a href="#cohorts" class="nav-link">梯次</a>
-      <a href="#signup" class="btn-gold px-4 py-2 rounded-lg font-bold text-xs tracking-[0.3em]">立即報名</a>
+    <div class="hidden md:flex items-center gap-6 text-sm text-ink-900 font-bold">
+      <a href="https://www.tigerai.info/category/all-products" target="_blank" rel="noopener" class="nav-link uppercase text-xs tracking-widest hover:text-rd transition">虎智學習中心 ↗</a>
+      <a href="#why" class="nav-link uppercase text-xs tracking-widest hover:text-rd transition">Why</a>
+      <a href="#tasks" class="nav-link uppercase text-xs tracking-widest hover:text-rd transition">Course</a>
+      <a href="#cohorts" class="nav-link uppercase text-xs tracking-widest hover:text-rd transition">Cohort</a>
+      <a href="#signup" class="btn-gold px-5 py-2.5 font-black text-xs tracking-[0.24em]">立即報名</a>
     </div>
-    <a href="#signup" class="md:hidden btn-gold px-3 py-2 rounded-lg text-sm font-bold">報名</a>
+    <a href="#signup" class="md:hidden btn-gold px-4 py-2 text-sm font-black">報名</a>
   </div>
 </nav>
 
-<!-- ════════ HERO ════════ -->
-<section class="pt-32 pb-16 sm:pt-36 sm:pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-  <div class="gold-orb w-96 h-96 top-0 right-0 animate-float-slow"></div>
-  <div class="gold-orb w-72 h-72 bottom-0 left-0 animate-float-slow" style="animation-delay:-3s"></div>
+<!-- ════════ HERO · MIID REKA 風格 ════════ -->
+<section class="pt-32 pb-16 sm:pt-36 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <!-- 紅斜條紋角落裝飾(MIID 那種) -->
+  <div class="absolute -top-8 right-0 w-64 h-40 red-stripes opacity-70 transform rotate-6 hidden md:block"></div>
+  <div class="absolute -bottom-4 left-0 w-40 h-24 red-stripes opacity-60 transform -rotate-3 hidden md:block"></div>
 
-  <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
-    <!-- 製造業風格主視覺：桌機在左、手機排在文字下方 -->
-    <div class="relative flex justify-center lg:justify-start lg:col-span-6 order-2 lg:order-1">
-      <div class="relative w-72 sm:w-96 lg:w-full lg:max-w-xl aspect-square">
-        <div class="hero-photo-glow"></div>
-        <span class="hero-corner tl"></span>
-        <span class="hero-corner br"></span>
-        <!-- Hero SVG:6 個模組聚合到 1 個 AI 中樞,3 個成果從中放射出來(藍圖風) -->
-        <svg viewBox="0 0 600 600" class="hero-photo relative z-10 w-full h-full" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="在職菁英課程主視覺 · 6 模組 3 成果">
+  <div class="max-w-6xl mx-auto relative grid lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+
+    <!-- 左邊:大黑字堆疊(MIID 主標)-->
+    <div class="lg:col-span-6 order-1">
+      <!-- 小 red mono 標籤 -->
+      <div class="flex items-center gap-2 mb-6 animate-fade-in">
+        <span class="block w-8 h-1 bg-rd"></span>
+        <span class="font-mono text-[11px] tracking-[0.32em] font-bold text-rd uppercase">In-Service Elite · 2026</span>
+      </div>
+
+      <!-- 主標:大黑字直堆疊 -->
+      <h1 class="hero-title font-black text-ink-900 leading-[0.92] mb-6 animate-fade-in-up" style="font-size: clamp(2.5rem, 6vw, 4.5rem); letter-spacing: -0.03em;">
+        AI<br>
+        MACHINERY<br>
+        <span class="text-rd">COURSE</span><br>
+        2026
+      </h1>
+
+      <!-- 中文標題(次級)-->
+      <h2 class="text-ink-900 text-2xl sm:text-3xl font-black mb-4 tracking-tight leading-tight">
+        用 AI 做出<br>機械業自己的工具
+      </h2>
+
+      <!-- 紅線 + 副標 -->
+      <div class="flex items-start gap-3 mb-6">
+        <span class="block w-12 h-1 bg-rd mt-3 shrink-0"></span>
+        <p class="text-ink-700 text-base sm:text-lg font-bold tracking-wide leading-snug">
+          30 小時 · 4 天完成 · <span class="text-rd">完全免費</span>
+        </p>
+      </div>
+
+      <!-- 站腳資訊 -->
+      <div class="border-t border-ink-900 pt-4 mb-6 max-w-md">
+        <div class="text-ink-600 text-xs font-mono tracking-widest uppercase mb-2">Ministry / Sponsor</div>
+        <div class="text-ink-900 text-sm font-bold">經濟部產業發展署 · 115 年度政府辦理培訓</div>
+      </div>
+
+      <!-- CTA -->
+      <div class="flex flex-wrap gap-3">
+        <a href="#signup" class="btn-gold px-8 py-4 font-black text-sm tracking-[0.2em] uppercase inline-block">立即報名 →</a>
+        <a href="#tasks" class="inline-block px-6 py-4 border-2 border-ink-900 text-ink-900 font-bold text-sm tracking-[0.16em] hover:bg-ink-900 hover:text-white transition uppercase">看課綱</a>
+      </div>
+    </div>
+
+    <!-- 右邊:斜切平行四邊形 · 3 個成果 panel(仿 MIID judge grid)-->
+    <div class="lg:col-span-6 order-2 lg:pl-8 pt-4 lg:pt-16">
+      <div class="mb-6">
+        <div class="font-mono text-[11px] tracking-[0.32em] text-rd font-bold uppercase">Outcome Panel</div>
+        <div class="text-ink-900 font-black text-xl mt-1">你帶走的 3 個成果</div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- 成果 01 -->
+        <div class="slant-card group">
+          <div class="content flex items-center gap-5">
+            <div class="text-5xl sm:text-6xl font-black text-ink-900 leading-none">01</div>
+            <div>
+              <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-1">Content Ops</div>
+              <div class="text-ink-900 font-black text-base leading-tight">AI 內容產出</div>
+              <div class="text-ink-600 text-xs mt-1">貼文 / 圖片 / 短影音自動化</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 成果 02 · dark 反色版(核心) -->
+        <div class="slant-card dark group">
+          <div class="content flex items-center gap-5">
+            <div class="text-5xl sm:text-6xl font-black text-white leading-none">02</div>
+            <div>
+              <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-1">★ Core · AI Agent</div>
+              <div class="font-black text-base leading-tight">企業自己的 AI 工具</div>
+              <div class="text-white/70 text-xs mt-1">SDD + Low-Code · 3 天做完</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 成果 03 -->
+        <div class="slant-card group">
+          <div class="content flex items-center gap-5">
+            <div class="text-5xl sm:text-6xl font-black text-ink-900 leading-none">03</div>
+            <div>
+              <div class="font-mono text-[10px] tracking-[0.24em] text-rd font-bold uppercase mb-1">Department RAG</div>
+              <div class="text-ink-900 font-black text-base leading-tight">部門級知識庫</div>
+              <div class="text-ink-600 text-xs mt-1">RAG + MCP · 跨系統串接</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部小 caption -->
+      <div class="mt-6 flex items-center gap-2">
+        <span class="block w-6 h-px bg-ink-900"></span>
+        <span class="font-mono text-[10px] tracking-[0.24em] text-ink-600 uppercase">感測 / 機械產業 · 30 hours</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ 舊 Hero SVG 隱藏(保留備用)════════ -->
+<div class="hidden">
+        <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="舊版藍圖 SVG(隱藏)">
           <defs>
             <linearGradient id="oliveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#5A8A44"/>
-              <stop offset="100%" stop-color="#1F3D26"/>
+              <stop offset="0%" stop-color="#0A0906"/>
+              <stop offset="100%" stop-color="#0A0906"/>
             </linearGradient>
             <linearGradient id="mustardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#D89928"/>
-              <stop offset="100%" stop-color="#8C5A0A"/>
+              <stop offset="0%" stop-color="#E62828"/>
+              <stop offset="100%" stop-color="#B01414"/>
             </linearGradient>
             <pattern id="blueprintGrid" width="24" height="24" patternUnits="userSpaceOnUse">
-              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(47,93,60,0.08)" stroke-width="0.6"/>
+              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="rgba(10, 9, 6,0.08)" stroke-width="0.6"/>
             </pattern>
             <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
@@ -614,73 +762,73 @@
           <rect x="0" y="0" width="600" height="600" fill="url(#blueprintGrid)"/>
 
           <!-- 外環 · 大三格弧線(3 個成果區) -->
-          <g fill="none" stroke="rgba(47,93,60,0.18)" stroke-width="1">
+          <g fill="none" stroke="rgba(10, 9, 6,0.18)" stroke-width="1">
             <circle cx="300" cy="300" r="270" stroke-dasharray="3 8"/>
             <circle cx="300" cy="300" r="215"/>
           </g>
 
           <!-- 標題角落 · 藍圖式 -->
-          <g fill="#5A8A44" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.20em">
+          <g fill="#0A0906" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.20em">
             <text x="40" y="52">115 · 在職菁英</text>
-            <line x1="40" y1="60" x2="200" y2="60" stroke="#5A8A44" stroke-width="0.6"/>
+            <line x1="40" y1="60" x2="200" y2="60" stroke="#0A0906" stroke-width="0.6"/>
             <text x="40" y="76" font-size="8" fill="#7A7367" letter-spacing="0.16em">感測 / 機械產業 · 30h</text>
           </g>
-          <g fill="rgba(47,93,60,0.6)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="0.18em" text-anchor="end">
+          <g fill="rgba(10, 9, 6,0.6)" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="0.18em" text-anchor="end">
             <text x="560" y="558">6 模組 · 3 成果</text>
-            <line x1="440" y1="548" x2="560" y2="548" stroke="rgba(47,93,60,0.6)" stroke-width="0.6"/>
+            <line x1="440" y1="548" x2="560" y2="548" stroke="rgba(10, 9, 6,0.6)" stroke-width="0.6"/>
           </g>
 
           <!-- 中央 AI Agent 樞紐 -->
           <g transform="translate(300, 300)" filter="url(#softShadow)">
-            <circle r="72" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="2.4"/>
-            <circle r="55" fill="none" stroke="rgba(47,93,60,0.2)" stroke-width="1" stroke-dasharray="2 4"/>
+            <circle r="72" fill="#FFFFFF" stroke="url(#oliveGrad)" stroke-width="2.4"/>
+            <circle r="55" fill="none" stroke="rgba(10, 9, 6,0.2)" stroke-width="1" stroke-dasharray="2 4"/>
             <circle r="16" fill="url(#oliveGrad)"/>
-            <text y="4" text-anchor="middle" fill="#FDFAF2" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">AI</text>
-            <text y="52" text-anchor="middle" fill="#2F5D3C" font-family="Noto Sans TC" font-size="12" font-weight="700">Agent 樞紐</text>
+            <text y="4" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700">AI</text>
+            <text y="52" text-anchor="middle" fill="#0A0906" font-family="Noto Sans TC" font-size="12" font-weight="700">Agent 樞紐</text>
           </g>
 
           <!-- 6 個模組(內圈,環繞中央) -->
           <g font-family="Noto Sans TC" font-size="11" font-weight="600" text-anchor="middle">
             <!-- 模組 1 · 上 -->
             <g transform="translate(300, 145)" filter="url(#softShadow)">
-              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
-              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 1</text>
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FFFFFF" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#0A0906" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 1</text>
               <text y="15" fill="#28221C">AI 文案圖片</text>
             </g>
             <!-- 模組 2 · 右上 -->
             <g transform="translate(465, 200)" filter="url(#softShadow)">
-              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
-              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 2</text>
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FFFFFF" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#0A0906" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 2</text>
               <text y="15" fill="#28221C">圖像 · 短影音</text>
             </g>
             <!-- 模組 3 · 右下 -->
             <g transform="translate(465, 400)" filter="url(#softShadow)">
-              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
-              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 3</text>
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FFFFFF" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#0A0906" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 3</text>
               <text y="15" fill="#28221C">生成式發表</text>
             </g>
             <!-- 模組 4 · 下(核心)-->
             <g transform="translate(300, 455)" filter="url(#softShadow)">
-              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#F7EEDA" stroke="url(#mustardGrad)" stroke-width="2.2"/>
-              <text y="-3" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 4 · 核心</text>
+              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#FFFFFF" stroke="url(#mustardGrad)" stroke-width="2.2"/>
+              <text y="-3" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 4 · 核心</text>
               <text y="15" fill="#28221C" font-weight="700">SDD + Low-Code</text>
             </g>
             <!-- 模組 5 · 左下(核心)-->
             <g transform="translate(135, 400)" filter="url(#softShadow)">
-              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#F7EEDA" stroke="url(#mustardGrad)" stroke-width="2.2"/>
-              <text y="-3" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 5 · 核心</text>
+              <rect x="-60" y="-24" width="120" height="48" rx="8" fill="#FFFFFF" stroke="url(#mustardGrad)" stroke-width="2.2"/>
+              <text y="-3" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">★ 模組 5 · 核心</text>
               <text y="15" fill="#28221C" font-weight="700">RAG + MCP</text>
             </g>
             <!-- 模組 6 · 左上 -->
             <g transform="translate(135, 200)" filter="url(#softShadow)">
-              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FDFAF2" stroke="url(#oliveGrad)" stroke-width="1.6"/>
-              <text y="-3" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 6</text>
+              <rect x="-56" y="-24" width="112" height="48" rx="8" fill="#FFFFFF" stroke="url(#oliveGrad)" stroke-width="1.6"/>
+              <text y="-3" fill="#0A0906" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">模組 6</text>
               <text y="15" fill="#28221C">Agent 發表</text>
             </g>
           </g>
 
           <!-- 6 個模組 → 中央的細連線 -->
-          <g stroke="rgba(47,93,60,0.35)" stroke-width="1.2" fill="none" stroke-dasharray="3 4">
+          <g stroke="rgba(10, 9, 6,0.35)" stroke-width="1.2" fill="none" stroke-dasharray="3 4">
             <line x1="300" y1="169" x2="300" y2="228"/>
             <line x1="411" y1="212" x2="358" y2="256"/>
             <line x1="411" y1="388" x2="358" y2="344"/>
@@ -690,7 +838,7 @@
           </g>
 
           <!-- 資料流節點 -->
-          <g fill="#B8760F">
+          <g fill="#E62828">
             <circle cx="300" cy="200" r="3">
               <animate attributeName="r" values="3;5;3" dur="3s" repeatCount="indefinite"/>
             </circle>
@@ -708,51 +856,28 @@
             <g transform="translate(535, 300)">
               <line x1="-40" y1="0" x2="0" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
               <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
-              <text x="-46" y="-4" text-anchor="end" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 01</text>
+              <text x="-46" y="-4" text-anchor="end" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 01</text>
               <text x="-46" y="12" text-anchor="end" fill="#28221C">AI 內容產出</text>
             </g>
             <!-- 成果 2 · 左下 -->
             <g transform="translate(65, 470)">
               <line x1="0" y1="0" x2="40" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
               <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
-              <text x="46" y="-4" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 02</text>
+              <text x="46" y="-4" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 02</text>
               <text x="46" y="12" fill="#28221C">企業 AI 工具</text>
             </g>
             <!-- 成果 3 · 右下 -->
             <g transform="translate(535, 470)">
               <line x1="-40" y1="0" x2="0" y2="0" stroke="url(#mustardGrad)" stroke-width="1.4"/>
               <circle cx="0" cy="0" r="6" fill="url(#mustardGrad)"/>
-              <text x="-46" y="-4" text-anchor="end" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 03</text>
+              <text x="-46" y="-4" text-anchor="end" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" letter-spacing="0.14em">成果 03</text>
               <text x="-46" y="12" text-anchor="end" fill="#28221C">部門 RAG 知識庫</text>
             </g>
           </g>
 
         </svg>
-      </div>
-    </div>
-
-    <!-- 文字：手機排在最上方 -->
-    <div class="text-center lg:text-left lg:col-span-6 order-1 lg:order-2">
-      <div class="flex flex-wrap justify-center lg:justify-start items-center gap-2 mb-5 animate-fade-in">
-        <span class="chapter-tag"><span class="w-1.5 h-1.5 rounded-full bg-gold-light"></span>感測 / 機械產業</span>
-        <span class="text-[11px] text-ink-500 tracking-[0.3em]">30 小時 · 政府辦理培訓</span>
-      </div>
-      <h1 class="hero-title text-5xl sm:text-6xl md:text-7xl text-ink-900 mb-5 animate-fade-in-up">
-        用 AI 做出<br>
-        <span class="gold-text">機械業自己的工具</span>
-      </h1>
-      <div class="flex items-center gap-3 justify-center lg:justify-start mb-6">
-        <span class="block w-12 h-px bg-gold shrink-0"></span>
-        <p class="text-gold-light text-sm sm:text-base tracking-[0.15em]">30 小時實戰 ・ 4 天完成 ・ 完全免費</p>
-      </div>
-      <p class="text-base sm:text-lg text-ink-700 animate-fade-in-up max-w-xl mx-auto lg:mx-0 leading-relaxed">
-        30 小時實戰，把 <span class="text-gold-light font-bold">Low-Code、RAG、AI Agent</span> 帶回工廠——<br class="hidden sm:block">
-        產出公司自己的行銷內容、做出企業自己的 AI 工具、打造部門級的知識庫。<br class="hidden sm:block">
-        <span class="text-gold-light font-bold">經濟部產業發展署</span> 115 年度在職菁英課程 · 政府辦理培訓。
-      </p>
-    </div>
-  </div>
-</section>
+</div>
+<!-- /隱藏舊 Hero SVG -->
 
 <!-- ════════ 為什麼要上這堂課 ════════ -->
 <section id="why" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
@@ -914,7 +1039,7 @@
 
       <div class="card-gold task-card p-7 sm:p-9 glow-border reveal from-right" data-level="3">
         <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
-          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(184, 118, 15,0.9); color: rgba(47, 93, 60,0.08);">04</div>
+          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(230, 40, 40,0.9); color: rgba(10, 9, 6,0.08);">04</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">★ 模組 4 ・ 6 小時 ・ 核心</div>
             <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">用 AI 做出企業自己的工具 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
@@ -929,7 +1054,7 @@
 
       <div class="card-gold task-card p-7 sm:p-9 glow-border reveal from-left" data-level="4">
         <div class="grid grid-cols-[auto_1fr] gap-6 sm:gap-8 items-start">
-          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(184, 118, 15,0.9); color: rgba(47, 93, 60,0.08);">05</div>
+          <div class="task-numeral" style="-webkit-text-stroke-color: rgba(230, 40, 40,0.9); color: rgba(10, 9, 6,0.08);">05</div>
           <div>
             <div class="text-gold-light text-[11px] tracking-[0.32em] mb-2">★ 模組 5 ・ 6 小時 ・ 核心</div>
             <h3 class="text-xl sm:text-2xl font-bold text-ink-900 mb-3">部門級 AI 導入架構 <span class="text-gold-light text-sm font-medium">(核心)</span></h3>
@@ -966,66 +1091,66 @@
         <svg class="ax-pyramid" viewBox="0 0 340 700" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <linearGradient id="oliveNode" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#7CA85F"/><stop offset="1" stop-color="#2F5D3C"/>
+              <stop offset="0" stop-color="#E62828"/><stop offset="1" stop-color="#0A0906"/>
             </linearGradient>
             <linearGradient id="mustardCore" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#D89928"/><stop offset="1" stop-color="#8C5A0A"/>
+              <stop offset="0" stop-color="#E62828"/><stop offset="1" stop-color="#B01414"/>
             </linearGradient>
           </defs>
 
           <!-- 中央垂直軸(旅程主線) -->
-          <line x1="170" y1="60" x2="170" y2="640" stroke="rgba(47,93,60,0.25)" stroke-width="2" stroke-dasharray="3 6"/>
+          <line x1="170" y1="60" x2="170" y2="640" stroke="rgba(10, 9, 6,0.25)" stroke-width="2" stroke-dasharray="3 6"/>
 
           <!-- 模組 1 · 起點(底部)-->
           <g class="ax-level" data-level="1">
-            <line x1="170" y1="605" x2="230" y2="605" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
-            <circle cx="170" cy="605" r="14" fill="#FDFAF2" stroke="url(#oliveNode)" stroke-width="2.5"/>
-            <text x="170" y="609" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#2F5D3C">01</text>
+            <line x1="170" y1="605" x2="230" y2="605" stroke="rgba(10, 9, 6,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="605" r="14" fill="#FFFFFF" stroke="url(#oliveNode)" stroke-width="2.5"/>
+            <text x="170" y="609" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#0A0906">01</text>
             <text x="242" y="602" font-size="12" font-weight="700" fill="#28221C">AI 文案圖片</text>
             <text x="242" y="618" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 1 · 6h</text>
           </g>
 
           <!-- 模組 2 -->
           <g class="ax-level" data-level="2">
-            <line x1="170" y1="510" x2="230" y2="510" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
-            <circle cx="170" cy="510" r="14" fill="#FDFAF2" stroke="url(#oliveNode)" stroke-width="2.5"/>
-            <text x="170" y="514" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#2F5D3C">02</text>
+            <line x1="170" y1="510" x2="230" y2="510" stroke="rgba(10, 9, 6,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="510" r="14" fill="#FFFFFF" stroke="url(#oliveNode)" stroke-width="2.5"/>
+            <text x="170" y="514" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#0A0906">02</text>
             <text x="242" y="507" font-size="12" font-weight="700" fill="#28221C">圖像 · 短影音</text>
             <text x="242" y="523" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 2 · 6h</text>
           </g>
 
           <!-- 模組 3(小發表 · 稍淡色)-->
           <g class="ax-level" data-level="3">
-            <line x1="170" y1="415" x2="230" y2="415" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
-            <circle cx="170" cy="415" r="11" fill="#FDFAF2" stroke="rgba(47,93,60,0.55)" stroke-width="2" stroke-dasharray="3 3"/>
-            <text x="170" y="419" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" fill="#3F6B2C">03</text>
+            <line x1="170" y1="415" x2="230" y2="415" stroke="rgba(10, 9, 6,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="415" r="11" fill="#FFFFFF" stroke="rgba(10, 9, 6,0.55)" stroke-width="2" stroke-dasharray="3 3"/>
+            <text x="170" y="419" text-anchor="middle" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700" fill="#B01414">03</text>
             <text x="242" y="412" font-size="12" font-weight="600" fill="#3F3830">生成式發表</text>
             <text x="242" y="428" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 3 · 3h · 專題</text>
           </g>
 
           <!-- 模組 4 · 核心 -->
           <g class="ax-level" data-level="4">
-            <line x1="170" y1="315" x2="230" y2="315" stroke="rgba(184,118,15,0.55)" stroke-width="1.4"/>
-            <circle cx="170" cy="315" r="18" fill="#F7EEDA" stroke="url(#mustardCore)" stroke-width="3"/>
+            <line x1="170" y1="315" x2="230" y2="315" stroke="rgba(230, 40, 40,0.55)" stroke-width="1.4"/>
+            <circle cx="170" cy="315" r="18" fill="#FFFFFF" stroke="url(#mustardCore)" stroke-width="3"/>
             <polygon points="170,299 172,306 179,306 173.5,311 175.5,318 170,313 164.5,318 166.5,311 161,306 168,306" fill="url(#mustardCore)"/>
-            <text x="242" y="311" font-size="12" font-weight="900" fill="#8C5A0A">★ SDD + Low-Code</text>
+            <text x="242" y="311" font-size="12" font-weight="900" fill="#B01414">★ SDD + Low-Code</text>
             <text x="242" y="327" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 4 · 6h · 核心</text>
           </g>
 
           <!-- 模組 5 · 核心 -->
           <g class="ax-level" data-level="5">
-            <line x1="170" y1="215" x2="230" y2="215" stroke="rgba(184,118,15,0.55)" stroke-width="1.4"/>
-            <circle cx="170" cy="215" r="18" fill="#F7EEDA" stroke="url(#mustardCore)" stroke-width="3"/>
+            <line x1="170" y1="215" x2="230" y2="215" stroke="rgba(230, 40, 40,0.55)" stroke-width="1.4"/>
+            <circle cx="170" cy="215" r="18" fill="#FFFFFF" stroke="url(#mustardCore)" stroke-width="3"/>
             <polygon points="170,199 172,206 179,206 173.5,211 175.5,218 170,213 164.5,218 166.5,211 161,206 168,206" fill="url(#mustardCore)"/>
-            <text x="242" y="211" font-size="12" font-weight="900" fill="#8C5A0A">★ RAG + MCP</text>
+            <text x="242" y="211" font-size="12" font-weight="900" fill="#B01414">★ RAG + MCP</text>
             <text x="242" y="227" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 5 · 6h · 核心</text>
           </g>
 
           <!-- 模組 6 · 頂端(結業)-->
           <g class="ax-level" data-level="6">
-            <line x1="170" y1="120" x2="230" y2="120" stroke="rgba(47,93,60,0.4)" stroke-width="1"/>
-            <circle cx="170" cy="120" r="14" fill="#2F5D3C" stroke="#1F3D26" stroke-width="2.5"/>
-            <text x="170" y="124" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#FDFAF2">06</text>
+            <line x1="170" y1="120" x2="230" y2="120" stroke="rgba(10, 9, 6,0.4)" stroke-width="1"/>
+            <circle cx="170" cy="120" r="14" fill="#0A0906" stroke="#0A0906" stroke-width="2.5"/>
+            <text x="170" y="124" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="#FFFFFF">06</text>
             <text x="242" y="117" font-size="12" font-weight="700" fill="#28221C">Agent 發表</text>
             <text x="242" y="133" font-size="10" fill="#5B5449" font-family="JetBrains Mono, monospace" letter-spacing="0.06em">模組 6 · 3h · 結業</text>
           </g>
@@ -1042,8 +1167,8 @@
 
           <!-- 頂端徽記 -->
           <g transform="translate(170, 45)">
-            <circle r="20" fill="#FDFAF2" stroke="url(#mustardCore)" stroke-width="1.6" stroke-dasharray="2 3"/>
-            <text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#8C5A0A" font-family="JetBrains Mono, monospace">30h</text>
+            <circle r="20" fill="#FFFFFF" stroke="url(#mustardCore)" stroke-width="1.6" stroke-dasharray="2 3"/>
+            <text y="4" text-anchor="middle" font-size="11" font-weight="800" fill="#B01414" font-family="JetBrains Mono, monospace">30h</text>
           </g>
 
           <!-- 底部 base -->
@@ -1060,12 +1185,12 @@
 
 <!-- ════════ U4 三條自動化流程 詳細展開 ════════ -->
 <style>
-  .flow-card { background: linear-gradient(180deg, rgba(253,250,242,0.7) 0%, rgba(246,241,228,0.9) 100%); border: 1px solid rgba(47, 93, 60,0.32); border-radius: 14px; }
-  .flow-pain { background: rgba(47, 93, 60,0.06); border-left: 3px solid #2F5D3C; padding: 12px 16px; border-radius: 0 8px 8px 0; }
-  .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(47, 93, 60,0.32); padding: 14px 16px; border-radius: 10px; }
+  .flow-card { background: linear-gradient(180deg, rgba(255, 255, 255,0.7) 0%, rgba(251, 248, 241,0.9) 100%); border: 1px solid rgba(10, 9, 6,0.32); border-radius: 14px; }
+  .flow-pain { background: rgba(10, 9, 6,0.06); border-left: 3px solid #0A0906; padding: 12px 16px; border-radius: 0 8px 8px 0; }
+  .flow-story { background: rgba(255,255,255,0.025); border: 1px dashed rgba(10, 9, 6,0.32); padding: 14px 16px; border-radius: 10px; }
   .flow-checklist li { display:flex; gap:10px; align-items:flex-start; }
-  .flow-checklist li::before { content:'✓'; color:#B8760F; font-weight:900; flex-shrink:0; margin-top:2px; }
-  .flow-svg { background: radial-gradient(ellipse at center, rgba(47, 93, 60,0.08) 0%, rgba(246,241,228,0) 70%); border-radius: 12px; }
+  .flow-checklist li::before { content:'✓'; color:#E62828; font-weight:900; flex-shrink:0; margin-top:2px; }
+  .flow-svg { background: radial-gradient(ellipse at center, rgba(10, 9, 6,0.08) 0%, rgba(251, 248, 241,0) 70%); border-radius: 12px; }
 </style>
 <section class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
   <div class="max-w-6xl mx-auto">
@@ -1111,14 +1236,14 @@
         <div class="lg:col-span-5">
           <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI 內容產出流程圖">
             <defs>
-              <linearGradient id="flowA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
-              <linearGradient id="flowAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
+              <linearGradient id="flowA" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
+              <linearGradient id="flowAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
             </defs>
 
             <!-- Step 1: 主題 / 提示詞輸入 -->
             <g transform="translate(30, 130)">
-              <rect x="0" y="0" width="86" height="60" rx="8" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.8"/>
-              <text x="43" y="24" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">主題</text>
+              <rect x="0" y="0" width="86" height="60" rx="8" fill="#FFFFFF" stroke="url(#flowA)" stroke-width="1.8"/>
+              <text x="43" y="24" text-anchor="middle" fill="#0A0906" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">主題</text>
               <text x="43" y="42" text-anchor="middle" fill="#5B5449" font-size="9">「新設備上市」</text>
               <text x="43" y="78" text-anchor="middle" fill="#7A7367" font-size="9" font-family="JetBrains Mono, monospace">你只給關鍵字</text>
             </g>
@@ -1128,14 +1253,14 @@
               <line x1="122" y1="160" x2="160" y2="160" stroke-dasharray="4 4"/>
               <polygon points="160,155 170,160 160,165" fill="url(#flowA)"/>
             </g>
-            <text x="141" y="150" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace">提示詞</text>
+            <text x="141" y="150" text-anchor="middle" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace">提示詞</text>
 
             <!-- Step 2: AI 生成引擎 -->
             <g transform="translate(170, 120)">
-              <rect x="0" y="0" width="80" height="80" rx="12" fill="#F7EEDA" stroke="url(#flowAcc)" stroke-width="2.4"/>
+              <rect x="0" y="0" width="80" height="80" rx="12" fill="#FFFFFF" stroke="url(#flowAcc)" stroke-width="2.4"/>
               <circle cx="40" cy="34" r="15" fill="none" stroke="url(#flowAcc)" stroke-width="1.6"/>
-              <text x="40" y="39" text-anchor="middle" fill="#8C5A0A" font-size="12" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
-              <line x1="12" y1="56" x2="68" y2="56" stroke="rgba(184,118,15,0.35)" stroke-width="0.8"/>
+              <text x="40" y="39" text-anchor="middle" fill="#B01414" font-size="12" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
+              <line x1="12" y1="56" x2="68" y2="56" stroke="rgba(230, 40, 40,0.35)" stroke-width="0.8"/>
               <text x="40" y="70" text-anchor="middle" fill="#3F3830" font-size="10">內容生成引擎</text>
             </g>
 
@@ -1148,23 +1273,23 @@
 
             <!-- 3 個輸出 tile -->
             <g transform="translate(310, 40)">
-              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
-              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">貼文</text>
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FFFFFF" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#0A0906" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">貼文</text>
               <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">5~10 篇/週</text>
             </g>
             <g transform="translate(310, 135)">
-              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
-              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">圖片</text>
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FFFFFF" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#0A0906" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">圖片</text>
               <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">AI 生成配圖</text>
             </g>
             <g transform="translate(310, 225)">
-              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FDFAF2" stroke="url(#flowA)" stroke-width="1.6"/>
-              <text x="40" y="22" text-anchor="middle" fill="#2F5D3C" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">短影音</text>
+              <rect x="0" y="0" width="80" height="50" rx="6" fill="#FFFFFF" stroke="url(#flowA)" stroke-width="1.6"/>
+              <text x="40" y="22" text-anchor="middle" fill="#0A0906" font-size="11" font-weight="700" font-family="JetBrains Mono, monospace">短影音</text>
               <text x="40" y="38" text-anchor="middle" fill="#5B5449" font-size="9">5~20 秒</text>
             </g>
 
             <!-- 底標 -->
-            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">PROMPT · GENERATE · PUBLISH</text>
+            <text x="200" y="298" text-anchor="middle" fill="rgba(10, 9, 6, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">PROMPT · GENERATE · PUBLISH</text>
           </svg>
         </div>
       </div>
@@ -1176,20 +1301,20 @@
         <div class="lg:col-span-5 order-2 lg:order-1">
           <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="企業自己的 AI 工具流程圖">
             <defs>
-              <linearGradient id="flowB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
-              <linearGradient id="flowBAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
+              <linearGradient id="flowB" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
+              <linearGradient id="flowBAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
             </defs>
 
             <!-- Step 1: 痛點文件(PDF)-->
             <g transform="translate(20, 128)">
-              <rect x="0" y="0" width="66" height="80" rx="4" fill="#FDFAF2" stroke="url(#flowB)" stroke-width="1.6"/>
-              <path d="M 46 0 L 46 20 L 66 20" fill="#EBE3CD" stroke="url(#flowB)" stroke-width="1.6"/>
-              <line x1="10" y1="34" x2="56" y2="34" stroke="rgba(47,93,60,0.4)" stroke-width="0.8"/>
-              <line x1="10" y1="44" x2="50" y2="44" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
-              <line x1="10" y1="52" x2="56" y2="52" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
-              <line x1="10" y1="60" x2="42" y2="60" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
-              <line x1="10" y1="68" x2="52" y2="68" stroke="rgba(47,93,60,0.3)" stroke-width="0.8"/>
-              <text x="33" y="97" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">痛點</text>
+              <rect x="0" y="0" width="66" height="80" rx="4" fill="#FFFFFF" stroke="url(#flowB)" stroke-width="1.6"/>
+              <path d="M 46 0 L 46 20 L 66 20" fill="#F1EEE6" stroke="url(#flowB)" stroke-width="1.6"/>
+              <line x1="10" y1="34" x2="56" y2="34" stroke="rgba(10, 9, 6,0.4)" stroke-width="0.8"/>
+              <line x1="10" y1="44" x2="50" y2="44" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="52" x2="56" y2="52" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="60" x2="42" y2="60" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.8"/>
+              <line x1="10" y1="68" x2="52" y2="68" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.8"/>
+              <text x="33" y="97" text-anchor="middle" fill="#0A0906" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">痛點</text>
               <text x="33" y="112" text-anchor="middle" fill="#7A7367" font-size="9">30 頁 PDF</text>
             </g>
 
@@ -1201,13 +1326,13 @@
 
             <!-- Step 2: SDD 規格書 -->
             <g transform="translate(130, 128)">
-              <rect x="0" y="0" width="70" height="80" rx="6" fill="#F7EEDA" stroke="url(#flowBAcc)" stroke-width="1.8"/>
-              <text x="35" y="20" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">SDD</text>
-              <line x1="10" y1="28" x2="60" y2="28" stroke="rgba(184,118,15,0.4)" stroke-width="0.6"/>
+              <rect x="0" y="0" width="70" height="80" rx="6" fill="#FFFFFF" stroke="url(#flowBAcc)" stroke-width="1.8"/>
+              <text x="35" y="20" text-anchor="middle" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">SDD</text>
+              <line x1="10" y1="28" x2="60" y2="28" stroke="rgba(230, 40, 40,0.4)" stroke-width="0.6"/>
               <text x="35" y="44" text-anchor="middle" fill="#28221C" font-size="10" font-weight="700">規格書</text>
               <text x="35" y="60" text-anchor="middle" fill="#5B5449" font-size="8">Input/Rule</text>
               <text x="35" y="72" text-anchor="middle" fill="#5B5449" font-size="8">Output</text>
-              <text x="35" y="97" text-anchor="middle" fill="#8C5A0A" font-size="9" font-family="JetBrains Mono, monospace">寫得清楚</text>
+              <text x="35" y="97" text-anchor="middle" fill="#B01414" font-size="9" font-family="JetBrains Mono, monospace">寫得清楚</text>
               <text x="35" y="112" text-anchor="middle" fill="#7A7367" font-size="9">才能做</text>
             </g>
 
@@ -1219,7 +1344,7 @@
 
             <!-- Step 3: Low-Code Agent -->
             <g transform="translate(245, 118)">
-              <rect x="0" y="0" width="90" height="100" rx="10" fill="#F7EEDA" stroke="url(#flowBAcc)" stroke-width="2.4"/>
+              <rect x="0" y="0" width="90" height="100" rx="10" fill="#FFFFFF" stroke="url(#flowBAcc)" stroke-width="2.4"/>
               <!-- Low-Code 節點示意 -->
               <g fill="none" stroke="url(#flowBAcc)" stroke-width="1.4">
                 <circle cx="20" cy="24" r="6"/>
@@ -1229,7 +1354,7 @@
                 <circle cx="58" cy="50" r="6"/>
                 <circle cx="45" cy="76" r="8"/>
               </g>
-              <g stroke="rgba(184,118,15,0.5)" stroke-width="1" fill="none">
+              <g stroke="rgba(230, 40, 40,0.5)" stroke-width="1" fill="none">
                 <line x1="20" y1="30" x2="32" y2="44"/>
                 <line x1="45" y1="30" x2="45" y2="44"/>
                 <line x1="45" y1="30" x2="32" y2="44"/>
@@ -1238,7 +1363,7 @@
                 <line x1="32" y1="56" x2="45" y2="68"/>
                 <line x1="58" y1="56" x2="45" y2="68"/>
               </g>
-              <text x="45" y="80" text-anchor="middle" fill="#8C5A0A" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
+              <text x="45" y="80" text-anchor="middle" fill="#B01414" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">AI</text>
               <text x="45" y="118" text-anchor="middle" fill="#28221C" font-size="10" font-weight="700" font-family="JetBrains Mono, monospace">Low-Code Agent</text>
             </g>
 
@@ -1252,14 +1377,14 @@
             <g transform="translate(360, 140)">
               <circle cx="16" cy="8" r="7" fill="none" stroke="url(#flowB)" stroke-width="1.6"/>
               <path d="M 4 30 Q 4 18 16 18 Q 28 18 28 30" fill="none" stroke="url(#flowB)" stroke-width="1.6"/>
-              <text x="16" y="52" text-anchor="middle" fill="#2F5D3C" font-size="8" font-family="JetBrains Mono, monospace">用戶</text>
+              <text x="16" y="52" text-anchor="middle" fill="#0A0906" font-size="8" font-family="JetBrains Mono, monospace">用戶</text>
             </g>
 
             <!-- 時間標記 -->
-            <text x="200" y="42" text-anchor="middle" fill="#8C5A0A" font-size="11" font-weight="900" font-family="JetBrains Mono, monospace">3 天完成 · 不用寫程式</text>
+            <text x="200" y="42" text-anchor="middle" fill="#B01414" font-size="11" font-weight="900" font-family="JetBrains Mono, monospace">3 天完成 · 不用寫程式</text>
 
             <!-- 底標 -->
-            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">SPEC · BUILD · DEPLOY</text>
+            <text x="200" y="298" text-anchor="middle" fill="rgba(10, 9, 6, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">SPEC · BUILD · DEPLOY</text>
           </svg>
         </div>
 
@@ -1331,28 +1456,28 @@
         <div class="lg:col-span-5">
           <svg class="flow-svg w-full" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="部門 RAG 知識庫流程圖">
             <defs>
-              <linearGradient id="flowC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A8A44"/><stop offset="100%" stop-color="#1F3D26"/></linearGradient>
-              <linearGradient id="flowCAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D89928"/><stop offset="100%" stop-color="#8C5A0A"/></linearGradient>
+              <linearGradient id="flowC" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0A0906"/><stop offset="100%" stop-color="#0A0906"/></linearGradient>
+              <linearGradient id="flowCAcc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#E62828"/><stop offset="100%" stop-color="#B01414"/></linearGradient>
             </defs>
 
             <!-- Step 1: 一疊文件 -->
             <g transform="translate(24, 100)">
               <!-- 疊 3 個 PDF icon 表示大量 -->
               <g transform="translate(0, 4)">
-                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4" opacity="0.5"/>
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FFFFFF" stroke="url(#flowC)" stroke-width="1.4" opacity="0.5"/>
               </g>
               <g transform="translate(6, 2)">
-                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4" opacity="0.75"/>
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FFFFFF" stroke="url(#flowC)" stroke-width="1.4" opacity="0.75"/>
               </g>
               <g transform="translate(12, 0)">
-                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.6"/>
-                <path d="M 36 0 L 36 14 L 52 14" fill="#EBE3CD" stroke="url(#flowC)" stroke-width="1.4"/>
-                <line x1="6" y1="24" x2="44" y2="24" stroke="rgba(47,93,60,0.4)" stroke-width="0.7"/>
-                <line x1="6" y1="32" x2="38" y2="32" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
-                <line x1="6" y1="40" x2="42" y2="40" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
-                <line x1="6" y1="48" x2="32" y2="48" stroke="rgba(47,93,60,0.3)" stroke-width="0.7"/>
+                <rect x="0" y="0" width="52" height="66" rx="4" fill="#FFFFFF" stroke="url(#flowC)" stroke-width="1.6"/>
+                <path d="M 36 0 L 36 14 L 52 14" fill="#F1EEE6" stroke="url(#flowC)" stroke-width="1.4"/>
+                <line x1="6" y1="24" x2="44" y2="24" stroke="rgba(10, 9, 6,0.4)" stroke-width="0.7"/>
+                <line x1="6" y1="32" x2="38" y2="32" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.7"/>
+                <line x1="6" y1="40" x2="42" y2="40" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.7"/>
+                <line x1="6" y1="48" x2="32" y2="48" stroke="rgba(10, 9, 6,0.3)" stroke-width="0.7"/>
               </g>
-              <text x="38" y="88" text-anchor="middle" fill="#2F5D3C" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">部門文件</text>
+              <text x="38" y="88" text-anchor="middle" fill="#0A0906" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">部門文件</text>
               <text x="38" y="102" text-anchor="middle" fill="#7A7367" font-size="9">200+ PDF</text>
             </g>
 
@@ -1361,11 +1486,11 @@
               <line x1="98" y1="140" x2="122" y2="140" stroke-dasharray="4 4"/>
               <polygon points="122,135 132,140 122,145" fill="url(#flowC)"/>
             </g>
-            <text x="110" y="130" text-anchor="middle" fill="rgba(47, 93, 60, 0.85)" font-size="8" font-family="JetBrains Mono, monospace">向量化</text>
+            <text x="110" y="130" text-anchor="middle" fill="rgba(10, 9, 6, 0.85)" font-size="8" font-family="JetBrains Mono, monospace">向量化</text>
 
             <!-- Step 2: Pinecone 向量資料庫(格子點陣)-->
             <g transform="translate(138, 108)">
-              <rect x="0" y="0" width="90" height="80" rx="8" fill="#F7EEDA" stroke="url(#flowCAcc)" stroke-width="2"/>
+              <rect x="0" y="0" width="90" height="80" rx="8" fill="#FFFFFF" stroke="url(#flowCAcc)" stroke-width="2"/>
               <!-- 格子點陣示意 vector store -->
               <g fill="url(#flowCAcc)">
                 <circle cx="14" cy="24" r="2"/>
@@ -1384,7 +1509,7 @@
                 <circle cx="56" cy="56" r="2"/>
                 <circle cx="70" cy="56" r="2"/>
               </g>
-              <text x="45" y="103" text-anchor="middle" fill="#8C5A0A" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">Pinecone RAG</text>
+              <text x="45" y="103" text-anchor="middle" fill="#B01414" font-size="10" font-weight="900" font-family="JetBrains Mono, monospace">Pinecone RAG</text>
             </g>
 
             <!-- 箭頭 -->
@@ -1397,14 +1522,14 @@
             <g transform="translate(275, 90)">
               <!-- 問題 bubble(小)-->
               <g transform="translate(0, 0)">
-                <rect x="0" y="0" width="105" height="30" rx="14" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.6"/>
+                <rect x="0" y="0" width="105" height="30" rx="14" fill="#FFFFFF" stroke="url(#flowC)" stroke-width="1.6"/>
                 <text x="52" y="19" text-anchor="middle" fill="#3F3830" font-size="9">「客戶 A 上次做了什麼?」</text>
               </g>
               <!-- 答 bubble(下,較大)-->
               <g transform="translate(0, 42)">
-                <rect x="0" y="0" width="115" height="66" rx="10" fill="#F7EEDA" stroke="url(#flowCAcc)" stroke-width="1.8"/>
-                <text x="57" y="19" text-anchor="middle" fill="#8C5A0A" font-size="9" font-weight="900" font-family="JetBrains Mono, monospace">AI 答</text>
-                <line x1="12" y1="26" x2="103" y2="26" stroke="rgba(184,118,15,0.35)" stroke-width="0.6"/>
+                <rect x="0" y="0" width="115" height="66" rx="10" fill="#FFFFFF" stroke="url(#flowCAcc)" stroke-width="1.8"/>
+                <text x="57" y="19" text-anchor="middle" fill="#B01414" font-size="9" font-weight="900" font-family="JetBrains Mono, monospace">AI 答</text>
+                <line x1="12" y1="26" x2="103" y2="26" stroke="rgba(230, 40, 40,0.35)" stroke-width="0.6"/>
                 <text x="57" y="41" text-anchor="middle" fill="#28221C" font-size="9">2023 年 6 月訂 X 型號</text>
                 <text x="57" y="53" text-anchor="middle" fill="#5B5449" font-size="8">來源:案例 A-072.pdf</text>
               </g>
@@ -1412,16 +1537,16 @@
 
             <!-- Human-in-the-Loop 標記 -->
             <g transform="translate(200, 232)">
-              <line x1="-60" y1="0" x2="60" y2="0" stroke="rgba(47,93,60,0.35)" stroke-width="0.6" stroke-dasharray="2 3"/>
-              <circle cx="0" cy="0" r="10" fill="#FDFAF2" stroke="url(#flowC)" stroke-width="1.4"/>
-              <path d="M -4 0 Q -4 -4 0 -4 Q 4 -4 4 0" fill="none" stroke="#2F5D3C" stroke-width="1.4"/>
-              <line x1="-3" y1="4" x2="3" y2="4" stroke="#2F5D3C" stroke-width="1.4"/>
-              <text x="0" y="26" text-anchor="middle" fill="#2F5D3C" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">HITL 審核</text>
+              <line x1="-60" y1="0" x2="60" y2="0" stroke="rgba(10, 9, 6,0.35)" stroke-width="0.6" stroke-dasharray="2 3"/>
+              <circle cx="0" cy="0" r="10" fill="#FFFFFF" stroke="url(#flowC)" stroke-width="1.4"/>
+              <path d="M -4 0 Q -4 -4 0 -4 Q 4 -4 4 0" fill="none" stroke="#0A0906" stroke-width="1.4"/>
+              <line x1="-3" y1="4" x2="3" y2="4" stroke="#0A0906" stroke-width="1.4"/>
+              <text x="0" y="26" text-anchor="middle" fill="#0A0906" font-size="9" font-family="JetBrains Mono, monospace" font-weight="700">HITL 審核</text>
               <text x="0" y="38" text-anchor="middle" fill="#7A7367" font-size="8">關鍵決策有人把關</text>
             </g>
 
             <!-- 底標 -->
-            <text x="200" y="298" text-anchor="middle" fill="rgba(47, 93, 60, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">INDEX · ASK · CITE</text>
+            <text x="200" y="298" text-anchor="middle" fill="rgba(10, 9, 6, 0.7)" font-size="10" letter-spacing="3" font-family="JetBrains Mono, monospace">INDEX · ASK · CITE</text>
           </svg>
         </div>
       </div>
