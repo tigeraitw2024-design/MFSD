@@ -1,0 +1,5 @@
+縣市,日期,時間,地點,人數上限
+# 本專案不用這個 CSV,改用 Google Sheet「發布到網路」的 CSV 動態抓
+# CSV URL 寫在 course/index.html 的 CONFIG.COHORTS_CSV_URL:
+# https://docs.google.com/spreadsheets/d/e/2PACX-1vQWoX_zvGuKX8uoPJGVraMSxVevr3LS5tUjaBPKhWS-Bb64_GAIaSeHFRlV8BxiCyPyGncFs-i8ukHD/pub?gid=1753505078&single=true&output=csv
+# 修改梯次直接改 Google Sheet,前端會自動抓
