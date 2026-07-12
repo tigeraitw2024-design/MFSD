@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="用 AI 做出機械業自己的工具｜30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠｜經濟部產業發展署 115 年度在職菁英課程（感測 / 機械產業）· 政府辦理培訓，完全免費">
+<meta name="description" content="用 AI 做出機械業自己的工具｜30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠｜感測 / 機械產業在職菁英課程，實作課程">
 <title>用 AI 做出機械業自己的工具｜在職菁英課程</title>
 
 <!-- Open Graph / 社群分享預覽 -->
@@ -12,14 +12,14 @@
 <meta property="og:locale" content="zh_TW">
 <meta property="og:url" content="https://mfsd.pages.dev/2-elite/">
 <meta property="og:title" content="用 AI 做出機械業自己的工具｜在職菁英課程">
-<meta property="og:description" content="30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠。經濟部產業發展署 115 年度在職菁英課程 · 完全免費。">
+<meta property="og:description" content="30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠。感測 / 機械產業在職菁英課程。。">
 <meta property="og:image" content="assets/og-card.png">
 <meta property="og:image:alt" content="用 AI 做出機械業自己的工具 · 在職菁英課程">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="用 AI 做出機械業自己的工具｜在職菁英課程">
-<meta name="twitter:description" content="30 小時實戰，帶回可運行的 AI 工具與 RAG 知識庫。政府辦理培訓 · 完全免費。">
+<meta name="twitter:description" content="30 小時實戰，帶回可運行的 AI 工具與 RAG 知識庫。感測 / 機械產業實作課程。">
 <meta name="twitter:image" content="assets/og-card.png">
 
 <link rel="icon" href="assets/favicon.ico" sizes="any">
@@ -670,14 +670,8 @@
       <div class="flex items-start gap-3 mb-6">
         <span class="block w-12 h-1.5 bg-rd mt-3 shrink-0"></span>
         <p class="text-ink-900 text-base sm:text-lg font-black tracking-wide leading-snug">
-          30 小時 · 4 天完成 · <span class="text-rd">完全免費</span>
+          30 小時實戰 · <span class="text-rd">4 天完成</span> · 感測 / 機械產業
         </p>
-      </div>
-
-      <!-- 站腳資訊 -->
-      <div class="border-t-2 border-ink-900 pt-4 mb-6 max-w-md">
-        <div class="text-ink-600 text-sm font-bold mb-1">主辦單位</div>
-        <div class="text-ink-900 text-base font-black">經濟部產業發展署 · 115 年度政府辦理培訓</div>
       </div>
 
       <!-- CTA -->
@@ -2171,55 +2165,32 @@
     <div class="text-center mb-12 reveal from-up">
       <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">08 ／ 課程報名</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
       <h2 class="section-title text-4xl sm:text-5xl mt-4">課程報名</h2>
-      <p class="text-ink-600 mt-4">本課程僅開放完全符合資格之企業，請先輸入統編驗證資格</p>
+      <p class="text-ink-600 mt-4">填寫下列資料即可完成報名,我們會 1 個工作日內與您聯繫確認</p>
     </div>
 
-    <!-- STEP 1：統編驗證 -->
-    <div class="card-gold p-7 sm:p-10 reveal from-up">
-      <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
-        <span class="step-pill">第 1 步 ・ 統編驗證</span>
-        <span class="text-[13px] text-gold-light/70 tracking-[0.24em]">資格審核</span>
-      </div>
-      <h3 class="text-ink-900 font-bold text-lg mb-5">輸入您的公司統一編號</h3>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <input
-          id="taxIdInput"
-          type="text"
-          inputmode="numeric"
-          maxlength="8"
-          placeholder="00000000"
-          class="form-input flex-1 px-5 py-4 text-center sm:text-left"
-        >
-        <button id="queryBtn" class="btn-gold font-black px-7 py-4 rounded-lg whitespace-nowrap tracking-widest">
-          驗證資格
-        </button>
-      </div>
-
-      <div class="flex items-start gap-2 mt-4 text-[13px] text-ink-500 tracking-[0.18em] leading-relaxed">
-        <span class="block w-6 h-px bg-gold/40 mt-2 shrink-0"></span>
-        <span>資料來源：經濟部公開商工登記資料</span>
-      </div>
-      <div id="resultArea" class="mt-6 hidden"></div>
-    </div>
-
-    <!-- STEP 2：報名資料 -->
-    <form id="signupForm" class="card-gold p-7 sm:p-10 space-y-7 mt-6 hidden">
+    <!-- 報名表單:一步完成 -->
+    <form id="signupForm" class="card-gold p-7 sm:p-10 space-y-7">
       <div class="flex items-center justify-between flex-wrap gap-3">
-        <span class="step-pill">第 2 步 ・ 填寫報名資料</span>
+        <span class="step-pill">填寫報名資料</span>
         <span class="text-[13px] text-gold-light/70 tracking-[0.24em]">報名表單</span>
       </div>
 
       <div>
         <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
-          公司資訊 <span class="text-gold-light/70 text-xs ml-2 tracking-[0.2em]">已通過資格審核</span>
+          公司資訊
         </h3>
-        <div id="companyInfoBox" class="p-5 rounded-lg bg-cream-50/60 border border-gold/20">
-          <p class="text-ink-600 text-sm">尚未查詢公司資料</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">公司統編 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_taxId" name="taxId" required inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input w-full px-4 py-3" placeholder="00000000">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">公司名稱 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_companyName" name="companyName" required class="form-input w-full px-4 py-3" placeholder="○○股份有限公司">
+          </div>
         </div>
-        <input type="hidden" id="f_taxId" name="taxId">
-        <input type="hidden" id="f_companyName" name="companyName">
-        <input type="hidden" id="f_eligibility" name="eligibility">
+        <input type="hidden" id="f_eligibility" name="eligibility" value="直接報名">
       </div>
 
       <div>
@@ -2329,7 +2300,7 @@
           </div>
           <span class="faq-icon text-gold text-2xl">＋</span>
         </summary>
-        <p class="text-ink-600 mt-4 leading-relaxed pl-14">課程內容開放所有人瀏覽；報名則僅開放完全符合資格之企業。在報名區輸入統編，系統會以經濟部公開資料自動判定資格，通過後即可直接填寫梯次與聯絡資料。</p>
+        <p class="text-ink-600 mt-4 leading-relaxed pl-14">直接在報名區填寫公司統編、公司名稱、聯絡窗口、選擇梯次即可完成報名。我們會於 1 個工作日內與您聯繫確認課程細節。</p>
       </details>
       <details class="card-glass p-6 group reveal from-right">
         <summary class="flex justify-between items-center gap-4">
@@ -2382,186 +2353,12 @@ const COHORTS_FALLBACK = [
 // 報名截止：開課當天起停止報名（前一天 23:59 仍可報）
 const REG_CUTOFF_DAYS = 0;
 
-// ══════════════════════ 統編查詢 ══════════════════════
-const taxIdInput = document.getElementById('taxIdInput');
-const queryBtn = document.getElementById('queryBtn');
-const resultArea = document.getElementById('resultArea');
-
-// 快取最後一次成功查到的公司
-let lastQueriedCompany = null;
-
-taxIdInput.addEventListener('input', e => {
-  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
-});
-queryBtn.addEventListener('click', queryCompany);
-taxIdInput.addEventListener('keypress', e => { if (e.key === 'Enter') queryCompany(); });
-
-async function queryCompany() {
-  const taxId = taxIdInput.value.trim();
-  if (!/^\d{8}$/.test(taxId)) {
-    showResult({ error: '請輸入 8 位數統編' });
-    return;
-  }
-  queryBtn.disabled = true;
-  queryBtn.innerHTML = '查詢中...';
-  resultArea.classList.remove('hidden');
-  resultArea.innerHTML = `
-    <div class="card-glass rounded-2xl p-6 animate-fade-in text-center">
-      <div class="text-gold-light animate-pulse">正在查詢 ${taxId}...</div>
-    </div>`;
-
-  try {
-    const res = await fetch(`https://company.g0v.ronny.tw/api/show/${taxId}`);
-    if (!res.ok) throw new Error('查無資料');
-    const data = await res.json();
-    const company = parseCompany(data, taxId);
-    lastQueriedCompany = company;
-    const verdict = evaluateEligibility(company);
-    showResult({ company, verdict });
-  } catch (err) {
-    lastQueriedCompany = null;
-    showResult({ error: '查無此統編或系統暫時無法連線，請確認統編正確' });
-  } finally {
-    queryBtn.disabled = false;
-    queryBtn.innerHTML = '立即查詢';
-  }
-}
-
-function parseCompany(data, taxId) {
-  const root = data.data || data;
-  const name = root['公司名稱'] || root['商業名稱'] || '(未知)';
-  const capitalStr = root['實收資本額(元)'] || root['資本總額(元)'] || root['資本額(元)'] || '0';
-  const capital = Number(String(capitalStr).replace(/,/g, '')) || 0;
-  const status = root['登記現況'] || root['公司狀況'] || root['商業狀況'] || '';
-  const mof = root['財政部'] || {};
-  const address = root['公司所在地'] || root['地址'] || root['商業所在地'] || mof['營業地址'] || '';
-  const industries = Array.isArray(mof['行業']) ? mof['行業'] : [];
-  const primary = industries.length > 0 ? industries[0] : ['', ''];
-  const raw = root['所營事業資料'];
-  const businessItems = [];
-  if (Array.isArray(raw)) {
-    raw.forEach(item => {
-      if (Array.isArray(item)) {
-        businessItems.push([String(item[0] || ''), String(item[1] || '')]);
-      } else if (typeof item === 'string') {
-        const m = item.match(/^([A-Z]{1,2}\d{5,6})\s*(.*)$/);
-        if (m) businessItems.push([m[1], m[2]]);
-      }
-    });
-  }
-  return {
-    taxId, name, capital, status, address,
-    industryCode: String(primary[0] || ''),
-    industryDesc: String(primary[1] || ''),
-    allIndustries: industries,
-    businessItems
-  };
-}
-
-function evaluateEligibility(c) {
-  // 簡化版:只確認公司仍在營業(g0v 查得到 + 非歇業/解散),不擋門
-  // 目的是「把統編抓下來」,不是把人擋掉
-  const checks = [];
-  const isActive = c.status && !/(歇業|解散|撤銷|廢止|停業)/.test(c.status);
-  checks.push({ pass: isActive, label: '公司營業狀態正常', detail: c.status || '未知' });
-
-  let level, title, subtitle;
-  if (isActive) {
-    level = 'green_full';
-    title = '公司資料已確認';
-    subtitle = '請繼續下方 STEP 2 填寫學員報名資料';
-  } else {
-    level = 'yellow';
-    title = '公司狀態異常';
-    subtitle = '此統編查詢到的公司已歇業或狀態異常,請確認統編是否正確,或聯絡虎智顧問';
-  }
-  return { level, title, subtitle, checks };
-}
-
-function formatMoney(n) {
-  if (n >= 100000000) return (n / 100000000).toFixed(2).replace(/\.?0+$/, '') + ' 億';
-  if (n >= 10000) return (n / 10000).toFixed(0) + ' 萬';
-  return n.toLocaleString();
-}
-
-function showResult(r) {
-  if (r.error) {
-    resultArea.innerHTML = `
-      <div class="card-glass rounded-2xl p-6 animate-fade-in border-l-4 border-red-500">
-        <div class="text-red-400 font-bold mb-1">查詢失敗</div>
-        <div class="text-ink-700 text-sm">${r.error}</div>
-      </div>`;
-    return;
-  }
-  const { company: c, verdict: v } = r;
-  const isFull = v.level === 'green_full';
-  const borderClass = isFull ? 'border-gold'
-    : v.level === 'red' ? 'border-red-500' : 'border-yellow-500';
-  const titleClass = isFull ? 'gold-text'
-    : v.level === 'red' ? 'text-red-400' : 'text-yellow-400';
-
-  const checkHtml = v.checks.map(ch => `
-    <div class="flex items-start gap-2 text-sm">
-      <span class="inline-block w-2 h-2 mt-2 rounded-full ${ch.pass ? 'bg-gold' : 'bg-gray-500'}"></span>
-      <div class="flex-1">
-        <div class="text-ink-800 font-medium">${ch.label}</div>
-        <div class="text-ink-500 text-xs">${ch.detail}</div>
-      </div>
-    </div>
-  `).join('');
-
-  const ctaHtml = isFull
-    ? `<div class="text-center text-gold-light text-sm font-bold mt-4">報名表單已為你開啟，請繼續填寫 STEP 2</div>`
-    : `<a href="https://lin.ee/ZB5Tjkd" target="_blank" class="block w-full text-center py-3 rounded-lg mt-5 bg-cream-200/50 border border-gold/30 text-gold-light font-bold">聯絡虎智顧問評估</a>`;
-
-  resultArea.innerHTML = `
-    <div class="card-glass rounded-2xl p-6 animate-fade-in-up border-l-4 ${borderClass}">
-      <div class="mb-3">
-        <div class="${titleClass} font-black text-lg">${v.title}</div>
-        <div class="text-ink-600 text-sm">${v.subtitle}</div>
-      </div>
-      <div class="pt-3 border-t border-gold/10 mb-3">
-        <div class="text-ink-900 font-bold text-lg">${c.name}</div>
-        <div class="text-ink-600 text-sm">統編 ${c.taxId}　${c.address || '(地址未知)'}</div>
-      </div>
-      <div class="space-y-2 mb-2">${checkHtml}</div>
-      ${ctaHtml}
-    </div>`;
-
-  window._queriedCompany = { company: c, verdict: v };
-
-  if (isFull) {
-    revealSignupForm();
-  } else {
-    // 改查到不符合資格時，收起已開啟的報名表單
-    document.getElementById('signupForm').classList.add('hidden');
-  }
-}
-
-// ══════════════════════ 開啟報名表單（STEP 2）══════════════════════
-function revealSignupForm() {
-  if (!window._queriedCompany || window._queriedCompany.verdict.level !== 'green_full') return;
-  const { company: c, verdict: v } = window._queriedCompany;
-
-  document.getElementById('f_taxId').value = c.taxId;
-  document.getElementById('f_companyName').value = c.name;
-  document.getElementById('f_eligibility').value = v.level;
-  document.getElementById('companyInfoBox').innerHTML = `
-    <div class="flex items-start justify-between gap-3">
-      <div class="flex-1">
-        <div class="text-ink-900 font-bold text-lg mb-1">${c.name}</div>
-        <div class="text-ink-600 text-xs space-y-1">
-          <div>統編 ${c.taxId}　資本額 NT$ ${formatMoney(c.capital) || '-'}</div>
-          <div>${c.address || ''}</div>
-        </div>
-      </div>
-      <span class="gold-text text-sm font-bold shrink-0">完全符合資格</span>
-    </div>`;
-
-  const form = document.getElementById('signupForm');
-  form.classList.remove('hidden');
-  form.classList.add('animate-fade-in-up');
-  setTimeout(() => form.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+// ══════════════════════ 統編輸入(不再做 g0v 驗證,只格式限制)══════════════════════
+const taxIdInput = document.getElementById('f_taxId');
+if (taxIdInput) {
+  taxIdInput.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+  });
 }
 
 // ══════════════════════ 捲動進場動畫 ══════════════════════
@@ -2617,7 +2414,7 @@ function parseCohortCSV(text) {
     date: (r[1] || '').trim(),      // B 欄：課程日期
     time: (r[2] || '').trim(),      // C 欄：課程時間
     location: (r[3] || '').trim(),  // D 欄：課程地點
-    capacity: 60                     // 每梯 60 人(政府課程)
+    capacity: 60                     // 每梯 60 人
   })).filter(c => c.date);
 }
 
@@ -2805,9 +2602,11 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
   const form = e.target;
   const submitBtn = document.getElementById('submitBtn');
 
-  if (!document.getElementById('f_taxId').value) {
-    alert('請先完成 STEP 1 統編驗證');
-    document.getElementById('signup').scrollIntoView({ behavior: 'smooth' });
+  // 統編格式檢查:8 碼數字
+  const taxId = form.taxId.value.trim();
+  if (!/^\d{8}$/.test(taxId)) {
+    alert('公司統編需為 8 位數字');
+    document.getElementById('f_taxId').focus();
     return;
   }
 
