@@ -109,12 +109,14 @@
   }
 </script>
 <style>
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     font-family: 'Noto Sans TC', system-ui, sans-serif;
     background: #FBF8F1;
     color: #2E2A24;
     letter-spacing: 0.005em;
+    overflow-x: hidden;
+    max-width: 100vw;
   }
   .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.04em; }
 
@@ -607,6 +609,37 @@
     .hero-title { font-size: 2.5rem !important; }
     .task-numeral { font-size: 4rem; }
     .reveal.from-left, .reveal.from-right { transform: translateY(45px); }
+
+    /* MIID 動畫 band 兩側紅斜條裝飾 · 手機遮到內容,拿掉 */
+    .agent-band::before, .agent-band::after { display: none !important; }
+    .agent-band { padding-left: 12px !important; padding-right: 12px !important; }
+
+    /* slant-card 手機把斜切角度收小 + 陰影縮小,避免撞側邊 */
+    .slant-card { transform: skewX(-4deg) !important; padding: 1rem 1.25rem !important; box-shadow: 3px 3px 0 #0A0906 !important; }
+    .slant-card > .content { transform: skewX(4deg) !important; }
+    .slant-card:hover { transform: skewX(-4deg) translate(-2px, -2px) !important; box-shadow: 5px 5px 0 #E62828 !important; }
+    .slant-card.dark:hover { box-shadow: 5px 5px 0 #E62828 !important; }
+
+    /* 卡片陰影全部縮小(避免推出滾動)*/
+    .card-glass { box-shadow: 3px 3px 0 rgba(10,9,6,0.08); }
+    .card-gold { box-shadow: 3px 3px 0 #E62828; }
+    .mod-card { box-shadow: 3px 3px 0 rgba(10,9,6,0.12); }
+    .mod-card.core { box-shadow: 3px 3px 0 #E62828; }
+    .flow-card { box-shadow: 3px 3px 0 rgba(10,9,6,0.10); }
+
+    /* 6 模組數字大小收斂,避免撐爆卡片 */
+    .mod-numeral { font-size: 4rem !important; }
+
+    /* 卡片 padding 小一點 · 換行空間夠 */
+    .mod-card { padding: 1rem !important; }
+
+    /* Hero 3 個成果卡片間距收緊 */
+    .slant-card + .slant-card { margin-top: 0 !important; }
+  }
+  /* 極窄螢幕再做一次保險 */
+  @media (max-width: 380px) {
+    .hero-title { font-size: 2.15rem !important; }
+    .btn-gold, .btn-primary { padding-left: 1rem !important; padding-right: 1rem !important; }
   }
   @media (prefers-reduced-motion: reduce) {
     .reveal, .ax-level { transition: opacity 0.3s ease; transform: none !important; }
@@ -1350,17 +1383,51 @@
           <div class="text-ink-900 text-sm font-bold mt-1">上課時間 · 開課前公告</div>
         </div>
       </div>
-      <!-- 6 段進度條 -->
-      <div class="grid grid-cols-6 gap-1">
-        <div class="h-6 bg-ink-900 text-white text-[13px] font-mono font-bold flex items-center justify-center">01 · 6h</div>
-        <div class="h-6 bg-ink-900 text-white text-[13px] font-mono font-bold flex items-center justify-center">02 · 6h</div>
-        <div class="h-6 bg-ink-900/50 text-white text-[13px] font-mono font-bold flex items-center justify-center">03 · 3h</div>
-        <div class="h-6 bg-rd text-white text-[13px] font-mono font-bold flex items-center justify-center">★04 · 6h</div>
-        <div class="h-6 bg-rd text-white text-[13px] font-mono font-bold flex items-center justify-center">★05 · 6h</div>
-        <div class="h-6 bg-ink-900/50 text-white text-[13px] font-mono font-bold flex items-center justify-center">06 · 3h</div>
+      <!-- 桌機:6 段橫向進度條 -->
+      <div class="hidden sm:grid grid-cols-6 gap-1">
+        <div class="h-8 bg-ink-900 text-white text-[13px] font-mono font-bold flex items-center justify-center">01 · 6h</div>
+        <div class="h-8 bg-ink-900 text-white text-[13px] font-mono font-bold flex items-center justify-center">02 · 6h</div>
+        <div class="h-8 bg-ink-900/60 text-white text-[13px] font-mono font-bold flex items-center justify-center">03 · 3h</div>
+        <div class="h-8 bg-rd text-white text-[13px] font-mono font-bold flex items-center justify-center">★04 · 6h</div>
+        <div class="h-8 bg-rd text-white text-[13px] font-mono font-bold flex items-center justify-center">★05 · 6h</div>
+        <div class="h-8 bg-ink-900/60 text-white text-[13px] font-mono font-bold flex items-center justify-center">06 · 3h</div>
       </div>
-      <div class="mt-2 text-[13px] font-mono tracking-widest text-ink-500 flex justify-between">
+      <div class="hidden sm:flex mt-2 text-[13px] font-mono tracking-widest text-ink-500 justify-between">
         <span>基礎</span><span>發表</span><span class="text-rd font-black">↑ 核心</span><span>結業</span>
+      </div>
+
+      <!-- 手機:6 段直向,每列一個模組完整資訊 -->
+      <div class="sm:hidden space-y-1.5">
+        <div class="flex items-center bg-ink-900 text-white">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/20">01</span>
+          <span class="flex-1 px-3 text-sm font-bold">行銷策略 · AI 文案圖片</span>
+          <span class="pr-3 font-mono text-xs opacity-80">6h</span>
+        </div>
+        <div class="flex items-center bg-ink-900 text-white">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/20">02</span>
+          <span class="flex-1 px-3 text-sm font-bold">AI 圖像 · 短影音</span>
+          <span class="pr-3 font-mono text-xs opacity-80">6h</span>
+        </div>
+        <div class="flex items-center bg-ink-900/60 text-white">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/20">03</span>
+          <span class="flex-1 px-3 text-sm font-bold">生成式 AI 成果發表</span>
+          <span class="pr-3 font-mono text-xs opacity-80">3h</span>
+        </div>
+        <div class="flex items-center bg-rd text-white relative">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/30">★04</span>
+          <span class="flex-1 px-3 text-sm font-bold">SDD + Low-Code · <span class="opacity-80">核心</span></span>
+          <span class="pr-3 font-mono text-xs opacity-90">6h</span>
+        </div>
+        <div class="flex items-center bg-rd text-white relative">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/30">★05</span>
+          <span class="flex-1 px-3 text-sm font-bold">RAG + MCP · <span class="opacity-80">核心</span></span>
+          <span class="pr-3 font-mono text-xs opacity-90">6h</span>
+        </div>
+        <div class="flex items-center bg-ink-900/60 text-white">
+          <span class="w-12 py-2.5 text-center font-mono font-black text-sm border-r border-white/20">06</span>
+          <span class="flex-1 px-3 text-sm font-bold">AI Agent 成果發表</span>
+          <span class="pr-3 font-mono text-xs opacity-80">3h</span>
+        </div>
       </div>
     </div>
 
