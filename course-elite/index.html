@@ -885,6 +885,159 @@
 </div>
 <!-- /隱藏舊 Hero SVG -->
 
+<!-- ════════ 動畫視覺:AI Agent 四大元件組合 ════════ -->
+<style>
+  .agent-band { background: #FBF8F1; border-top: 1.5px solid #0A0906; border-bottom: 1.5px solid #0A0906; overflow: hidden; position: relative; }
+  .agent-band::before, .agent-band::after {
+    content: ""; position: absolute; width: 60px; height: 100%;
+    background: repeating-linear-gradient(-45deg, #E62828 0 2px, transparent 2px 6px);
+    opacity: 0.55; pointer-events: none;
+  }
+  .agent-band::before { left: 0; }
+  .agent-band::after { right: 0; }
+  .agent-svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+</style>
+<section class="agent-band py-14 sm:py-16 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="flex items-center justify-center gap-3 mb-2">
+      <span class="block w-8 h-1 bg-rd"></span>
+      <span class="section-eyebrow">課程設計主軸</span>
+      <span class="block w-8 h-1 bg-rd"></span>
+    </div>
+    <h3 class="text-ink-900 font-black text-2xl sm:text-3xl leading-tight mb-6">
+      從 6 個模組 · 到 <span class="text-rd">1 個能運作</span>的 AI 系統
+    </h3>
+
+    <svg class="agent-svg" viewBox="0 0 520 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="AI Agent 四大元件組合">
+      <defs>
+        <pattern id="dotgrid" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.6" fill="rgba(10,9,6,0.15)"/>
+        </pattern>
+      </defs>
+
+      <!-- 底層點陣 -->
+      <rect x="0" y="0" width="520" height="380" fill="url(#dotgrid)"/>
+
+      <!-- 四角外框 · MIID L 型刻度 -->
+      <g stroke="#0A0906" stroke-width="1.5" fill="none">
+        <path d="M 20 20 L 60 20 M 20 20 L 20 60"/>
+        <path d="M 500 20 L 460 20 M 500 20 L 500 60"/>
+        <path d="M 20 360 L 60 360 M 20 360 L 20 320"/>
+        <path d="M 500 360 L 460 360 M 500 360 L 500 320"/>
+      </g>
+
+      <!-- 中心 Agent 節點 -->
+      <g transform="translate(260, 190)">
+        <!-- 呼吸環 -->
+        <circle r="60" fill="none" stroke="#E62828" stroke-width="1.5" opacity="0.5">
+          <animate attributeName="r" values="55;80;55" dur="3.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;0;0.5" dur="3.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="60" fill="none" stroke="#E62828" stroke-width="1" opacity="0.35" stroke-dasharray="3 5">
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/>
+        </circle>
+        <!-- Agent 六角形 -->
+        <polygon points="0,-42 36,-21 36,21 0,42 -36,21 -36,-21" fill="#0A0906" stroke="#0A0906" stroke-width="2"/>
+        <text y="-4" text-anchor="middle" fill="#FFFFFF" font-family="JetBrains Mono, monospace" font-size="14" font-weight="900" letter-spacing="0.08em">AI</text>
+        <text y="14" text-anchor="middle" fill="#E62828" font-family="Noto Sans TC" font-size="11" font-weight="700">Agent</text>
+      </g>
+
+      <!-- 4 個衛星:左上 RAG 文件 -->
+      <g transform="translate(100, 90)">
+        <rect x="-32" y="-24" width="64" height="48" fill="#FFFFFF" stroke="#0A0906" stroke-width="1.5"/>
+        <line x1="-24" y1="-14" x2="20" y2="-14" stroke="#0A0906" stroke-width="0.8"/>
+        <line x1="-24" y1="-6" x2="14" y2="-6" stroke="#0A0906" stroke-width="0.8"/>
+        <line x1="-24" y1="2" x2="18" y2="2" stroke="#0A0906" stroke-width="0.8"/>
+        <line x1="-24" y1="10" x2="10" y2="10" stroke="#0A0906" stroke-width="0.8"/>
+        <text y="40" text-anchor="middle" fill="#0A0906" font-family="Noto Sans TC" font-size="12" font-weight="900">文件庫</text>
+        <text y="55" text-anchor="middle" fill="#E62828" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="0.14em">RAG</text>
+      </g>
+
+      <!-- 右上 Prompt / LLM 聊天 -->
+      <g transform="translate(420, 90)">
+        <path d="M -34 -22 L 30 -22 L 30 14 L -18 14 L -30 26 L -30 14 L -34 14 Z" fill="#FFFFFF" stroke="#0A0906" stroke-width="1.5"/>
+        <line x1="-24" y1="-14" x2="20" y2="-14" stroke="#E62828" stroke-width="1"/>
+        <line x1="-24" y1="-6" x2="14" y2="-6" stroke="#0A0906" stroke-width="0.8"/>
+        <line x1="-24" y1="2" x2="18" y2="2" stroke="#0A0906" stroke-width="0.8"/>
+        <text y="40" text-anchor="middle" fill="#0A0906" font-family="Noto Sans TC" font-size="12" font-weight="900">提示詞</text>
+        <text y="55" text-anchor="middle" fill="#E62828" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="0.14em">PROMPT · LLM</text>
+      </g>
+
+      <!-- 左下 HITL 人審 -->
+      <g transform="translate(100, 290)">
+        <circle cx="0" cy="-16" r="10" fill="#FFFFFF" stroke="#0A0906" stroke-width="1.5"/>
+        <path d="M -18 12 Q -18 -2 0 -2 Q 18 -2 18 12 L 18 22 L -18 22 Z" fill="#FFFFFF" stroke="#0A0906" stroke-width="1.5"/>
+        <path d="M -6 -20 L 0 -13 L 6 -20" stroke="#E62828" stroke-width="1.5" fill="none"/>
+        <text y="42" text-anchor="middle" fill="#0A0906" font-family="Noto Sans TC" font-size="12" font-weight="900">人審</text>
+        <text y="57" text-anchor="middle" fill="#E62828" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="0.14em">HITL</text>
+      </g>
+
+      <!-- 右下 MCP 節點網 -->
+      <g transform="translate(420, 290)">
+        <g stroke="#0A0906" stroke-width="1" fill="#FFFFFF">
+          <line x1="-24" y1="-18" x2="0" y2="0" stroke-width="0.8"/>
+          <line x1="24" y1="-18" x2="0" y2="0" stroke-width="0.8"/>
+          <line x1="-24" y1="18" x2="0" y2="0" stroke-width="0.8"/>
+          <line x1="24" y1="18" x2="0" y2="0" stroke-width="0.8"/>
+          <circle cx="-24" cy="-18" r="5"/>
+          <circle cx="24" cy="-18" r="5"/>
+          <circle cx="-24" cy="18" r="5"/>
+          <circle cx="24" cy="18" r="5"/>
+          <circle cx="0" cy="0" r="7" fill="#E62828"/>
+        </g>
+        <text y="42" text-anchor="middle" fill="#0A0906" font-family="Noto Sans TC" font-size="12" font-weight="900">跨系統</text>
+        <text y="57" text-anchor="middle" fill="#E62828" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" letter-spacing="0.14em">MCP</text>
+      </g>
+
+      <!-- 4 條連線 · 虛線 + 動態 dash offset -->
+      <g stroke="#0A0906" stroke-width="1.4" fill="none" stroke-dasharray="4 6">
+        <line x1="136" y1="106" x2="222" y2="164">
+          <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.6s" repeatCount="indefinite"/>
+        </line>
+        <line x1="384" y1="106" x2="298" y2="164">
+          <animate attributeName="stroke-dashoffset" from="0" to="-20" dur="1.9s" repeatCount="indefinite"/>
+        </line>
+        <line x1="140" y1="272" x2="224" y2="216">
+          <animate attributeName="stroke-dashoffset" from="0" to="20" dur="1.7s" repeatCount="indefinite"/>
+        </line>
+        <line x1="384" y1="272" x2="296" y2="216">
+          <animate attributeName="stroke-dashoffset" from="0" to="20" dur="2.1s" repeatCount="indefinite"/>
+        </line>
+      </g>
+
+      <!-- 資料流小圓點 -->
+      <g fill="#E62828">
+        <circle r="3">
+          <animateMotion dur="2.4s" repeatCount="indefinite" path="M 136 106 L 222 164"/>
+        </circle>
+        <circle r="3">
+          <animateMotion dur="2.8s" repeatCount="indefinite" path="M 384 106 L 298 164"/>
+        </circle>
+        <circle r="3">
+          <animateMotion dur="2.6s" repeatCount="indefinite" path="M 140 272 L 224 216"/>
+        </circle>
+        <circle r="3">
+          <animateMotion dur="3.1s" repeatCount="indefinite" path="M 384 272 L 296 216"/>
+        </circle>
+      </g>
+
+      <!-- 角落 mono 標籤 -->
+      <g fill="#0A0906" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.16em">
+        <text x="30" y="42" font-weight="700">AI × 在職菁英</text>
+        <line x1="30" y1="48" x2="130" y2="48" stroke="#E62828" stroke-width="1"/>
+      </g>
+      <g fill="rgba(10,9,6,0.65)" font-family="JetBrains Mono, monospace" font-size="10" letter-spacing="0.16em" text-anchor="end">
+        <text x="490" y="352">/ 30h · 4 DAY</text>
+      </g>
+    </svg>
+
+    <p class="text-ink-700 text-sm sm:text-base mt-6 leading-relaxed max-w-2xl mx-auto">
+      課程不只教你「怎麼下 prompt」,而是把 <span class="font-black text-ink-900">RAG 知識庫 · MCP 跨系統 · HITL 人審</span> 四個元件<br class="hidden sm:block">
+      組成一個能真的在公司跑起來的 <span class="text-rd font-black">AI Agent 系統</span>。
+    </p>
+  </div>
+</section>
+
 <!-- ════════ 為什麼要上這堂課 ════════ -->
 <section id="why" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8">
   <div class="max-w-6xl mx-auto">
