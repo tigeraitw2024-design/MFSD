@@ -2327,9 +2327,13 @@
         </h3>
         <div class="mb-5">
           <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-3">輔導的單位 <span class="text-red-400">*</span></label>
+          <!-- 本課程主要輔導單位:感測中心 / 資通所(獨立整列凸顯) -->
+          <div class="space-y-2 mb-3">
+            <label class="flex items-center gap-2 cursor-pointer text-ink-900 font-bold py-2 px-3 rounded border border-gold/40 bg-gold/5 hover:bg-gold/10 transition"><input type="radio" name="advisor" value="感測中心" required class="accent-rd"> 感測中心</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-900 font-bold py-2 px-3 rounded border border-gold/40 bg-gold/5 hover:bg-gold/10 transition"><input type="radio" name="advisor" value="資通所" class="accent-rd"> 資通所</label>
+          </div>
+          <div class="text-[11px] tracking-[0.18em] text-gold-light/60 mb-2 pl-1">其他工研院單位</div>
           <div class="grid sm:grid-cols-2 gap-2 text-sm">
-            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院感測中心" required class="accent-rd"> 工研院感測中心</label>
-            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院資通所" class="accent-rd"> 工研院資通所</label>
             <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(材化所-化材)" class="accent-rd"> 工研院(材化所-化材)</label>
             <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院電光所" class="accent-rd"> 工研院電光所</label>
             <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(材化所-織機)" class="accent-rd"> 工研院(材化所-織機)</label>
