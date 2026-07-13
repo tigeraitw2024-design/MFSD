@@ -2238,6 +2238,46 @@
         <span class="text-[13px] text-gold-light/70 tracking-[0.24em]">報名表單</span>
       </div>
 
+      <!-- 學員資訊 -->
+      <div>
+        <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
+          <span class="block w-1 h-4 bg-gold"></span>
+          學員資訊
+        </h3>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">中文姓名 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_name" name="name" required class="form-input w-full px-4 py-3" placeholder="王大明">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">職稱 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_jobTitle" name="jobTitle" required class="form-input w-full px-4 py-3" placeholder="生產部經理">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">E-Mail <span class="text-red-400">*</span></label>
+            <input type="email" id="f_email" name="email" required class="form-input w-full px-4 py-3" placeholder="you@example.com">
+          </div>
+          <div>
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">性別 <span class="text-red-400">*</span></label>
+            <select id="f_gender" name="gender" required class="form-input w-full px-4 py-3">
+              <option value="">— 請選擇 —</option>
+              <option value="男">男</option>
+              <option value="女">女</option>
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">用餐選擇 <span class="text-red-400">*</span></label>
+            <select id="f_meal" name="meal" required class="form-input w-full px-4 py-3">
+              <option value="">— 請選擇 —</option>
+              <option value="葷">葷</option>
+              <option value="素">素</option>
+              <option value="不用餐">不用餐</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 公司資訊 -->
       <div>
         <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
@@ -2252,10 +2292,70 @@
             <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">公司名稱 <span class="text-red-400">*</span></label>
             <input type="text" id="f_companyName" name="companyName" required class="form-input w-full px-4 py-3" placeholder="○○股份有限公司">
           </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">產業別 <span class="text-red-400">*</span></label>
+            <select id="f_industry" name="industry" required class="form-input w-full px-4 py-3">
+              <option value="">— 請選擇 —</option>
+              <option value="製造業">製造業</option>
+              <option value="出版影音及資通訊業">出版影音及資通訊業</option>
+              <option value="批發及零售業">批發及零售業</option>
+              <option value="專業、科學及技術服務業">專業、科學及技術服務業</option>
+              <option value="金融及保險業">金融及保險業</option>
+              <option value="營建工程業">營建工程業</option>
+              <option value="運輸及倉儲業">運輸及倉儲業</option>
+              <option value="住宿及餐飲業">住宿及餐飲業</option>
+              <option value="醫療保健及社會工作服務業">醫療保健及社會工作服務業</option>
+              <option value="教育業">教育業</option>
+              <option value="農、林、漁、牧業">農、林、漁、牧業</option>
+              <option value="礦業及土石採取業">礦業及土石採取業</option>
+              <option value="電力及燃氣供應業">電力及燃氣供應業</option>
+              <option value="用水供應及污染整治業">用水供應及污染整治業</option>
+              <option value="不動產業">不動產業</option>
+              <option value="支援服務業">支援服務業</option>
+              <option value="藝術、娛樂及休閒服務業">藝術、娛樂及休閒服務業</option>
+              <option value="其他服務業">其他服務業</option>
+            </select>
+          </div>
         </div>
-        <input type="hidden" id="f_eligibility" name="eligibility" value="直接報名">
       </div>
 
+      <!-- 輔導資訊 -->
+      <div>
+        <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
+          <span class="block w-1 h-4 bg-gold"></span>
+          輔導資訊
+        </h3>
+        <div class="mb-5">
+          <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-3">輔導的單位 <span class="text-red-400">*</span></label>
+          <div class="grid sm:grid-cols-2 gap-2 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院感測中心" required class="accent-rd"> 工研院感測中心</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院資通所" class="accent-rd"> 工研院資通所</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(材化所-化材)" class="accent-rd"> 工研院(材化所-化材)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院電光所" class="accent-rd"> 工研院電光所</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(材化所-織機)" class="accent-rd"> 工研院(材化所-織機)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院綠能所" class="accent-rd"> 工研院綠能所</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(生醫所-生物工程醫藥保健組)" class="accent-rd"> 工研院(生醫所-生物工程醫藥保健組)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(生醫所-藥理臨床研究部)" class="accent-rd"> 工研院(生醫所-藥理臨床研究部)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(機械所-智慧機械技術組)" class="accent-rd"> 工研院(機械所-智慧機械技術組)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院中分院" class="accent-rd"> 工研院中分院</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="工研院(材化所-應材)" class="accent-rd"> 工研院(材化所-應材)</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700 py-1"><input type="radio" name="advisor" value="其他" class="accent-rd"> 其他</label>
+          </div>
+          <div id="advisorOtherWrap" class="hidden mt-3">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">輔導單位 - 其他</label>
+            <input type="text" id="f_advisorOther" name="advisorOther" class="form-input w-full px-4 py-3" placeholder="請填寫單位名稱">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-3">是否為受輔導廠商 <span class="text-red-400">*</span></label>
+          <div class="flex gap-8 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="是" required class="accent-rd"> 是</label>
+            <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="否" class="accent-rd"> 否</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 選擇梯次 -->
       <div>
         <h3 class="text-ink-900 font-bold text-base mb-3 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
@@ -2266,49 +2366,50 @@
         </select>
       </div>
 
+      <!-- 聯絡窗口 -->
       <div>
-        <h3 class="text-ink-900 font-bold text-base mb-4 flex items-center gap-2">
+        <h3 class="text-ink-900 font-bold text-base mb-2 flex items-center gap-2">
           <span class="block w-1 h-4 bg-gold"></span>
           聯絡窗口
         </h3>
+        <p class="text-[13px] text-ink-500 mb-4">通常填 HR 或協助報名的主管;若學員本人即為聯絡人,填學員自己也可以</p>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">姓名 <span class="text-red-400">*</span></label>
-            <input type="text" id="f_name" name="name" required class="form-input w-full px-4 py-3" placeholder="王大明">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">聯絡人姓名 <span class="text-red-400">*</span></label>
+            <input type="text" id="f_contactName" name="contactName" required class="form-input w-full px-4 py-3" placeholder="王大明">
           </div>
           <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">職稱 <span class="text-red-400">*</span></label>
-            <input type="text" id="f_jobTitle" name="jobTitle" required class="form-input w-full px-4 py-3" placeholder="生產部經理">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">聯絡人手機 <span class="text-red-400">*</span></label>
+            <input type="tel" id="f_contactPhone" name="contactPhone" required class="form-input w-full px-4 py-3" placeholder="0912345678">
           </div>
-          <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">電話 <span class="text-red-400">*</span></label>
-            <input type="tel" id="f_phone" name="phone" required class="form-input w-full px-4 py-3" placeholder="0912345678 或 02-12345678">
-          </div>
-          <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">信箱 <span class="text-red-400">*</span></label>
-            <input type="email" id="f_email" name="email" required class="form-input w-full px-4 py-3" placeholder="you@example.com">
-          </div>
-          <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">身分證字號 <span class="text-red-400">*</span></label>
-            <input type="text" id="f_nationalId" name="nationalId" required maxlength="10" pattern="[A-Za-z][0-9]{9}" class="form-input w-full px-4 py-3" placeholder="A123456789">
-          </div>
-          <div>
-            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">公司人數 <span class="text-red-400">*</span></label>
-            <select id="f_companySize" name="companySize" required class="form-input w-full px-4 py-3">
-              <option value="">— 請選擇 —</option>
-              <option value="1~30人">1~30 人</option>
-              <option value="31~100人">31~100 人</option>
-              <option value="101~199人">101~199 人</option>
-              <option value="200人以上">200 人以上</option>
-            </select>
+          <div class="sm:col-span-2">
+            <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">聯絡人 E-Mail <span class="text-red-400">*</span></label>
+            <input type="email" id="f_contactEmail" name="contactEmail" required class="form-input w-full px-4 py-3" placeholder="you@example.com">
           </div>
         </div>
+      </div>
+
+      <!-- 其他 -->
+      <div>
+        <label class="block text-xs tracking-[0.18em] text-gold-light/80 mb-2">報名留言 <span class="text-ink-500">(選填,128 字內)</span></label>
+        <textarea id="f_note" name="note" maxlength="128" rows="3" class="form-input w-full px-4 py-3" placeholder="任何想告訴我們的事,例如飲食禁忌、無障礙需求⋯⋯"></textarea>
+      </div>
+
+      <!-- 同意書 -->
+      <div class="pt-5 border-t border-gold/30">
+        <label class="flex items-start gap-3 cursor-pointer">
+          <input type="checkbox" id="f_consent" name="consent" required class="mt-1 accent-rd w-4 h-4 flex-shrink-0">
+          <span class="text-[13px] text-ink-700 leading-relaxed">
+            本人已閱讀
+            <button type="button" onclick="openConsentModal()" class="text-gold-light underline font-bold hover:text-white transition">在職菁英課程 資料蒐集、處理及利用之告知暨同意書</button>
+            ,並同意經濟部產業發展署及工研院在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
+          </span>
+        </label>
       </div>
 
       <button type="submit" id="submitBtn" class="btn-gold w-full font-black text-lg py-4 rounded-xl tracking-widest">
         送出報名 ▸
       </button>
-      <p class="text-[13px] text-ink-500 text-center tracking-[0.18em]">送出即表示同意課程主辦方蒐集與使用您的聯絡資訊</p>
     </form>
 
     <!-- 成功訊息 -->
@@ -2374,6 +2475,82 @@
     </div>
   </div>
 </section>
+
+<!-- ════════ 同意書彈窗 ════════ -->
+<div id="consentModal" class="hidden fixed inset-0 z-[100] bg-black/70 items-center justify-center p-4" style="display:none" onclick="if(event.target===this)closeConsentModal()">
+  <div class="bg-white max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-lg shadow-2xl" style="color:#0A0906">
+    <div class="sticky top-0 bg-ink-900 px-6 py-4 flex justify-between items-center" style="background:#0A0906">
+      <h3 class="font-black text-base" style="color:#fff">個人資料蒐集、處理及利用之告知暨同意書</h3>
+      <button type="button" onclick="closeConsentModal()" class="text-2xl leading-none hover:text-rd" style="color:#fff">×</button>
+    </div>
+    <div class="px-6 py-6 text-[14px] leading-relaxed space-y-8" style="color:#2E2A24">
+      <!-- 第一份:經濟部產業發展署 -->
+      <div>
+        <h4 class="font-black text-center text-base mb-4" style="color:#0A0906">經濟部產業發展署個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <p class="font-bold mb-3">告知事項</p>
+        <p class="mb-4">經濟部產業發展署(下稱本署)為了執行「次產業輔導團_在職菁英培訓」,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>蒐集目的:為本課程相關辦理或執行業務、活動、計畫、提供服務及供本會用於內部行政管理、陳報經濟部產業發展署之蒐集目的,而須獲取個人資料。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、Email</li>
+          <li>利用期間:至蒐集目的消失為止。</li>
+          <li>利用地區:中華民國地區及本署辦事處所在地區。</li>
+          <li>利用者:本署及其他與本署有業務往來之公務及非公務機關。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、傳真及其他合法方式利用之。</li>
+          <li>您得以書面主張下列權利:
+            <div class="pl-4 mt-2 font-bold space-y-1">
+              <div>(一)查詢或請求閱覽</div>
+              <div>(二)請求製給複製本</div>
+              <div>(三)請求補充或更正</div>
+              <div>(四)請求停止蒐集、處理或利用</div>
+              <div>(五)請求刪除</div>
+            </div>
+            <p class="mt-3 font-normal">若有上述需求,請與承辦人員(<span class="font-bold">虎智科技 紀先生 02-66058192</span>)聯繫,本署將依法進行回覆。</p>
+          </li>
+          <li>您若不簽署本告知暨同意書,本署將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對本署所持有您的個資,本署會按照政府相關法規保密並予以妥善保管。</li>
+        </ol>
+        <p class="text-right mt-4">中華民國 115 年 07 月 01 日</p>
+      </div>
+
+      <hr style="border-color:rgba(46,42,36,0.2)">
+
+      <!-- 第二份:工研院 -->
+      <div>
+        <h4 class="font-black text-center text-base mb-4" style="color:#0A0906">財團法人工業技術研究院個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <p class="font-bold mb-3">告知事項</p>
+        <p class="mb-4">經濟部產業發展署及財團法人工業技術研究院(工研院)為了執行【次產業輔導團_在職菁英培訓】,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>蒐集目的:為本課程相關辦理或執行業務、活動、計畫、提供服務及供本會用於內部行政管理、陳報經濟部產業發展署之蒐集目的,而須獲取個人資料。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、Email</li>
+          <li>利用期間:至蒐集目的消失為止。</li>
+          <li>利用地區:中華民國地區及工研院駐點及辦事處所在地區。</li>
+          <li>利用者:經濟部產業發展署、工研院及其他與經濟部產業發展署或工研院有業務往來之公務及非公務機關。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、傳真及其他合法方式利用之。</li>
+          <li>您得以書面主張下列權利:
+            <div class="pl-4 mt-2 font-bold space-y-1">
+              <div>(一)查詢或請求閱覽</div>
+              <div>(二)請求製給複製本</div>
+              <div>(三)請求補充或更正</div>
+              <div>(四)請求停止蒐集、處理或利用</div>
+              <div>(五)請求刪除</div>
+            </div>
+            <p class="mt-3 font-normal">若有上述需求,請與工研院本活動聯絡人聯繫(<span class="font-bold">虎智科技 紀先生 02-66058192</span>),工研院將依法進行回覆。</p>
+          </li>
+          <li>若未提供正確個資,經濟部產業發展署或工研院將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對經濟部產業發展署及工研院所持有您的個資,經濟部產業發展署及工研院會按照政府相關法規保密並予以妥善保管。</li>
+        </ol>
+        <div class="mt-4">
+          <p>經濟部產業發展署</p>
+          <p>財團法人工業技術研究院</p>
+        </div>
+        <p class="text-right mt-4">中華民國 115 年 07 月 01 日</p>
+      </div>
+    </div>
+    <div class="sticky bottom-0 px-6 py-4 flex justify-end" style="background:#fff;border-top:1px solid rgba(46,42,36,0.2)">
+      <button type="button" onclick="closeConsentModal()" class="font-bold px-6 py-2 rounded transition" style="background:#0A0906;color:#fff">關閉</button>
+    </div>
+  </div>
+</div>
 
 <!-- ════════ 浮動報名按鈕 ════════ -->
 <a href="#signup" class="floating-cta btn-gold font-black">立即報名 ▸</a>
@@ -2648,6 +2825,43 @@ loadCohorts();
 // 頁面載入即啟動捲動進場動畫（內容不再有資格閘門）
 initRevealObserver();
 
+// ══════════════════════ 同意書彈窗 ══════════════════════
+function openConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.remove('hidden');
+  m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  m.querySelector('.overflow-y-auto').scrollTop = 0;
+}
+function closeConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.add('hidden');
+  m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('consentModal');
+    if (m && !m.classList.contains('hidden')) closeConsentModal();
+  }
+});
+
+// ══════════════════════ 輔導單位「其他」條件顯示 ══════════════════════
+document.querySelectorAll('input[name="advisor"]').forEach(radio => {
+  radio.addEventListener('change', e => {
+    const wrap = document.getElementById('advisorOtherWrap');
+    const other = document.getElementById('f_advisorOther');
+    if (e.target.value === '其他') {
+      wrap.classList.remove('hidden');
+      other.required = true;
+    } else {
+      wrap.classList.add('hidden');
+      other.required = false;
+      other.value = '';
+    }
+  });
+});
+
 // ══════════════════════ 表單送出 ══════════════════════
 document.getElementById('signupForm').addEventListener('submit', async e => {
   e.preventDefault();
@@ -2662,29 +2876,55 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     return;
   }
 
-  // 身分證字號驗證：1 碼英文字母 + 9 碼數字
-  const nationalId = form.nationalId.value.trim().toUpperCase();
-  if (!/^[A-Z]\d{9}$/.test(nationalId)) {
-    alert('身分證字號格式錯誤（需 1 碼英文字母 + 9 碼數字）');
-    const nidEl = document.getElementById('f_nationalId');
-    nidEl.classList.add('error');
-    nidEl.focus();
+  // 輔導單位:必選
+  const advisorRadio = form.querySelector('input[name="advisor"]:checked');
+  if (!advisorRadio) {
+    alert('請選擇輔導的單位');
+    return;
+  }
+  const advisorVal = advisorRadio.value === '其他'
+    ? '其他:' + (form.advisorOther.value.trim() || '未填')
+    : advisorRadio.value;
+
+  // 是否為受輔導廠商:必選
+  const isAdvisedRadio = form.querySelector('input[name="isAdvised"]:checked');
+  if (!isAdvisedRadio) {
+    alert('請回答「是否為受輔導廠商」');
+    return;
+  }
+
+  // 同意書:必勾
+  if (!form.consent.checked) {
+    alert('請先閱讀並勾選「個人資料蒐集、處理及利用之告知暨同意書」');
+    document.getElementById('f_consent').focus();
     return;
   }
 
   const data = {
     type: 'course_signup',
     timestamp: new Date().toISOString(),
-    taxId: form.taxId.value,
-    companyName: form.companyName.value,
-    eligibility: form.eligibility.value,
-    cohort: form.cohort.value,
+    // 學員
     name: form.name.value,
     jobTitle: form.jobTitle.value,
-    phone: form.phone.value,
     email: form.email.value,
-    nationalId: nationalId,
-    companySize: form.companySize.value
+    gender: form.gender.value,
+    meal: form.meal.value,
+    // 公司
+    taxId: form.taxId.value,
+    companyName: form.companyName.value,
+    industry: form.industry.value,
+    // 輔導
+    advisor: advisorVal,
+    isAdvised: isAdvisedRadio.value,
+    // 梯次
+    cohort: form.cohort.value,
+    // 聯絡窗口
+    contactName: form.contactName.value,
+    contactPhone: form.contactPhone.value,
+    contactEmail: form.contactEmail.value,
+    // 其他
+    note: form.note.value,
+    consent: '已同意 ' + new Date().toISOString()
   };
 
   submitBtn.disabled = true;
@@ -2699,16 +2939,16 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
         body: JSON.stringify(data)
       });
     } else {
-      console.warn('[DEMO 模式] 未設定 Apps Script URL，僅 log：', data);
+      console.warn('[DEMO 模式] 未設定 Apps Script URL,僅 log:', data);
     }
     form.classList.add('hidden');
     const success = document.getElementById('successBox');
     success.classList.remove('hidden');
     success.scrollIntoView({ behavior: 'smooth', block: 'center' });
   } catch (err) {
-    alert('送出失敗，請稍後再試或聯絡主辦單位');
+    alert('送出失敗,請稍後再試或聯絡主辦單位');
     submitBtn.disabled = false;
-    submitBtn.innerHTML = '送出報名';
+    submitBtn.innerHTML = '送出報名 ▸';
   }
 });
 
@@ -2718,22 +2958,14 @@ document.getElementById('f_email').addEventListener('blur', e => {
   if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
   else e.target.classList.remove('error');
 });
-document.getElementById('f_phone').addEventListener('blur', e => {
+document.getElementById('f_contactEmail').addEventListener('blur', e => {
   const v = e.target.value.trim();
-  if (v && !/^[\d\-+()\s]{7,}$/.test(v)) e.target.classList.add('error');
+  if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
   else e.target.classList.remove('error');
 });
-// 身分證字號：自動轉大寫，限制第 1 碼英文、其餘數字
-document.getElementById('f_nationalId').addEventListener('input', e => {
-  let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (v.length > 0) {
-    v = v.charAt(0).replace(/[^A-Z]/g, '') + v.slice(1).replace(/\D/g, '');
-  }
-  e.target.value = v.slice(0, 10);
-});
-document.getElementById('f_nationalId').addEventListener('blur', e => {
+document.getElementById('f_contactPhone').addEventListener('blur', e => {
   const v = e.target.value.trim();
-  if (v && !/^[A-Z]\d{9}$/.test(v)) e.target.classList.add('error');
+  if (v && !/^[\d\-+()\s]{7,}$/.test(v)) e.target.classList.add('error');
   else e.target.classList.remove('error');
 });
 
