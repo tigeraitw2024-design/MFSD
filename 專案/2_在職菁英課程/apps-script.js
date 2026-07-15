@@ -168,9 +168,9 @@ function sendCourseConfirmEmail(data) {
     '　．如需改期或取消,請於開課 3 日前來信告知\n\n' +
     '如有任何問題,歡迎隨時與我們聯繫,期待課堂上見!\n\n' +
     '──────────────────\n' +
-    '虎智科技 TigerAI\n' +
-    '業務聯絡窗口|紀先生\n' +
-    '電話:02-66058192\n';
+    '本課程聯絡窗口\n' +
+    '．虎智科技  紀先生   02-66058192\n' +
+    '．工研院    許雅婷   07-2625889 分機 117\n';
 
   MailApp.sendEmail({ to: to, subject: subject, body: body, name: '虎智科技 TigerAI' });
 }
