@@ -491,6 +491,10 @@
       inset 0 0 0 1px rgba(230, 40, 40, 0.4);
     animation: ctaPulse 3s ease-in-out infinite;
   }
+  /* 蓋掉 .btn-gold:hover 的 transform,不然 hover 會把垂直置中 translateY(-50%) 蓋掉造成上下彈跳 */
+  .floating-cta:hover {
+    transform: translateY(-50%) translate(-2px, -2px);
+  }
   @keyframes ctaPulse {
     0%, 100% {
       box-shadow:
@@ -512,6 +516,8 @@
       padding: 0.8rem 1.6rem;
       letter-spacing: 0.12em;
     }
+    /* 手機沒垂直置中,hover 就用 btn-gold 原本的即可 */
+    .floating-cta:hover { transform: translate(-2px, -2px); }
   }
 
   /* ── 捲動進場：保留 from-left / from-right / from-up ── */
