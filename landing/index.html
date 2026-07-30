@@ -1099,16 +1099,22 @@ function evaluateEligibility(c, under200) {
   // 總結（兩段式）
   // 勾選「200 人以下」= 完全符合；未勾選最多到部分符合
   let level, title, subtitle, programs;
-  if (isToolMachine && isActive && under200) {
-    // 完全符合：A + B 都可申請
+  if (isToolMachine && isManufacturing && isActive && under200) {
+    // 完全符合：A + B 都可申請（工具機上下游 + C 大類製造業）
     level = 'green_full';
     title = '🎯 完全符合資格';
     subtitle = '同時符合免費課程（方案 A）與 10 萬 AI 工具方案（方案 B）';
     programs = ['免費 AI 實戰課程（100% 政府方案）', '10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon'];
-  } else if (isManufacturing && isActive && under200) {
-    // 部分符合：僅符合 B（非工具機上下游的 C 類製造業）
+  } else if (isToolMachine && isActive && under200) {
+    // 僅符合 A（工具機上下游批發/服務業，非 C 大類製造業）
     level = 'green_partial';
-    title = '✅ 部分符合（方案 B）';
+    title = '✅ 符合方案 A（免費課程）';
+    subtitle = '可申請免費 AI 實戰課程；方案 B（10 萬 AI 工具）僅開放 C 大類製造業';
+    programs = ['免費 AI 實戰課程（100% 政府方案）', '（方案 B：非 C 大類製造業，暫不符合）'];
+  } else if (isManufacturing && isActive && under200) {
+    // 僅符合 B（非工具機上下游的 C 類製造業）
+    level = 'green_partial';
+    title = '✅ 符合方案 B（10 萬 AI 工具）';
     subtitle = '可申請 10 萬 AI 工具方案；免費課程資格將由顧問評估';
     programs = ['10 萬 AI 工具採購 + 19 萬專家診斷 + 12 萬培訓 Coupon', '（免費課程：顧問評估）'];
   } else if (isManufacturing || isToolMachine) {
@@ -1207,7 +1213,8 @@ function fillCompanyToForm() {
   document.getElementById('f_address').value = c.address;
   document.getElementById('f_eligibility').value = v.level;
   const levelText = v.level === 'green_full' ? '完全符合 (A+B)'
-    : v.level === 'green_partial' ? '部分符合 (方案 B)'
+    : v.level === 'green_partial' && v.isToolMachine && !v.isManufacturing ? '僅符合方案 A（免費課程）'
+    : v.level === 'green_partial' ? '僅符合方案 B（10 萬 AI 工具）'
     : v.level === 'yellow' ? '部分符合'
     : '暫不符合';
   const levelColor = (v.level === 'green_full' || v.level === 'green_partial') ? 'text-teal-bright'
@@ -1639,8 +1646,9 @@ refreshProgressive();
     const isMfg = !!mfgItem;
     const capitalOK = c.capital > 0 && c.capital <= CONFIG.CAPITAL_LIMIT;
     let level, label;
-    if (isTM && isActive && capitalOK) { level = 'green_full'; label = '🎯 完全符合 (A+B)'; }
-    else if (isMfg && isActive && capitalOK) { level = 'green_partial'; label = '✅ 部分符合 (B)'; }
+    if (isTM && isMfg && isActive && capitalOK) { level = 'green_full'; label = '🎯 完全符合 (A+B)'; }
+    else if (isTM && isActive && capitalOK) { level = 'green_partial'; label = '✅ 僅符合 A (免費課程)'; }
+    else if (isMfg && isActive && capitalOK) { level = 'green_partial'; label = '✅ 僅符合 B (10 萬 AI 工具)'; }
     else if (isMfg || isTM) { level = 'yellow'; label = '⚠️ 部分符合'; }
     else { level = 'red'; label = '❌ 暫不符合'; }
     return { level, label, isTM, isMfg, isActive, capitalOK,
