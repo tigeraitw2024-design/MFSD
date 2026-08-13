@@ -186,6 +186,23 @@
   }
   .card-outline:hover { border-color: #14B8A6; background: #F0FDFA; }
 
+  /* ── Hero 兩位講師「一上一下」蹺蹺板動畫 ── */
+  @media (min-width: 640px) {
+    .hero-float-up   { animation: float-lin 5.5s ease-in-out infinite; }
+    .hero-float-down { animation: float-leo 5.5s ease-in-out infinite; }
+  }
+  @keyframes float-lin {
+    0%, 100% { transform: translateY(-28px); }  /* 較不上 */
+    50%      { transform: translateY(-56px); }  /* 最上 */
+  }
+  @keyframes float-leo {
+    0%, 100% { transform: translateY(56px); }   /* 最下 */
+    50%      { transform: translateY(28px); }   /* 較不下 */
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-float-up, .hero-float-down { animation: none; }
+  }
+
   /* ── 中文標題斷行:不允許在任意中文字中間斷,寧願長也要在標點處斷 ── */
   .card h3, .card-outline h3, .section-title, .hero-title {
     word-break: keep-all;
@@ -744,9 +761,9 @@
 
     <!-- 上排:2 位講師照片(拉更近 · max-w-3xl 收緊) -->
     <div class="grid grid-cols-2 sm:grid-cols-12 gap-3 sm:gap-0 items-center mb-10 sm:mb-14 max-w-3xl mx-auto">
-      <!-- 左講師(桌機:col-span-5,靠右對齊往中間貼 · 視差往上) -->
+      <!-- 左講師(桌機:col-span-5,靠右對齊往中間貼 · 一上一下蹺蹺板) -->
       <div class="sm:col-span-5 reveal">
-        <div class="sm:-translate-y-10">
+        <div class="hero-float-up">
           <div class="mx-auto sm:ml-auto sm:mr-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
             <div class="instructor-frame instructor-frame-lin">
               <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img instructor-img-lin">
@@ -766,9 +783,9 @@
         <div class="hero-verticaltext text-mint-800">2026 秋 季 開 課</div>
       </div>
 
-      <!-- 右講師(桌機:col-span-5,靠左對齊往中間貼 · 視差往下) -->
+      <!-- 右講師(桌機:col-span-5,靠左對齊往中間貼 · 一上一下蹺蹺板) -->
       <div class="sm:col-span-5 reveal from-right">
-        <div class="sm:translate-y-10">
+        <div class="hero-float-down">
           <div class="mx-auto sm:mr-auto sm:ml-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
             <div class="instructor-frame instructor-frame-leo">
               <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-leo">
