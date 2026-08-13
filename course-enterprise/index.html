@@ -216,10 +216,11 @@
     display: block;
     width: 100%; height: 100%;
     object-fit: cover;
+    object-position: center top;
   }
-  /* 頭部尺寸對齊 + 胸口以上緊 crop */
-  .instructor-img-lin { transform: scale(1.85); transform-origin: center 8%; }
-  .instructor-img-leo { transform: scale(1.4);  transform-origin: center 2%; }
+  /* 頭部尺寸盡量對齊,但優先保證整顆頭都在框內(絕不切頭頂) */
+  .instructor-img-lin { transform: scale(1.25); transform-origin: center 18%; }
+  .instructor-img-leo { transform: scale(1.05); transform-origin: center 8%; }
 
   /* ─────── nav ─────── */
   .nav-blur {
