@@ -29,13 +29,14 @@
       extend: {
         fontFamily: {
           sans: ['"Noto Sans TC"', '"Inter"', 'system-ui', 'sans-serif'],
+          serif: ['"Noto Serif TC"', 'serif'],
           mono: ['"Inter"', 'ui-monospace', 'monospace']
         },
         colors: {
-          paper: { 50: '#FFFFFF', 100: '#F7FAFC', 200: '#F1F5F9', 300: '#E2E8F0' },
-          ink:   { 900: '#0F172A', 800: '#1E293B', 700: '#334155', 600: '#475569', 500: '#64748B', 400: '#94A3B8', 300: '#CBD5E1' },
-          teal:  { 50: '#F0F9FF', 100: '#E0F2FE', 200: '#BAE6FD', 300: '#7DD3FC', 400: '#38BDF8', 500: '#0EA5E9', 600: '#0891B2', 700: '#0E7490', 800: '#155E75', 900: '#164E63' },
-          amber: { 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706', 700: '#B45309' }
+          paper: { 50: '#FFFFFF', 100: '#FAFAF7', 200: '#F5F5F0', 300: '#E5E7EB' },
+          ink:   { 900: '#1F2937', 800: '#374151', 700: '#4B5563', 600: '#6B7280', 500: '#9CA3AF', 400: '#D1D5DB' },
+          mint:  { 50: '#F0FDFA', 100: '#CCFBF1', 200: '#99F6E4', 300: '#5EEAD4', 400: '#2DD4BF', 500: '#14B8A6', 600: '#0D9488', 700: '#0F766E', 800: '#115E59', 900: '#134E4A' },
+          amber: { 100: '#FEF3C7', 300: '#FCD34D', 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706' }
         }
       }
     }
@@ -45,132 +46,210 @@
 <style>
   html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
-    background: #F7FAFC;
-    color: #0F172A;
+    background: #FAFAF7;
+    color: #1F2937;
     font-family: 'Noto Sans TC', 'Inter', system-ui, sans-serif;
     font-feature-settings: 'palt' 1;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
     max-width: 100vw;
-    background-image: radial-gradient(circle at 1px 1px, rgba(8, 145, 178, 0.06) 1px, transparent 0);
-    background-size: 24px 24px;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(20, 184, 166, 0.06) 0, transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(20, 184, 166, 0.05) 0, transparent 45%);
+  }
+
+  /* ─────── 書架肌理:超淡的直線 + 橫線圖案(仿海報書櫃) ─────── */
+  .bookshelf-bg {
+    background-image:
+      linear-gradient(180deg, transparent 0, transparent 118px, rgba(31, 41, 55, 0.06) 118px, rgba(31, 41, 55, 0.06) 120px, transparent 120px, transparent 240px),
+      repeating-linear-gradient(90deg,
+        transparent 0, transparent 24px,
+        rgba(31, 41, 55, 0.04) 24px, rgba(31, 41, 55, 0.04) 25px,
+        transparent 25px, transparent 40px,
+        rgba(31, 41, 55, 0.05) 40px, rgba(31, 41, 55, 0.05) 42px,
+        transparent 42px, transparent 68px,
+        rgba(31, 41, 55, 0.04) 68px, rgba(31, 41, 55, 0.04) 69px);
+    background-size: 100% 240px, 120px 120px;
+    background-position: 0 0, 0 0;
   }
 
   /* ─────── 通用小工具 ─────── */
   .container-narrow { max-width: 1100px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+  .container-wide { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+
   .eyebrow {
     display: inline-flex; align-items: center; gap: 0.75rem;
-    font-size: 12px; letter-spacing: 0.28em; font-weight: 700;
-    color: #0891B2; text-transform: uppercase;
+    font-size: 12px; letter-spacing: 0.32em; font-weight: 700;
+    color: #0D9488; text-transform: uppercase;
   }
   .eyebrow::before, .eyebrow::after {
-    content: ''; display: inline-block; width: 32px; height: 2px; background: #0891B2; opacity: 0.55;
+    content: ''; display: inline-block; width: 40px; height: 1.5px; background: #0D9488; opacity: 0.5;
   }
+  .eyebrow-simple {
+    display: inline-block;
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 11px; letter-spacing: 0.2em; font-weight: 700;
+    background: #F0FDFA; color: #0F766E;
+  }
+
   .section-title {
-    font-size: clamp(1.75rem, 4vw, 2.75rem);
-    font-weight: 900; color: #0F172A;
+    font-size: clamp(1.9rem, 4.5vw, 3rem);
+    font-weight: 900; color: #1F2937;
     letter-spacing: -0.02em; line-height: 1.15;
   }
   .section-sub {
-    color: #475569; font-size: 15px; line-height: 1.75;
+    color: #4B5563; font-size: 15px; line-height: 1.8;
     max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+
+  /* ─────── HERO 標題,像海報一樣戲劇性 ─────── */
+  .hero-title {
+    font-weight: 900; color: #1F2937;
+    letter-spacing: -0.025em;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 1;
+  }
+  .hero-title-line {
+    display: block;
+  }
+  .hero-mint {
+    background: linear-gradient(180deg, transparent 62%, #99F6E4 62%, #99F6E4 92%, transparent 92%);
+    padding: 0 6px;
+  }
+  .hero-verticaltext {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.8em;
+    font-weight: 700; font-size: 12px;
+    color: #0F766E;
+    line-height: 1;
   }
 
   /* ─────── 卡片系統 ─────── */
   .card {
-    background: #fff; border-radius: 16px; padding: 1.75rem;
-    border: 1px solid #E2E8F0;
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 8px 24px -12px rgba(15, 23, 42, 0.08);
+    background: #fff; border-radius: 20px; padding: 1.75rem;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 2px 6px rgba(31, 41, 55, 0.04), 0 12px 28px -14px rgba(31, 41, 55, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
   .card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06), 0 20px 40px -12px rgba(8, 145, 178, 0.18);
-    border-color: #BAE6FD;
+    box-shadow: 0 4px 12px rgba(31, 41, 55, 0.06), 0 22px 44px -14px rgba(20, 184, 166, 0.2);
+    border-color: #99F6E4;
   }
-  .card-tint { background: linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 100%); }
+  .card-tint { background: linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 100%); }
   .card-outline {
-    background: #fff; border-radius: 16px; padding: 1.5rem;
-    border: 1.5px solid #E2E8F0;
+    background: #fff; border-radius: 20px; padding: 1.5rem;
+    border: 1.5px solid #E5E7EB;
     transition: all 0.25s ease;
   }
-  .card-outline:hover { border-color: #0891B2; background: #F0F9FF; }
+  .card-outline:hover { border-color: #14B8A6; background: #F0FDFA; }
 
-  /* ─────── 按鈕 ─────── */
+  /* ─────── 按鈕:主色是薄荷深綠(呼應海報) ─────── */
   .btn-primary {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    background: #F59E0B; color: #fff;
-    padding: 0.9rem 1.75rem; border-radius: 10px;
+    background: #0D9488; color: #fff;
+    padding: 0.95rem 1.85rem; border-radius: 999px;
     font-weight: 900; font-size: 15px; letter-spacing: 0.05em;
     border: none; cursor: pointer;
-    box-shadow: 0 6px 16px -4px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 8px 20px -4px rgba(13, 148, 136, 0.4);
     transition: all 0.2s ease;
   }
   .btn-primary:hover {
-    background: #D97706;
+    background: #0F766E;
     transform: translateY(-1px);
-    box-shadow: 0 10px 24px -4px rgba(245, 158, 11, 0.55);
+    box-shadow: 0 12px 28px -4px rgba(13, 148, 136, 0.55);
   }
   .btn-outline {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    background: transparent; color: #0891B2;
-    padding: 0.85rem 1.75rem; border-radius: 10px;
+    background: transparent; color: #0D9488;
+    padding: 0.9rem 1.85rem; border-radius: 999px;
     font-weight: 700; font-size: 15px;
-    border: 1.5px solid #0891B2;
+    border: 1.5px solid #0D9488;
     cursor: pointer; transition: all 0.2s ease;
   }
-  .btn-outline:hover { background: #0891B2; color: #fff; }
+  .btn-outline:hover { background: #0D9488; color: #fff; }
 
   /* ─────── 表單 ─────── */
   .form-input, .form-input:focus {
-    background: #fff; color: #0F172A;
-    border: 1.5px solid #E2E8F0; border-radius: 10px;
+    background: #fff; color: #1F2937;
+    border: 1.5px solid #E5E7EB; border-radius: 10px;
     font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease;
     width: 100%;
   }
-  .form-input::placeholder { color: #94A3B8; }
-  .form-input:focus { outline: none; border-color: #0891B2; box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.12); }
+  .form-input::placeholder { color: #9CA3AF; }
+  .form-input:focus { outline: none; border-color: #0D9488; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14); }
   .form-input.error { border-color: #DC2626; }
-  select.form-input { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 40px; }
-  select.form-input option:disabled { color: #CBD5E1; }
+  select.form-input { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 40px; }
+  select.form-input option:disabled { color: #D1D5DB; }
 
-  /* ─────── 課程單元:模組編號大字 ─────── */
+  /* ─────── 課程單元編號 ─────── */
   .unit-number {
     font-family: 'Inter', sans-serif;
     font-weight: 900; font-size: 3.5rem; line-height: 1;
-    color: #0891B2; letter-spacing: -0.03em;
+    color: #0D9488; letter-spacing: -0.03em;
   }
   .unit-badge {
     display: inline-block;
-    padding: 4px 10px; border-radius: 999px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-    background: #E0F2FE; color: #0E7490;
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    background: #F0FDFA; color: #0F766E;
+  }
+
+  /* ─────── 講師 blob 效果 ─────── */
+  .instructor-blob {
+    position: relative;
+    display: inline-block;
+  }
+  .instructor-blob::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #14B8A6;
+    border-radius: 62% 38% 55% 45% / 55% 40% 60% 45%;
+    z-index: 0;
+    transform: translate(8px, 8px);
+  }
+  .instructor-blob-alt::before {
+    border-radius: 40% 60% 42% 58% / 50% 45% 55% 50%;
+    background: #5EEAD4;
+    transform: translate(-8px, 8px);
+  }
+  .instructor-img {
+    position: relative; z-index: 1;
+    display: block;
+    width: 100%; height: 100%; object-fit: cover; object-position: center top;
+    border-radius: 60% 40% 55% 45% / 55% 42% 58% 45%;
+  }
+  .instructor-img-alt {
+    border-radius: 42% 58% 44% 56% / 50% 45% 55% 50%;
   }
 
   /* ─────── nav ─────── */
   .nav-blur {
-    backdrop-filter: saturate(180%) blur(12px);
-    background: rgba(247, 250, 252, 0.85);
-    border-bottom: 1px solid #E2E8F0;
+    backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(250, 250, 247, 0.88);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.6);
   }
   .nav-link {
-    color: #475569; font-weight: 700; font-size: 14px;
+    color: #4B5563; font-weight: 700; font-size: 14px;
     transition: color 0.2s ease;
   }
-  .nav-link:hover { color: #0891B2; }
+  .nav-link:hover { color: #0D9488; }
 
   /* ─────── floating CTA ─────── */
   .floating-cta {
     position: fixed; right: 1.25rem; bottom: 1.25rem;
-    z-index: 50; padding: 0.9rem 1.5rem;
-    background: #F59E0B; color: #fff !important;
+    z-index: 50; padding: 0.95rem 1.6rem;
+    background: #0D9488; color: #fff !important;
     border-radius: 999px; font-weight: 900; font-size: 14px; letter-spacing: 0.12em;
-    box-shadow: 0 10px 32px -6px rgba(245, 158, 11, 0.55);
+    box-shadow: 0 12px 32px -6px rgba(13, 148, 136, 0.55);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
   }
   .floating-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 40px -6px rgba(245, 158, 11, 0.7);
+    box-shadow: 0 16px 42px -6px rgba(13, 148, 136, 0.7);
   }
 
   /* ─────── 進場動畫 ─────── */
@@ -190,18 +269,15 @@
   .cohort-track::-webkit-scrollbar { display: none; }
   .cohort-card { flex: 0 0 min(380px, 88%); scroll-snap-align: start; }
 
-  /* ─────── 手繪線稿 hero deco ─────── */
-  .hand-stroke { stroke: #0891B2; stroke-width: 1.5; fill: none; opacity: 0.35; }
-  .hand-dot { fill: #F59E0B; opacity: 0.8; }
-
   /* ─────── 錯誤訊息 ─────── */
   .field-error { color: #DC2626; font-size: 12px; margin-top: 4px; }
 
   /* ─────── 手機微調 ─────── */
   @media (max-width: 640px) {
-    .container-narrow { padding-left: 1rem; padding-right: 1rem; }
+    .container-narrow, .container-wide { padding-left: 1rem; padding-right: 1rem; }
     .unit-number { font-size: 2.75rem; }
     .card { padding: 1.25rem; }
+    .hero-verticaltext { display: none; }
   }
 </style>
 </head>
@@ -210,129 +286,111 @@
 
 <!-- ══════════════════════ NAV ══════════════════════ -->
 <nav class="fixed top-0 left-0 right-0 z-40 nav-blur">
-  <div class="container-narrow flex items-center justify-between h-16">
-    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="font-black text-ink-900 tracking-tight hover:text-teal-600 transition">
-      <span class="text-teal-600">AX</span> · 企業落地課程
+  <div class="container-wide flex items-center justify-between h-16">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="font-black text-ink-900 tracking-tight hover:text-mint-700 transition text-sm sm:text-base">
+      <span class="text-mint-700">AX</span> · 企業落地課程
     </a>
     <div class="hidden md:flex items-center gap-7">
       <a href="#why" class="nav-link">為什麼上課</a>
       <a href="#architecture" class="nav-link">課程架構</a>
+      <a href="#instructors" class="nav-link">講師</a>
       <a href="#cohorts" class="nav-link">開課梯次</a>
-      <a href="#signup" class="btn-primary" style="padding:0.55rem 1.25rem; font-size:13px; box-shadow:0 4px 12px -3px rgba(245,158,11,0.4);">立即報名</a>
+      <a href="#signup" class="btn-primary" style="padding:0.5rem 1.25rem; font-size:13px; box-shadow:0 4px 12px -3px rgba(13,148,136,0.4);">立即報名</a>
     </div>
     <a href="#signup" class="md:hidden btn-primary" style="padding:0.5rem 1rem; font-size:12px;">報名</a>
   </div>
 </nav>
 
-<!-- ══════════════════════ HERO ══════════════════════ -->
-<section class="pt-28 pb-16 sm:pt-36 sm:pb-24">
-  <div class="container-narrow">
-    <div class="grid lg:grid-cols-12 gap-10 items-center">
-      <!-- 主標 -->
-      <div class="lg:col-span-7 reveal">
-        <div class="eyebrow mb-5">2026 · AX 企業落地</div>
-        <h1 class="font-black text-ink-900 leading-[1.08] mb-6" style="font-size: clamp(2.25rem, 5.4vw, 4rem); letter-spacing: -0.02em;">
-          從 <span class="text-teal-600">AI 導論</span><br>
-          到<span style="background:linear-gradient(180deg, transparent 62%, #FDE68A 62%, #FDE68A 92%, transparent 92%); padding:0 4px;">企業落地</span><br>
-          製造業 AI 轉型<br>
-          <span class="text-teal-600">一次學會</span>
-        </h1>
-        <p class="text-ink-600 text-base sm:text-lg leading-[1.85] mb-8 max-w-xl">
-          4 大單元實作智慧工作流、生成式設計、AI Agent 與 RAG,打造企業可用的 AI 應用能力
-        </p>
+<!-- ══════════════════════ HERO(海報式) ══════════════════════ -->
+<section class="pt-24 pb-14 sm:pt-32 sm:pb-20 bookshelf-bg relative overflow-hidden">
+  <!-- 裝飾用薄荷色塊 -->
+  <div class="absolute -top-20 -left-20 w-80 h-80 rounded-full opacity-30" style="background:radial-gradient(circle,#5EEAD4 0%, transparent 65%)"></div>
+  <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full opacity-25" style="background:radial-gradient(circle,#2DD4BF 0%, transparent 65%)"></div>
 
-        <!-- 摘要 badges -->
-        <div class="flex flex-wrap gap-2 mb-8">
-          <span class="unit-badge" style="background:#FEF3C7; color:#B45309;">30 小時</span>
-          <span class="unit-badge">4 大單元</span>
-          <span class="unit-badge">4 天實體</span>
-          <span class="unit-badge">2 場梯次</span>
+  <div class="container-wide relative">
+
+    <!-- 上排:小 header + 2 位講師照片(海報式) -->
+    <div class="grid grid-cols-12 gap-4 sm:gap-8 items-end mb-10 sm:mb-14">
+      <!-- 左講師 -->
+      <div class="col-span-5 sm:col-span-4 reveal">
+        <div class="instructor-blob mx-auto" style="width: min(100%, 240px); aspect-ratio: 3/4;">
+          <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img">
         </div>
-
-        <div class="flex flex-wrap gap-3">
-          <a href="#signup" class="btn-primary">立即報名 →</a>
-          <a href="#architecture" class="btn-outline">看課程架構</a>
+        <div class="text-center mt-3">
+          <div class="eyebrow-simple mb-2">單元 01 · 02</div>
+          <div class="font-black text-ink-900 text-sm sm:text-base">林京賢</div>
+          <div class="text-[11px] text-ink-500 mt-0.5">AI 導論 · AI 設計</div>
         </div>
       </div>
 
-      <!-- 手繪 hero 圖 -->
-      <div class="lg:col-span-5 reveal from-right">
-        <div class="relative">
-          <div class="card card-tint" style="padding: 2rem;">
-            <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
-              <!-- 底層淡色網格點 (在 body 已有 radial dots,這裡再加一層) -->
-              <!-- 4 單元流:AI 導論 → AI 設計 → AI Agent → AI 落地 -->
-              <defs>
-                <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-                  <path d="M0,0 L10,5 L0,10 z" fill="#0891B2" opacity="0.7"/>
-                </marker>
-              </defs>
+      <!-- 中間直排文字(手機隱藏) -->
+      <div class="hidden sm:flex col-span-4 flex-col items-center justify-center h-full">
+        <div class="hero-verticaltext text-mint-800">從 導 論 到 落 地</div>
+        <div class="my-6 w-px h-16 bg-mint-500 opacity-50"></div>
+        <div class="hero-verticaltext text-mint-800">2026 秋 季 開 課</div>
+      </div>
 
-              <!-- 4 個節點 -->
-              <!-- 節點 1: AI 導論 (左上) -->
-              <g transform="translate(60,80)">
-                <circle r="30" fill="#fff" stroke="#0891B2" stroke-width="2"/>
-                <text x="0" y="-2" text-anchor="middle" font-family="Inter" font-weight="900" font-size="13" fill="#0891B2">01</text>
-                <text x="0" y="12" text-anchor="middle" font-family="Noto Sans TC" font-size="9" fill="#475569">導論</text>
-              </g>
+      <!-- 右講師 -->
+      <div class="col-span-7 sm:col-span-4 reveal from-right">
+        <div class="instructor-blob instructor-blob-alt mx-auto" style="width: min(100%, 240px); aspect-ratio: 3/4;">
+          <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-alt">
+        </div>
+        <div class="text-center mt-3">
+          <div class="eyebrow-simple mb-2" style="background:#FEF3C7; color:#B45309;">單元 03 · 04</div>
+          <div class="font-black text-ink-900 text-sm sm:text-base">謝侑霖</div>
+          <div class="text-[11px] text-ink-500 mt-0.5">AI Agent · AI 落地</div>
+        </div>
+      </div>
+    </div>
 
-              <!-- 節點 2: AI 設計 (右上) -->
-              <g transform="translate(280,80)">
-                <circle r="30" fill="#fff" stroke="#0891B2" stroke-width="2"/>
-                <text x="0" y="-2" text-anchor="middle" font-family="Inter" font-weight="900" font-size="13" fill="#0891B2">02</text>
-                <text x="0" y="12" text-anchor="middle" font-family="Noto Sans TC" font-size="9" fill="#475569">設計</text>
-              </g>
+    <!-- 下排:海報式大標題 -->
+    <div class="text-center reveal">
+      <div class="eyebrow mb-6">2026 · AX ENTERPRISE ADOPTION</div>
 
-              <!-- 節點 3: AI Agent (左下) -->
-              <g transform="translate(60,240)">
-                <circle r="30" fill="#fff" stroke="#0891B2" stroke-width="2"/>
-                <text x="0" y="-2" text-anchor="middle" font-family="Inter" font-weight="900" font-size="13" fill="#0891B2">03</text>
-                <text x="0" y="12" text-anchor="middle" font-family="Noto Sans TC" font-size="9" fill="#475569">Agent</text>
-              </g>
+      <p class="text-mint-800 font-bold text-sm sm:text-base tracking-[0.4em] mb-3">從 AI 導論到企業落地</p>
 
-              <!-- 節點 4: AI 落地 (右下) -->
-              <g transform="translate(280,240)">
-                <circle r="30" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
-                <text x="0" y="-2" text-anchor="middle" font-family="Inter" font-weight="900" font-size="13" fill="#fff">04</text>
-                <text x="0" y="12" text-anchor="middle" font-family="Noto Sans TC" font-size="9" fill="#fff">落地</text>
-              </g>
+      <h1 class="hero-title mb-6">
+        <span class="hero-title-line">製造業 AI 轉型</span>
+        <span class="hero-title-line"><span class="hero-mint">一次學會</span></span>
+      </h1>
 
-              <!-- 中央:企業 icon -->
-              <g transform="translate(170,160)">
-                <rect x="-35" y="-25" width="70" height="50" rx="4" fill="#F0F9FF" stroke="#0891B2" stroke-width="1.5"/>
-                <line x1="-25" y1="-15" x2="25" y2="-15" stroke="#0891B2" stroke-width="1" opacity="0.5"/>
-                <line x1="-25" y1="-5" x2="25" y2="-5" stroke="#0891B2" stroke-width="1" opacity="0.5"/>
-                <line x1="-25" y1="5" x2="25" y2="5" stroke="#0891B2" stroke-width="1" opacity="0.5"/>
-                <line x1="-25" y1="15" x2="25" y2="15" stroke="#0891B2" stroke-width="1" opacity="0.5"/>
-                <text x="0" y="42" text-anchor="middle" font-family="Noto Sans TC" font-weight="700" font-size="11" fill="#0F172A">企業</text>
-              </g>
+      <p class="text-ink-600 text-base sm:text-lg leading-[1.8] max-w-2xl mx-auto mb-8">
+        4 大單元實作 <span class="font-bold text-ink-900">智慧工作流</span>、<span class="font-bold text-ink-900">生成式設計</span>、<span class="font-bold text-ink-900">AI Agent</span> 與 <span class="font-bold text-ink-900">RAG</span>,打造企業可用的 AI 應用能力
+      </p>
 
-              <!-- 連線:虛線 -->
-              <line x1="90" y1="80" x2="250" y2="80" class="hand-stroke" stroke-dasharray="4 4" marker-end="url(#ah)"/>
-              <line x1="280" y1="110" x2="280" y2="210" class="hand-stroke" stroke-dasharray="4 4" marker-end="url(#ah)"/>
-              <line x1="250" y1="240" x2="90" y2="240" class="hand-stroke" stroke-dasharray="4 4" marker-end="url(#ah)"/>
-              <line x1="60" y1="210" x2="60" y2="110" class="hand-stroke" stroke-dasharray="4 4" marker-end="url(#ah)"/>
+      <!-- 摘要 badges -->
+      <div class="flex flex-wrap gap-2 justify-center mb-8">
+        <span class="unit-badge" style="background:#FEF3C7; color:#B45309;">30 小時</span>
+        <span class="unit-badge">4 大單元</span>
+        <span class="unit-badge">4 天實體</span>
+        <span class="unit-badge">2 場梯次</span>
+      </div>
 
-              <!-- 中央 → 4 節點 (輻射線) -->
-              <line x1="170" y1="160" x2="80" y2="90" stroke="#0891B2" stroke-width="0.8" opacity="0.25"/>
-              <line x1="170" y1="160" x2="260" y2="90" stroke="#0891B2" stroke-width="0.8" opacity="0.25"/>
-              <line x1="170" y1="160" x2="80" y2="230" stroke="#0891B2" stroke-width="0.8" opacity="0.25"/>
-              <line x1="170" y1="160" x2="260" y2="230" stroke="#0891B2" stroke-width="0.8" opacity="0.25"/>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <a href="#signup" class="btn-primary">立即報名 →</a>
+        <a href="#architecture" class="btn-outline">看課程架構</a>
+      </div>
+    </div>
 
-              <!-- 手繪點綴 -->
-              <circle cx="30" cy="30" r="3" class="hand-dot"/>
-              <circle cx="370" cy="45" r="4" class="hand-dot"/>
-              <circle cx="20" cy="310" r="3" class="hand-dot"/>
-              <circle cx="380" cy="300" r="3" class="hand-dot"/>
-
-              <!-- 副標籤 -->
-              <text x="200" y="325" text-anchor="middle" font-family="Inter" font-weight="600" font-size="11" fill="#64748B" letter-spacing="1">4 UNITS · 30 HOURS · AX ADOPTION</text>
-            </svg>
+    <!-- 底部日期/地點 info bar(仿海報最下方一列) -->
+    <div class="mt-14 sm:mt-20 max-w-4xl mx-auto reveal">
+      <div class="card flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-paper-300" style="padding:0; overflow:hidden;">
+        <div class="flex-1 p-5 sm:p-6 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F0FDFA">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </div>
-
-          <!-- 浮動標籤 -->
-          <div class="hidden lg:block absolute -top-4 -right-4 px-3 py-1.5 rounded-full text-xs font-bold" style="background:#F59E0B; color:#fff; box-shadow: 0 6px 16px -4px rgba(245,158,11,0.4);">
-            2026 秋季開課
+          <div>
+            <div class="text-[10px] tracking-[0.28em] text-mint-700 font-bold mb-1">日 &nbsp; 期</div>
+            <div class="text-sm text-ink-900 font-bold leading-tight">新竹 9/30 起 · 台中 10/13 起</div>
+          </div>
+        </div>
+        <div class="flex-1 p-5 sm:p-6 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style="background:#F0FDFA">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="text-[10px] tracking-[0.28em] text-mint-700 font-bold mb-1">場 &nbsp; 地</div>
+            <div class="text-sm text-ink-900 font-bold leading-tight">新竹縣工業會 / 工研院台中學習中心</div>
           </div>
         </div>
       </div>
@@ -352,7 +410,7 @@
     <div class="grid md:grid-cols-3 gap-5">
       <!-- 痛點 1 -->
       <div class="card reveal">
-        <div class="text-teal-600 mb-4">
+        <div class="text-mint-700 mb-4">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         </div>
         <h3 class="font-black text-ink-900 text-lg mb-2">學了很多 AI,卻沒有一個真的用起來</h3>
@@ -360,7 +418,7 @@
       </div>
       <!-- 痛點 2 -->
       <div class="card reveal" style="transition-delay:0.1s">
-        <div class="text-teal-600 mb-4">
+        <div class="text-mint-700 mb-4">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
         </div>
         <h3 class="font-black text-ink-900 text-lg mb-2">公司資料一堆,AI 卻答不出自己家的事</h3>
@@ -368,7 +426,7 @@
       </div>
       <!-- 痛點 3 -->
       <div class="card reveal" style="transition-delay:0.2s">
-        <div class="text-teal-600 mb-4">
+        <div class="text-mint-700 mb-4">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/><path d="M3 9h6"/><path d="M15 9h6"/><path d="M3 15h6"/><path d="M15 15h6"/><path d="M9 3v6"/><path d="M9 15v6"/><path d="M15 3v6"/><path d="M15 15v6"/></svg>
         </div>
         <h3 class="font-black text-ink-900 text-lg mb-2">工程師人手不夠,做不出企業內部工具</h3>
@@ -431,10 +489,10 @@
           <div class="unit-number">01</div>
         </div>
         <ul class="text-sm text-ink-700 space-y-2 leading-relaxed">
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>AI 工具在企業流程中的角色定位與應用場景</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>跨職能 AI 工具的實務操作與關鍵功能示範</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>AI 生產力輔助工具導入</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>AI 技術應用延伸與未來工作模式</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>AI 工具在企業流程中的角色定位與應用場景</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>跨職能 AI 工具的實務操作與關鍵功能示範</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>AI 生產力輔助工具導入</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>AI 技術應用延伸與未來工作模式</span></li>
         </ul>
         <div class="mt-5 pt-4 border-t border-paper-300 flex items-center justify-between text-xs text-ink-500">
           <span>講師 · <span class="font-bold text-ink-900">林京賢</span></span>
@@ -452,10 +510,10 @@
           <div class="unit-number">02</div>
         </div>
         <ul class="text-sm text-ink-700 space-y-2 leading-relaxed">
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>AI 工具於設計流程中的應用方式</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>圖像生成、參考圖應用與設計方案調整</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>生成式設計助理之建立與操作</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>設計成果彙整、提案輸出與案例交流</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>AI 工具於設計流程中的應用方式</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>圖像生成、參考圖應用與設計方案調整</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>生成式設計助理之建立與操作</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>設計成果彙整、提案輸出與案例交流</span></li>
         </ul>
         <div class="mt-5 pt-4 border-t border-paper-300 flex items-center justify-between text-xs text-ink-500">
           <span>講師 · <span class="font-bold text-ink-900">林京賢</span></span>
@@ -473,10 +531,10 @@
           <div class="unit-number">03</div>
         </div>
         <ul class="text-sm text-ink-700 space-y-2 leading-relaxed">
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>規格驅動開發(SDD)演練</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>安全可控的 AI 導入 · Low Code 工具</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>做出第一個 AI 代理人 · AI Agent</span></li>
-          <li class="flex gap-2"><span class="text-teal-600 mt-0.5">▸</span><span>學員實作:依自己的 SDD 題目動手建流程</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>規格驅動開發(SDD)演練</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>安全可控的 AI 導入 · Low Code 工具</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>做出第一個 AI 代理人 · AI Agent</span></li>
+          <li class="flex gap-2"><span class="text-mint-700 mt-0.5">▸</span><span>學員實作:依自己的 SDD 題目動手建流程</span></li>
         </ul>
         <div class="mt-5 pt-4 border-t border-paper-300 flex items-center justify-between text-xs text-ink-500">
           <span>講師 · <span class="font-bold text-ink-900">謝侑霖</span></span>
@@ -520,19 +578,19 @@
     <div class="grid md:grid-cols-3 gap-5">
       <!-- 成果 1 -->
       <div class="card reveal text-center">
-        <div class="unit-number mb-3" style="color:#0891B2;">01</div>
+        <div class="unit-number mb-3" style="color:#0D9488;">01</div>
         <h3 class="font-black text-ink-900 text-lg mb-3">AI 加速的<br>工作與設計產出</h3>
         <p class="text-sm text-ink-600 leading-relaxed">用 AI 產文、生圖、做設計提案。從構思到出稿的時間砍到 1/3。</p>
       </div>
       <!-- 成果 2 -->
       <div class="card reveal text-center" style="transition-delay:0.1s;">
-        <div class="unit-number mb-3" style="color:#0891B2;">02</div>
+        <div class="unit-number mb-3" style="color:#0D9488;">02</div>
         <h3 class="font-black text-ink-900 text-lg mb-3">企業自己的<br>AI Agent 工具</h3>
         <p class="text-sm text-ink-600 leading-relaxed">SDD + Low Code 帶回一個真的能跑的 Agent。不用 IT 排隊。</p>
       </div>
       <!-- 成果 3 -->
-      <div class="card reveal text-center" style="transition-delay:0.2s; background:linear-gradient(180deg, #F0F9FF 0%, #FFFFFF 60%);">
-        <div class="unit-number mb-3" style="color:#0891B2;">03</div>
+      <div class="card reveal text-center" style="transition-delay:0.2s; background:linear-gradient(180deg, #F0FDFA 0%, #FFFFFF 60%);">
+        <div class="unit-number mb-3" style="color:#0D9488;">03</div>
         <h3 class="font-black text-ink-900 text-lg mb-3">部門級<br>RAG 知識庫</h3>
         <p class="text-sm text-ink-600 leading-relaxed">Low Code RAG(LLM Wiki)把公司文件接上 AI,問答就對得上自家事。</p>
       </div>
@@ -541,34 +599,39 @@
 </section>
 
 <!-- ══════════════════════ 講師 ══════════════════════ -->
-<section class="py-16 sm:py-24">
+<section id="instructors" class="py-16 sm:py-24">
   <div class="container-narrow">
     <div class="text-center mb-14">
       <div class="eyebrow mb-4"><span>04 &nbsp;/&nbsp; INSTRUCTORS</span></div>
       <h2 class="section-title mb-4">授課講師</h2>
+      <p class="section-sub">兩位講師,15 小時 × 2,一路帶你從導論做到企業落地。</p>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-5">
-      <div class="card reveal">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg, #0891B2 0%, #38BDF8 100%); color:#fff;">京</div>
-          <div>
-            <div class="font-black text-ink-900 text-xl">林京賢</div>
-            <div class="text-xs text-ink-500 mt-1">單元 01 · AI 導論　·　單元 02 · AI 設計</div>
-          </div>
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- 林京賢 -->
+      <div class="reveal text-center">
+        <div class="instructor-blob mx-auto mb-6" style="width: min(100%, 280px); aspect-ratio: 3/4;">
+          <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img">
         </div>
-        <p class="text-sm text-ink-600 leading-relaxed">帶你把 AI 工具從「聽過」變成「日常用」。從導論到生成式設計輔助,15 小時實作把工具嵌進工作流。</p>
+        <div class="eyebrow-simple mb-3">單元 01 · 02</div>
+        <h3 class="text-2xl font-black text-ink-900 mb-1">林京賢</h3>
+        <div class="text-sm text-mint-700 font-bold mb-4">AI 導論 · AI 設計</div>
+        <p class="text-sm text-ink-600 leading-relaxed max-w-sm mx-auto">
+          帶你把 AI 工具從「聽過」變成「日常用」。從導論一路帶到生成式設計輔助,15 小時實作把工具嵌進你的工作流。
+        </p>
       </div>
 
-      <div class="card reveal" style="transition-delay:0.1s;">
-        <div class="flex items-center gap-4 mb-4">
-          <div class="w-14 h-14 rounded-full flex items-center justify-center font-black text-lg" style="background:linear-gradient(135deg, #0E7490 0%, #F59E0B 100%); color:#fff;">侑</div>
-          <div>
-            <div class="font-black text-ink-900 text-xl">謝侑霖</div>
-            <div class="text-xs text-ink-500 mt-1">單元 03 · AI Agent　·　單元 04 · AI 落地</div>
-          </div>
+      <!-- 謝侑霖 -->
+      <div class="reveal text-center" style="transition-delay:0.1s;">
+        <div class="instructor-blob instructor-blob-alt mx-auto mb-6" style="width: min(100%, 280px); aspect-ratio: 3/4;">
+          <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-alt">
         </div>
-        <p class="text-sm text-ink-600 leading-relaxed">帶你做出「企業真的能用」的 AI 工具。SDD + Low Code + RAG,15 小時做出企業內部 Agent + 部門知識庫。</p>
+        <div class="eyebrow-simple mb-3" style="background:#FEF3C7; color:#B45309;">單元 03 · 04</div>
+        <h3 class="text-2xl font-black text-ink-900 mb-1">謝侑霖</h3>
+        <div class="text-sm text-mint-700 font-bold mb-4">AI Agent · AI 落地</div>
+        <p class="text-sm text-ink-600 leading-relaxed max-w-sm mx-auto">
+          帶你做出「企業真的能用」的 AI 工具。SDD + Low Code + RAG,15 小時做出企業內部 Agent + 部門級知識庫。
+        </p>
       </div>
     </div>
   </div>
@@ -602,8 +665,8 @@
 
       <!-- ══════ 同意書 GATE ══════ -->
       <div id="consentGate" class="text-center py-4">
-        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5" style="border:2px solid #0891B2;background:#F0F9FF">
-          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#0891B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5" style="border:2px solid #0D9488;background:#F0FDFA">
+          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#0D9488" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 2L4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/>
             <polyline points="9 12 11 14 15 10"/>
           </svg>
@@ -611,16 +674,16 @@
         <h3 class="text-xl sm:text-2xl font-black text-ink-900 mb-2">請先閱讀個人資料告知書</h3>
         <p class="text-sm text-ink-600 mb-6 max-w-md mx-auto leading-relaxed">依《個人資料保護法》,報名前需閱讀並同意本課程個資蒐集告知書。閱讀後勾選同意,即可開始填寫報名資料。</p>
 
-        <button type="button" onclick="openConsentModal()" class="btn-outline mb-5" style="border-color:#0891B2;">
+        <button type="button" onclick="openConsentModal()" class="btn-outline mb-5" style="border-color:#0D9488;">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
           閱讀個資告知書
         </button>
 
-        <label class="flex items-start gap-3 cursor-pointer max-w-xl mx-auto text-left px-3 py-3 rounded transition hover:bg-teal-50">
-          <input type="checkbox" id="f_consent" name="consent" required class="mt-1 w-5 h-5 flex-shrink-0" style="accent-color:#0891B2;">
+        <label class="flex items-start gap-3 cursor-pointer max-w-xl mx-auto text-left px-3 py-3 rounded transition hover:bg-mint-50">
+          <input type="checkbox" id="f_consent" name="consent" required class="mt-1 w-5 h-5 flex-shrink-0" style="accent-color:#0D9488;">
           <span class="text-[13px] text-ink-700 leading-relaxed">
             本人已閱讀
-            <button type="button" onclick="openConsentModal()" class="text-teal-600 underline font-bold hover:text-teal-800 transition">在職菁英課程 資料蒐集、處理及利用之告知暨同意書</button>
+            <button type="button" onclick="openConsentModal()" class="text-mint-700 underline font-bold hover:text-mint-800 transition">在職菁英課程 資料蒐集、處理及利用之告知暨同意書</button>
             ,並同意經濟部產業發展署及工研院在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
           </span>
         </label>
@@ -632,7 +695,7 @@
         <!-- 學員資訊 -->
         <div>
           <h3 class="text-ink-900 font-bold text-base mb-3 pb-2 border-b border-paper-300 flex items-center gap-2">
-            <span class="block w-1 h-4 rounded" style="background:#0891B2;"></span>學員資訊
+            <span class="block w-1 h-4 rounded" style="background:#0D9488;"></span>學員資訊
           </h3>
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
@@ -670,7 +733,7 @@
         <!-- 公司資訊 -->
         <div>
           <h3 class="text-ink-900 font-bold text-base mb-3 pb-2 border-b border-paper-300 flex items-center gap-2">
-            <span class="block w-1 h-4 rounded" style="background:#0891B2;"></span>公司資訊
+            <span class="block w-1 h-4 rounded" style="background:#0D9488;"></span>公司資訊
           </h3>
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
@@ -720,7 +783,7 @@
         <!-- 輔導資訊 -->
         <div>
           <h3 class="text-ink-900 font-bold text-base mb-3 pb-2 border-b border-paper-300 flex items-center gap-2">
-            <span class="block w-1 h-4 rounded" style="background:#0891B2;"></span>輔導資訊
+            <span class="block w-1 h-4 rounded" style="background:#0D9488;"></span>輔導資訊
           </h3>
           <div class="mb-5">
             <label class="block text-xs font-bold text-ink-600 mb-1.5">輔導的單位 <span class="text-red-500">*</span></label>
@@ -748,8 +811,8 @@
           <div>
             <label class="block text-xs font-bold text-ink-600 mb-2">是否為受輔導廠商 <span class="text-red-500">*</span></label>
             <div class="flex gap-6 text-sm">
-              <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="是" required style="accent-color:#0891B2;"> 是</label>
-              <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="否" style="accent-color:#0891B2;"> 否</label>
+              <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="是" required style="accent-color:#0D9488;"> 是</label>
+              <label class="flex items-center gap-2 cursor-pointer text-ink-700"><input type="radio" name="isAdvised" value="否" style="accent-color:#0D9488;"> 否</label>
             </div>
           </div>
         </div>
@@ -757,7 +820,7 @@
         <!-- 梯次 -->
         <div>
           <h3 class="text-ink-900 font-bold text-base mb-3 pb-2 border-b border-paper-300 flex items-center gap-2">
-            <span class="block w-1 h-4 rounded" style="background:#0891B2;"></span>選擇報名梯次 <span class="text-red-500">*</span>
+            <span class="block w-1 h-4 rounded" style="background:#0D9488;"></span>選擇報名梯次 <span class="text-red-500">*</span>
           </h3>
           <select id="f_cohort" name="cohort" required class="form-input px-4 py-3">
             <option value="">— 請選擇梯次 —</option>
@@ -767,7 +830,7 @@
         <!-- 聯絡窗口 -->
         <div>
           <h3 class="text-ink-900 font-bold text-base mb-1 pb-2 border-b border-paper-300 flex items-center gap-2">
-            <span class="block w-1 h-4 rounded" style="background:#0891B2;"></span>聯絡窗口
+            <span class="block w-1 h-4 rounded" style="background:#0D9488;"></span>聯絡窗口
           </h3>
           <p class="text-xs text-ink-500 mb-3">通常填 HR 或協助報名的主管;若學員本人即為聯絡人,填學員自己也可以</p>
           <div class="grid sm:grid-cols-2 gap-4">
@@ -800,7 +863,7 @@
 
       <!-- 課程聯絡窗口(表單內) -->
       <div class="pt-6 mt-2 border-t border-paper-300 text-center">
-        <div class="text-[11px] tracking-[0.28em] text-teal-600 mb-3 font-bold">課程聯絡窗口</div>
+        <div class="text-[11px] tracking-[0.28em] text-mint-700 mb-3 font-bold">課程聯絡窗口</div>
         <div class="grid sm:grid-cols-2 gap-4 text-sm">
           <div>
             <div class="font-bold text-ink-900">虎智科技  紀先生</div>
@@ -816,12 +879,12 @@
 
     <!-- 成功訊息 -->
     <div id="successBox" class="hidden mt-8 card text-center" style="padding: 2.5rem 1.75rem;">
-      <div class="text-teal-600 text-sm tracking-[0.3em] font-bold mb-5">報名已確認</div>
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid #0891B2;background:#F0F9FF;">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#0891B2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="text-mint-700 text-sm tracking-[0.3em] font-bold mb-5">報名已確認</div>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid #0D9488;background:#F0FDFA;">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#0D9488" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <h3 class="text-2xl font-black text-ink-900 mb-3">報名成功</h3>
-      <p class="text-ink-600 leading-relaxed">將於 <span class="text-teal-600 font-bold">開課前 3 天</span> 發送行前通知,請留意信箱</p>
+      <p class="text-ink-600 leading-relaxed">將於 <span class="text-mint-700 font-bold">開課前 3 天</span> 發送行前通知,請留意信箱</p>
     </div>
   </div>
 </section>
@@ -837,40 +900,40 @@
       <details class="card p-5 group reveal">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
-            <span class="text-teal-600 text-xs font-bold tracking-[0.2em]">Q 01</span>
+            <span class="text-mint-700 text-xs font-bold tracking-[0.2em]">Q 01</span>
             <span class="text-ink-900 font-bold">需要程式基礎嗎?</span>
           </div>
-          <span class="faq-icon text-teal-600 text-2xl">＋</span>
+          <span class="faq-icon text-mint-700 text-2xl">＋</span>
         </summary>
         <p class="text-ink-600 mt-4 leading-relaxed pl-16 text-sm">不需要。全程以視覺化拖拉操作 Low-Code 工具,零程式門檻。單元 3 的 SDD 演練會帶你用「規格書」的方式描述需求,AI Agent 幫你把它變成流程。</p>
       </details>
       <details class="card p-5 group reveal">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
-            <span class="text-teal-600 text-xs font-bold tracking-[0.2em]">Q 02</span>
+            <span class="text-mint-700 text-xs font-bold tracking-[0.2em]">Q 02</span>
             <span class="text-ink-900 font-bold">課程多長?會帶走什麼?</span>
           </div>
-          <span class="faq-icon text-teal-600 text-2xl">＋</span>
+          <span class="faq-icon text-mint-700 text-2xl">＋</span>
         </summary>
         <p class="text-ink-600 mt-4 leading-relaxed pl-16 text-sm">4 天 30 小時實體課程。結訓當天帶走 3 個成果:(1) AI 加速的工作與設計產出;(2) 企業自己的 AI Agent 工具;(3) 部門級 RAG 知識庫。</p>
       </details>
       <details class="card p-5 group reveal">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
-            <span class="text-teal-600 text-xs font-bold tracking-[0.2em]">Q 03</span>
+            <span class="text-mint-700 text-xs font-bold tracking-[0.2em]">Q 03</span>
             <span class="text-ink-900 font-bold">為什麼報名要輸入統編?</span>
           </div>
-          <span class="faq-icon text-teal-600 text-2xl">＋</span>
+          <span class="faq-icon text-mint-700 text-2xl">＋</span>
         </summary>
         <p class="text-ink-600 mt-4 leading-relaxed pl-16 text-sm">用於報名資料建檔與課程資訊寄發。開課前 3 天會發送行前通知信,請留意信箱。</p>
       </details>
       <details class="card p-5 group reveal">
         <summary class="flex justify-between items-center gap-4">
           <div class="flex items-center gap-3">
-            <span class="text-teal-600 text-xs font-bold tracking-[0.2em]">Q 04</span>
+            <span class="text-mint-700 text-xs font-bold tracking-[0.2em]">Q 04</span>
             <span class="text-ink-900 font-bold">上完課還有支援嗎?</span>
           </div>
-          <span class="faq-icon text-teal-600 text-2xl">＋</span>
+          <span class="faq-icon text-mint-700 text-2xl">＋</span>
         </summary>
         <p class="text-ink-600 mt-4 leading-relaxed pl-16 text-sm">有。結訓後提供基於課程內容的 24h AI 助教,隨時解決實作疑問。</p>
       </details>
@@ -881,7 +944,7 @@
 <!-- ══════════════════════ 同意書彈窗 ══════════════════════ -->
 <div id="consentModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4" style="display:none; background:rgba(15,23,42,0.6);" onclick="if(event.target===this)closeConsentModal()">
   <div class="max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-xl shadow-2xl" style="background:#fff; color:#0F172A;">
-    <div class="sticky top-0 px-6 py-4 flex justify-between items-center" style="background:#0891B2;">
+    <div class="sticky top-0 px-6 py-4 flex justify-between items-center" style="background:#0D9488;">
       <h3 class="font-black text-base" style="color:#fff">個人資料蒐集、處理及利用之告知暨同意書</h3>
       <button type="button" onclick="closeConsentModal()" class="text-2xl leading-none hover:opacity-70" style="color:#fff">×</button>
     </div>
@@ -963,12 +1026,12 @@
 <footer class="border-t border-paper-300 py-12 px-4 sm:px-6 lg:px-8 mt-8">
   <div class="container-narrow text-center">
     <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="inline-block group cursor-pointer">
-      <div class="text-ink-900 font-black text-base tracking-tight group-hover:text-teal-600 transition"><span class="text-teal-600">AX</span> · 企業落地課程</div>
-      <div class="text-ink-500 text-[13px] tracking-widest font-mono mt-2 group-hover:text-teal-700 transition">↑ 回到頂端</div>
+      <div class="text-ink-900 font-black text-base tracking-tight group-hover:text-mint-700 transition"><span class="text-mint-700">AX</span> · 企業落地課程</div>
+      <div class="text-ink-500 text-[13px] tracking-widest font-mono mt-2 group-hover:text-mint-700 transition">↑ 回到頂端</div>
     </a>
 
     <div class="mt-8 pt-6 border-t border-paper-300 max-w-2xl mx-auto">
-      <div class="text-[11px] tracking-[0.28em] text-teal-600 mb-3 font-bold">課程聯絡窗口</div>
+      <div class="text-[11px] tracking-[0.28em] text-mint-700 mb-3 font-bold">課程聯絡窗口</div>
       <div class="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-10 text-sm">
         <div>
           <span class="font-bold text-ink-900">虎智科技 紀先生</span>
@@ -1145,7 +1208,7 @@ function normCohortKey(label) {
 function countdownBadge(dateStr) {
   const days = daysUntil(dateStr);
   if (days === null) return '<span class="text-ink-500 text-xs">日期待定</span>';
-  if (days > 0) return `<span class="text-teal-600 font-black text-sm">距開課還有 ${days} 天</span>`;
+  if (days > 0) return `<span class="text-mint-700 font-black text-sm">距開課還有 ${days} 天</span>`;
   if (days === 0) return '<span class="text-amber-600 font-black text-sm">今天開課</span>';
   return '<span class="text-ink-500 text-xs">已結束</span>';
 }
@@ -1175,13 +1238,13 @@ function renderCohorts(cohorts, counts) {
     let statusHtml;
     if (closed) statusHtml = '<span class="text-red-500 font-bold text-sm">報名已截止</span>';
     else if (full) statusHtml = '<span class="text-amber-600 font-bold text-sm">已額滿 · 開放候補</span>';
-    else statusHtml = `剩餘名額 <span class="text-teal-600 font-black text-lg">${remaining}</span> / ${co.capacity} 人`;
+    else statusHtml = `剩餘名額 <span class="text-mint-700 font-black text-lg">${remaining}</span> / ${co.capacity} 人`;
 
     const card = document.createElement('div');
     card.className = 'cohort-card card';
     card.innerHTML = `
       <div class="flex items-center gap-2 mb-3">
-        <span class="text-teal-600 font-black text-2xl">${co.city || '場次'}</span>
+        <span class="text-mint-700 font-black text-2xl">${co.city || '場次'}</span>
         <span class="text-xs text-ink-400 font-mono">COHORT</span>
       </div>
       <div class="space-y-2.5 text-sm text-ink-700 mb-4">

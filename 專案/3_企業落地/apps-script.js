@@ -24,7 +24,7 @@
  *   ⚠️ 不要按「新增部署」— 會產生新 URL,前端就抓不到。
  */
 
-const SHEET_ID = 'YOUR_NEW_ENTERPRISE_SHEET_ID_HERE';  // ⚠️ 建立 Sheet 後填上
+const SHEET_ID = '1jyYwlYXTDeqnkm0CkFyJcEjA0v09iox4QnK3azk6-3c';
 const SHEET_COURSE = '企業落地報名表單';
 
 const COURSE_HEADERS = [
