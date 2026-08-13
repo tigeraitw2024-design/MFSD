@@ -119,10 +119,13 @@
   .hero-verticaltext {
     writing-mode: vertical-rl;
     text-orientation: mixed;
-    letter-spacing: 0.8em;
-    font-weight: 700; font-size: 12px;
+    letter-spacing: 0.35em;
+    font-weight: 900; font-size: 22px;
     color: #0F766E;
     line-height: 1;
+  }
+  @media (min-width: 1024px) {
+    .hero-verticaltext { font-size: 26px; letter-spacing: 0.4em; }
   }
 
   /* ─────── 卡片系統 ─────── */
@@ -309,36 +312,36 @@
 
   <div class="container-wide relative">
 
-    <!-- 上排:小 header + 2 位講師照片(海報式) -->
-    <div class="grid grid-cols-12 gap-4 sm:gap-8 items-end mb-10 sm:mb-14">
+    <!-- 上排:2 位講師照片(海報式 · 雙邊等寬) -->
+    <div class="grid grid-cols-2 sm:grid-cols-12 gap-4 sm:gap-6 items-center mb-10 sm:mb-14">
       <!-- 左講師 -->
-      <div class="col-span-5 sm:col-span-4 reveal">
-        <div class="instructor-blob mx-auto" style="width: min(100%, 240px); aspect-ratio: 3/4;">
+      <div class="sm:col-span-4 reveal">
+        <div class="instructor-blob mx-auto" style="width: 100%; max-width: 240px; aspect-ratio: 3/4;">
           <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img">
         </div>
-        <div class="text-center mt-3">
+        <div class="text-center mt-4">
           <div class="eyebrow-simple mb-2">單元 01 · 02</div>
-          <div class="font-black text-ink-900 text-sm sm:text-base">林京賢</div>
-          <div class="text-[11px] text-ink-500 mt-0.5">AI 導論 · AI 設計</div>
+          <div class="font-black text-ink-900 text-base sm:text-lg">林京賢</div>
+          <div class="text-[11px] sm:text-xs text-ink-500 mt-0.5">AI 導論 · AI 設計</div>
         </div>
       </div>
 
       <!-- 中間直排文字(手機隱藏) -->
-      <div class="hidden sm:flex col-span-4 flex-col items-center justify-center h-full">
+      <div class="hidden sm:flex sm:col-span-4 flex-col items-center justify-center h-full py-6">
         <div class="hero-verticaltext text-mint-800">從 導 論 到 落 地</div>
-        <div class="my-6 w-px h-16 bg-mint-500 opacity-50"></div>
+        <div class="my-5 w-px h-14 bg-mint-500 opacity-50"></div>
         <div class="hero-verticaltext text-mint-800">2026 秋 季 開 課</div>
       </div>
 
       <!-- 右講師 -->
-      <div class="col-span-7 sm:col-span-4 reveal from-right">
-        <div class="instructor-blob instructor-blob-alt mx-auto" style="width: min(100%, 240px); aspect-ratio: 3/4;">
+      <div class="sm:col-span-4 reveal from-right">
+        <div class="instructor-blob instructor-blob-alt mx-auto" style="width: 100%; max-width: 240px; aspect-ratio: 3/4;">
           <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-alt">
         </div>
-        <div class="text-center mt-3">
+        <div class="text-center mt-4">
           <div class="eyebrow-simple mb-2" style="background:#FEF3C7; color:#B45309;">單元 03 · 04</div>
-          <div class="font-black text-ink-900 text-sm sm:text-base">謝侑霖</div>
-          <div class="text-[11px] text-ink-500 mt-0.5">AI Agent · AI 落地</div>
+          <div class="font-black text-ink-900 text-base sm:text-lg">謝侑霖</div>
+          <div class="text-[11px] sm:text-xs text-ink-500 mt-0.5">AI Agent · AI 落地</div>
         </div>
       </div>
     </div>
