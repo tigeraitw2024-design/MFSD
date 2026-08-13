@@ -732,16 +732,18 @@
 
     <!-- 上排:2 位講師照片(放大 40% · 拉近中間 · 拿掉單元 pill 標籤) -->
     <div class="grid grid-cols-2 sm:grid-cols-12 gap-3 sm:gap-2 items-center mb-10 sm:mb-14 max-w-5xl mx-auto">
-      <!-- 左講師(桌機:col-span-5,靠右對齊往中間貼) -->
+      <!-- 左講師(桌機:col-span-5,靠右對齊往中間貼 · 視差往上) -->
       <div class="sm:col-span-5 reveal">
-        <div class="mx-auto sm:ml-auto sm:mr-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
-          <div class="instructor-frame instructor-frame-lin">
-            <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img instructor-img-lin">
+        <div class="sm:-translate-y-10">
+          <div class="mx-auto sm:ml-auto sm:mr-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
+            <div class="instructor-frame instructor-frame-lin">
+              <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img instructor-img-lin">
+            </div>
           </div>
-        </div>
-        <div class="text-center sm:text-right sm:pr-4 mt-5">
-          <div class="font-black text-ink-900 text-xl sm:text-2xl mb-1">林京賢</div>
-          <div class="text-sm text-ink-600">AI 導論 · AI 設計</div>
+          <div class="text-center sm:text-right sm:pr-4 mt-5">
+            <div class="font-black text-ink-900 text-xl sm:text-2xl mb-1">林京賢</div>
+            <div class="text-sm text-ink-600">AI 導論 · AI 設計</div>
+          </div>
         </div>
       </div>
 
@@ -752,16 +754,18 @@
         <div class="hero-verticaltext text-mint-800">2026 秋 季 開 課</div>
       </div>
 
-      <!-- 右講師(桌機:col-span-5,靠左對齊往中間貼) -->
+      <!-- 右講師(桌機:col-span-5,靠左對齊往中間貼 · 視差往下) -->
       <div class="sm:col-span-5 reveal from-right">
-        <div class="mx-auto sm:mr-auto sm:ml-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
-          <div class="instructor-frame instructor-frame-leo">
-            <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-leo">
+        <div class="sm:translate-y-10">
+          <div class="mx-auto sm:mr-auto sm:ml-0" style="width: 100%; max-width: 310px; aspect-ratio: 3/4;">
+            <div class="instructor-frame instructor-frame-leo">
+              <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-leo">
+            </div>
           </div>
-        </div>
-        <div class="text-center sm:text-left sm:pl-4 mt-5">
-          <div class="font-black text-ink-900 text-xl sm:text-2xl mb-1">謝侑霖</div>
-          <div class="text-sm text-ink-600">AI Agent · AI 落地</div>
+          <div class="text-center sm:text-left sm:pl-4 mt-5">
+            <div class="font-black text-ink-900 text-xl sm:text-2xl mb-1">謝侑霖</div>
+            <div class="text-sm text-ink-600">AI Agent · AI 落地</div>
+          </div>
         </div>
       </div>
     </div>
