@@ -58,7 +58,7 @@
       radial-gradient(circle at 88% 92%, rgba(20, 184, 166, 0.05) 0, transparent 45%);
   }
 
-  /* ─────── 書架肌理:超淡的直線 + 橫線圖案(仿海報書櫃) ─────── */
+  /* ─────── 書架肌理:超淡的直線 + 橫線圖案(仿海報書櫃) + 緩慢漂移動畫 ─────── */
   .bookshelf-bg {
     background-image:
       linear-gradient(180deg, transparent 0, transparent 118px, rgba(31, 41, 55, 0.06) 118px, rgba(31, 41, 55, 0.06) 120px, transparent 120px, transparent 240px),
@@ -71,6 +71,17 @@
         rgba(31, 41, 55, 0.04) 68px, rgba(31, 41, 55, 0.04) 69px);
     background-size: 100% 240px, 120px 120px;
     background-position: 0 0, 0 0;
+    animation: bookshelf-drift 90s linear infinite;
+    will-change: background-position;
+  }
+  @keyframes bookshelf-drift {
+    /* 兩層 bg 一起走:橫層(240px 循環)每 90s 走一整個週期,直層(120px 循環)也一樣
+       上下左右同步移動,像整片書架在後面緩緩滑動 */
+    0%   { background-position: 0 0,        0 0; }
+    100% { background-position: 240px 240px, 120px 120px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bookshelf-bg { animation: none; }
   }
 
   /* ─────── 通用小工具 ─────── */
@@ -215,12 +226,11 @@
   .instructor-img {
     display: block;
     width: 100%; height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center top;
   }
-  /* 頭部尺寸盡量對齊,但優先保證整顆頭都在框內(絕不切頭頂) */
-  .instructor-img-lin { transform: scale(1.25); transform-origin: center 18%; }
-  .instructor-img-leo { transform: scale(1.05); transform-origin: center 8%; }
+  /* 兩張照片已在檔案層次去背 + 統一頭部尺寸,不需 CSS scale */
+  .instructor-img-lin, .instructor-img-leo { transform: none; }
 
   /* ─────── nav ─────── */
   .nav-blur {
