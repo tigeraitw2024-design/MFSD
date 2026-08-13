@@ -186,6 +186,13 @@
   }
   .card-outline:hover { border-color: #14B8A6; background: #F0FDFA; }
 
+  /* ── 中文標題斷行:不允許在任意中文字中間斷,寧願長也要在標點處斷 ── */
+  .card h3, .card-outline h3, .section-title, .hero-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    text-wrap: balance;      /* 現代瀏覽器會自動平衡多行長度 */
+  }
+
   /* ─────── 按鈕:主色是薄荷深綠(呼應海報) ─────── */
   .btn-primary {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
