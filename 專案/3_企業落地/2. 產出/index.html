@@ -192,12 +192,12 @@
     .hero-float-down { animation: float-leo 5.5s ease-in-out infinite; }
   }
   @keyframes float-lin {
-    0%, 100% { transform: translateY(-28px); }  /* 較不上 */
-    50%      { transform: translateY(-56px); }  /* 最上 */
+    0%, 100% { transform: translateY(-32px); }  /* 上 */
+    50%      { transform: translateY( 32px); }  /* 下 */
   }
   @keyframes float-leo {
-    0%, 100% { transform: translateY(56px); }   /* 最下 */
-    50%      { transform: translateY(28px); }   /* 較不下 */
+    0%, 100% { transform: translateY( 32px); }  /* 下 */
+    50%      { transform: translateY(-32px); }  /* 上 */
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-float-up, .hero-float-down { animation: none; }
