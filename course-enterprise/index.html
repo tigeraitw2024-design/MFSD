@@ -199,34 +199,29 @@
     background: #F0FDFA; color: #0F766E;
   }
 
-  /* ─────── 講師 blob 效果 ─────── */
-  .instructor-blob {
+  /* ─────── 講師方框(去掉 blob 圓形,改用方形 · 以頭部大小為對齊基準) ─────── */
+  .instructor-frame {
     position: relative;
-    display: inline-block;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #F0FDFA;
+    box-shadow: 0 20px 40px -12px rgba(15, 118, 110, 0.28), 0 2px 6px rgba(15, 118, 110, 0.08);
   }
-  .instructor-blob::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: #14B8A6;
-    border-radius: 62% 38% 55% 45% / 55% 40% 60% 45%;
-    z-index: 0;
-    transform: translate(8px, 8px);
-  }
-  .instructor-blob-alt::before {
-    border-radius: 40% 60% 42% 58% / 50% 45% 55% 50%;
-    background: #5EEAD4;
-    transform: translate(-8px, 8px);
+  /* 淡淡的 mint 頂邊條當視覺記號 */
+  .instructor-frame::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: linear-gradient(90deg, #0D9488 0%, #5EEAD4 100%);
+    z-index: 2;
   }
   .instructor-img {
-    position: relative; z-index: 1;
     display: block;
-    width: 100%; height: 100%; object-fit: cover; object-position: center top;
-    border-radius: 60% 40% 55% 45% / 55% 42% 58% 45%;
+    width: 100%; height: 100%;
+    object-fit: cover;
   }
-  .instructor-img-alt {
-    border-radius: 42% 58% 44% 56% / 50% 45% 55% 50%;
-  }
+  /* 兩張源圖 person scale 差很多,個別調整讓頭部尺寸一致 */
+  .instructor-img-lin { transform: scale(1.55); transform-origin: center 12%; }
+  .instructor-img-leo { transform: scale(1.12); transform-origin: center 5%; }
 
   /* ─────── nav ─────── */
   .nav-blur {
@@ -312,14 +307,16 @@
 
   <div class="container-wide relative">
 
-    <!-- 上排:2 位講師照片(海報式 · 雙邊等寬) -->
-    <div class="grid grid-cols-2 sm:grid-cols-12 gap-4 sm:gap-6 items-center mb-10 sm:mb-14">
-      <!-- 左講師 -->
+    <!-- 上排:2 位講師照片(方形 · 頭部對齊 · 版面往中收) -->
+    <div class="grid grid-cols-2 sm:grid-cols-12 gap-4 sm:gap-4 items-center mb-10 sm:mb-14 max-w-4xl mx-auto">
+      <!-- 左講師(桌機靠右對齊,往中間貼) -->
       <div class="sm:col-span-4 reveal">
-        <div class="instructor-blob mx-auto" style="width: 100%; max-width: 240px; aspect-ratio: 3/4;">
-          <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img">
+        <div class="mx-auto sm:ml-auto sm:mr-2" style="width: 100%; max-width: 220px; aspect-ratio: 3/4;">
+          <div class="instructor-frame">
+            <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img instructor-img-lin">
+          </div>
         </div>
-        <div class="text-center mt-4">
+        <div class="text-center sm:text-right sm:pr-2 mt-4">
           <div class="eyebrow-simple mb-2">單元 01 · 02</div>
           <div class="font-black text-ink-900 text-base sm:text-lg">林京賢</div>
           <div class="text-[11px] sm:text-xs text-ink-500 mt-0.5">AI 導論 · AI 設計</div>
@@ -333,12 +330,14 @@
         <div class="hero-verticaltext text-mint-800">2026 秋 季 開 課</div>
       </div>
 
-      <!-- 右講師 -->
+      <!-- 右講師(桌機靠左對齊,往中間貼) -->
       <div class="sm:col-span-4 reveal from-right">
-        <div class="instructor-blob instructor-blob-alt mx-auto" style="width: 100%; max-width: 240px; aspect-ratio: 3/4;">
-          <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-alt">
+        <div class="mx-auto sm:mr-auto sm:ml-2" style="width: 100%; max-width: 220px; aspect-ratio: 3/4;">
+          <div class="instructor-frame">
+            <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-leo">
+          </div>
         </div>
-        <div class="text-center mt-4">
+        <div class="text-center sm:text-left sm:pl-2 mt-4">
           <div class="eyebrow-simple mb-2" style="background:#FEF3C7; color:#B45309;">單元 03 · 04</div>
           <div class="font-black text-ink-900 text-base sm:text-lg">謝侑霖</div>
           <div class="text-[11px] sm:text-xs text-ink-500 mt-0.5">AI Agent · AI 落地</div>
@@ -610,11 +609,13 @@
       <p class="section-sub">兩位講師,15 小時 × 2,一路帶你從導論做到企業落地。</p>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-3xl mx-auto">
       <!-- 林京賢 -->
       <div class="reveal text-center">
-        <div class="instructor-blob mx-auto mb-6" style="width: min(100%, 280px); aspect-ratio: 3/4;">
-          <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img">
+        <div class="mx-auto mb-6" style="width: 100%; max-width: 280px; aspect-ratio: 3/4;">
+          <div class="instructor-frame">
+            <img src="assets/instructor-lin.png" alt="林京賢 講師" class="instructor-img instructor-img-lin">
+          </div>
         </div>
         <div class="eyebrow-simple mb-3">單元 01 · 02</div>
         <h3 class="text-2xl font-black text-ink-900 mb-1">林京賢</h3>
@@ -626,8 +627,10 @@
 
       <!-- 謝侑霖 -->
       <div class="reveal text-center" style="transition-delay:0.1s;">
-        <div class="instructor-blob instructor-blob-alt mx-auto mb-6" style="width: min(100%, 280px); aspect-ratio: 3/4;">
-          <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-alt">
+        <div class="mx-auto mb-6" style="width: 100%; max-width: 280px; aspect-ratio: 3/4;">
+          <div class="instructor-frame">
+            <img src="assets/instructor-leo.png" alt="謝侑霖 講師" class="instructor-img instructor-img-leo">
+          </div>
         </div>
         <div class="eyebrow-simple mb-3" style="background:#FEF3C7; color:#B45309;">單元 03 · 04</div>
         <h3 class="text-2xl font-black text-ink-900 mb-1">謝侑霖</h3>
