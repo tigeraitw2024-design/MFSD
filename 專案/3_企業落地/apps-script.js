@@ -139,7 +139,7 @@ function sendCourseConfirmEmail(data) {
     '　．單元 02 · AI 設計(林京賢)\n' +
     '　．單元 03 · AI Agent(謝侑霖)\n' +
     '　．單元 04 · AI 落地 · Workshop(謝侑霖)\n' +
-    '　．結訓帶 3 個具體成果回公司直接用:\n' +
+    '　．完訓帶 3 個具體成果回公司直接用:\n' +
     '　　1. AI 加速的工作與設計產出\n' +
     '　　2. 企業自己的 AI Agent 工具\n' +
     '　　3. 部門級 RAG 知識庫(LLM Wiki)\n\n' +
