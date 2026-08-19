@@ -18,8 +18,9 @@
  *      千萬不要按「新增部署」— 會產生新 URL,前端就抓不到。
  */
 
-const SHEET_ID = 'YOUR_NEW_TOUR_SHEET_ID_HERE';   // ⚠️ 建立 Sheet 後填上
+const SHEET_ID = '1dY_fqYg0r1sIo2bLIH5QNFYhEmcVVt6hktm2pNQT8cE';
 const SHEET_COURSE = '製造業列車報名表單';
+const SHEET_COHORT = '梯次目錄';
 
 const COURSE_HEADERS = [
   '時間戳',
@@ -30,6 +31,14 @@ const COURSE_HEADERS = [
   '寄信狀態'
 ];
 const COURSE_MAIL_STATUS_COL = 14;
+
+const COHORT_HEADERS = ['開課縣市', '課程日期', '課程時間', '課程地點'];
+// 範例場次(setupAll 第一次跑會塞這 3 列 · 之後你直接改 Sheet)
+const COHORT_SEED = [
+  ['台北', '3月15日(六)', '09:00-17:00', '虎智科技教室(待定)'],
+  ['台中', '4月12日(六)', '09:00-17:00', '待定'],
+  ['高雄', '5月10日(六)', '09:00-17:00', '待定']
+];
 
 // ════════ 入口 ════════
 function doPost(e) {
@@ -150,6 +159,31 @@ function setupCourseSheet() {
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
   Logger.log('分頁「' + SHEET_COURSE + '」就緒(' + COURSE_HEADERS.length + ' 欄)');
+}
+
+// ⭐ 一鍵建全部:報名表單 + 梯次目錄 + 塞範例資料
+function setupAll() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+
+  // 1. 報名表單分頁
+  let sheet = ss.getSheetByName(SHEET_COURSE);
+  if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
+  ensureHeaders(sheet, COURSE_HEADERS);
+  Logger.log('✅ 分頁「' + SHEET_COURSE + '」就緒(' + COURSE_HEADERS.length + ' 欄)');
+
+  // 2. 梯次目錄分頁
+  let cohortSheet = ss.getSheetByName(SHEET_COHORT);
+  if (!cohortSheet) cohortSheet = ss.insertSheet(SHEET_COHORT, 0);   // 插到最前面
+  ensureHeaders(cohortSheet, COHORT_HEADERS);
+  // 若目前沒任何場次資料,塞 3 列範例(避免覆蓋既有資料)
+  if (cohortSheet.getLastRow() < 2) {
+    cohortSheet.getRange(2, 1, COHORT_SEED.length, COHORT_HEADERS.length).setValues(COHORT_SEED);
+    Logger.log('✅ 分頁「' + SHEET_COHORT + '」就緒 + 塞 ' + COHORT_SEED.length + ' 列範例場次');
+  } else {
+    Logger.log('✅ 分頁「' + SHEET_COHORT + '」就緒(已有資料,未覆蓋)');
+  }
+
+  Logger.log('全部建置完成 · 現在到「檔案 → 共用 → 發布到網路」把「梯次目錄」發布成 CSV');
 }
 
 function testCourseEmail() {
