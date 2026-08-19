@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>製造業 AI 巡迴列車｜蓋工廠 × 裝門鎖 · 6 小時實戰</title>
+<meta name="description" content="6 小時實戰:上午用 AI 蓋工廠(n8n + Antigravity),下午學會裝門鎖(AI Agent 資安)。Morris + Victor 雙講師,一天內把 AI 應用 + 資安治理帶回產線。">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mfsd.pages.dev/course-tour/">
+<meta property="og:title" content="製造業 AI 巡迴列車｜蓋工廠 × 裝門鎖 · 6 小時實戰">
+<meta property="og:description" content="Morris + Victor 雙講師 · 6 小時實戰 · n8n × Antigravity × 資安治理">
+<meta property="og:image" content="https://mfsd.pages.dev/course-tour/assets/og-card.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="製造業 AI 巡迴列車 · 6 小時實戰">
+<meta name="twitter:image" content="https://mfsd.pages.dev/course-tour/assets/og-card.png">
+
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Noto Sans TC"', '"Inter"', 'system-ui', 'sans-serif'],
+          mono: ['"Inter"', 'ui-monospace', 'monospace']
+        },
+        colors: {
+          bg:    { 900: '#050914', 800: '#0A1128', 700: '#111938', 600: '#1A2447', 500: '#243154' },
+          blue:  { 300: '#7DB4FF', 400: '#4D9FFF', 500: '#0066FF', 600: '#0052CC', 700: '#003D99', 800: '#002966' },
+          cyan:  { 400: '#33EEFF', 500: '#00E5FF', 600: '#00B8CC' },
+          ink:   { 0: '#FFFFFF', 100: 'rgba(255,255,255,0.92)', 300: 'rgba(255,255,255,0.75)', 500: 'rgba(255,255,255,0.55)', 700: 'rgba(255,255,255,0.35)' }
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    background: #0A1128;
+    color: #FFFFFF;
+    font-family: 'Noto Sans TC', 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'palt' 1;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    max-width: 100vw;
+    background-image:
+      radial-gradient(circle at 15% -10%, rgba(0, 102, 255, 0.25) 0, transparent 55%),
+      radial-gradient(circle at 85% 110%, rgba(0, 229, 255, 0.18) 0, transparent 55%);
+    background-attachment: fixed;
+  }
+
+  /* ─────── 幾何裝飾:斜切、格線 ─────── */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .diag-slash {
+    background: repeating-linear-gradient(135deg,
+      rgba(0, 229, 255, 0.15) 0, rgba(0, 229, 255, 0.15) 3px,
+      transparent 3px, transparent 12px);
+  }
+
+  /* ─────── 通用小工具 ─────── */
+  .container-wide { max-width: 1200px; margin-left: auto; margin-right: auto; padding-left: 1.25rem; padding-right: 1.25rem; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 12px; letter-spacing: 0.32em; font-weight: 700;
+    color: #33EEFF; text-transform: uppercase;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: ''; display: inline-block; width: 40px; height: 1.5px; background: #00E5FF; opacity: 0.5;
+  }
+  .section-title {
+    font-size: clamp(2rem, 4.8vw, 3.25rem);
+    font-weight: 900; color: #FFFFFF;
+    letter-spacing: -0.02em; line-height: 1.12;
+  }
+  .section-sub {
+    color: rgba(255,255,255,0.75); font-size: 16px; line-height: 1.8;
+    max-width: 640px; margin-left: auto; margin-right: auto;
+  }
+
+  /* ─────── HERO 標題 ─────── */
+  .hero-title {
+    font-weight: 900; color: #FFFFFF;
+    letter-spacing: -0.03em;
+    font-size: clamp(2.75rem, 8vw, 6rem);
+    line-height: 0.95;
+  }
+  .hero-underline {
+    background: linear-gradient(180deg, transparent 65%, rgba(0, 229, 255, 0.55) 65%, rgba(0, 229, 255, 0.55) 90%, transparent 90%);
+    padding: 0 8px;
+  }
+  .hero-blue { color: #4D9FFF; }
+  .hero-cyan { color: #00E5FF; }
+
+  /* ─────── 卡片系統(深色玻璃感) ─────── */
+  .card {
+    background: linear-gradient(135deg, rgba(26, 36, 71, 0.75) 0%, rgba(17, 25, 56, 0.65) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px; padding: 1.75rem;
+    box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 12px 40px -6px rgba(0, 102, 255, 0.35);
+  }
+  .card-tint {
+    background: linear-gradient(135deg, rgba(0, 102, 255, 0.18) 0%, rgba(0, 61, 153, 0.10) 100%);
+  }
+
+  /* ─────── 講師 blue gradient 卡片(仿飛書海報) ─────── */
+  .instructor-card {
+    position: relative;
+    width: 100%; aspect-ratio: 3/4;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0066FF 0%, #003D99 100%);
+    box-shadow: 0 20px 44px -12px rgba(0, 102, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  .instructor-card::before {
+    /* 斜切裝飾 */
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(0, 229, 255, 0.25) 60%, rgba(0, 229, 255, 0.25) 65%, transparent 65%);
+    z-index: 1;
+  }
+  .instructor-img {
+    position: relative; z-index: 2;
+    display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom;
+  }
+  .instructor-label {
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    background: rgba(0, 41, 102, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 8px; padding: 8px 12px;
+    z-index: 3;
+    border: 1px solid rgba(77, 159, 255, 0.35);
+  }
+
+  /* ─────── 按鈕 ─────── */
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: linear-gradient(135deg, #0066FF 0%, #4D9FFF 100%);
+    color: #fff;
+    padding: 0.95rem 1.85rem; border-radius: 8px;
+    font-weight: 900; font-size: 15px; letter-spacing: 0.06em;
+    border: none; cursor: pointer;
+    box-shadow: 0 8px 20px -4px rgba(0, 102, 255, 0.55), 0 0 0 1px rgba(77, 159, 255, 0.4) inset;
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px -4px rgba(0, 102, 255, 0.7), 0 0 0 1px rgba(0, 229, 255, 0.5) inset;
+    filter: brightness(1.08);
+  }
+  .btn-outline {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: #4D9FFF;
+    padding: 0.9rem 1.85rem; border-radius: 8px;
+    font-weight: 700; font-size: 15px;
+    border: 1.5px solid #4D9FFF;
+    cursor: pointer; transition: all 0.2s ease;
+  }
+  .btn-outline:hover { background: rgba(77, 159, 255, 0.12); border-color: #00E5FF; color: #00E5FF; }
+
+  /* ─────── 表單 ─────── */
+  .form-input, .form-input:focus {
+    background: rgba(255,255,255,0.06); color: #FFFFFF;
+    border: 1.5px solid rgba(255,255,255,0.15); border-radius: 8px;
+    font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.35); }
+  .form-input:focus { outline: none; border-color: #4D9FFF; box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.18); background: rgba(255,255,255,0.09); }
+  .form-input.error { border-color: #F87171; }
+  select.form-input { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFFFFF' stroke-width='2' opacity='0.6'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 12px center; background-size: 18px; padding-right: 40px; }
+  select.form-input option { background: #0A1128; color: #FFF; }
+  select.form-input option:disabled { color: rgba(255,255,255,0.3); }
+
+  /* ─────── 單元 badge ─────── */
+  .unit-badge {
+    display: inline-block;
+    padding: 6px 12px; border-radius: 4px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    background: rgba(0, 229, 255, 0.15); color: #33EEFF;
+    border: 1px solid rgba(0, 229, 255, 0.3);
+  }
+  .unit-badge-morris { background: rgba(77, 159, 255, 0.18); color: #7DB4FF; border-color: rgba(77, 159, 255, 0.35); }
+  .unit-badge-victor { background: rgba(0, 229, 255, 0.15); color: #33EEFF; border-color: rgba(0, 229, 255, 0.3); }
+  .unit-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; font-size: 3rem; line-height: 1;
+    background: linear-gradient(135deg, #4D9FFF 0%, #00E5FF 100%);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.03em;
+  }
+
+  /* ─────── nav ─────── */
+  .nav-blur {
+    backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(10, 17, 40, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .nav-link {
+    color: rgba(255,255,255,0.75); font-weight: 700; font-size: 14px;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: #00E5FF; }
+
+  /* ─────── floating CTA ─────── */
+  .floating-cta {
+    position: fixed; right: 1.25rem; bottom: 1.25rem;
+    z-index: 50; padding: 0.95rem 1.6rem;
+    background: linear-gradient(135deg, #0066FF 0%, #4D9FFF 100%);
+    color: #fff !important;
+    border-radius: 999px; font-weight: 900; font-size: 14px; letter-spacing: 0.12em;
+    box-shadow: 0 12px 32px -6px rgba(0, 102, 255, 0.65);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+  }
+  .floating-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 42px -6px rgba(0, 102, 255, 0.85);
+  }
+
+  /* ─────── 進場動畫 ─────── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); will-change: opacity, transform; }
+  .reveal.from-left { transform: translateX(-40px); }
+  .reveal.from-right { transform: translateX(40px); }
+  .reveal.in-view { opacity: 1; transform: translate(0,0); }
+
+  /* ─────── FAQ ─────── */
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+  details .faq-icon { transition: transform 0.3s ease; }
+  details[open] .faq-icon { transform: rotate(45deg); }
+
+  /* ─────── 梯次卡片橫向捲動 ─────── */
+  .cohort-track { display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.5rem 0.25rem 1rem; scrollbar-width: none; }
+  .cohort-track::-webkit-scrollbar { display: none; }
+  .cohort-card { flex: 0 0 min(380px, 88%); scroll-snap-align: start; }
+
+  /* ─────── 中文標題斷行 ─────── */
+  .card h3, .section-title, .hero-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  /* ─────── 手機微調 ─────── */
+  @media (max-width: 640px) {
+    .container-wide { padding-left: 1rem; padding-right: 1rem; }
+    .unit-number { font-size: 2.5rem; }
+    .card { padding: 1.25rem; }
+  }
+
+  /* ─────── 講師浮動蹺蹺板動畫(跟 3 一樣) ─────── */
+  @media (min-width: 640px) {
+    .hero-float-a { animation: float-a 5.5s ease-in-out infinite; }
+    .hero-float-b { animation: float-b 5.5s ease-in-out infinite; }
+  }
+  @keyframes float-a {
+    0%, 100% { transform: translateY(-24px); }
+    50%      { transform: translateY(24px); }
+  }
+  @keyframes float-b {
+    0%, 100% { transform: translateY(24px); }
+    50%      { transform: translateY(-24px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-float-a, .hero-float-b { animation: none; }
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-40 nav-blur">
+  <div class="container-wide flex items-center justify-between h-16">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="font-black text-white tracking-tight hover:text-cyan-400 transition text-sm sm:text-base">
+      <span class="hero-cyan">⚡</span> 製造業 AI 巡迴列車
+    </a>
+    <div class="hidden md:flex items-center gap-7">
+      <a href="#why" class="nav-link">為什麼上課</a>
+      <a href="#curriculum" class="nav-link">課程架構</a>
+      <a href="#instructors" class="nav-link">講師</a>
+      <a href="#cohorts" class="nav-link">開課場次</a>
+      <a href="#signup" class="btn-primary" style="padding:0.5rem 1.25rem; font-size:13px;">立即報名</a>
+    </div>
+    <a href="#signup" class="md:hidden btn-primary" style="padding:0.5rem 1rem; font-size:12px;">報名</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="pt-24 pb-14 sm:pt-32 sm:pb-20 relative overflow-hidden">
+  <!-- 底層網格 -->
+  <div class="absolute inset-0 grid-lines opacity-40 pointer-events-none"></div>
+  <!-- 斜切裝飾 -->
+  <div class="absolute top-20 -right-32 w-96 h-96 diag-slash opacity-30 rotate-12 pointer-events-none"></div>
+  <div class="absolute -bottom-16 -left-16 w-80 h-80 diag-slash opacity-20 -rotate-12 pointer-events-none"></div>
+
+  <div class="container-wide relative">
+
+    <!-- 上排:小 eyebrow -->
+    <div class="text-center mb-8 reveal">
+      <div class="eyebrow">2026 · 製造業 TECH SUMMIT · MANUFACTURING AI TOUR</div>
+    </div>
+
+    <!-- Hero 主標題 + 講師卡片 -->
+    <div class="grid lg:grid-cols-12 gap-8 items-center mb-14">
+      <!-- 左:主標 -->
+      <div class="lg:col-span-7 reveal">
+        <h1 class="hero-title mb-6">
+          <span class="block">用 <span class="hero-cyan">AI</span> 蓋工廠</span>
+          <span class="block">學<span class="hero-underline">資安</span>裝門鎖</span>
+        </h1>
+        <p class="text-ink-300 text-base sm:text-lg leading-[1.85] mb-6 max-w-xl">
+          6 小時實戰 · 雙講師 · 一次補齊<br>
+          <span class="text-white font-bold">Morris</span> 教你把 <span class="hero-cyan">n8n × Antigravity</span> 帶回工廠 ·
+          <span class="text-white font-bold">Victor</span> 補上 <span class="hero-cyan">AI Agent 資安</span>
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-8">
+          <span class="unit-badge">6 小時</span>
+          <span class="unit-badge">8 大單元</span>
+          <span class="unit-badge">2 位講師</span>
+          <span class="unit-badge">實體巡迴</span>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#signup" class="btn-primary">立即報名 →</a>
+          <a href="#curriculum" class="btn-outline">看課程架構</a>
+        </div>
+      </div>
+
+      <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4 reveal from-right">
+        <div class="hero-float-a">
+          <div class="instructor-card">
+            <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
+            <div class="instructor-label">
+              <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">上半場 · MORRIS</div>
+              <div class="text-white font-black text-sm">Morris</div>
+              <div class="text-ink-300 text-[11px]">AI 落地 · n8n</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-float-b">
+          <div class="instructor-card">
+            <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
+            <div class="instructor-label">
+              <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">下半場 · VICTOR</div>
+              <div class="text-white font-black text-sm">Victor 游文賢</div>
+              <div class="text-ink-300 text-[11px]">AI Agent 資安</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部 info bar -->
+    <div class="max-w-4xl mx-auto reveal">
+      <div class="card flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-white/10" style="padding:0; overflow:hidden;">
+        <div class="flex-1 p-5 sm:p-6 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.3)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div class="text-[10px] tracking-[0.28em] text-cyan-400 font-bold mb-1">時 &nbsp; 長</div>
+            <div class="text-sm text-white font-bold leading-tight">6 小時實戰 · 8 大單元 · 一日完訓</div>
+          </div>
+        </div>
+        <div class="flex-1 p-5 sm:p-6 flex items-center gap-4">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.3)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div>
+            <div class="text-[10px] tracking-[0.28em] text-cyan-400 font-bold mb-1">場 &nbsp; 次</div>
+            <div class="text-sm text-white font-bold leading-tight">多城市巡迴 · 詳見開課場次</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ WHY ══════════════════════ -->
+<section id="why" class="py-16 sm:py-24 relative">
+  <div class="container-wide">
+    <div class="text-center mb-14">
+      <div class="eyebrow mb-4">01 &nbsp;/&nbsp; WHY</div>
+      <h2 class="section-title mb-4">為什麼是這堂課</h2>
+      <p class="section-sub">大部分的 AI 課只教「工具怎麼用」。這堂課教「怎麼在你的工廠真的動起來,而且不會出事」。</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card reveal">
+        <div class="text-cyan-400 mb-4">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"/><path d="M12 18v4"/><path d="M4.93 4.93l2.83 2.83"/><path d="M16.24 16.24l2.83 2.83"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M4.93 19.07l2.83-2.83"/><path d="M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h3 class="font-black text-white text-lg mb-2">AI 工具會了,製造業現場還是老樣子</h3>
+        <p class="text-ink-300 text-base leading-relaxed">Prompt 寫得溜,但沒接到 MES / ERP,沒法自動化。這堂課給地圖 + 手把手接管線,讓 AI 真的在你的產線上跑。</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.1s">
+        <div class="text-cyan-400 mb-4">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4"/><path d="M16 2v4"/><path d="M3 10h18"/></svg>
+        </div>
+        <h3 class="font-black text-white text-lg mb-2">SOP 一堆散在腦袋,想收沒工具</h3>
+        <p class="text-ink-300 text-base leading-relaxed">資深工程師退休帶走一切。我們用 Google Antigravity 把 SOP 變成可執行的 AI Skill,新人一鍵重跑,老手經驗留下。</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.2s">
+        <div class="text-cyan-400 mb-4">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="font-black text-white text-lg mb-2">動了 AI 又怕被駭,遲遲不敢上線</h3>
+        <p class="text-ink-300 text-base leading-relaxed">AI Agent 有權限、能操作系統、對外通訊,就是新破口。下半場直接教 Gateway、稽核、心跳監控,讓資安部門不擋你的路。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 課程架構 ══════════════════════ -->
+<section id="curriculum" class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="absolute inset-0 grid-lines opacity-30 pointer-events-none"></div>
+  <div class="container-wide relative">
+    <div class="text-center mb-14">
+      <div class="eyebrow mb-4">02 &nbsp;/&nbsp; CURRICULUM</div>
+      <h2 class="section-title mb-4">8 大單元 · 6 小時</h2>
+      <p class="section-sub">上半場 Morris 教「怎麼用 AI 做出東西」 · 下半場 Victor 補「這些東西跑起來怎麼防」。</p>
+    </div>
+
+    <!-- 4:4 上下半場 -->
+    <div class="grid md:grid-cols-2 gap-10 lg:gap-14">
+
+      <!-- 上半場 · Morris -->
+      <div class="reveal from-left">
+        <div class="mb-6 flex items-center gap-3">
+          <div class="w-1.5 h-8 rounded" style="background:linear-gradient(180deg,#4D9FFF,#0066FF)"></div>
+          <div>
+            <div class="text-cyan-400 text-xs tracking-[0.28em] font-bold">MORNING · MORRIS</div>
+            <h3 class="text-2xl font-black text-white mt-1">上半場 · AI 蓋工廠</h3>
+            <div class="text-ink-300 text-sm mt-1">3 小時 · 4 單元 · n8n × Antigravity 實戰</div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">01</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-morris mb-2">30 min · 講授</div>
+                <h4 class="font-black text-white text-lg mb-1">製造業 AI 落地地圖</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">三大 Solution Map(訂單客服 / 生產效能 / 設備維修)· 告訴你「哪裡可以動 AI」。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">02</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-morris mb-2">60 min · 實作</div>
+                <h4 class="font-black text-white text-lg mb-1">Antigravity 把 SOP 變 AI Skill</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">Google Antigravity + Vibe Coding · 學員實作把一份 SOP 變成可重複執行的 Agent。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">03</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-morris mb-2">60 min · 實作</div>
+                <h4 class="font-black text-white text-lg mb-1">n8n 全流程自動化</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">從 Trigger 到 Discord 通知 · Nathan 訂單案例手把手,學員實作自己公司的一條自動化。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">04</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-morris mb-2">30 min · 講授</div>
+                <h4 class="font-black text-white text-lg mb-1">企業 AI 治理入門</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">Enterprise AI Orchestrator 概念 · 把散落 AI 收攏成中央 Hub,銜接下半場資安。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 下半場 · Victor -->
+      <div class="reveal from-right">
+        <div class="mb-6 flex items-center gap-3">
+          <div class="w-1.5 h-8 rounded" style="background:linear-gradient(180deg,#00E5FF,#00B8CC)"></div>
+          <div>
+            <div class="text-cyan-400 text-xs tracking-[0.28em] font-bold">AFTERNOON · VICTOR</div>
+            <h3 class="text-2xl font-black text-white mt-1">下半場 · 學資安裝門鎖</h3>
+            <div class="text-ink-300 text-sm mt-1">3 小時 · 4 單元 · AI Agent 資安治理實戰</div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">05</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-victor mb-2">30 min · 講授</div>
+                <h4 class="font-black text-white text-lg mb-1">LLM 的資安死角</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">Prompt 洩漏、API 濫用、Skill 劫持 · 為什麼員工用 AI Agent 就是新破口。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">06</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-victor mb-2">30 min · 講授</div>
+                <h4 class="font-black text-white text-lg mb-1">2026 AI Agent 攻擊面</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">MCP、CLI、自動執行權限 · 把上午學的 n8n / Antigravity 拿來對照風險。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">07</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-victor mb-2">75 min · 實作</div>
+                <h4 class="font-black text-white text-lg mb-1">OpenClaw 安全 Gateway 實作</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">開源 AI-native Gateway · 給上午做的 Agent 加上權限稽核、心跳監控、跨平台接入。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="flex items-start gap-4">
+              <div class="unit-number flex-shrink-0">08</div>
+              <div class="flex-1">
+                <div class="unit-badge unit-badge-victor mb-2">45 min · 講授+Q&A</div>
+                <h4 class="font-black text-white text-lg mb-1">AI 治理實務 + 收尾</h4>
+                <p class="text-ink-300 text-sm leading-relaxed">「AI 最危險的不是駭客,是什麼都相信它的員工」 · 企業治理 checklist + 現場 Q&A。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ OUTCOMES ══════════════════════ -->
+<section class="py-16 sm:py-24 relative">
+  <div class="container-wide">
+    <div class="text-center mb-14">
+      <div class="eyebrow mb-4">03 &nbsp;/&nbsp; OUTCOMES</div>
+      <h2 class="section-title mb-4">完訓帶走的 3 個成果</h2>
+      <p class="section-sub">不只是聽懂,是回工廠當週就能用。</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="card card-tint reveal text-center">
+        <div class="unit-number mb-3">01</div>
+        <h3 class="font-black text-white text-lg mb-3">能跑的 AI Skill</h3>
+        <p class="text-ink-300 text-sm leading-relaxed">把公司一份 SOP 變成可重複執行的 AI 工作模式(SKILL.md + scripts)。</p>
+      </div>
+      <div class="card card-tint reveal text-center" style="transition-delay:0.1s;">
+        <div class="unit-number mb-3">02</div>
+        <h3 class="font-black text-white text-lg mb-3">能跑的 n8n 自動化</h3>
+        <p class="text-ink-300 text-sm leading-relaxed">訂單 / 庫存 / 告警 三選一 · 一條完整流程接上 Discord / Email。</p>
+      </div>
+      <div class="card card-tint reveal text-center" style="transition-delay:0.2s;">
+        <div class="unit-number mb-3">03</div>
+        <h3 class="font-black text-white text-lg mb-3">能守的安全 Gateway</h3>
+        <p class="text-ink-300 text-sm leading-relaxed">OpenClaw 給上面兩個工具加門鎖 · 權限稽核 + 心跳監控就位。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ INSTRUCTORS ══════════════════════ -->
+<section id="instructors" class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="absolute -top-20 -right-20 w-96 h-96 diag-slash opacity-15 rotate-45 pointer-events-none"></div>
+  <div class="container-wide relative">
+    <div class="text-center mb-14">
+      <div class="eyebrow mb-4">04 &nbsp;/&nbsp; INSTRUCTORS</div>
+      <h2 class="section-title mb-4">雙講師陣容</h2>
+      <p class="section-sub">一個蓋工廠的顧問,一個 20+ 年資安專家。一天內把「怎麼用」+「怎麼防」都給你。</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+      <!-- Morris -->
+      <div class="reveal">
+        <div class="mx-auto mb-6" style="width: 100%; max-width: 320px;">
+          <div class="instructor-card">
+            <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="unit-badge unit-badge-morris mb-3">上半場 · 單元 01-04</div>
+          <h3 class="text-3xl font-black text-white mb-1">Morris</h3>
+          <div class="text-base text-cyan-400 font-bold mb-4">虎智科技 · GenAI 顧問方法論</div>
+          <p class="text-base text-ink-300 leading-relaxed max-w-sm mx-auto">
+            從 AI Solution Map 到 n8n 手把手 · 帶你把 Antigravity Vibe Coding 帶回工廠,讓 SOP 變成能跑的 AI Skill。
+          </p>
+        </div>
+      </div>
+
+      <!-- Victor -->
+      <div class="reveal" style="transition-delay:0.1s;">
+        <div class="mx-auto mb-6" style="width: 100%; max-width: 320px;">
+          <div class="instructor-card">
+            <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
+          </div>
+        </div>
+        <div class="text-center">
+          <div class="unit-badge unit-badge-victor mb-3">下半場 · 單元 05-08</div>
+          <h3 class="text-3xl font-black text-white mb-1">Victor · 游文賢</h3>
+          <div class="text-base text-cyan-400 font-bold mb-4">虎智科技資安顧問 · 20+ 年資安經驗</div>
+          <div class="text-sm text-ink-300 leading-relaxed max-w-md mx-auto space-y-2">
+            <p>前創泓科技資安長(上櫃) · 亞洲物聯網聯盟 常務理事 · 台科大資管系外聘專業導師</p>
+            <p class="text-ink-500 text-xs">著作《AI 元宇宙應用與商機》第六章「IT & OT 資訊安全」 · 9 項發明專利 · 20+ 家金融 App 資安導入(台銀、國泰、玉山、Line Bank、街口...)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ COHORTS ══════════════════════ -->
+<section id="cohorts" class="py-16 sm:py-24 relative">
+  <div class="container-wide">
+    <div class="text-center mb-14">
+      <div class="eyebrow mb-4">05 &nbsp;/&nbsp; COHORTS</div>
+      <h2 class="section-title mb-4">開課場次</h2>
+      <p class="section-sub">6 小時 · 一日完訓 · 每場限額 30 人</p>
+    </div>
+
+    <div class="cohort-track reveal" id="cohortList"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SIGNUP ══════════════════════ -->
+<section id="signup" class="py-16 sm:py-24 relative">
+  <div class="container-wide" style="max-width:780px;">
+    <div class="text-center mb-10">
+      <div class="eyebrow mb-4">06 &nbsp;/&nbsp; SIGNUP</div>
+      <h2 class="section-title mb-4">課程報名</h2>
+      <p class="section-sub">填寫下列資料即可完成報名,開課前 3 天會發送行前通知</p>
+    </div>
+
+    <form id="signupForm" class="card" style="padding: 2rem 1.75rem;">
+
+      <!-- 同意書 gate -->
+      <div id="consentGate" class="text-center py-4">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5" style="border:2px solid #00E5FF;background:rgba(0,229,255,0.08)">
+          <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#00E5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-white mb-2">請先閱讀個人資料告知書</h3>
+        <p class="text-sm text-ink-300 mb-6 max-w-md mx-auto leading-relaxed">依《個人資料保護法》,報名前需閱讀並同意本課程個資蒐集告知書。閱讀後勾選同意,即可開始填寫報名資料。</p>
+
+        <button type="button" onclick="openConsentModal()" class="btn-outline mb-5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          閱讀個資告知書
+        </button>
+
+        <label class="flex items-start gap-3 cursor-pointer max-w-xl mx-auto text-left px-3 py-3 rounded transition hover:bg-white/5">
+          <input type="checkbox" id="f_consent" name="consent" required class="mt-1 w-5 h-5 flex-shrink-0" style="accent-color:#4D9FFF;">
+          <span class="text-sm text-ink-300 leading-relaxed">
+            本人已閱讀
+            <button type="button" onclick="openConsentModal()" class="text-cyan-400 underline font-bold hover:text-white transition">製造業 AI 巡迴列車 資料蒐集、處理及利用之告知暨同意書</button>
+            ,並同意虎智科技在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
+          </span>
+        </label>
+      </div>
+
+      <!-- 表單欄位 -->
+      <div id="formFields" class="hidden space-y-6">
+
+        <!-- 學員資訊 -->
+        <div>
+          <h3 class="text-white font-bold text-base mb-3 pb-2 border-b border-white/10 flex items-center gap-2">
+            <span class="block w-1 h-4 rounded" style="background:#00E5FF;"></span>學員資訊
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">中文姓名 <span class="text-red-400">*</span></label>
+              <input type="text" id="f_name" name="name" required class="form-input px-4 py-2.5" placeholder="王大明">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">職稱 <span class="text-red-400">*</span></label>
+              <input type="text" id="f_jobTitle" name="jobTitle" required class="form-input px-4 py-2.5" placeholder="生產部經理">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">E-Mail <span class="text-red-400">*</span></label>
+              <input type="email" id="f_email" name="email" required class="form-input px-4 py-2.5" placeholder="you@example.com">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">手機 <span class="text-red-400">*</span></label>
+              <input type="tel" id="f_phone" name="phone" required class="form-input px-4 py-2.5" placeholder="0912345678">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">性別 <span class="text-red-400">*</span></label>
+              <select id="f_gender" name="gender" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">用餐選擇 <span class="text-red-400">*</span></label>
+              <select id="f_meal" name="meal" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="葷">葷</option>
+                <option value="素">素</option>
+                <option value="不用餐">不用餐</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 公司資訊 -->
+        <div>
+          <h3 class="text-white font-bold text-base mb-3 pb-2 border-b border-white/10 flex items-center gap-2">
+            <span class="block w-1 h-4 rounded" style="background:#00E5FF;"></span>公司資訊
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">公司名稱 <span class="text-red-400">*</span></label>
+              <input type="text" id="f_companyName" name="companyName" required class="form-input px-4 py-2.5" placeholder="○○股份有限公司">
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">公司統編 <span class="text-ink-500 font-normal">(可選 · 需開發票才填)</span></label>
+              <input type="text" id="f_taxId" name="taxId" inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">產業別 <span class="text-red-400">*</span></label>
+              <select id="f_industry" name="industry" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="電子零組件業">電子零組件業</option>
+                <option value="電腦電子產品及光學製品業">電腦電子產品及光學製品業</option>
+                <option value="電力設備及配備業">電力設備及配備業</option>
+                <option value="金屬製品業">金屬製品業</option>
+                <option value="基本金屬業">基本金屬業</option>
+                <option value="機械設備業">機械設備業</option>
+                <option value="產業用機械設備維修及安裝業">產業用機械設備維修及安裝業</option>
+                <option value="汽車及其零件業">汽車及其零件業</option>
+                <option value="其他運輸工具及其零件業">其他運輸工具及其零件業</option>
+                <option value="食品及飼品業">食品及飼品業</option>
+                <option value="飲料及菸草業">飲料及菸草業</option>
+                <option value="紡織業">紡織業</option>
+                <option value="成衣及服飾品業">成衣及服飾品業</option>
+                <option value="皮革毛皮製品業">皮革毛皮製品業</option>
+                <option value="木竹製品業">木竹製品業</option>
+                <option value="紙漿、紙及紙製品業">紙漿、紙及紙製品業</option>
+                <option value="印刷及資料儲存媒體複製業">印刷及資料儲存媒體複製業</option>
+                <option value="石油及煤製品業">石油及煤製品業</option>
+                <option value="化學材料及肥料業">化學材料及肥料業</option>
+                <option value="其他化學製品業">其他化學製品業</option>
+                <option value="藥品及醫用化學製品業">藥品及醫用化學製品業</option>
+                <option value="橡膠製品業">橡膠製品業</option>
+                <option value="塑膠製品業">塑膠製品業</option>
+                <option value="非金屬礦物製品業(建材)">非金屬礦物製品業(建材)</option>
+                <option value="家具業">家具業</option>
+                <option value="其他製造業">其他製造業</option>
+                <option value="其他(非製造業)">其他(非製造業)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 梯次 -->
+        <div>
+          <h3 class="text-white font-bold text-base mb-3 pb-2 border-b border-white/10 flex items-center gap-2">
+            <span class="block w-1 h-4 rounded" style="background:#00E5FF;"></span>選擇報名場次 <span class="text-red-400">*</span>
+          </h3>
+          <select id="f_cohort" name="cohort" required class="form-input px-4 py-3">
+            <option value="">— 請選擇場次 —</option>
+          </select>
+        </div>
+
+        <!-- 其他 -->
+        <div>
+          <label class="block text-sm font-bold text-ink-300 mb-1.5">報名留言 <span class="text-ink-500 font-normal">(選填,128 字內)</span></label>
+          <textarea id="f_note" name="note" maxlength="128" rows="3" class="form-input px-4 py-2.5" placeholder="任何想告訴我們的事,例如飲食禁忌、無障礙需求⋯⋯"></textarea>
+        </div>
+
+      </div><!-- /formFields -->
+
+      <button type="submit" id="submitBtn" class="hidden btn-primary w-full text-base py-4" style="border-radius:10px; font-size:16px;">
+        送出報名 →
+      </button>
+
+      <!-- 課程聯絡窗口 -->
+      <div class="pt-6 mt-2 border-t border-white/10 text-center">
+        <div class="text-[11px] tracking-[0.28em] text-cyan-400 mb-3 font-bold">課程聯絡窗口</div>
+        <div class="text-sm">
+          <div class="font-bold text-white">虎智科技 · 紀先生</div>
+          <div class="text-ink-500 mt-1 font-mono">02-66058192</div>
+        </div>
+      </div>
+    </form>
+
+    <!-- 成功訊息 -->
+    <div id="successBox" class="hidden mt-8 card text-center" style="padding: 2.5rem 1.75rem;">
+      <div class="text-cyan-400 text-sm tracking-[0.3em] font-bold mb-5">報名已確認</div>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid #00E5FF;background:rgba(0,229,255,0.08);">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#00E5FF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="text-2xl font-black text-white mb-3">報名成功</h3>
+      <p class="text-ink-300 leading-relaxed">將於 <span class="text-cyan-400 font-bold">開課前 3 天</span> 發送行前通知,請留意信箱</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ FAQ ══════════════════════ -->
+<section id="faq" class="py-16 sm:py-24 relative">
+  <div class="container-wide" style="max-width:820px;">
+    <div class="text-center mb-12">
+      <div class="eyebrow mb-4">07 &nbsp;/&nbsp; FAQ</div>
+      <h2 class="section-title mb-4">常見問題</h2>
+    </div>
+    <div class="space-y-3">
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-cyan-400 text-xs font-bold tracking-[0.2em]">Q 01</span>
+            <span class="text-white font-bold">需要程式基礎嗎?</span>
+          </div>
+          <span class="faq-icon text-cyan-400 text-2xl">＋</span>
+        </summary>
+        <p class="text-ink-300 mt-4 leading-relaxed pl-16 text-sm">不需要。n8n 是視覺化拖拉,Antigravity 用自然語言敘述,OpenClaw 用 CLI 逐步教。零程式基礎照樣能實作 3 個成果。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-cyan-400 text-xs font-bold tracking-[0.2em]">Q 02</span>
+            <span class="text-white font-bold">課程多長?會帶走什麼?</span>
+          </div>
+          <span class="faq-icon text-cyan-400 text-2xl">＋</span>
+        </summary>
+        <p class="text-ink-300 mt-4 leading-relaxed pl-16 text-sm">6 小時 · 一日完訓。完訓當天帶走:AI Skill(SOP 版)、n8n 自動化流程、OpenClaw 安全 Gateway 三個能直接上工的成果。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-cyan-400 text-xs font-bold tracking-[0.2em]">Q 03</span>
+            <span class="text-white font-bold">要帶什麼設備?</span>
+          </div>
+          <span class="faq-icon text-cyan-400 text-2xl">＋</span>
+        </summary>
+        <p class="text-ink-300 mt-4 leading-relaxed pl-16 text-sm">請攜帶個人筆電(MacOS / Windows 皆可)· 我們會提供 n8n / Antigravity / OpenClaw 帳號與環境。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4">
+          <div class="flex items-center gap-3">
+            <span class="text-cyan-400 text-xs font-bold tracking-[0.2em]">Q 04</span>
+            <span class="text-white font-bold">上完課還有支援嗎?</span>
+          </div>
+          <span class="faq-icon text-cyan-400 text-2xl">＋</span>
+        </summary>
+        <p class="text-ink-300 mt-4 leading-relaxed pl-16 text-sm">有。完訓後提供基於課程內容的 24h AI 助教,隨時解決實作疑問。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 同意書彈窗 ══════════════════════ -->
+<div id="consentModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4" style="display:none; background:rgba(5,9,20,0.8);" onclick="if(event.target===this)closeConsentModal()">
+  <div class="max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-xl shadow-2xl" style="background:#0A1128; color:#fff; border:1px solid rgba(77,159,255,0.3)">
+    <div class="sticky top-0 px-6 py-4 flex justify-between items-center" style="background:linear-gradient(135deg,#0066FF,#003D99);">
+      <h3 class="font-black text-base" style="color:#fff">個人資料蒐集、處理及利用之告知暨同意書</h3>
+      <button type="button" onclick="closeConsentModal()" class="text-2xl leading-none hover:opacity-70" style="color:#fff">×</button>
+    </div>
+    <div class="px-6 py-6 text-[14px] leading-relaxed space-y-6" style="color:rgba(255,255,255,0.85)">
+      <div>
+        <h4 class="font-black text-center text-base mb-4 text-white">虎智科技個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <p class="font-bold mb-3">告知事項</p>
+        <p class="mb-4">虎智科技有限公司(下稱本公司)為了執行「製造業 AI 巡迴列車」課程,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>蒐集目的:為本課程相關辦理、活動、通訊、開立發票、寄送行前通知與課後追蹤,以及本公司內部行政管理與服務改善。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、手機、E-Mail、產業別。</li>
+          <li>利用期間:至蒐集目的消失為止,或您以書面要求刪除為止。</li>
+          <li>利用地區:中華民國地區及本公司辦事處所在地區。</li>
+          <li>利用者:本公司及承辦本課程之受託服務廠商。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、電話及其他合法方式利用之。</li>
+          <li>您得以書面主張下列權利:
+            <div class="pl-4 mt-2 font-bold space-y-1">
+              <div>(一)查詢或請求閱覽</div>
+              <div>(二)請求製給複製本</div>
+              <div>(三)請求補充或更正</div>
+              <div>(四)請求停止蒐集、處理或利用</div>
+              <div>(五)請求刪除</div>
+            </div>
+            <p class="mt-3 font-normal">若有上述需求,請與本公司承辦人員聯繫:
+              <span class="block mt-2 font-bold">．虎智科技 紀先生 02-66058192</span></p>
+          </li>
+          <li>您若不簽署本告知暨同意書,本公司將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對本公司所持有您的個資,本公司會按照個資法相關規定保密並予以妥善保管。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="sticky bottom-0 px-6 py-4 flex justify-end" style="background:#0A1128;border-top:1px solid rgba(255,255,255,0.1);">
+      <button type="button" onclick="closeConsentModal()" class="btn-primary" style="padding:0.6rem 1.5rem; font-size:14px;">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 浮動報名按鈕 ══════════════════════ -->
+<a href="#signup" class="floating-cta">立即報名 →</a>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8 mt-8 relative">
+  <div class="container-wide text-center">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="inline-block group cursor-pointer">
+      <div class="text-white font-black text-base tracking-tight group-hover:text-cyan-400 transition"><span class="hero-cyan">⚡</span> 製造業 AI 巡迴列車</div>
+      <div class="text-ink-500 text-[13px] tracking-widest font-mono mt-2 group-hover:text-cyan-400 transition">↑ 回到頂端</div>
+    </a>
+
+    <div class="mt-8 pt-6 border-t border-white/10 max-w-2xl mx-auto">
+      <div class="text-[11px] tracking-[0.28em] text-cyan-400 mb-3 font-bold">課程聯絡窗口</div>
+      <div class="text-sm">
+        <span class="font-bold text-white">虎智科技 · 紀先生</span>
+        <span class="font-mono ml-2 text-ink-500">02-66058192</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════ 設定 ══════════════════════
+const CONFIG = {
+  SHEET_WEBHOOK: 'YOUR_TOUR_APPS_SCRIPT_URL_HERE',
+  COHORTS_CSV_URL: ''
+};
+
+const COHORTS_FALLBACK = [
+  { city: '場次待公布', date: '日期待公布', time: '時間待公布', location: '地點待公布', capacity: 30 }
+];
+const REG_CUTOFF_DAYS = 0;
+
+// ── 統編:只格式限制,不驗證(選填) ──
+const taxIdInput = document.getElementById('f_taxId');
+if (taxIdInput) {
+  taxIdInput.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+  });
+}
+
+// ── Reveal 進場 ──
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+}
+
+// ── 同意書彈窗 ──
+function openConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.remove('hidden'); m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.add('hidden'); m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('consentModal');
+    if (m && !m.classList.contains('hidden')) closeConsentModal();
+  }
+});
+
+// ── 同意 checkbox → 展開表單 ──
+document.getElementById('f_consent').addEventListener('change', e => {
+  const fields = document.getElementById('formFields');
+  const btn = document.getElementById('submitBtn');
+  if (e.target.checked) {
+    fields.classList.remove('hidden');
+    btn.classList.remove('hidden');
+    setTimeout(() => {
+      const firstInput = fields.querySelector('input, select, textarea');
+      if (firstInput) firstInput.focus({ preventScroll: true });
+      fields.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  } else {
+    fields.classList.add('hidden');
+    btn.classList.add('hidden');
+  }
+});
+
+// ── CSV 解析 ──
+function parseCSV(text) {
+  const rows = []; let row = []; let cell = ''; let inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') { inQ = false; }
+      else { cell += c; }
+    } else {
+      if (c === '"') { inQ = true; }
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c === '\r') {}
+      else { cell += c; }
+    }
+  }
+  if (cell.length || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+function parseCohortCSV(text) {
+  const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+  if (rows.length < 2) return [];
+  return rows.slice(1).map(r => ({
+    city: (r[0] || '').trim(),
+    date: (r[1] || '').trim(),
+    time: (r[2] || '').trim(),
+    location: (r[3] || '').trim(),
+    capacity: 30
+  })).filter(c => c.date);
+}
+
+function parseFlexDate(str) {
+  if (!str) return null;
+  const s = String(str).trim();
+  let y, m, d, mt;
+  if ((mt = s.match(/(\d{4})\s*[\/\-.年]\s*(\d{1,2})\s*[\/\-.月]\s*(\d{1,2})/))) {
+    y = +mt[1]; m = +mt[2]; d = +mt[3];
+  } else if ((mt = s.match(/(\d{1,2})\s*[\/\-月]\s*(\d{1,2})/))) {
+    m = +mt[1]; d = +mt[2];
+  } else {
+    const dd = new Date(s);
+    return isNaN(dd.getTime()) ? null : dd;
+  }
+  if (y === undefined) {
+    const now = new Date(); y = now.getFullYear();
+    if ((new Date(y, m - 1, d) - now) / 86400000 < -30) y += 1;
+  }
+  const out = new Date(y, m - 1, d);
+  return isNaN(out.getTime()) ? null : out;
+}
+
+function daysUntil(dateStr) {
+  const d = parseFlexDate(dateStr);
+  if (!d) return null;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / 86400000);
+}
+
+function normCohortKey(label) {
+  const parts = String(label).split('｜');
+  if (parts.length < 2) return String(label);
+  const dt = (parts[1] || '').trim();
+  const sp = dt.indexOf(' ');
+  const datePart = sp >= 0 ? dt.slice(0, sp) : dt;
+  const rest = sp >= 0 ? dt.slice(sp + 1) : '';
+  const pd = parseFlexDate(datePart);
+  const norm = pd ? `${pd.getFullYear()}-${pd.getMonth() + 1}-${pd.getDate()}` : datePart;
+  return [parts[0], (norm + (rest ? ' ' + rest : '')).trim(), parts[2] || ''].join('｜');
+}
+
+function countdownBadge(dateStr) {
+  const days = daysUntil(dateStr);
+  if (days === null) return '<span class="text-ink-500 text-xs">日期待定</span>';
+  if (days > 0) return `<span class="text-cyan-400 font-black text-sm">距開課還有 ${days} 天</span>`;
+  if (days === 0) return '<span class="text-yellow-400 font-black text-sm">今天開課</span>';
+  return '<span class="text-ink-500 text-xs">已結束</span>';
+}
+
+function renderCohorts(cohorts, counts) {
+  counts = counts || {};
+  const list = document.getElementById('cohortList');
+  const select = document.getElementById('f_cohort');
+  list.innerHTML = '';
+  select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+
+  const normCounts = {};
+  Object.keys(counts).forEach(k => {
+    const nk = normCohortKey(k);
+    normCounts[nk] = (normCounts[nk] || 0) + counts[k];
+  });
+  const labelOf = (co) => [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+  const takenOf = (co) => normCounts[normCohortKey(labelOf(co))] || 0;
+
+  cohorts.forEach((co) => {
+    const label = labelOf(co);
+    const taken = takenOf(co);
+    const remaining = Math.max(0, co.capacity - taken);
+    const full = remaining <= 0;
+    const days = daysUntil(co.date);
+    const closed = days !== null && days <= REG_CUTOFF_DAYS;
+    let statusHtml;
+    if (closed) statusHtml = '<span class="text-red-400 font-bold text-sm">報名已截止</span>';
+    else if (full) statusHtml = '<span class="text-yellow-400 font-bold text-sm">已額滿 · 開放候補</span>';
+    else statusHtml = `剩餘名額 <span class="text-cyan-400 font-black text-lg">${remaining}</span> / ${co.capacity} 人`;
+
+    const card = document.createElement('div');
+    card.className = 'cohort-card card';
+    card.innerHTML = `
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-cyan-400 font-black text-2xl">${co.city || '場次'}</span>
+        <span class="text-xs text-ink-500 font-mono">COHORT</span>
+      </div>
+      <div class="space-y-2.5 text-sm text-ink-300 mb-4">
+        <div class="flex gap-3"><span class="text-ink-500 text-xs w-10 mt-0.5 shrink-0">日期</span><span class="text-white font-bold">${co.date || '-'}</span></div>
+        <div class="flex gap-3"><span class="text-ink-500 text-xs w-10 mt-0.5 shrink-0">時間</span><span>${co.time || '-'}</span></div>
+        <div class="flex gap-3"><span class="text-ink-500 text-xs w-10 mt-0.5 shrink-0">地點</span><span>${co.location || '-'}</span></div>
+      </div>
+      <div class="pt-3 border-t border-white/10 flex justify-between items-center">
+        <div>${countdownBadge(co.date)}</div>
+        <div class="text-xs text-ink-300">${statusHtml}</div>
+      </div>`;
+    list.appendChild(card);
+
+    const opt = document.createElement('option');
+    opt.value = label;
+    opt.textContent = label + (closed ? '(報名已截止)' : full ? '(候補)' : '');
+    if (closed) opt.disabled = true;
+    select.appendChild(opt);
+  });
+}
+
+async function loadCohorts() {
+  let cohorts = COHORTS_FALLBACK;
+  if (CONFIG.COHORTS_CSV_URL) {
+    try {
+      const res = await fetch(CONFIG.COHORTS_CSV_URL);
+      if (res.ok) {
+        const parsed = parseCohortCSV(await res.text());
+        if (parsed.length) cohorts = parsed;
+      }
+    } catch (e) {}
+  }
+  let counts = {};
+  if (CONFIG.SHEET_WEBHOOK && !CONFIG.SHEET_WEBHOOK.includes('YOUR_')) {
+    try {
+      const r = await fetch(CONFIG.SHEET_WEBHOOK + '?action=counts');
+      if (r.ok) counts = await r.json();
+    } catch (e) {}
+  }
+  const upcoming = cohorts.filter(c => {
+    const d = daysUntil(c.date);
+    return d === null || d >= 0;
+  });
+  renderCohorts(upcoming.length ? upcoming : cohorts, counts);
+}
+loadCohorts();
+
+// ── 表單送出 ──
+document.getElementById('signupForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = document.getElementById('submitBtn');
+
+  // 統編如果有填 → 檢查 8 碼
+  const taxId = form.taxId.value.trim();
+  if (taxId && !/^\d{8}$/.test(taxId)) {
+    alert('公司統編需為 8 位數字(或留空不開發票)');
+    document.getElementById('f_taxId').focus(); return;
+  }
+
+  if (!form.consent.checked) {
+    alert('請先閱讀並勾選「個人資料蒐集、處理及利用之告知暨同意書」');
+    document.getElementById('f_consent').focus(); return;
+  }
+
+  const data = {
+    type: 'course_signup',
+    timestamp: new Date().toISOString(),
+    name: form.name.value, jobTitle: form.jobTitle.value, email: form.email.value, phone: form.phone.value,
+    gender: form.gender.value, meal: form.meal.value,
+    companyName: form.companyName.value, taxId: taxId, industry: form.industry.value,
+    cohort: form.cohort.value,
+    note: form.note.value,
+    consent: '已同意 ' + new Date().toISOString()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '送出中...';
+
+  try {
+    if (CONFIG.SHEET_WEBHOOK && !CONFIG.SHEET_WEBHOOK.includes('YOUR_')) {
+      await fetch(CONFIG.SHEET_WEBHOOK, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+    } else {
+      console.warn('[DEMO 模式] 未設定 Apps Script URL,僅 log:', data);
+      alert('目前為測試模式(後端 Apps Script 未部署),資料未真的寫入。');
+    }
+    form.classList.add('hidden');
+    const success = document.getElementById('successBox');
+    success.classList.remove('hidden');
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    alert('送出失敗,請稍後再試');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '送出報名 →';
+  }
+});
+
+// 格式錯誤紅框
+document.getElementById('f_email').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+document.getElementById('f_phone').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[\d\-+()\s]{7,}$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+</script>
+
+</body>
+</html>
