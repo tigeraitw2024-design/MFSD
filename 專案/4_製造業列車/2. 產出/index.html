@@ -126,7 +126,7 @@
     background: linear-gradient(135deg, rgba(0, 102, 255, 0.18) 0%, rgba(0, 61, 153, 0.10) 100%);
   }
 
-  /* ─────── Hero 講師藍卡片框(仿飛書海報) ─────── */
+  /* ─────── 講師藍色卡片(原始版) ─────── */
   .instructor-card {
     position: relative;
     width: 100%; aspect-ratio: 3/4;
@@ -140,7 +140,19 @@
     background: linear-gradient(135deg, transparent 60%, rgba(0, 229, 255, 0.25) 60%, rgba(0, 229, 255, 0.25) 65%, transparent 65%);
     z-index: 1;
   }
-  .instructor-card .instructor-img { position: relative; z-index: 2; }
+  .instructor-img {
+    position: relative; z-index: 2;
+    display: block; width: 100%; height: 100%;
+    object-fit: contain; object-position: center bottom;
+  }
+  .instructor-label {
+    position: absolute; bottom: 12px; left: 12px; right: 12px;
+    background: rgba(0, 41, 102, 0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 8px; padding: 8px 12px;
+    z-index: 3;
+    border: 1px solid rgba(77, 159, 255, 0.35);
+  }
 
   /* ─────── 下方 Instructors 區:純去背 · 無框 ─────── */
   .instructor-wrap {
@@ -148,12 +160,7 @@
     width: 100%; aspect-ratio: 3/4;
     filter: drop-shadow(0 20px 30px rgba(0, 102, 255, 0.35));
   }
-
-  /* ─────── 通用 img 屬性 ─────── */
-  .instructor-img {
-    display: block; width: 100%; height: 100%;
-    object-fit: contain; object-position: center bottom;
-  }
+  .instructor-wrap .instructor-img { position: static; z-index: auto; }
 
   /* ─────── 按鈕 ─────── */
   .btn-primary {
@@ -273,11 +280,7 @@
     .card { padding: 1.25rem; }
   }
 
-  /* ─────── 講師平行置中 + 放大 15%(無視差、無動畫) ─────── */
-  @media (min-width: 640px) {
-    .hero-offset-up   { transform: scale(1.15); transform-origin: center right; }
-    .hero-offset-down { transform: scale(1.15); transform-origin: center left; }
-  }
+  /* Hero 講師區:無動畫、無視差、水平置中(用 grid items-center 就對齊了) */
 </style>
 </head>
 
@@ -344,26 +347,20 @@
 
       <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
       <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-center reveal from-right">
-        <!-- Morris(左上 · Hero 藍卡片框) -->
-        <div class="hero-offset-up">
-          <div class="instructor-card">
-            <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
-          </div>
-          <div class="text-center mt-3">
-            <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1">上半場 · MORRIS</div>
-            <div class="text-white font-black text-base">Morris</div>
-            <div class="text-ink-300 text-xs mt-0.5">AI 落地 · n8n</div>
+        <div class="instructor-card">
+          <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
+          <div class="instructor-label">
+            <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">上半場 · MORRIS</div>
+            <div class="text-white font-black text-sm">Morris</div>
+            <div class="text-ink-300 text-[11px]">AI 落地 · n8n</div>
           </div>
         </div>
-        <!-- Victor(右下 · Hero 藍卡片框) -->
-        <div class="hero-offset-down">
-          <div class="instructor-card">
-            <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
-          </div>
-          <div class="text-center mt-3">
-            <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1">下半場 · VICTOR</div>
-            <div class="text-white font-black text-base">Victor 游文賢</div>
-            <div class="text-ink-300 text-xs mt-0.5">AI Agent 資安</div>
+        <div class="instructor-card">
+          <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
+          <div class="instructor-label">
+            <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">下半場 · VICTOR</div>
+            <div class="text-white font-black text-sm">Victor 游文賢</div>
+            <div class="text-ink-300 text-[11px]">AI Agent 資安</div>
           </div>
         </div>
       </div>
