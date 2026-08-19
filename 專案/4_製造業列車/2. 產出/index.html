@@ -126,12 +126,30 @@
     background: linear-gradient(135deg, rgba(0, 102, 255, 0.18) 0%, rgba(0, 61, 153, 0.10) 100%);
   }
 
-  /* ─────── 講師照片:純去背 · 無卡片框 · 直接放深底上 ─────── */
+  /* ─────── Hero 講師藍卡片框(仿飛書海報) ─────── */
+  .instructor-card {
+    position: relative;
+    width: 100%; aspect-ratio: 3/4;
+    border-radius: 14px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #0066FF 0%, #003D99 100%);
+    box-shadow: 0 20px 44px -12px rgba(0, 102, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+  .instructor-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(0, 229, 255, 0.25) 60%, rgba(0, 229, 255, 0.25) 65%, transparent 65%);
+    z-index: 1;
+  }
+  .instructor-card .instructor-img { position: relative; z-index: 2; }
+
+  /* ─────── 下方 Instructors 區:純去背 · 無框 ─────── */
   .instructor-wrap {
     position: relative;
     width: 100%; aspect-ratio: 3/4;
     filter: drop-shadow(0 20px 30px rgba(0, 102, 255, 0.35));
   }
+
+  /* ─────── 通用 img 屬性 ─────── */
   .instructor-img {
     display: block; width: 100%; height: 100%;
     object-fit: contain; object-position: center bottom;
@@ -326,9 +344,9 @@
 
       <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
       <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-end reveal from-right">
-        <!-- Morris(左上) -->
+        <!-- Morris(左上 · Hero 藍卡片框) -->
         <div class="hero-offset-up">
-          <div class="instructor-wrap">
+          <div class="instructor-card">
             <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
           </div>
           <div class="text-center mt-3">
@@ -337,9 +355,9 @@
             <div class="text-ink-300 text-xs mt-0.5">AI 落地 · n8n</div>
           </div>
         </div>
-        <!-- Victor(右下) -->
+        <!-- Victor(右下 · Hero 藍卡片框) -->
         <div class="hero-offset-down">
-          <div class="instructor-wrap">
+          <div class="instructor-card">
             <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
           </div>
           <div class="text-center mt-3">
