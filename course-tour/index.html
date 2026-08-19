@@ -273,10 +273,10 @@
     .card { padding: 1.25rem; }
   }
 
-  /* ─────── 講師固定視差 + 放大 15%(無動畫) ─────── */
+  /* ─────── 講師平行置中 + 放大 15%(無視差、無動畫) ─────── */
   @media (min-width: 640px) {
-    .hero-offset-up   { transform: translateY(-34px) scale(1.15); transform-origin: center right; }
-    .hero-offset-down { transform: translateY(34px) scale(1.15); transform-origin: center left; }
+    .hero-offset-up   { transform: scale(1.15); transform-origin: center right; }
+    .hero-offset-down { transform: scale(1.15); transform-origin: center left; }
   }
 </style>
 </head>
@@ -343,7 +343,7 @@
       </div>
 
       <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
-      <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-end reveal from-right">
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-center reveal from-right">
         <!-- Morris(左上 · Hero 藍卡片框) -->
         <div class="hero-offset-up">
           <div class="instructor-card">
