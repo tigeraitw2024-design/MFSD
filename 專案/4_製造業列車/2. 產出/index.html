@@ -273,10 +273,10 @@
     .card { padding: 1.25rem; }
   }
 
-  /* ─────── 講師固定視差:左上右下(無動畫) ─────── */
+  /* ─────── 講師固定視差 + 放大 15%(無動畫) ─────── */
   @media (min-width: 640px) {
-    .hero-offset-up   { transform: translateY(-30px); }
-    .hero-offset-down { transform: translateY(30px); }
+    .hero-offset-up   { transform: translateY(-34px) scale(1.15); transform-origin: center right; }
+    .hero-offset-down { transform: translateY(34px) scale(1.15); transform-origin: center left; }
   }
 </style>
 </head>
