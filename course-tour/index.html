@@ -140,23 +140,22 @@
     background: linear-gradient(135deg, transparent 60%, rgba(0, 229, 255, 0.25) 60%, rgba(0, 229, 255, 0.25) 65%, transparent 65%);
     z-index: 1;
   }
-  /* 鏡面光帶:斜著從左飄到右,像玻璃反射 */
+  /* 鏡面光帶:斜度 45° 對齊卡片背景 135deg 斜線 · 只掃藍卡不掃人 */
   .instructor-card::after {
     content: '';
     position: absolute;
-    top: -30%; left: -80%;
-    width: 55%; height: 160%;
+    top: -40%; left: -80%;
+    width: 45%; height: 180%;
     background: linear-gradient(90deg,
       transparent 0%,
-      rgba(255, 255, 255, 0.08) 30%,
-      rgba(255, 255, 255, 0.38) 50%,
-      rgba(255, 255, 255, 0.08) 70%,
+      rgba(255, 255, 255, 0.12) 30%,
+      rgba(255, 255, 255, 0.45) 50%,
+      rgba(255, 255, 255, 0.12) 70%,
       transparent 100%);
-    transform: rotate(18deg);
+    transform: rotate(45deg);
     animation: instructor-shine 5.5s ease-in-out infinite;
-    z-index: 3;
+    z-index: 1;             /* 在 img (z-index 2) 底下 → 只在藍卡上看到,人物不受影響 */
     pointer-events: none;
-    mix-blend-mode: screen;
   }
   @keyframes instructor-shine {
     0%   { left: -80%; }
@@ -176,7 +175,7 @@
     background: rgba(0, 41, 102, 0.9);
     backdrop-filter: blur(8px);
     border-radius: 8px; padding: 8px 12px;
-    z-index: 4;             /* 拉高蓋過光帶 · 標籤不受影響 */
+    z-index: 4;
     border: 1px solid rgba(77, 159, 255, 0.35);
   }
 
