@@ -126,32 +126,15 @@
     background: linear-gradient(135deg, rgba(0, 102, 255, 0.18) 0%, rgba(0, 61, 153, 0.10) 100%);
   }
 
-  /* ─────── 講師 blue gradient 卡片(仿飛書海報) ─────── */
-  .instructor-card {
+  /* ─────── 講師照片:純去背 · 無卡片框 · 直接放深底上 ─────── */
+  .instructor-wrap {
     position: relative;
     width: 100%; aspect-ratio: 3/4;
-    border-radius: 14px;
-    overflow: hidden;
-    background: linear-gradient(135deg, #0066FF 0%, #003D99 100%);
-    box-shadow: 0 20px 44px -12px rgba(0, 102, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3);
-  }
-  .instructor-card::before {
-    /* 斜切裝飾 */
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(0, 229, 255, 0.25) 60%, rgba(0, 229, 255, 0.25) 65%, transparent 65%);
-    z-index: 1;
+    filter: drop-shadow(0 20px 30px rgba(0, 102, 255, 0.35));
   }
   .instructor-img {
-    position: relative; z-index: 2;
-    display: block; width: 100%; height: 100%; object-fit: contain; object-position: center bottom;
-  }
-  .instructor-label {
-    position: absolute; bottom: 12px; left: 12px; right: 12px;
-    background: rgba(0, 41, 102, 0.85);
-    backdrop-filter: blur(8px);
-    border-radius: 8px; padding: 8px 12px;
-    z-index: 3;
-    border: 1px solid rgba(77, 159, 255, 0.35);
+    display: block; width: 100%; height: 100%;
+    object-fit: contain; object-position: center bottom;
   }
 
   /* ─────── 按鈕 ─────── */
@@ -272,21 +255,10 @@
     .card { padding: 1.25rem; }
   }
 
-  /* ─────── 講師浮動蹺蹺板動畫(跟 3 一樣) ─────── */
+  /* ─────── 講師固定視差:左上右下(無動畫) ─────── */
   @media (min-width: 640px) {
-    .hero-float-a { animation: float-a 5.5s ease-in-out infinite; }
-    .hero-float-b { animation: float-b 5.5s ease-in-out infinite; }
-  }
-  @keyframes float-a {
-    0%, 100% { transform: translateY(-24px); }
-    50%      { transform: translateY(24px); }
-  }
-  @keyframes float-b {
-    0%, 100% { transform: translateY(24px); }
-    50%      { transform: translateY(-24px); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-float-a, .hero-float-b { animation: none; }
+    .hero-offset-up   { transform: translateY(-30px); }
+    .hero-offset-down { transform: translateY(30px); }
   }
 </style>
 </head>
@@ -353,25 +325,27 @@
       </div>
 
       <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
-      <div class="lg:col-span-5 grid grid-cols-2 gap-4 reveal from-right">
-        <div class="hero-float-a">
-          <div class="instructor-card">
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-end reveal from-right">
+        <!-- Morris(左上) -->
+        <div class="hero-offset-up">
+          <div class="instructor-wrap">
             <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
-            <div class="instructor-label">
-              <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">上半場 · MORRIS</div>
-              <div class="text-white font-black text-sm">Morris</div>
-              <div class="text-ink-300 text-[11px]">AI 落地 · n8n</div>
-            </div>
+          </div>
+          <div class="text-center mt-3">
+            <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1">上半場 · MORRIS</div>
+            <div class="text-white font-black text-base">Morris</div>
+            <div class="text-ink-300 text-xs mt-0.5">AI 落地 · n8n</div>
           </div>
         </div>
-        <div class="hero-float-b">
-          <div class="instructor-card">
+        <!-- Victor(右下) -->
+        <div class="hero-offset-down">
+          <div class="instructor-wrap">
             <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
-            <div class="instructor-label">
-              <div class="text-cyan-400 text-[10px] tracking-widest font-bold mb-0.5">下半場 · VICTOR</div>
-              <div class="text-white font-black text-sm">Victor 游文賢</div>
-              <div class="text-ink-300 text-[11px]">AI Agent 資安</div>
-            </div>
+          </div>
+          <div class="text-center mt-3">
+            <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1">下半場 · VICTOR</div>
+            <div class="text-white font-black text-base">Victor 游文賢</div>
+            <div class="text-ink-300 text-xs mt-0.5">AI Agent 資安</div>
           </div>
         </div>
       </div>
@@ -613,7 +587,7 @@
       <!-- Morris -->
       <div class="reveal">
         <div class="mx-auto mb-6" style="width: 100%; max-width: 320px;">
-          <div class="instructor-card">
+          <div class="instructor-wrap">
             <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
           </div>
         </div>
@@ -630,7 +604,7 @@
       <!-- Victor -->
       <div class="reveal" style="transition-delay:0.1s;">
         <div class="mx-auto mb-6" style="width: 100%; max-width: 320px;">
-          <div class="instructor-card">
+          <div class="instructor-wrap">
             <img src="assets/instructor-victor.png" alt="Victor 講師" class="instructor-img">
           </div>
         </div>
