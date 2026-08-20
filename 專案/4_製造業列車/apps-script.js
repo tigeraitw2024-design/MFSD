@@ -25,7 +25,7 @@ const SHEET_COHORT = '梯次目錄';
 const COURSE_HEADERS = [
   '時間戳',
   '中文姓名', '職稱', 'E-Mail', '手機', '性別', '用餐選擇',
-  '公司名稱', '統編', '產業別',
+  '公司名稱', '統編', '邀請單位',
   '報名場次',
   '報名留言', '同意狀態',
   '寄信狀態'
@@ -84,7 +84,7 @@ function logCourseSignup(data) {
   sheet.appendRow([
     data.timestamp || new Date().toISOString(),
     data.name || '', data.jobTitle || '', data.email || '', data.phone || '', data.gender || '', data.meal || '',
-    data.companyName || '', data.taxId || '', data.industry || '',
+    data.companyName || '', data.taxId || '', data.referral || '',
     data.cohort || '',
     data.note || '', data.consent || '',
     ''
@@ -122,7 +122,7 @@ function sendCourseConfirmEmail(data) {
     '▌您的報名資訊\n' +
     '　公司名稱:' + (data.companyName || '') + '\n' +
     (data.taxId ? '　公司統編:' + data.taxId + '\n' : '') +
-    '　產業別  :' + (data.industry || '') + '\n' +
+    '　邀請單位:' + (data.referral || '') + '\n' +
     '　報名學員:' + (data.name || '') + ' / ' + (data.jobTitle || '') + '\n' +
     '　手機    :' + (data.phone || '') + '\n' +
     '　用餐選擇:' + (data.meal || '') + '\n' +
@@ -192,7 +192,7 @@ function testCourseEmail() {
     email: Session.getActiveUser().getEmail(),
     phone: '0912345678', gender: '男', meal: '葷',
     companyName: '測試股份有限公司', taxId: '12345678',
-    industry: '機械設備業',
+    referral: '中華亞太智慧物聯發展協會',
     cohort: '台北｜3月15日(六) 09:00-17:00｜虎智科技教室',
     note: '素食一份'
   });

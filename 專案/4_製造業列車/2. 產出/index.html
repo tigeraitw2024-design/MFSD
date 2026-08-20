@@ -776,37 +776,34 @@
               <input type="text" id="f_taxId" name="taxId" inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
             </div>
             <div class="sm:col-span-2">
-              <label class="block text-sm font-bold text-ink-300 mb-1.5">產業別 <span class="text-red-400">*</span></label>
-              <select id="f_industry" name="industry" required class="form-input px-4 py-2.5">
-                <option value="">— 請選擇 —</option>
-                <option value="電子零組件業">電子零組件業</option>
-                <option value="電腦電子產品及光學製品業">電腦電子產品及光學製品業</option>
-                <option value="電力設備及配備業">電力設備及配備業</option>
-                <option value="金屬製品業">金屬製品業</option>
-                <option value="基本金屬業">基本金屬業</option>
-                <option value="機械設備業">機械設備業</option>
-                <option value="產業用機械設備維修及安裝業">產業用機械設備維修及安裝業</option>
-                <option value="汽車及其零件業">汽車及其零件業</option>
-                <option value="其他運輸工具及其零件業">其他運輸工具及其零件業</option>
-                <option value="食品及飼品業">食品及飼品業</option>
-                <option value="飲料及菸草業">飲料及菸草業</option>
-                <option value="紡織業">紡織業</option>
-                <option value="成衣及服飾品業">成衣及服飾品業</option>
-                <option value="皮革毛皮製品業">皮革毛皮製品業</option>
-                <option value="木竹製品業">木竹製品業</option>
-                <option value="紙漿、紙及紙製品業">紙漿、紙及紙製品業</option>
-                <option value="印刷及資料儲存媒體複製業">印刷及資料儲存媒體複製業</option>
-                <option value="石油及煤製品業">石油及煤製品業</option>
-                <option value="化學材料及肥料業">化學材料及肥料業</option>
-                <option value="其他化學製品業">其他化學製品業</option>
-                <option value="藥品及醫用化學製品業">藥品及醫用化學製品業</option>
-                <option value="橡膠製品業">橡膠製品業</option>
-                <option value="塑膠製品業">塑膠製品業</option>
-                <option value="非金屬礦物製品業(建材)">非金屬礦物製品業(建材)</option>
-                <option value="家具業">家具業</option>
-                <option value="其他製造業">其他製造業</option>
-                <option value="其他(非製造業)">其他(非製造業)</option>
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">邀請單位 / 推薦來源 <span class="text-red-400">*</span></label>
+              <select id="f_referral" name="referral" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 · 誰邀請你來? —</option>
+                <option value="虎智科技">虎智科技</option>
+                <option value="中華亞太智慧物聯發展協會">中華亞太智慧物聯發展協會</option>
+                <option value="講師 Morris · 盧業興">講師 Morris · 盧業興</option>
+                <option value="講師 Victor · 游文賢">講師 Victor · 游文賢</option>
+                <option disabled>─── EMBA ───</option>
+                <option value="台灣大學 EMBA">台灣大學 EMBA</option>
+                <option value="政治大學 EMBA">政治大學 EMBA</option>
+                <option value="中山大學 EMBA">中山大學 EMBA</option>
+                <option value="中央大學 EMBA">中央大學 EMBA</option>
+                <option value="成功大學 EMBA">成功大學 EMBA</option>
+                <option value="陽明交通大學 EMBA">陽明交通大學 EMBA</option>
+                <option value="台灣科技大學 EMBA">台灣科技大學 EMBA</option>
+                <option value="台灣師範大學 EMBA">台灣師範大學 EMBA</option>
+                <option value="清華大學 EMBA">清華大學 EMBA</option>
+                <option value="台北科技大學 EMBA">台北科技大學 EMBA</option>
+                <option value="高雄科技大學 EMBA">高雄科技大學 EMBA</option>
+                <option value="中興大學 EMBA">中興大學 EMBA</option>
+                <option value="逢甲大學 EMBA">逢甲大學 EMBA</option>
+                <option value="東海大學 EMBA">東海大學 EMBA</option>
+                <option value="其他">其他(請填寫)</option>
               </select>
+              <div id="referralOtherWrap" class="hidden mt-3">
+                <label class="block text-sm font-bold text-ink-300 mb-1.5">其他 - 請填寫</label>
+                <input type="text" id="f_referralOther" name="referralOther" class="form-input px-4 py-2.5" placeholder="請填寫邀請單位或介紹人">
+              </div>
             </div>
           </div>
         </div>
@@ -1017,6 +1014,20 @@ document.addEventListener('keydown', e => {
   }
 });
 
+// ── 邀請單位選「其他」→ 展開文字欄 ──
+document.getElementById('f_referral').addEventListener('change', e => {
+  const wrap = document.getElementById('referralOtherWrap');
+  const other = document.getElementById('f_referralOther');
+  if (e.target.value === '其他') {
+    wrap.classList.remove('hidden');
+    other.required = true;
+  } else {
+    wrap.classList.add('hidden');
+    other.required = false;
+    other.value = '';
+  }
+});
+
 // ── 同意 checkbox → 展開表單 ──
 document.getElementById('f_consent').addEventListener('change', e => {
   const fields = document.getElementById('formFields');
@@ -1213,12 +1224,18 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     document.getElementById('f_consent').focus(); return;
   }
 
+  // 邀請單位 · 若選其他,拼接自填內容
+  const referralSel = form.referral.value;
+  const referralVal = referralSel === '其他'
+    ? '其他:' + (form.referralOther.value.trim() || '未填')
+    : referralSel;
+
   const data = {
     type: 'course_signup',
     timestamp: new Date().toISOString(),
     name: form.name.value, jobTitle: form.jobTitle.value, email: form.email.value, phone: form.phone.value,
     gender: form.gender.value, meal: form.meal.value,
-    companyName: form.companyName.value, taxId: taxId, industry: form.industry.value,
+    companyName: form.companyName.value, taxId: taxId, referral: referralVal,
     cohort: form.cohort.value,
     note: form.note.value,
     consent: '已同意 ' + new Date().toISOString()
