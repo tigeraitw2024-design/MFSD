@@ -113,7 +113,7 @@ function sendCourseConfirmEmail(data) {
   const datetime = (parts[1] || '—').trim();
   const place    = (parts[2] || '—').trim();
 
-  const subject = '【報名確認】製造業 AI 巡迴列車 · 用 AI 蓋工廠 × 學資安裝門鎖';
+  const subject = '【報名確認】製造業 AI 巡迴列車 · 用 AI 建工具 × 學資安裝門鎖';
   const body =
     (data.name || '') + ' ' + (data.jobTitle || '') + ' 您好,\n\n' +
     '感謝您報名「製造業 AI 巡迴列車」6 小時實戰課程,\n' +
