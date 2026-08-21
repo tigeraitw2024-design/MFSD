@@ -291,6 +291,43 @@
   .cohort-track::-webkit-scrollbar { display: none; }
   .cohort-card { flex: 0 0 min(380px, 88%); scroll-snap-align: start; }
 
+  /* ─────── 證照翻牌 ─────── */
+  .flip-card {
+    perspective: 1400px;
+    aspect-ratio: 4 / 3;
+    width: 100%;
+  }
+  .flip-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1.4s cubic-bezier(0.68, -0.4, 0.27, 1.4);
+  }
+  .flip-card.in-view .flip-inner { transform: rotateY(180deg); }
+  .flip-back, .flip-front {
+    position: absolute; inset: 0;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0, 102, 255, 0.4), 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+  .flip-back {
+    background: linear-gradient(135deg, #050914 0%, #003D99 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff;
+    border: 1px solid rgba(0, 229, 255, 0.25);
+  }
+  .flip-back::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 55%, rgba(0, 229, 255, 0.2) 55%, rgba(0, 229, 255, 0.2) 62%, transparent 62%);
+  }
+  .flip-back-inner { position: relative; z-index: 1; text-align: center; padding: 2rem; }
+  .flip-front { transform: rotateY(180deg); background: #fff; }
+  .flip-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flip-inner { transition: none; transform: rotateY(180deg); }
+  }
+
   /* ─────── 中文標題斷行 ─────── */
   .card h3, .section-title, .hero-title {
     word-break: keep-all;
@@ -320,6 +357,7 @@
     <div class="hidden md:flex items-center gap-7">
       <a href="#why" class="nav-link">為什麼上課</a>
       <a href="#curriculum" class="nav-link">課程架構</a>
+      <a href="#certificates" class="nav-link">完訓證照</a>
       <a href="#instructors" class="nav-link">講師</a>
       <a href="#cohorts" class="nav-link">開課場次</a>
       <a href="#signup" class="btn-primary" style="padding:0.5rem 1.25rem; font-size:13px;">立即報名</a>
@@ -362,6 +400,7 @@
           <span class="unit-badge">8 大單元</span>
           <span class="unit-badge">2 位講師</span>
           <span class="unit-badge">實體巡迴</span>
+          <span class="unit-badge" style="background:rgba(245,158,11,0.15);color:#FBBF24;border-color:rgba(245,158,11,0.4)">🏆 完訓拿雙證照</span>
         </div>
 
         <div class="flex flex-wrap gap-3">
@@ -613,12 +652,81 @@
   </div>
 </section>
 
+<!-- ══════════════════════ 04 · 完訓證照(One More Thing)══════════════════════ -->
+<section id="certificates" class="py-20 sm:py-32 relative overflow-hidden" style="background:linear-gradient(180deg, transparent 0%, rgba(0, 61, 153, 0.15) 50%, transparent 100%);">
+  <div class="absolute inset-0 grid-lines opacity-40 pointer-events-none"></div>
+  <div class="absolute top-10 -right-20 w-80 h-80 diag-slash opacity-20 rotate-12 pointer-events-none"></div>
+
+  <div class="container-wide relative">
+    <div class="text-center mb-16 reveal">
+      <div class="eyebrow mb-5" style="color:#F59E0B;">
+        <span style="background:linear-gradient(90deg,#F59E0B,#FBBF24);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">ONE MORE THING</span>
+      </div>
+      <h2 class="section-title mb-4">不只帶走這 3 個工具</h2>
+      <p class="text-2xl sm:text-3xl font-black mb-4">還帶走 <span class="hero-cyan">2 張</span> 你能亮的證照</p>
+      <p class="section-sub">虎智完訓證書 + n8n Academy 官方認證 · 寫進履歷、放進 LinkedIn、跟主管報告 · 都是能亮的東西</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+      <!-- 證照 01:虎智完訓 -->
+      <div class="reveal">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-back">
+              <div class="flip-back-inner">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#00E5FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><circle cx="12" cy="15" r="2"/><path d="M12 17v3"/></svg>
+                <div class="text-cyan-400 text-xs tracking-[0.3em] font-bold mb-2">CERTIFICATE · 01</div>
+                <div class="text-white font-black text-2xl mb-2">虎智完訓證書</div>
+                <div class="text-ink-300 text-sm">Morris + Victor 講師簽名<br>虎智科技用印</div>
+              </div>
+            </div>
+            <div class="flip-front">
+              <img src="assets/cert-tigerai.jpg" alt="虎智科技完訓證書 · Morris + Victor 講師簽名">
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+          <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1">STEP 1</div>
+          <div class="text-white font-black text-lg mb-1">虎智完訓證書</div>
+          <div class="text-ink-300 text-sm">通過最終測試 + 實作演練 → 課後即拿</div>
+        </div>
+      </div>
+
+      <!-- 證照 02:n8n Academy 官方 -->
+      <div class="reveal" style="transition-delay:0.2s">
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-back">
+              <div class="flip-back-inner">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                <div class="text-amber-400 text-xs tracking-[0.3em] font-bold mb-2" style="color:#FBBF24">CERTIFICATE · 02</div>
+                <div class="text-white font-black text-2xl mb-2">n8n Academy 認證</div>
+                <div class="text-ink-300 text-sm">n8n 官方核發<br>全球通用 · 履歷加分</div>
+              </div>
+            </div>
+            <div class="flip-front">
+              <img src="assets/cert-n8n.jpg" alt="n8n Academy 官方認證證書">
+            </div>
+          </div>
+        </div>
+        <div class="mt-5 text-center">
+          <div class="text-cyan-400 text-[11px] tracking-widest font-bold mb-1" style="color:#FBBF24">STEP 2</div>
+          <div class="text-white font-black text-lg mb-1">n8n Academy · 官方認證</div>
+          <div class="text-ink-300 text-sm">n8n 官方核發 · 寫履歷、LinkedIn 都能亮</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center text-ink-500 text-xs tracking-widest mt-14 reveal">▲ 滑到這裡自動翻牌 · 上圖為範例格式,實際證書以完訓當日核發為準</p>
+  </div>
+</section>
+
 <!-- ══════════════════════ INSTRUCTORS ══════════════════════ -->
 <section id="instructors" class="py-16 sm:py-24 relative overflow-hidden">
   <div class="absolute -top-20 -right-20 w-96 h-96 diag-slash opacity-15 rotate-45 pointer-events-none"></div>
   <div class="container-wide relative">
     <div class="text-center mb-14">
-      <div class="eyebrow mb-4">04 &nbsp;/&nbsp; INSTRUCTORS</div>
+      <div class="eyebrow mb-4">05 &nbsp;/&nbsp; INSTRUCTORS</div>
       <h2 class="section-title mb-4">雙講師陣容</h2>
       <p class="section-sub">一個建工具的顧問,一個 20+ 年資安專家。一天內把「怎麼用」+「怎麼防」都給你。</p>
     </div>
@@ -670,7 +778,7 @@
 <section id="cohorts" class="py-16 sm:py-24 relative">
   <div class="container-wide">
     <div class="text-center mb-14">
-      <div class="eyebrow mb-4">05 &nbsp;/&nbsp; COHORTS</div>
+      <div class="eyebrow mb-4">06 &nbsp;/&nbsp; COHORTS</div>
       <h2 class="section-title mb-4">開課場次</h2>
       <p class="section-sub">6 小時 · 一日完訓 · 每場限額 30 人</p>
     </div>
@@ -683,7 +791,7 @@
 <section id="signup" class="py-16 sm:py-24 relative">
   <div class="container-wide" style="max-width:780px;">
     <div class="text-center mb-10">
-      <div class="eyebrow mb-4">06 &nbsp;/&nbsp; SIGNUP</div>
+      <div class="eyebrow mb-4">07 &nbsp;/&nbsp; SIGNUP</div>
       <h2 class="section-title mb-4">課程報名</h2>
       <p class="section-sub">填寫下列資料即可完成報名,開課前 3 天會發送行前通知</p>
     </div>
@@ -856,7 +964,7 @@
 <section id="faq" class="py-16 sm:py-24 relative">
   <div class="container-wide" style="max-width:820px;">
     <div class="text-center mb-12">
-      <div class="eyebrow mb-4">07 &nbsp;/&nbsp; FAQ</div>
+      <div class="eyebrow mb-4">08 &nbsp;/&nbsp; FAQ</div>
       <h2 class="section-title mb-4">常見問題</h2>
     </div>
     <div class="space-y-3">
