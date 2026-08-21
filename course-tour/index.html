@@ -291,7 +291,26 @@
   .cohort-track::-webkit-scrollbar { display: none; }
   .cohort-card { flex: 0 0 min(380px, 88%); scroll-snap-align: start; }
 
-  /* ─────── 講師 LINE 對話框 ─────── */
+  /* ─────── 講師 LINE 對話框(pivot 錨點在耳頰紅點,對話框往上偏移到頭外)─────── */
+  /* Pivot:0×0 隱形錨點 · 對話框從這裡 pop 展開 · 位置就是紅點 */
+  .bubble-pivot {
+    position: absolute;
+    width: 0; height: 0;
+    z-index: 10;
+    transform: scale(0);
+    opacity: 0;
+    transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.4s ease;
+  }
+  .reveal.in-view .bubble-pivot { transform: scale(1); opacity: 1; }
+  .reveal.in-view .bubble-pivot.morris { transition-delay: 0.6s; }
+  .reveal.in-view .bubble-pivot.victor { transition-delay: 0.9s; }
+
+  /* 紅點位置(耳頰高度)· 兩張同 y 水平 */
+  .bubble-pivot.morris { top: 24%; left: 55%; }
+  .bubble-pivot.victor { top: 24%; right: 55%; }
+
+  /* 對話框本體:相對 pivot 位移 · 停在頭上方不壓臉 */
   .speech-bubble {
     position: absolute;
     background: #fff;
@@ -302,72 +321,48 @@
     font-weight: 700;
     white-space: nowrap;
     box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.25);
-    z-index: 10;
     cursor: pointer;
     user-select: none;
-    opacity: 0;
-    transform: scale(0.4);
-    transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-                transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s ease;
   }
-  .reveal.in-view .speech-bubble {
-    opacity: 1;
-    transform: scale(1);
+  .bubble-pivot.morris .speech-bubble {
+    bottom: 90px;       /* 對話框底離 pivot 90px = 升到頭上方 */
+    left: -12px;        /* pivot 靠近對話框左下 · 尾巴根 */
   }
-  .reveal.in-view .speech-bubble.morris { transition-delay: 0.6s; }
-  .reveal.in-view .speech-bubble.victor { transition-delay: 0.9s; }
+  .bubble-pivot.victor .speech-bubble {
+    bottom: 90px;
+    right: -12px;
+  }
   .speech-bubble:hover { transform: scale(1.05); }
 
-  /* Morris(左卡):對話框在頭上方 · POP 起點錨到「頭側耳頰」位置(黃點) */
-  .speech-bubble.morris {
-    top: -3%;
-    left: 60%;
-    right: auto;
-    /* pop 起點:對話框左下角往下 100px(對應到 Morris 右頰) · 兩張都用同數值確保水平 */
-    transform-origin: 0 100px;
-  }
-  .speech-bubble.morris::after {
+  /* 尾巴 · 從對話框底部朝 pivot 指下去 */
+  .speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -10px; left: 18px;
+    bottom: -10px;
     width: 0; height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 14px solid #fff;
     filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
   }
+  .bubble-pivot.morris .speech-bubble::after { left: 16px; }
+  .bubble-pivot.victor .speech-bubble::after { right: 16px; }
 
-  /* Victor(右卡):對話框在頭上方 · POP 起點錨到「頭側耳頰」位置(黃點) */
-  .speech-bubble.victor {
-    top: -3%;
-    right: 60%;
-    left: auto;
-    /* pop 起點:對話框右下角往下 100px(對應到 Victor 左頰) · 跟 Morris 同高度 */
-    transform-origin: 100% 100px;
-  }
-  .speech-bubble.victor::after {
-    content: '';
-    position: absolute;
-    bottom: -10px; right: 18px;
-    width: 0; height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 14px solid #fff;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
-  }
   /* 文字切換動畫 */
   .bubble-text {
     display: inline-block;
     transition: opacity 0.2s ease;
   }
   .speech-bubble.swapping .bubble-text { opacity: 0; }
+
   @media (max-width: 640px) {
     .speech-bubble { font-size: 12px; padding: 7px 12px; }
-    .speech-bubble.morris { top: -1%; left: 56%; }
-    .speech-bubble.victor { top: -1%; right: 56%; }
+    .bubble-pivot.morris .speech-bubble,
+    .bubble-pivot.victor .speech-bubble { bottom: 68px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .speech-bubble { transition: opacity 0.3s ease; transform: none; }
+    .bubble-pivot { transition: opacity 0.3s ease; transform: scale(1); }
   }
 
   /* ─────── 證照翻牌 ─────── */
@@ -844,7 +839,9 @@
         <div class="mx-auto mb-6" style="width: 100%; max-width: 416px;">
           <div class="instructor-wrap">
             <img src="assets/instructor-morris-lg.png" alt="Morris 講師" class="instructor-img">
-            <div class="speech-bubble morris" aria-label="Morris 對話框 · 點擊換一句"><span class="bubble-text">產線 AI 我教你組</span></div>
+            <div class="bubble-pivot morris">
+              <div class="speech-bubble" aria-label="Morris 對話框 · 點擊換一句"><span class="bubble-text">產線 AI 我教你組</span></div>
+            </div>
           </div>
         </div>
         <!-- 跟 Hero 一樣的深藍 label 框(包 3 行) -->
@@ -865,7 +862,9 @@
         <div class="mx-auto mb-6" style="width: 100%; max-width: 416px;">
           <div class="instructor-wrap">
             <img src="assets/instructor-victor-lg.png" alt="Victor 講師" class="instructor-img">
-            <div class="speech-bubble victor" aria-label="Victor 對話框 · 點擊換一句"><span class="bubble-text">產線資料別外洩</span></div>
+            <div class="bubble-pivot victor">
+              <div class="speech-bubble" aria-label="Victor 對話框 · 點擊換一句"><span class="bubble-text">產線資料別外洩</span></div>
+            </div>
           </div>
         </div>
         <div class="text-center max-w-xs mx-auto">
@@ -1254,8 +1253,8 @@ document.addEventListener('keydown', e => {
     setInterval(next, 6000);
   }
 
-  bind(document.querySelector('.speech-bubble.morris'), morrisMsgs);
-  bind(document.querySelector('.speech-bubble.victor'), victorMsgs);
+  bind(document.querySelector('.bubble-pivot.morris .speech-bubble'), morrisMsgs);
+  bind(document.querySelector('.bubble-pivot.victor .speech-bubble'), victorMsgs);
 })();
 
 document.getElementById('f_referral').addEventListener('change', e => {
