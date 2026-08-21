@@ -325,29 +325,40 @@
     user-select: none;
     transition: transform 0.2s ease;
   }
+  /* 對話框物理放在臉頰旁邊(pivot 位置)· 不去頭頂 */
   .bubble-pivot.morris .speech-bubble {
-    bottom: 90px;       /* 對話框底離 pivot 90px = 升到頭上方 */
-    left: -12px;        /* pivot 靠近對話框左下 · 尾巴根 */
+    bottom: -20px;      /* 對話框中線 ≈ 對到 pivot(耳頰) */
+    left: 0;            /* 從 pivot 往右延伸 */
   }
   .bubble-pivot.victor .speech-bubble {
-    bottom: 90px;
-    right: -12px;
+    bottom: -20px;
+    right: 0;
   }
   .speech-bubble:hover { transform: scale(1.05); }
 
-  /* 尾巴 · 從對話框底部朝 pivot 指下去 */
+  /* 尾巴 · 水平朝人物方向指(對話框在臉頰旁,尾巴指人物) */
   .speech-bubble::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 0; height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 14px solid #fff;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
   }
-  .bubble-pivot.morris .speech-bubble::after { left: 16px; }
-  .bubble-pivot.victor .speech-bubble::after { right: 16px; }
+  /* Morris:對話框在他右邊 → 尾巴在對話框左邊指左(指 Morris) */
+  .bubble-pivot.morris .speech-bubble::after {
+    left: -12px;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-right: 14px solid #fff;
+  }
+  /* Victor:對話框在他左邊 → 尾巴在對話框右邊指右(指 Victor) */
+  .bubble-pivot.victor .speech-bubble::after {
+    right: -12px;
+    border-top: 9px solid transparent;
+    border-bottom: 9px solid transparent;
+    border-left: 14px solid #fff;
+  }
 
   /* 文字切換動畫 */
   .bubble-text {
@@ -359,7 +370,7 @@
   @media (max-width: 640px) {
     .speech-bubble { font-size: 12px; padding: 7px 12px; }
     .bubble-pivot.morris .speech-bubble,
-    .bubble-pivot.victor .speech-bubble { bottom: 68px; }
+    .bubble-pivot.victor .speech-bubble { bottom: -18px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .bubble-pivot { transition: opacity 0.3s ease; transform: scale(1); }
