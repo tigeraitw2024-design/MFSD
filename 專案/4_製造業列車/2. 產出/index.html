@@ -318,38 +318,42 @@
   .reveal.in-view .speech-bubble.victor { transition-delay: 0.9s; }
   .speech-bubble:hover { transform: scale(1.05); }
 
-  /* Morris(左卡):對話框錨在「右耳邊」· 文字往右延伸(往版面中間) */
+  /* Morris(左卡):對話框錨在「頭部右外側」· 尾巴水平指向頭 · 文字往右延伸 */
   .speech-bubble.morris {
-    top: 12%;               /* 頭側耳邊高度 */
-    left: 58%;              /* 錨點:人物右側頭部位置 */
+    top: 14%;                          /* 頭部側邊高度 */
+    left: 72%;                         /* 錨點推到頭部右外側,不壓到臉 */
     right: auto;
-    transform-origin: left bottom;   /* 從尾巴根 pop 出來 */
+    transform-origin: left center;     /* 從左邊(尾巴根)pop 出 */
   }
   .speech-bubble.morris::after {
     content: '';
-    position: absolute; bottom: -10px; left: 16px;
+    position: absolute;
+    top: 50%; left: -12px;
+    transform: translateY(-50%);
     width: 0; height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 14px solid #fff;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 14px solid #fff;     /* 水平尾巴 · 指左邊(指頭) */
+    filter: drop-shadow(-2px 0 2px rgba(0, 0, 0, 0.15));
   }
 
-  /* Victor(右卡):對話框錨在「左耳邊」· 文字往左延伸(往版面中間) */
+  /* Victor(右卡):對話框錨在「頭部左外側」· 尾巴水平指向頭 · 文字往左延伸 */
   .speech-bubble.victor {
-    top: 12%;
-    right: 58%;             /* 錨點:人物左側頭部位置(用 right 讓文字往左展開) */
+    top: 14%;
+    right: 72%;                        /* 錨點推到頭部左外側 */
     left: auto;
-    transform-origin: right bottom;
+    transform-origin: right center;
   }
   .speech-bubble.victor::after {
     content: '';
-    position: absolute; bottom: -10px; right: 16px;
+    position: absolute;
+    top: 50%; right: -12px;
+    transform: translateY(-50%);
     width: 0; height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-top: 14px solid #fff;
-    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 14px solid #fff;      /* 水平尾巴 · 指右邊(指頭) */
+    filter: drop-shadow(2px 0 2px rgba(0, 0, 0, 0.15));
   }
   /* 文字切換動畫 */
   .bubble-text {
@@ -359,8 +363,8 @@
   .speech-bubble.swapping .bubble-text { opacity: 0; }
   @media (max-width: 640px) {
     .speech-bubble { font-size: 12px; padding: 7px 12px; }
-    .speech-bubble.morris { top: 8%; left: 55%; }
-    .speech-bubble.victor { top: 8%; right: 55%; }
+    .speech-bubble.morris { top: 10%; left: 68%; }
+    .speech-bubble.victor { top: 10%; right: 68%; }
   }
   @media (prefers-reduced-motion: reduce) {
     .speech-bubble { transition: opacity 0.3s ease; transform: none; }
