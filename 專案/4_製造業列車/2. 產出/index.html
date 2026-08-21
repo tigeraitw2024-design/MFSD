@@ -296,7 +296,11 @@
     perspective: 1400px;
     aspect-ratio: 4 / 3;
     width: 100%;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);   /* 彈簧感 · hover 用 */
   }
+  /* 卡片翻正後 · hover 傾斜(左卡向左、右卡向右)+ 浮起 */
+  .reveal.in-view .flip-card.tilt-left:hover  { transform: rotate(-3deg) translateY(-10px) scale(1.02); }
+  .reveal.in-view .flip-card.tilt-right:hover { transform: rotate( 3deg) translateY(-10px) scale(1.02); }
   .flip-inner {
     position: relative; width: 100%; height: 100%;
     transform-style: preserve-3d;
@@ -324,6 +328,29 @@
   .flip-back-inner { position: relative; z-index: 1; text-align: center; padding: 2rem; }
   .flip-front { transform: rotateY(180deg); background: #fff; }
   .flip-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Hover 亮光斜掃 */
+  .flip-front::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -80%;
+    width: 40%; height: 200%;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.15) 30%,
+      rgba(255, 255, 255, 0.7) 50%,
+      rgba(255, 255, 255, 0.15) 70%,
+      transparent 100%);
+    transform: rotate(22deg);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .reveal.in-view .flip-card:hover .flip-front::after {
+    animation: cert-shine 0.95s ease-out;
+  }
+  @keyframes cert-shine {
+    0%   { left: -80%; opacity: 1; }
+    100% { left: 130%; opacity: 1; }
+  }
 
   @media (prefers-reduced-motion: reduce) {
     .flip-inner { transition: none; transform: rotateY(180deg); }
@@ -671,7 +698,7 @@
     <div class="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
       <!-- 證照 01:虎智完訓 -->
       <div class="reveal">
-        <div class="flip-card">
+        <div class="flip-card tilt-left">
           <div class="flip-inner">
             <div class="flip-back">
               <div class="flip-back-inner">
@@ -695,7 +722,7 @@
 
       <!-- 證照 02:n8n Academy 官方 -->
       <div class="reveal" style="transition-delay:0.2s">
-        <div class="flip-card">
+        <div class="flip-card tilt-right">
           <div class="flip-inner">
             <div class="flip-back">
               <div class="flip-back-inner">
