@@ -446,6 +446,13 @@
   }
 
   /* Hero 講師區:無動畫、無視差、水平置中(用 grid items-center 就對齊了) */
+  /* 只在 lg (1024px+) 桌面才放大 15% · 手機/平板不放大 · 避免撐爆容器 */
+  @media (min-width: 1024px) {
+    .hero-cards-scale {
+      transform: scale(1.15);
+      transform-origin: center right;
+    }
+  }
 </style>
 </head>
 
@@ -513,7 +520,7 @@
       </div>
 
       <!-- 右:2 位講師卡片(藍漸層 · 蹺蹺板) -->
-      <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-center reveal from-right" style="transform: scale(1.15); transform-origin: center right;">
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4 items-center reveal from-right hero-cards-scale">
         <div class="instructor-card">
           <img src="assets/instructor-morris.png" alt="Morris 講師" class="instructor-img">
           <div class="instructor-label">
