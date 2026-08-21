@@ -291,6 +291,74 @@
   .cohort-track::-webkit-scrollbar { display: none; }
   .cohort-card { flex: 0 0 min(380px, 88%); scroll-snap-align: start; }
 
+  /* ─────── 講師 LINE 對話框 ─────── */
+  .speech-bubble {
+    position: absolute;
+    background: #fff;
+    color: #1F2937;
+    padding: 10px 18px;
+    border-radius: 22px;
+    font-size: 15px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 12px 28px -6px rgba(0, 0, 0, 0.5), 0 3px 8px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0;
+    transform: scale(0.4) translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .reveal.in-view .speech-bubble {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    transition-delay: 0.6s;   /* 卡片進場後 0.6s 才 pop */
+  }
+  .reveal.in-view .speech-bubble.morris { transition-delay: 0.6s; }
+  .reveal.in-view .speech-bubble.victor { transition-delay: 0.9s; }
+  .speech-bubble:hover { transform: scale(1.05) translateY(-2px); }
+  /* Morris(左卡):對話框在講師右上方 · 尾巴指向講師(尾巴在左下) */
+  .speech-bubble.morris {
+    top: 8%; right: -8%;
+  }
+  .speech-bubble.morris::after {
+    content: '';
+    position: absolute; bottom: -10px; left: 22px;
+    width: 0; height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #fff;
+    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
+  }
+  /* Victor(右卡):對話框在講師左上方 · 尾巴在右下 */
+  .speech-bubble.victor {
+    top: 8%; left: -8%;
+  }
+  .speech-bubble.victor::after {
+    content: '';
+    position: absolute; bottom: -10px; right: 22px;
+    width: 0; height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 14px solid #fff;
+    filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
+  }
+  /* 文字切換動畫 */
+  .bubble-text {
+    display: inline-block;
+    transition: opacity 0.2s ease;
+  }
+  .speech-bubble.swapping .bubble-text { opacity: 0; }
+  @media (max-width: 640px) {
+    .speech-bubble { font-size: 13px; padding: 8px 14px; }
+    .speech-bubble.morris { top: 4%; right: -4%; }
+    .speech-bubble.victor { top: 4%; left: -4%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .speech-bubble { transition: opacity 0.3s ease; transform: none; }
+  }
+
   /* ─────── 證照翻牌 ─────── */
   .flip-card {
     perspective: 1400px;
@@ -765,6 +833,7 @@
         <div class="mx-auto mb-6" style="width: 100%; max-width: 416px;">
           <div class="instructor-wrap">
             <img src="assets/instructor-morris-lg.png" alt="Morris 講師" class="instructor-img">
+            <div class="speech-bubble morris" aria-label="Morris 對話框 · 點擊換一句"><span class="bubble-text">產線 AI 我教你組</span></div>
           </div>
         </div>
         <!-- 跟 Hero 一樣的深藍 label 框(包 3 行) -->
@@ -785,6 +854,7 @@
         <div class="mx-auto mb-6" style="width: 100%; max-width: 416px;">
           <div class="instructor-wrap">
             <img src="assets/instructor-victor-lg.png" alt="Victor 講師" class="instructor-img">
+            <div class="speech-bubble victor" aria-label="Victor 對話框 · 點擊換一句"><span class="bubble-text">產線資料別外洩</span></div>
           </div>
         </div>
         <div class="text-center max-w-xs mx-auto">
@@ -1151,6 +1221,43 @@ document.addEventListener('keydown', e => {
 });
 
 // ── 邀請單位選「其他」→ 展開文字欄 ──
+// ── 講師 LINE 對話框:隨機切換(點擊 + 6 秒自動)──
+(function initSpeechBubbles() {
+  const morrisMsgs = ['產線 AI 我教你組', 'SOP 變 AI 工具', 'MES 資料 AI 幫你讀', '工廠報表自動化', '訂單流程一鍵跑', '老師傅經驗留下來', '產線異常 AI 先報', '不用寫程式就會做'];
+  const victorMsgs = ['產線資料別外洩', '工單 AI 別亂改', 'AI 沒鎖不能上線', 'OT 資安我來守', '稽核我幫你過', '別讓 AI 亂發料', '工廠 AI 有門鎖', '工控資安 20 年'];
+
+  function pickRandom(arr, exclude) {
+    if (arr.length <= 1) return arr[0];
+    let pick;
+    do { pick = arr[Math.floor(Math.random() * arr.length)]; } while (pick === exclude);
+    return pick;
+  }
+
+  function bind(bubbleEl, msgs) {
+    if (!bubbleEl) return;
+    const textEl = bubbleEl.querySelector('.bubble-text');
+    let current = textEl.textContent.trim();
+    const swap = () => {
+      const next = pickRandom(msgs, current);
+      current = next;
+      bubbleEl.classList.add('swapping');
+      setTimeout(() => {
+        textEl.textContent = next;
+        bubbleEl.classList.remove('swapping');
+      }, 200);
+    };
+    // 開場先隨機一次(避免每次進場都同一句)
+    setTimeout(swap, 800);
+    // 點擊換
+    bubbleEl.addEventListener('click', swap);
+    // 每 6 秒自動換
+    setInterval(swap, 6000);
+  }
+
+  bind(document.querySelector('.speech-bubble.morris'), morrisMsgs);
+  bind(document.querySelector('.speech-bubble.victor'), victorMsgs);
+})();
+
 document.getElementById('f_referral').addEventListener('change', e => {
   const wrap = document.getElementById('referralOtherWrap');
   const other = document.getElementById('f_referralOther');
