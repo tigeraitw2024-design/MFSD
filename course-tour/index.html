@@ -302,7 +302,8 @@
     transform-style: preserve-3d;
     transition: transform 1.4s cubic-bezier(0.68, -0.4, 0.27, 1.4);
   }
-  .flip-card.in-view .flip-inner { transform: rotateY(180deg); }
+  /* 觸發:滑到外層 .reveal.in-view 進入畫面 → 內層 flip 翻正面 */
+  .reveal.in-view .flip-inner { transform: rotateY(180deg); }
   .flip-back, .flip-front {
     position: absolute; inset: 0;
     backface-visibility: hidden;
