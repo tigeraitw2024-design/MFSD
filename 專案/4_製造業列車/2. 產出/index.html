@@ -318,26 +318,28 @@
   .reveal.in-view .speech-bubble.morris { transition-delay: 0.6s; }
   .reveal.in-view .speech-bubble.victor { transition-delay: 0.9s; }
   .speech-bubble:hover { transform: scale(1.05) translateY(-2px); }
-  /* Morris(左卡):對話框在講師右上方 · 尾巴指向講師(尾巴在左下) */
+  /* Morris(左卡):對話框飄在容器「右上角外」 · 尾巴斜指向他的頭 */
   .speech-bubble.morris {
-    top: 8%; right: -8%;
+    top: -8%;               /* 上緣浮出容器頂端 */
+    right: -14%;            /* 右緣浮出容器右邊 */
   }
   .speech-bubble.morris::after {
     content: '';
-    position: absolute; bottom: -10px; left: 22px;
+    position: absolute; bottom: -10px; left: 24px;
     width: 0; height: 0;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
     border-top: 14px solid #fff;
     filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
   }
-  /* Victor(右卡):對話框在講師左上方 · 尾巴在右下 */
+  /* Victor(右卡):對話框飄在容器「左上角外」 · 尾巴斜指向他的頭 */
   .speech-bubble.victor {
-    top: 8%; left: -8%;
+    top: -8%;
+    left: -14%;
   }
   .speech-bubble.victor::after {
     content: '';
-    position: absolute; bottom: -10px; right: 22px;
+    position: absolute; bottom: -10px; right: 24px;
     width: 0; height: 0;
     border-left: 12px solid transparent;
     border-right: 12px solid transparent;
@@ -352,8 +354,8 @@
   .speech-bubble.swapping .bubble-text { opacity: 0; }
   @media (max-width: 640px) {
     .speech-bubble { font-size: 13px; padding: 8px 14px; }
-    .speech-bubble.morris { top: 4%; right: -4%; }
-    .speech-bubble.victor { top: 4%; left: -4%; }
+    .speech-bubble.morris { top: -6%; right: -6%; }
+    .speech-bubble.victor { top: -6%; left: -6%; }
   }
   @media (prefers-reduced-motion: reduce) {
     .speech-bubble { transition: opacity 0.3s ease; transform: none; }
@@ -1221,37 +1223,26 @@ document.addEventListener('keydown', e => {
 });
 
 // ── 邀請單位選「其他」→ 展開文字欄 ──
-// ── 講師 LINE 對話框:隨機切換(點擊 + 6 秒自動)──
+// ── 講師 LINE 對話框:輪播(依順序 1→2→3...→8→1)· 點擊也能手動下一句 · 每 6 秒自動
 (function initSpeechBubbles() {
   const morrisMsgs = ['產線 AI 我教你組', 'SOP 變 AI 工具', 'MES 資料 AI 幫你讀', '工廠報表自動化', '訂單流程一鍵跑', '老師傅經驗留下來', '產線異常 AI 先報', '不用寫程式就會做'];
   const victorMsgs = ['產線資料別外洩', '工單 AI 別亂改', 'AI 沒鎖不能上線', 'OT 資安我來守', '稽核我幫你過', '別讓 AI 亂發料', '工廠 AI 有門鎖', '工控資安 20 年'];
 
-  function pickRandom(arr, exclude) {
-    if (arr.length <= 1) return arr[0];
-    let pick;
-    do { pick = arr[Math.floor(Math.random() * arr.length)]; } while (pick === exclude);
-    return pick;
-  }
-
   function bind(bubbleEl, msgs) {
     if (!bubbleEl) return;
     const textEl = bubbleEl.querySelector('.bubble-text');
-    let current = textEl.textContent.trim();
-    const swap = () => {
-      const next = pickRandom(msgs, current);
-      current = next;
+    let idx = 0;                       // 從第 1 句開始
+    textEl.textContent = msgs[0];      // 進場先固定顯示第 1 句
+    const next = () => {
+      idx = (idx + 1) % msgs.length;   // 循環 next
       bubbleEl.classList.add('swapping');
       setTimeout(() => {
-        textEl.textContent = next;
+        textEl.textContent = msgs[idx];
         bubbleEl.classList.remove('swapping');
       }, 200);
     };
-    // 開場先隨機一次(避免每次進場都同一句)
-    setTimeout(swap, 800);
-    // 點擊換
-    bubbleEl.addEventListener('click', swap);
-    // 每 6 秒自動換
-    setInterval(swap, 6000);
+    bubbleEl.addEventListener('click', next);
+    setInterval(next, 6000);
   }
 
   bind(document.querySelector('.speech-bubble.morris'), morrisMsgs);
