@@ -318,12 +318,13 @@
   .reveal.in-view .speech-bubble.victor { transition-delay: 0.9s; }
   .speech-bubble:hover { transform: scale(1.05); }
 
-  /* Morris(左卡):對話框在頭部斜上方(頭外側 + 上方) · 尾巴垂直往下指頭 */
+  /* Morris(左卡):對話框在頭上方 · POP 起點錨到「頭側耳頰」位置(黃點) */
   .speech-bubble.morris {
-    top: -3%;                          /* 上緣微出容器頂端(bubble body 完全高於頭) */
-    left: 60%;                         /* 錨點右側 · 文字往右延伸 */
+    top: -3%;
+    left: 60%;
     right: auto;
-    transform-origin: left bottom;
+    /* pop 起點:對話框左下角往下 100px(對應到 Morris 右頰) · 兩張都用同數值確保水平 */
+    transform-origin: 0 100px;
   }
   .speech-bubble.morris::after {
     content: '';
@@ -336,12 +337,13 @@
     filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.15));
   }
 
-  /* Victor(右卡):對話框在頭部斜上方(頭外側 + 上方) · 尾巴垂直往下指頭 */
+  /* Victor(右卡):對話框在頭上方 · POP 起點錨到「頭側耳頰」位置(黃點) */
   .speech-bubble.victor {
     top: -3%;
     right: 60%;
     left: auto;
-    transform-origin: right bottom;
+    /* pop 起點:對話框右下角往下 100px(對應到 Victor 左頰) · 跟 Morris 同高度 */
+    transform-origin: 100% 100px;
   }
   .speech-bubble.victor::after {
     content: '';
