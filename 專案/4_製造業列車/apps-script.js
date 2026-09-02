@@ -134,10 +134,10 @@ function sendCourseConfirmEmail(data) {
     '　．6 小時實體實戰(一日完訓)\n' +
     '　．上半場 · Morris:AI 落地地圖、Antigravity SOP → Skill、n8n 全流程、企業 AI 治理\n' +
     '　．下半場 · Victor:LLM 資安死角、Agent 攻擊面、OpenClaw Gateway 實作、治理實務\n' +
-    '　．完訓帶 3 個具體成果:\n' +
-    '　　1. 能跑的 AI Skill(SOP 版)\n' +
-    '　　2. 能跑的 n8n 自動化流程\n' +
-    '　　3. 能守的 OpenClaw 安全 Gateway\n\n' +
+    '　．完訓帶 3 個 AI 員工回公司直接上班:\n' +
+    '　　1. 值班 AI:24hr 客服助理(SOP 學一遍,重複問題他來回)\n' +
+    '　　2. 管家 AI:產線流程自動化(訂單/庫存/告警自己跑)\n' +
+    '　　3. 守門 AI:資安治理(權限、稽核、對外通訊都鎖好)\n\n' +
     '▌行前提醒\n' +
     '　．請攜帶個人筆電(MacOS / Windows 皆可)\n' +
     '　．課程當天請提早 10 分鐘報到\n' +
