@@ -378,6 +378,7 @@
   .reveal.in-view .flip-card.tilt-right:hover { transform: rotate( 3deg) translateY(-10px) scale(1.02); }
   .flip-inner {
     position: relative; width: 100%; height: 100%;
+    -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
     transition: transform 1.4s cubic-bezier(0.68, -0.4, 0.27, 1.4);
   }
@@ -385,12 +386,17 @@
   .reveal.in-view .flip-inner { transform: rotateY(180deg); }
   .flip-back, .flip-front {
     position: absolute; inset: 0;
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     border-radius: 14px;
     overflow: hidden;
     box-shadow: 0 30px 60px -20px rgba(0, 102, 255, 0.4), 0 6px 20px rgba(0, 0, 0, 0.5);
+    /* iOS Safari 保險:動畫完成後強制隱藏背面(用 visibility 延遲切) */
+    transition: visibility 0s linear 1.4s;
   }
   .flip-back {
+    -webkit-transform: rotateY(0deg) translateZ(1px);
+    transform: rotateY(0deg) translateZ(1px);
     background: linear-gradient(135deg, #050914 0%, #003D99 100%);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     color: #fff;
@@ -401,7 +407,15 @@
     background: linear-gradient(135deg, transparent 55%, rgba(0, 229, 255, 0.2) 55%, rgba(0, 229, 255, 0.2) 62%, transparent 62%);
   }
   .flip-back-inner { position: relative; z-index: 1; text-align: center; padding: 2rem; }
-  .flip-front { transform: rotateY(180deg); background: #fff; }
+  .flip-front {
+    -webkit-transform: rotateY(180deg) translateZ(1px);
+    transform: rotateY(180deg) translateZ(1px);
+    background: #fff;
+    visibility: hidden;   /* 起始:背面朝觀眾時 front 先隱藏 */
+  }
+  /* 翻正後:front 立即顯示、back 延遲(1.4s 動畫結束後)隱藏 */
+  .reveal.in-view .flip-front { visibility: visible; transition-delay: 0s; }
+  .reveal.in-view .flip-back  { visibility: hidden;  transition-delay: 1.4s; }
   .flip-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* Hover 亮光斜掃 */
   .flip-front::after {
@@ -429,6 +443,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .flip-inner { transition: none; transform: rotateY(180deg); }
+    .flip-front { visibility: visible; }
+    .flip-back  { visibility: hidden; }
   }
 
   /* ─────── 中文標題斷行 ─────── */
