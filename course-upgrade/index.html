@@ -350,6 +350,32 @@
   .hex-rule { display: block; width: 18px; height: 2px; background: currentColor; opacity: 0.6; margin: 0.5rem auto; }
   .hex-sub { font-size: clamp(0.68rem, 1vw, 0.8rem); line-height: 1.45; opacity: 0.82; }
 
+  /* ══════════ 實戰現場 · 六角形照片無限輪播 ══════════ */
+  .hexmq {
+    --hw: 224px; --hh: calc(var(--hw) * 1.1547); --g: 10px;
+    width: 100%; overflow: hidden; padding: 8px 0 16px;
+    -webkit-mask: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+            mask: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  }
+  .hexmq-track {
+    display: flex; align-items: flex-start; width: max-content;
+    height: calc(var(--hh) * 1.75 + var(--g) * 0.6);
+    animation: hexmq-scroll 52s linear infinite; will-change: transform;
+  }
+  .hexmq:hover .hexmq-track { animation-play-state: paused; }
+  .hex-photo {
+    position: relative; flex: 0 0 var(--hw); width: var(--hw); height: var(--hh);
+    clip-path: var(--hex); overflow: hidden; background: #E9E7E3;
+    margin-right: calc(-0.5 * var(--hw) + var(--g) / 2);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .hex-photo:nth-child(even) { margin-top: calc(var(--hh) * 0.75 + var(--g) * 0.6); }
+  .hex-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hex-photo:hover { transform: scale(1.06); filter: brightness(1.06); z-index: 2; }
+  @keyframes hexmq-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (max-width: 640px) { .hexmq { --hw: 150px; --g: 6px; } .hexmq-track { animation-duration: 38s; } }
+  @media (prefers-reduced-motion: reduce) { .hexmq-track { animation: none; } }
+
   /* ── Bracket 修飾 ── */
   .bracket-frame { position: relative; }
   .bracket-frame::before, .bracket-frame::after {
@@ -2112,6 +2138,52 @@
   </div>
 </section>
 
+<!-- ════════ 實戰現場 · 六角形照片輪播 ════════ -->
+<section id="live" class="py-20 sm:py-24 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10 reveal from-up">
+    <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">★ 實戰現場</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+    <h2 class="section-title text-4xl sm:text-5xl mt-4">顧問陪跑，<br class="sm:hidden">做到能落地為止</h2>
+    <p class="text-ink-600 mt-4 text-sm sm:text-base leading-relaxed">不是坐著聽完就走。講師在旁邊一起把工具做出來，<br class="hidden sm:block">卡住的地方當場解，回公司隔天就能用。</p>
+  </div>
+  <div class="hexmq" aria-label="課程現場照片輪播">
+    <div class="hexmq-track">
+      <div class="hex-photo"><img src="assets/photos/p01.jpg" alt="課程現場 1" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p02.jpg" alt="課程現場 2" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p03.jpg" alt="課程現場 3" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p04.jpg" alt="課程現場 4" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p05.jpg" alt="課程現場 5" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p06.jpg" alt="課程現場 6" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p07.jpg" alt="課程現場 7" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p08.jpg" alt="課程現場 8" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p09.jpg" alt="課程現場 9" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p10.jpg" alt="課程現場 10" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p11.jpg" alt="課程現場 11" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p12.jpg" alt="課程現場 12" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p13.jpg" alt="課程現場 13" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p14.jpg" alt="課程現場 14" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p15.jpg" alt="課程現場 15" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p16.jpg" alt="課程現場 16" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p01.jpg" alt="課程現場 1" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p02.jpg" alt="課程現場 2" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p03.jpg" alt="課程現場 3" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p04.jpg" alt="課程現場 4" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p05.jpg" alt="課程現場 5" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p06.jpg" alt="課程現場 6" loading="eager" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p07.jpg" alt="課程現場 7" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p08.jpg" alt="課程現場 8" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p09.jpg" alt="課程現場 9" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p10.jpg" alt="課程現場 10" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p11.jpg" alt="課程現場 11" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p12.jpg" alt="課程現場 12" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p13.jpg" alt="課程現場 13" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p14.jpg" alt="課程現場 14" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p15.jpg" alt="課程現場 15" loading="lazy" decoding="async"></div>
+      <div class="hex-photo"><img src="assets/photos/p16.jpg" alt="課程現場 16" loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+  <p class="text-center text-[13px] text-ink-500 mt-6 tracking-[0.18em]">※ 照片為虎智科技歷次企業內訓與公開班現場，滑鼠停在照片上會暫停</p>
+</section>
+
 <!-- ════════ 開課梯次 ════════ -->
 <section id="cohorts" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-cream-100/60">
   <div class="max-w-5xl mx-auto">
@@ -3064,6 +3136,26 @@ document.getElementById('f_contactPhone').addEventListener('blur', e => {
     new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); sync(); }, { threshold: 0.05 }).observe(cluster);
   } else start();
   document.addEventListener('visibilitychange', sync);
+})();
+</script>
+<!-- ════════ 實戰現場:讀 manifest.json 自動長出輪播(sync_photos.py 產生) ════════ -->
+<script>
+(function hexPhotos() {
+  const track = document.querySelector('.hexmq-track');
+  if (!track) return;
+  fetch('assets/photos/manifest.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(m => {
+      if (!m || !Array.isArray(m.photos) || !m.photos.length) return;
+      const list = m.photos.filter(f => /^p\d+\.jpg$/.test(f));
+      if (!list.length) return;
+      if (list.length % 2) list.push(list[0]);   // 偶數張才能無縫接回起點
+      const tile = (f, i) => '<div class="hex-photo"><img src="assets/photos/' + f + '" alt="課程現場 ' + (i + 1) + '" loading="' + (i < 6 ? 'eager' : 'lazy') + '" decoding="async"></div>';
+      const html = list.map(tile).join('');
+      track.innerHTML = html + html;
+      track.style.animationDuration = Math.max(40, Math.round(list.length * 3.2)) + 's';   // 張數越多跑越久,速度固定
+    })
+    .catch(() => {});
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cdeb4199032c42cba563a51bf018538c"}'></script><!-- End Cloudflare Web Analytics -->

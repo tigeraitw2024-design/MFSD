@@ -22,3 +22,21 @@
 - `CONFIG.SHEET_WEBHOOK` 與 `COHORTS_CSV_URL` 已換成 AI 升級計劃專用 Sheet(2026-09-14)。梯次填在該 Sheet 第 1 個分頁(A 縣市 / B 日期 / C 時間 / D 地點),報名資料進「AI升級計劃報名表單」分頁。
 - `assets/og-card.png` 是舊主題的分享卡,要重做一張新的(1200×630)換掉。
 - 網址預設 `https://mfsd.pages.dev/course-upgrade/`,push 後 Cloudflare 會自動長出來。
+
+## 「實戰現場」照片輪播怎麼更新
+
+照片來源是 Google Drive 資料夾(設成「知道連結的任何人都可檢視」):
+https://drive.google.com/drive/folders/1GhdzqTVQMvumURYvx6RYwHkhk8xroqw6
+
+Drive 裡新增或刪除照片後,在專案根目錄執行一行:
+
+```
+python "專案/5_AI 升級計劃/sync_photos.py"
+```
+
+它會自動:抓沒抓過的照片 → 跳過影片與重複檔 → 依 EXIF 轉正、置中裁成六角比例、壓縮 → 輸出到兩個 `assets/photos/` → 更新 `manifest.json`。
+網頁載入時讀 `manifest.json` 自動長出輪播,不用改 HTML。跑完 git commit + push 就上線。
+
+- 不想上網站的照片(例如簽到表),把檔名加進 `1. 素材資料/照片排除清單.txt`。
+- 第一次要先 `pip install gdown pillow`;有 iPhone HEIC 再加 `pip install pillow-heif`。
+- 原檔快取在 `.photo_cache/`,已加進 .gitignore。

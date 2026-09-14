@@ -34,3 +34,6 @@ yarn-error.log*
 專案/*/1. 素材資料/素材/**/*.docx
 專案/*/1. 素材資料/素材/**/*.xlsx
 專案/*/1. 素材資料/素材/**/*.mp4
+
+# AI 升級計劃:Drive 照片原檔快取(sync_photos.py 產生,不進 git)
+專案/5_AI 升級計劃/.photo_cache/
