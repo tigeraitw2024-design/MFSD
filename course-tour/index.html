@@ -1058,6 +1058,18 @@
           <select id="f_cohort" name="cohort" required class="form-input px-4 py-3">
             <option value="">— 請選擇場次 —</option>
           </select>
+          <!-- 單講師場次提示條 · 選到單場才顯示 -->
+          <div id="soloNoticeBox" class="hidden mt-3 rounded-lg border p-4" style="border-color:rgba(0,229,255,0.35); background:rgba(0,102,255,0.08);">
+            <div class="text-cyan-300 text-[11px] tracking-[0.3em] font-bold mb-3">▌本場資訊</div>
+            <div class="space-y-2 text-sm">
+              <div class="flex gap-3"><span class="text-ink-500 w-10 shrink-0">講師</span><span id="soloName" class="text-white font-black"></span></div>
+              <div class="flex gap-3"><span class="text-ink-500 w-10 shrink-0">內容</span><span id="soloContent" class="text-ink-200"></span></div>
+              <div class="flex gap-3"><span class="text-ink-500 w-10 shrink-0">日期</span><span id="soloDate" class="text-ink-200"></span></div>
+              <div class="flex gap-3"><span class="text-ink-500 w-10 shrink-0">時間</span><span id="soloTime" class="text-white font-bold"></span></div>
+              <div class="flex gap-3"><span class="text-ink-500 w-10 shrink-0">地點</span><span id="soloLocation" class="text-ink-200"></span></div>
+            </div>
+            <div class="mt-3 pt-3 border-t border-cyan-400/15 text-[12px] text-ink-400">此場為單講師專場 · 與雙講師 6 小時完整版不同,請確認後再送出。</div>
+          </div>
         </div>
 
         <!-- 其他 -->
@@ -1296,6 +1308,29 @@ document.getElementById('f_referral').addEventListener('change', e => {
   }
 });
 
+// ── 場次選單 · 若為單講師專場 → 顯示提示條 ──
+document.getElementById('f_cohort').addEventListener('change', e => {
+  const box = document.getElementById('soloNoticeBox');
+  const label = e.target.value;
+  const co = (window.__cohorts || []).find(c => {
+    const lbl = [c.city, [c.date, c.time].filter(Boolean).join(' '), c.location].filter(Boolean).join('｜');
+    return lbl === label;
+  });
+  if (!co || !co.soloInstructor) { box.classList.add('hidden'); return; }
+  const mode = co.soloInstructor.trim();
+  const content = mode === 'Morris'
+    ? 'AI 落地實戰(n8n × Antigravity)'
+    : mode === 'Victor'
+      ? 'AI 資安實戰(LLM 資安 × AI Agent 攻擊面)'
+      : '單場專題';
+  document.getElementById('soloName').textContent = mode + (mode === 'Morris' ? ' · 盧業興' : mode === 'Victor' ? ' · 游文賢' : '');
+  document.getElementById('soloContent').textContent = content;
+  document.getElementById('soloDate').textContent = co.date || '—';
+  document.getElementById('soloTime').textContent = co.time || '—';
+  document.getElementById('soloLocation').textContent = co.location || '—';
+  box.classList.remove('hidden');
+});
+
 // ── 同意 checkbox → 展開表單 ──
 document.getElementById('f_consent').addEventListener('change', e => {
   const fields = document.getElementById('formFields');
@@ -1343,6 +1378,7 @@ function parseCohortCSV(text) {
     date: (r[1] || '').trim(),
     time: (r[2] || '').trim(),
     location: (r[3] || '').trim(),
+    soloInstructor: (r[4] || '').trim(),   // 空=雙講師 · 'Morris'/'Victor'=單場
     capacity: 30
   })).filter(c => c.date);
 }
@@ -1397,6 +1433,7 @@ function countdownBadge(dateStr) {
 
 function renderCohorts(cohorts, counts) {
   counts = counts || {};
+  window.__cohorts = cohorts;   // 供選取後 lookup soloInstructor 用
   const list = document.getElementById('cohortList');
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
@@ -1498,6 +1535,13 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     ? '其他:' + (form.referralOther.value.trim() || '未填')
     : referralSel;
 
+  // 查選中的 cohort 是不是單場
+  const selCo = (window.__cohorts || []).find(c => {
+    const lbl = [c.city, [c.date, c.time].filter(Boolean).join(' '), c.location].filter(Boolean).join('｜');
+    return lbl === form.cohort.value;
+  });
+  const soloInstructor = (selCo && selCo.soloInstructor) ? selCo.soloInstructor.trim() : '';
+
   const data = {
     type: 'course_signup',
     timestamp: new Date().toISOString(),
@@ -1505,6 +1549,7 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     gender: form.gender.value, meal: form.meal.value,
     companyName: form.companyName.value, taxId: taxId, referral: referralVal,
     cohort: form.cohort.value,
+    soloInstructor: soloInstructor,   // '' | 'Morris' | 'Victor'
     note: form.note.value,
     consent: '已同意 ' + new Date().toISOString()
   };
