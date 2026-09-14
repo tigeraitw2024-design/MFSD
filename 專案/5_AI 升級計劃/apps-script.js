@@ -1,30 +1,33 @@
 /**
- * Google Apps Script · 在職菁英課程報名後端
+ * Google Apps Script · AI 升級計劃(在職菁英課程)報名後端
+ * 課程:從自動化到智動化：手把手帶您做出智慧製造AI 升級計畫
  *
- * 綁定 Sheet: https://docs.google.com/spreadsheets/d/1EcRHVdfrx720kvCbYSN2FjyVq_TgYTojDONs2baR9I4/
+ * 這份程式「綁定」你開啟 Apps Script 時所在的那份 Google Sheet,
+ * 不用再填 Sheet ID。
  *
  * 分頁:
- *   梯次目錄 …………………… 課程場次資料;前端讀 CSV(要「發布到網路」)
- *   在職菁英報名表單 …………… 報名資料;doPost 自動寫入 + 寄確認信
+ *   第 1 個分頁(gid=0)…… 梯次目錄:前端讀「發布到網路」的 CSV
+ *       A 欄=開課縣市  B 欄=課程日期  C 欄=課程時間  D 欄=課程地點(第 1 列標題,資料從第 2 列起)
+ *   AI升級計劃報名表單 ……… 報名資料:doPost 自動建立、寫入 + 寄確認信
  *
- * ════════ 部署步驟(建 Sheet 之後做這幾步) ════════
- *   1. 打開新 Sheet → 擴充功能 → Apps Script → 貼這整份到 Code.gs(覆蓋預設程式碼)
+ * ════════ 部署步驟 ════════
+ *   1. 打開新 Sheet → 擴充功能 → Apps Script → 把 Code.gs 的預設內容全部刪掉,貼上這整份
  *   2. 存檔(Ctrl+S)
- *   3. 上方函式下拉選 setupCourseSheet → Run
- *      → 會跳授權視窗,一路同意(需要 Gmail 寄信權限)
- *   4.(建議)函式選 testCourseEmail → Run → 你會收到範例信,確認版型
- *   5. 部署 → 新增部署 → 網頁應用程式
+ *   3. 上方函式下拉選 setupCourseSheet → 執行
+ *      → 會跳授權視窗,一路同意(需要 Sheet 與 Gmail 寄信權限)
+ *      → 會自動建好「AI升級計劃報名表單」分頁與欄位
+ *   4.(建議)函式選 testCourseEmail → 執行 → 你會收到範例信,確認版型
+ *   5. 部署 → 新增部署 → 類型選「網頁應用程式」
  *      執行身份:我
  *      存取權限:任何人
- *      按「部署」→ 拿到 Web App URL(這就是 SHEET_WEBHOOK)
- *   6. 把那串 URL 貼給 Robin,他會填進 index.html 的 CONFIG.SHEET_WEBHOOK
+ *      按「部署」→ 複製 Web App URL(這就是 SHEET_WEBHOOK)
+ *   6. 把那串 URL 貼給 Claude,填進 index.html 的 CONFIG.SHEET_WEBHOOK
  *
- *   ⚠️ 未來改這份程式後要重部署:「管理部署 → 鉛筆編輯 → 版本『新版本』→ 部署」
- *      千萬不要按「新增部署」— 會產生新 URL,前端就抓不到。
+ *   ⚠️ 未來改這份程式後要重部署:「管理部署 → 鉛筆編輯 → 版本選『新版本』→ 部署」
+ *      千萬不要按「新增部署」,那會產生新 URL,前端就抓不到。
  */
 
-const SHEET_ID = '1EcRHVdfrx720kvCbYSN2FjyVq_TgYTojDONs2baR9I4';
-const SHEET_COURSE = '在職菁英報名表單';
+const SHEET_COURSE = 'AI升級計劃報名表單';
 
 const COURSE_HEADERS = [
   '時間戳',
@@ -45,6 +48,13 @@ const COURSE_HEADERS = [
 ];
 const COURSE_MAIL_STATUS_COL = 18;   // 寄信狀態固定在最後(第 18 欄)
 
+// 綁定這份 Sheet(從 Sheet 的「擴充功能 → Apps Script」開出來的專案才有效)
+function getSS() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) throw new Error('找不到綁定的 Sheet,請從 Sheet 的「擴充功能 → Apps Script」建立這份程式');
+  return ss;
+}
+
 // ════════ 入口 ════════
 function doPost(e) {
   try {
@@ -58,15 +68,14 @@ function doPost(e) {
 
 function doGet(e) {
   if (e && e.parameter && e.parameter.action === 'counts') return courseCounts();
-  return ContentService.createTextOutput('在職菁英課程報名 API 運作中 ✓');
+  return ContentService.createTextOutput('AI 升級計劃報名 API 運作中 ✓');
 }
 
-// 回傳各梯次目前報名人數
+// 回傳各梯次目前報名人數(只回數字,不含個資)
 function courseCounts() {
   const counts = {};
   try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = ss.getSheetByName(SHEET_COURSE);
+    const sheet = getSS().getSheetByName(SHEET_COURSE);
     if (sheet && sheet.getLastRow() > 1) {
       // 報名梯次 = 第 12 欄
       const values = sheet.getRange(2, 12, sheet.getLastRow() - 1, 1).getValues();
@@ -82,7 +91,7 @@ function courseCounts() {
 
 // ════════ 寫入:課程報名(寫資料 + 寄確認信 + 記錄寄信狀態) ════════
 function logCourseSignup(data) {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ss = getSS();
   let sheet = ss.getSheetByName(SHEET_COURSE);
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
@@ -177,9 +186,9 @@ function sendCourseConfirmEmail(data) {
 
 // ════════ 測試工具 ════════
 
-// 部署後手動跑一次,把「在職菁英報名表單」分頁建好並補齊欄位
+// 貼完程式先手動跑一次:建好「AI升級計劃報名表單」分頁並補齊欄位、順便完成授權
 function setupCourseSheet() {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ss = getSS();
   let sheet = ss.getSheetByName(SHEET_COURSE);
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
@@ -193,10 +202,10 @@ function testCourseEmail() {
     email: Session.getActiveUser().getEmail(),
     gender: '男', meal: '葷',
     companyName: '測試股份有限公司', taxId: '12345678',
-    industry: '製造業',
-    advisor: '工研院感測中心', isAdvised: '是',
+    industry: '機械設備業',
+    advisor: '感測中心', isAdvised: '是',
     contactName: '李小華', contactPhone: '0912345678', contactEmail: 'contact@example.com',
-    cohort: '台中｜8/17-18 + 8/24-25｜勤益科大',
+    cohort: '台中｜2026/10/17-18 + 10/24-25 09:00-17:00｜地點另行公告',
     note: '素食一份'
   });
   Logger.log('已寄測試信至 ' + Session.getActiveUser().getEmail());
@@ -217,7 +226,7 @@ function ensureHeaders(sheet, headers) {
   if (needsUpdate) {
     sheet.getRange(1, 1, 1, width).setValues([headers]);
     sheet.setFrozenRows(1);
-    sheet.getRange(1, 1, 1, width).setFontWeight('bold').setBackground('#F1EBD7');
+    sheet.getRange(1, 1, 1, width).setFontWeight('bold').setBackground('#FDECDF');
   }
 }
 
