@@ -1012,8 +1012,8 @@
               <input type="text" id="f_companyName" name="companyName" required class="form-input px-4 py-2.5" placeholder="○○股份有限公司">
             </div>
             <div>
-              <label class="block text-sm font-bold text-ink-300 mb-1.5">公司統編 <span class="text-ink-500 font-normal">(可選 · 需開發票才填)</span></label>
-              <input type="text" id="f_taxId" name="taxId" inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
+              <label class="block text-sm font-bold text-ink-300 mb-1.5">公司統編 <span class="text-red-400">*</span></label>
+              <input type="text" id="f_taxId" name="taxId" required inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
             </div>
             <div class="sm:col-span-2">
               <label class="block text-sm font-bold text-ink-300 mb-1.5">邀請單位 / 推薦來源 <span class="text-red-400">*</span></label>
@@ -1232,7 +1232,7 @@ const COHORTS_FALLBACK = [
 ];
 const REG_CUTOFF_DAYS = 0;
 
-// ── 統編:只格式限制,不驗證(選填) ──
+// ── 統編:輸入時自動過濾非數字並限 8 碼(必填) ──
 const taxIdInput = document.getElementById('f_taxId');
 if (taxIdInput) {
   taxIdInput.addEventListener('input', e => {
@@ -1513,10 +1513,10 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
   const form = e.target;
   const submitBtn = document.getElementById('submitBtn');
 
-  // 統編如果有填 → 檢查 8 碼
+  // 統編:必填 · 檢查 8 碼
   const taxId = form.taxId.value.trim();
-  if (taxId && !/^\d{8}$/.test(taxId)) {
-    alert('公司統編需為 8 位數字(或留空不開發票)');
+  if (!/^\d{8}$/.test(taxId)) {
+    alert('請填寫公司統編(8 位數字)');
     document.getElementById('f_taxId').focus(); return;
   }
 
