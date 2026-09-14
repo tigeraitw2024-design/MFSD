@@ -34,9 +34,8 @@ Drive 裡新增或刪除照片後,在專案根目錄執行一行:
 python "專案/5_AI 升級計劃/sync_photos.py"
 ```
 
-它會自動:抓沒抓過的照片 → 跳過影片與重複檔 → 依 EXIF 轉正、置中裁成六角比例、壓縮 → 輸出到兩個 `assets/photos/` → 更新 `manifest.json`。
+它會自動:抓沒抓過的照片(Drive 刪掉的也會跟著移除)→ 跳過影片 → 依 EXIF 轉正、置中裁成六角比例、壓縮 → 輸出到兩個 `assets/photos/` → 更新 `manifest.json`。Drive 裡放什麼就輪播什麼,不做過濾,要拿掉的照片直接在 Drive 刪掉再重跑。
 網頁載入時讀 `manifest.json` 自動長出輪播,不用改 HTML。跑完 git commit + push 就上線。
 
-- 不想上網站的照片(例如簽到表),把檔名加進 `1. 素材資料/照片排除清單.txt`。
 - 第一次要先 `pip install gdown pillow`;有 iPhone HEIC 再加 `pip install pillow-heif`。
 - 原檔快取在 `.photo_cache/`,已加進 .gitignore。

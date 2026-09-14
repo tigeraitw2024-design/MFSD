@@ -2,13 +2,14 @@
 """
 sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自動抓進網站輪播
 
+Drive 裡放什麼就輪播什麼(不去重、不過濾),要拿掉的照片直接在 Drive 刪掉再重跑。
+
 流程:
   1. 讀 Drive 資料夾(含所有子資料夾)的檔案清單
   2. 只下載還沒下載過的照片到 .photo_cache/(影片、非圖片一律跳過)
-  3. 依內容去重(不同資料夾放了同一張也只算一張)、套用排除清單
-  4. 每張:依 EXIF 轉正 → 置中裁成六角比例(640×740)→ 壓縮成 JPG
-  5. 依子資料夾輪流排序(輪播才不會連續同一場),輸出 p01.jpg、p02.jpg…
-  6. 產 manifest.json,網頁載入時自動讀清單長出輪播
+  3. 每張:依 EXIF 轉正 → 置中裁成六角比例(640×740)→ 壓縮成 JPG
+  4. 依子資料夾輪流排序(輪播才不會連續同一場),輸出 p01.jpg、p02.jpg…
+  5. 產 manifest.json,網頁載入時自動讀清單長出輪播
 
 用法(在這個資料夾或任何地方執行都可以):
     python "專案/5_AI 升級計劃/sync_photos.py"            抓新照片 + 重新裁切全部
@@ -21,7 +22,6 @@ sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自�
 跑完後 git commit + push,Cloudflare 會自動上線。
 """
 import argparse
-import hashlib
 import json
 import sys
 import time
@@ -52,7 +52,6 @@ OUT_DIRS = [
     HERE / "2. 產出" / "assets" / "photos",
     ROOT / "course-upgrade" / "assets" / "photos",     # 實際上線的那份
 ]
-EXCLUDE_FILE = HERE / "1. 素材資料" / "照片排除清單.txt"   # 一行一個檔名,# 後面是註解
 
 W, H = 640, 740          # 六角形比例 0.866:1,略留餘裕
 QUALITY = 78
@@ -62,16 +61,6 @@ IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 
 def log(msg):
     print(msg, flush=True)
-
-
-def load_excludes():
-    names = set()
-    if EXCLUDE_FILE.exists():
-        for line in EXCLUDE_FILE.read_text(encoding="utf-8").splitlines():
-            line = line.split("#", 1)[0].strip()
-            if line:
-                names.add(line.lower())
-    return names
 
 
 def list_drive_files():
@@ -103,7 +92,12 @@ def fetch_file(file_id: str, dest: Path):
 
 
 def download_new(files):
-    """只下載快取裡還沒有的照片"""
+    """只下載快取裡還沒有的照片;Drive 已刪掉的,快取也一併刪掉"""
+    keep = {Path(f.local_path).resolve() for f in files}
+    for p in CACHE.rglob("*"):
+        if p.is_file() and p.resolve() not in keep:
+            p.unlink()
+            log(f"  Drive 已刪除,移除快取 {p.relative_to(CACHE)}")
     todo = [f for f in files
             if Path(f.local_path).suffix.lower() in IMG_EXT and not Path(f.local_path).exists()]
     log(f"Drive 共 {len(files)} 個檔案,照片 {sum(1 for f in files if Path(f.local_path).suffix.lower() in IMG_EXT)} 張,"
@@ -114,25 +108,15 @@ def download_new(files):
         fetch_file(f.id, Path(f.local_path))
 
 
-def collect_cached_photos(excludes):
-    """從快取收集照片,去重 + 排除,並依子資料夾輪流排序"""
+def collect_cached_photos():
+    """從快取收集全部照片,依子資料夾輪流排序"""
     by_folder = {}
-    seen = set()
-    skipped_dup = skipped_ex = 0
     for p in sorted(CACHE.rglob("*")):
         if not p.is_file() or p.suffix.lower() not in IMG_EXT:
-            continue
-        if p.name.lower() in excludes:
-            skipped_ex += 1
             continue
         if p.suffix.lower() in {".heic", ".heif"} and not HEIC_OK:
             log(f"  略過 {p.name}(HEIC 需要 pip install pillow-heif)")
             continue
-        digest = hashlib.md5(p.read_bytes()).hexdigest()
-        if digest in seen:
-            skipped_dup += 1
-            continue
-        seen.add(digest)
         by_folder.setdefault(p.parent, []).append(p)
 
     # 輪流從每個資料夾各取一張,輪播才不會一整段都是同一場
@@ -142,7 +126,7 @@ def collect_cached_photos(excludes):
         for q in queues:
             if q:
                 ordered.append(q.pop(0))
-    log(f"可用照片 {len(ordered)} 張(重複略過 {skipped_dup},排除清單略過 {skipped_ex})")
+    log(f"照片共 {len(ordered)} 張")
     return ordered
 
 
@@ -192,7 +176,7 @@ def main():
     CACHE.mkdir(parents=True, exist_ok=True)
     if not args.no_download:
         download_new(list_drive_files())
-    photos = collect_cached_photos(load_excludes())
+    photos = collect_cached_photos()
     if not photos:
         sys.exit("沒有任何照片可用。")
     write_outputs(photos)
