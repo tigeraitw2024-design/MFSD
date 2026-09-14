@@ -19,6 +19,6 @@
 
 ## 上線前要人工做的事
 
-- `course-upgrade/index.html` 裡的 `CONFIG.SHEET_WEBHOOK` 與 `COHORTS_CSV_URL` 目前**仍指向在職菁英課程的 Apps Script 與梯次表**,報名資料會進同一份 Sheet。要分開就照 `專案/規範/部署清單.md` 新開一個。
+- `CONFIG.SHEET_WEBHOOK` 與 `COHORTS_CSV_URL` 已換成 AI 升級計劃專用 Sheet(2026-09-14)。梯次填在該 Sheet 第 1 個分頁(A 縣市 / B 日期 / C 時間 / D 地點),報名資料進「AI升級計劃報名表單」分頁。
 - `assets/og-card.png` 是舊主題的分享卡,要重做一張新的(1200×630)換掉。
 - 網址預設 `https://mfsd.pages.dev/course-upgrade/`,push 後 Cloudflare 會自動長出來。
