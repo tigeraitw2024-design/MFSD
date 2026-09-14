@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --org: #E8772E; --org-deep: #C4571A; --org-light: #F6A65E; --peach: #F8D3B4; --gray: #E9E7E3; --ink: #111;
+    --grad: linear-gradient(160deg, #F6A65E 0%, #E8772E 52%, #C4571A 100%);
+    --hex: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    font-family: 'Noto Sans TC', system-ui, sans-serif; color: #2B2B2B; background: #fff; position: relative;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34.64' height='60' viewBox='0 0 34.64 60'%3E%3Cg stroke='%23111111' stroke-width='0.8' stroke-opacity='.05' fill='none'%3E%3Cpolygon points='17.32,0 34.64,10 34.64,30 17.32,40 0,30 0,10'/%3E%3Cpolygon points='0,30 17.32,40 17.32,60 0,70 -17.32,60 -17.32,40'/%3E%3Cpolygon points='34.64,30 51.96,40 51.96,60 34.64,70 17.32,60 17.32,40'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 52px 90px;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Bebas Neue', sans-serif; }
+
+  /* 頂部 lockup */
+  .lockup { position: absolute; left: 60px; top: 44px; display: flex; align-items: center; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 15px; letter-spacing: .14em; color: #5A5A57; }
+  .lockup img { height: 44px; width: auto; margin-right: 6px; }
+  .lockup b { color: #111; font-weight: 800; margin-right: 6px; }
+  .lockup .sep { width: 1px; height: 16px; background: rgba(17,17,17,.35); }
+
+  /* 左邊文字 */
+  .left { position: absolute; left: 60px; top: 128px; width: 620px; }
+  .eyebrow { display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 15px; letter-spacing: .3em; font-weight: 700; color: var(--org-deep); margin-bottom: 18px; }
+  .dot { width: 13px; height: 15px; clip-path: var(--hex); background: var(--grad); }
+  h1 { font-weight: 900; color: #111; letter-spacing: -.02em; line-height: 1.02; }
+  h1 .big { display: block; font-size: 66px; }
+  h1 .mid { display: block; font-size: 27px; font-weight: 700; color: #5A5A57; letter-spacing: .14em; margin: 12px 0 10px; }
+  h1 .o { color: var(--org); }
+  .sub { margin-top: 22px; font-size: 22px; font-weight: 700; color: #2B2B2B; line-height: 1.45; }
+  .sub b { color: #111; }
+  .kw { margin-top: 22px; display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 900; color: #111; letter-spacing: .04em; }
+  .kw .bar { width: 48px; height: 6px; background: var(--grad); }
+  .kw .o { color: var(--org); }
+
+  /* 右邊蜂巢 */
+  .deco { position: absolute; right: -40px; top: -30px; width: 620px; height: 700px; opacity: .45; }
+  .cluster { position: absolute; right: 64px; top: 88px; width: 500px; height: 480px; }
+  .hex { position: absolute; width: 240px; height: 277px; clip-path: var(--hex); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 46px 30px; }
+  .hex.orange { background: var(--grad); color: #111; left: 0; top: 0; transform: rotateX(4deg) rotateY(-6deg); }
+  .hex.black  { background: #111; color: #fff; left: 254px; top: 0; transform: rotateX(4deg) rotateY(6deg); }
+  .hex.peach  { background: var(--peach); color: #111; left: 127px; top: 214px; transform: rotateX(-3deg); }
+  .cluster { perspective: 900px; }
+  .hl { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .2em; font-weight: 800; opacity: .85; margin-bottom: 4px; }
+  .hex.black .hl { color: var(--org-light); opacity: 1; }
+  .hn { font-family: 'Bebas Neue', sans-serif; font-size: 50px; line-height: .9; letter-spacing: .02em; }
+  .ht { font-weight: 900; font-size: 21px; line-height: 1.2; margin-top: 4px; }
+  .hr { width: 18px; height: 2px; background: currentColor; opacity: .6; margin: 8px auto; }
+  .hs { font-size: 12.5px; line-height: 1.4; opacity: .82; }
+  .shadow { position: absolute; width: 240px; height: 277px; filter: blur(14px); opacity: .5; }
+  .shadow::before { content: ""; position: absolute; inset: 8% 5% -6%; clip-path: var(--hex); background: rgba(17,17,17,.45); }
+  .shadow.s1 { left: 0; top: 0; } .shadow.s2 { left: 254px; top: 0; } .shadow.s3 { left: 127px; top: 214px; }
+
+  /* 底部小字 */
+  .foot { position: absolute; left: 60px; bottom: 40px; display: flex; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: .24em; color: #5A5A57; }
+  .foot .line { width: 26px; height: 1px; background: #111; }
+</style>
+</head>
+<body>
+  <!-- 右側裝飾蜂巢 -->
+  <svg class="deco" viewBox="0 0 620 700" aria-hidden="true">
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6A65E"/><stop offset=".55" stop-color="#E8772E"/><stop offset="1" stop-color="#C4571A"/></linearGradient></defs>
+    <g stroke="#fff" stroke-width="3">
+      <polygon points="330,10 394,47 394,121 330,158 266,121 266,47" fill="#E9E7E3"/>
+      <polygon points="458,10 522,47 522,121 458,158 394,121 394,47" fill="url(#g)"/>
+      <polygon points="586,10 650,47 650,121 586,158 522,121 522,47" fill="#F8D3B4"/>
+      <polygon points="266,121 330,158 330,232 266,269 202,232 202,158" fill="#F8D3B4"/>
+      <polygon points="522,121 586,158 586,232 522,269 458,232 458,158" fill="url(#g)"/>
+      <polygon points="650,121 714,158 714,232 650,269 586,232 586,158" fill="#E9E7E3"/>
+      <polygon points="202,232 266,269 266,343 202,380 138,343 138,269" fill="#E9E7E3"/>
+      <polygon points="586,232 650,269 650,343 586,380 522,343 522,269" fill="#F8D3B4"/>
+      <polygon points="458,343 522,380 522,454 458,491 394,454 394,380" fill="url(#g)"/>
+      <polygon points="586,343 650,380 650,454 586,491 522,454 522,380" fill="#E9E7E3"/>
+      <polygon points="266,454 330,491 330,565 266,602 202,565 202,491" fill="#F8D3B4"/>
+      <polygon points="522,454 586,491 586,565 522,602 458,565 458,491" fill="url(#g)"/>
+      <polygon points="650,454 714,491 714,565 650,602 586,565 586,491" fill="#F8D3B4"/>
+      <polygon points="394,565 458,602 458,676 394,713 330,676 330,602" fill="#E9E7E3"/>
+      <polygon points="586,565 650,602 650,676 586,713 522,676 522,602" fill="url(#g)"/>
+    </g>
+  </svg>
+
+  <div class="lockup">
+    <img src="assets/logo.png" alt="">
+    <span><b>主辦</b>經濟部產業發展署</span>
+    <span class="sep"></span>
+    <span><b>執行</b>虎智科技 TigerAI</span>
+  </div>
+
+  <div class="left">
+    <div class="eyebrow"><span class="dot"></span>在職菁英課程 · 2026 · 感測 / 機械產業</div>
+    <h1>
+      <span class="big">從自動化到<span class="o">智動化</span></span>
+      <span class="mid">手把手帶您做出</span>
+      <span class="big">智慧製造 <span class="o">AI</span> 升級計畫</span>
+    </h1>
+    <div class="sub">30 小時實戰，把 <b>Low-Code、RAG、AI Agent</b><br>帶回工廠。</div>
+    <div class="kw"><span class="bar"></span>30 小時實戰 · <span class="o">4 天完成</span> · 3 個成果帶回公司</div>
+  </div>
+
+  <div class="cluster">
+    <div class="shadow s1"></div><div class="shadow s2"></div><div class="shadow s3"></div>
+    <div class="hex orange">
+      <div class="hl">公司行銷內容產出</div>
+      <div class="hn">01</div>
+      <div class="ht">AI 內容產出</div>
+      <div class="hr"></div>
+      <div class="hs">貼文 / 圖片 / 短影音自動化</div>
+    </div>
+    <div class="hex black">
+      <div class="hl">★ 核心</div>
+      <div class="hn">02</div>
+      <div class="ht">企業自己的 AI 工具</div>
+      <div class="hr"></div>
+      <div class="hs">SDD + Low-Code · 3 天做完</div>
+    </div>
+    <div class="hex peach">
+      <div class="hl">部門級 RAG 知識庫</div>
+      <div class="hn">03</div>
+      <div class="ht">部門級知識庫</div>
+      <div class="hr"></div>
+      <div class="hs">RAG + MCP · 跨系統串接</div>
+    </div>
+  </div>
+
+  <div class="foot"><span class="line"></span>mfsd.pages.dev/course-upgrade</div>
+</body>
+</html>
