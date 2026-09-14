@@ -533,6 +533,31 @@
     .reveal, .ax-level { transition: opacity 0.3s ease; transform: none !important; }
     .floating-cta { animation: none; }
   }
+
+  /* ══════════ 實戰現場 · 兩行方塊照片輪播(上行往左、下行往右) ══════════ */
+  .pstrip {
+    --pw: 220px; --pg: 14px;
+    width: 100%; overflow: hidden; display: flex; flex-direction: column; gap: var(--pg); padding: 6px 0 10px;
+    -webkit-mask: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+            mask: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
+  }
+  .pstrip-row { display: flex; width: max-content; will-change: transform; }
+  .pstrip-left  { animation: pstrip-l var(--pd, 90s) linear infinite; }
+  .pstrip-right { animation: pstrip-r var(--pd, 90s) linear infinite; }
+  .pstrip:hover .pstrip-row { animation-play-state: paused; }
+  .ptile {
+    flex: 0 0 var(--pw); width: var(--pw); height: var(--pw); margin-right: var(--pg);
+    overflow: hidden; border-radius: var(--pr, 16px); border: var(--pb, 1px solid rgba(0,0,0,0.08));
+    background: var(--pbg, #eee); box-shadow: var(--ps, none);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .ptile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ptile:hover { transform: scale(1.05); filter: brightness(1.06); }
+  @keyframes pstrip-l { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+  @keyframes pstrip-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (max-width: 640px) { .pstrip { --pw: 140px; --pg: 10px; } }
+  @media (prefers-reduced-motion: reduce) { .pstrip-row { animation: none; } }
+  .pstrip { --pr: 14px; --pb: 1px solid rgba(216,178,90,0.32); --pbg: #16131C; --ps: 0 10px 30px -12px rgba(0,0,0,0.6); }
 </style>
 </head>
 <body class="gold-glow-bg min-h-screen">
@@ -1419,6 +1444,46 @@
   </div>
 </section>
 
+<!-- ════════ 實戰現場 · 照片輪播 ════════ -->
+<section id="live" class="py-20 sm:py-28 relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12 reveal from-up">
+    <div class="inline-block"><span class="floating-line"></span><span class="section-eyebrow">★ 實戰現場</span><span class="floating-line ml-3" style="transform:scaleX(-1)"></span></div>
+    <h2 class="section-title text-4xl sm:text-5xl mt-4">顧問陪跑，<br class="sm:hidden">做到能落地為止</h2>
+    <p class="text-gray-400 mt-4 text-sm sm:text-base leading-relaxed">不是坐著聽完就走。講師在旁邊一起把工具做出來，<br class="hidden sm:block">卡住的地方當場解，回公司隔天就能用。</p>
+  </div>
+  <div class="pstrip" aria-label="課程現場照片輪播">
+    <div class="pstrip-row pstrip-left">
+      <div class="ptile"><img src="assets/photos/p01.jpg" alt="課程現場 1" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p03.jpg" alt="課程現場 3" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p05.jpg" alt="課程現場 5" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p07.jpg" alt="課程現場 7" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p09.jpg" alt="課程現場 9" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p11.jpg" alt="課程現場 11" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p13.jpg" alt="課程現場 13" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p15.jpg" alt="課程現場 15" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p17.jpg" alt="課程現場 17" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p19.jpg" alt="課程現場 19" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p21.jpg" alt="課程現場 21" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p23.jpg" alt="課程現場 23" loading="lazy" decoding="async"></div>
+    </div>
+    <div class="pstrip-row pstrip-right">
+      <div class="ptile"><img src="assets/photos/p02.jpg" alt="課程現場 2" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p04.jpg" alt="課程現場 4" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p06.jpg" alt="課程現場 6" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p08.jpg" alt="課程現場 8" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p10.jpg" alt="課程現場 10" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p12.jpg" alt="課程現場 12" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p14.jpg" alt="課程現場 14" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p16.jpg" alt="課程現場 16" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p18.jpg" alt="課程現場 18" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p20.jpg" alt="課程現場 20" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p22.jpg" alt="課程現場 22" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="assets/photos/p24.jpg" alt="課程現場 24" loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+  <p class="text-center text-xs text-gray-500 mt-6 tracking-[0.18em]">※ 照片為虎智科技歷次企業內訓與公開班現場，滑鼠停在照片上會暫停</p>
+</section>
+
 <!-- ════════ 開課梯次 ════════ -->
 <section id="cohorts" class="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-navy-900/60">
   <div class="max-w-5xl mx-auto">
@@ -2286,6 +2351,30 @@ document.getElementById('f_nationalId').addEventListener('blur', e => {
       levels.forEach(el => el.classList.remove('active'));
     });
   });
+})();
+</script>
+<!-- ════════ 實戰現場:讀 manifest.json 自動長出兩行輪播(專案/sync_photos.py 產生) ════════ -->
+<script>
+(function photoStrip() {
+  const left = document.querySelector('.pstrip-left');
+  const right = document.querySelector('.pstrip-right');
+  if (!left || !right) return;
+  const tile = (f, i) => '<div class="ptile"><img src="assets/photos/' + f + '" alt="課程現場 ' + (i + 1) + '" loading="' + (i < 8 ? 'eager' : 'lazy') + '" decoding="async"></div>';
+  const fill = (row, list) => {
+    const html = list.map(tile).join('');
+    row.innerHTML = html + html;                                   // 複製一輪才能無縫接回起點
+    row.style.setProperty('--pd', Math.max(30, Math.round(list.length * 4.5)) + 's');   // 張數越多跑越久,速度固定
+  };
+  fetch('assets/photos/manifest.json', { cache: 'no-cache' })
+    .then(r => (r.ok ? r.json() : null))
+    .then(m => {
+      if (!m || !Array.isArray(m.photos) || !m.photos.length) return;
+      const list = m.photos.filter(f => /^p\d+\.jpg$/.test(f));
+      if (!list.length) return;
+      fill(left,  list.filter((_, i) => i % 2 === 0));   // 單數張往左
+      fill(right, list.filter((_, i) => i % 2 === 1));   // 雙數張往右
+    })
+    .catch(() => {});
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cdeb4199032c42cba563a51bf018538c"}'></script><!-- End Cloudflare Web Analytics -->

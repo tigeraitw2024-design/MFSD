@@ -1,23 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自動抓進網站輪播
+sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自動抓進五個課程網站的照片輪播
 
 Drive 裡放什麼就輪播什麼(不去重、不過濾),要拿掉的照片直接在 Drive 刪掉再重跑。
 
 流程:
   1. 讀 Drive 資料夾(含所有子資料夾)的檔案清單
-  2. 只下載還沒下載過的照片到 .photo_cache/(影片、非圖片一律跳過)
-  3. 每張:依 EXIF 轉正 → 置中裁成六角比例(640×740)→ 壓縮成 JPG
+  2. 只下載還沒下載過的照片到 專案/.photo_cache/(Drive 刪掉的也跟著移除;影片、非圖片一律跳過)
+  3. 每張:依 EXIF 轉正 → 置中裁切 → 壓縮成 JPG
+       - AI 升級計劃(course-upgrade):六角形比例 640×740
+       - 其他四站(course / course-elite / course-enterprise / course-tour):正方形 640×640
   4. 依子資料夾輪流排序(輪播才不會連續同一場),輸出 p01.jpg、p02.jpg…
-  5. 產 manifest.json,網頁載入時自動讀清單長出輪播
+  5. 每站產 assets/photos/manifest.json,網頁載入時自動讀清單長出輪播
 
-用法(在這個資料夾或任何地方執行都可以):
-    python "專案/5_AI 升級計劃/sync_photos.py"            抓新照片 + 重新裁切全部
-    python "專案/5_AI 升級計劃/sync_photos.py" --no-download   不連網,只用快取重新裁切
+用法(在專案根目錄或任何地方執行都可以):
+    python "專案/sync_photos.py"                 抓新照片 + 重新裁切全部
+    python "專案/sync_photos.py" --no-download   不連網,只用快取重新裁切
 
 需要一次性安裝:
-    pip install gdown pillow
-    (若 Drive 裡有 iPhone 的 HEIC 檔,再加 pip install pillow-heif;需要 gdown 6 以上)
+    pip install gdown pillow          (gdown 6 以上)
+    (若 Drive 裡有 iPhone 的 HEIC 檔,再加 pip install pillow-heif)
 
 跑完後 git commit + push,Cloudflare 會自動上線。
 """
@@ -45,15 +47,21 @@ except ImportError:
 # ───────────────────────────── 設定 ─────────────────────────────
 DRIVE_FOLDER_URL = "https://drive.google.com/drive/folders/1GhdzqTVQMvumURYvx6RYwHkhk8xroqw6"
 
-HERE = Path(__file__).resolve().parent                 # 專案/5_AI 升級計劃
-ROOT = HERE.parent.parent                              # 政府補助一站式網站
+HERE = Path(__file__).resolve().parent                 # 專案/
+ROOT = HERE.parent                                     # 政府補助一站式網站
 CACHE = HERE / ".photo_cache"                          # 原檔快取(已加進 .gitignore)
-OUT_DIRS = [
-    HERE / "2. 產出" / "assets" / "photos",
-    ROOT / "course-upgrade" / "assets" / "photos",     # 實際上線的那份
+
+HEX = (640, 740)      # 六角形比例 0.866:1,略留餘裕
+SQUARE = (640, 640)   # 正方形方塊
+TARGETS = [
+    (HERE / "5_AI 升級計劃" / "2. 產出" / "assets" / "photos", HEX),
+    (ROOT / "course-upgrade" / "assets" / "photos", HEX),
+    (ROOT / "course" / "assets" / "photos", SQUARE),
+    (ROOT / "course-elite" / "assets" / "photos", SQUARE),
+    (ROOT / "course-enterprise" / "assets" / "photos", SQUARE),
+    (ROOT / "course-tour" / "assets" / "photos", SQUARE),
 ]
 
-W, H = 640, 740          # 六角形比例 0.866:1,略留餘裕
 QUALITY = 78
 IMG_EXT = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 # ────────────────────────────────────────────────────────────────
@@ -130,16 +138,16 @@ def collect_cached_photos():
     return ordered
 
 
-def crop_hex(src: Path) -> Image.Image:
-    im = ImageOps.exif_transpose(Image.open(src)).convert("RGB")
-    w, h = im.size
+def crop_to(src_im: Image.Image, size) -> Image.Image:
+    W, H = size
+    w, h = src_im.size
     target = W / H
     if w / h > target:
         cw, ch = int(h * target), h
     else:
         cw, ch = w, int(w / target)
     x0, y0 = (w - cw) // 2, (h - ch) // 2
-    return im.crop((x0, y0, x0 + cw, y0 + ch)).resize((W, H), Image.LANCZOS)
+    return src_im.crop((x0, y0, x0 + cw, y0 + ch)).resize((W, H), Image.LANCZOS)
 
 
 def write_outputs(photos):
@@ -150,22 +158,23 @@ def write_outputs(photos):
         "count": len(names),
         "photos": names,
     }
-    rendered = []
-    total = 0
-    for src, name in zip(photos, names):
-        rendered.append((name, crop_hex(src)))
-    for out in OUT_DIRS:
+    # 先把原檔轉正一次,再依各站需要的比例裁切
+    opened = [ImageOps.exif_transpose(Image.open(src)).convert("RGB") for src in photos]
+    sizes = sorted({size for _, size in TARGETS})
+    rendered = {size: [(n, crop_to(im, size)) for n, im in zip(names, opened)] for size in sizes}
+
+    for out, size in TARGETS:
         out.mkdir(parents=True, exist_ok=True)
-        # 清掉舊的 pNN.jpg,避免留下已刪除的照片
-        for old in out.glob("p*.jpg"):
+        for old in out.glob("p*.jpg"):      # 清掉舊的,避免留下已刪除的照片
             old.unlink()
-        for name, im in rendered:
+        total = 0
+        for name, im in rendered[size]:
             path = out / name
             im.save(path, "JPEG", quality=QUALITY, optimize=True, progressive=True)
             total += path.stat().st_size
         (out / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-        log(f"寫入 {out}  ({len(names)} 張)")
-    log(f"每份約 {total // len(OUT_DIRS) // 1024} KB,manifest.json 已更新")
+        log(f"寫入 {out.relative_to(ROOT)}  ({len(names)} 張 · {size[0]}×{size[1]} · {total // 1024} KB)")
+    log("manifest.json 已更新")
 
 
 def main():
