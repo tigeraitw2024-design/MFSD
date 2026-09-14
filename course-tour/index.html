@@ -1309,6 +1309,7 @@ document.getElementById('f_referral').addEventListener('change', e => {
 });
 
 // ── 場次選單 · 若為單講師專場 → 顯示提示條 ──
+// 講師名/主題全部從 Sheet 拉,不 hardcode 特定講師,通用於任何課程任何講師
 document.getElementById('f_cohort').addEventListener('change', e => {
   const box = document.getElementById('soloNoticeBox');
   const label = e.target.value;
@@ -1317,14 +1318,8 @@ document.getElementById('f_cohort').addEventListener('change', e => {
     return lbl === label;
   });
   if (!co || !co.soloInstructor) { box.classList.add('hidden'); return; }
-  const mode = co.soloInstructor.trim();
-  const content = mode === 'Morris'
-    ? 'AI 落地實戰(n8n × Antigravity)'
-    : mode === 'Victor'
-      ? 'AI 資安實戰(LLM 資安 × AI Agent 攻擊面)'
-      : '單場專題';
-  document.getElementById('soloName').textContent = mode + (mode === 'Morris' ? ' · 盧業興' : mode === 'Victor' ? ' · 游文賢' : '');
-  document.getElementById('soloContent').textContent = content;
+  document.getElementById('soloName').textContent = co.soloInstructor;
+  document.getElementById('soloContent').textContent = co.soloTopic || '單場專題';
   document.getElementById('soloDate').textContent = co.date || '—';
   document.getElementById('soloTime').textContent = co.time || '—';
   document.getElementById('soloLocation').textContent = co.location || '—';
@@ -1378,7 +1373,8 @@ function parseCohortCSV(text) {
     date: (r[1] || '').trim(),
     time: (r[2] || '').trim(),
     location: (r[3] || '').trim(),
-    soloInstructor: (r[4] || '').trim(),   // 空=雙講師 · 'Morris'/'Victor'=單場
+    soloInstructor: (r[4] || '').trim(),   // 空=雙講師 · 有填=單場(顯示什麼就填什麼)
+    soloTopic: (r[5] || '').trim(),        // 單場主題(空則顯示「單場專題」)
     capacity: 30
   })).filter(c => c.date);
 }
@@ -1541,6 +1537,7 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     return lbl === form.cohort.value;
   });
   const soloInstructor = (selCo && selCo.soloInstructor) ? selCo.soloInstructor.trim() : '';
+  const soloTopic = (selCo && selCo.soloTopic) ? selCo.soloTopic.trim() : '';
 
   const data = {
     type: 'course_signup',
@@ -1549,7 +1546,8 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     gender: form.gender.value, meal: form.meal.value,
     companyName: form.companyName.value, taxId: taxId, referral: referralVal,
     cohort: form.cohort.value,
-    soloInstructor: soloInstructor,   // '' | 'Morris' | 'Victor'
+    soloInstructor: soloInstructor,   // 空=雙講師 · 有值=單場(Sheet 填什麼帶什麼)
+    soloTopic: soloTopic,             // 單場主題(Sheet 帶)
     note: form.note.value,
     consent: '已同意 ' + new Date().toISOString()
   };

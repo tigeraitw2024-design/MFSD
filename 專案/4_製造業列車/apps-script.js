@@ -29,17 +29,20 @@ const COURSE_HEADERS = [
   '報名場次',
   '報名留言', '同意狀態',
   '寄信狀態',
-  '講師模式'   // 新增 · 空=雙講師 · Morris/Victor=單場
+  '單場講師',   // col 15 · 空=雙講師 · 有值=單場(Sheet 填什麼帶什麼)
+  '單場主題'    // col 16 · 單場的課程主題(Sheet 帶)
 ];
 const COURSE_MAIL_STATUS_COL = 14;
 
-// 梯次目錄 · 第 5 欄「單場講師」為選填,空白 = 雙講師 6h;填 Morris / Victor = 該場為單講師專場
-const COHORT_HEADERS = ['開課縣市', '課程日期', '課程時間', '課程地點', '單場講師'];
+// 梯次目錄:單場講師 + 單場主題兩欄搭配使用
+//   單場講師欄空白 → 雙講師 6h 場;有填 → 單場專場,顯示什麼寫什麼(通用於任何講師)
+//   單場主題欄 → 這場的課程內容/主題敘述(前端提示條與信件都會直接引用)
+const COHORT_HEADERS = ['開課縣市', '課程日期', '課程時間', '課程地點', '單場講師', '單場主題'];
 // 範例場次(setupAll 第一次跑會塞這 3 列 · 之後你直接改 Sheet)
 const COHORT_SEED = [
-  ['台北', '3月15日(六)', '09:00-17:00', '虎智科技教室(待定)', ''],
-  ['台中', '4月12日(六)', '13:00-17:00', '待定', 'Morris'],
-  ['高雄', '5月10日(六)', '09:00-17:00', '待定', '']
+  ['台北', '3月15日(六)', '09:00-17:00', '虎智科技教室(待定)', '', ''],
+  ['台中', '4月12日(六)', '13:00-17:00', '待定', 'Morris · 盧業興', 'AI 落地實戰(n8n × Antigravity)'],
+  ['高雄', '5月10日(六)', '09:00-12:00', '待定', 'Victor · 游文賢', 'AI 資安實戰(LLM 資安 × AI Agent 攻擊面)']
 ];
 
 // ════════ 入口 ════════
@@ -90,7 +93,8 @@ function logCourseSignup(data) {
     data.cohort || '',
     data.note || '', data.consent || '',
     '',                            // col 14 · 寄信狀態(下方 setValue 填)
-    data.soloInstructor || ''      // col 15 · 講師模式
+    data.soloInstructor || '',     // col 15 · 單場講師
+    data.soloTopic || ''           // col 16 · 單場主題
   ]);
   const row = sheet.getLastRow();
 
@@ -107,6 +111,7 @@ function logCourseSignup(data) {
 }
 
 // ════════ 寄送:報名確認信 ════════
+// 兩種模式:雙講師(現行寫死內容) · 通用單場(講師名/主題全由 Sheet 帶,套到任何講師)
 function sendCourseConfirmEmail(data) {
   const to = String(data.email || '').trim();
   if (!to) throw new Error('無 Email');
@@ -115,36 +120,24 @@ function sendCourseConfirmEmail(data) {
   const city     = (parts[0] || '—').trim();
   const datetime = (parts[1] || '—').trim();
   const place    = (parts[2] || '—').trim();
-  const mode     = String(data.soloInstructor || '').trim();   // '' | 'Morris' | 'Victor'
+  const solo     = String(data.soloInstructor || '').trim();   // 有值 = 單場
+  const topic    = String(data.soloTopic || '').trim() || '單場專題';
 
-  // ─ 依講師模式決定信件標題與課程內容段 ─
   let subject, headline, courseBlock;
-  if (mode === 'Morris') {
-    subject = '【報名確認】製造業 AI 巡迴列車 · Morris 單場 · AI 落地實戰';
+  if (solo) {
+    // ── 通用單場版 · 講師/主題從 Sheet 拉,不 hardcode ──
+    subject = '【報名確認】製造業 AI 巡迴列車 · ' + solo + ' 單場 · ' + topic;
     headline =
-      '感謝您報名「製造業 AI 巡迴列車 · Morris 單場」,\n' +
-      '本場為 Morris 單講師專場 · 主題:AI 落地實戰(n8n × Antigravity)。\n' +
+      '感謝您報名「製造業 AI 巡迴列車 · ' + solo + ' 單場」,\n' +
+      '本場為 ' + solo + ' 單講師專場 · 主題:' + topic + '。\n' +
       '我們已收到您的報名資料。\n\n';
     courseBlock =
       '▌課程資訊\n' +
       '　．本場為單講師專場(非 6 小時完整版)\n' +
-      '　．講師 · Morris:AI 落地地圖、Antigravity SOP → Skill、n8n 全流程、企業 AI 治理\n' +
-      '　．完訓帶回公司的 AI 員工:\n' +
-      '　　1. 值班 AI:24hr 客服助理(SOP 學一遍,重複問題他來回)\n' +
-      '　　2. 管家 AI:產線流程自動化(訂單/庫存/告警自己跑)\n\n';
-  } else if (mode === 'Victor') {
-    subject = '【報名確認】製造業 AI 巡迴列車 · Victor 單場 · AI 資安實戰';
-    headline =
-      '感謝您報名「製造業 AI 巡迴列車 · Victor 單場」,\n' +
-      '本場為 Victor 單講師專場 · 主題:AI 資安實戰(LLM 資安 × AI Agent 攻擊面)。\n' +
-      '我們已收到您的報名資料。\n\n';
-    courseBlock =
-      '▌課程資訊\n' +
-      '　．本場為單講師專場(非 6 小時完整版)\n' +
-      '　．講師 · Victor:LLM 資安死角、Agent 攻擊面、OpenClaw Gateway 實作、治理實務\n' +
-      '　．完訓帶回公司的 AI 員工:\n' +
-      '　　1. 守門 AI:資安治理(權限、稽核、對外通訊都鎖好)\n\n';
+      '　．講師:' + solo + '\n' +
+      '　．主題:' + topic + '\n\n';
   } else {
+    // ── 雙講師版(製造業列車專屬,寫死 Morris+Victor)──
     subject = '【報名確認】製造業 AI 巡迴列車 · 用 AI 建工具 × 學資安裝門鎖';
     headline =
       '感謝您報名「製造業 AI 巡迴列車」6 小時實戰課程,\n' +
@@ -175,7 +168,7 @@ function sendCourseConfirmEmail(data) {
     '　　．開課縣市:' + city + '\n' +
     '　　．上課時間:' + datetime + '\n' +
     '　　．上課地點:' + place + '\n' +
-    (mode ? '　　．講師模式:' + mode + ' 單場專題\n' : '') +
+    (solo ? '　　．講師模式:' + solo + ' · ' + topic + '\n' : '') +
     '\n' +
     courseBlock +
     '▌行前提醒\n' +
@@ -239,7 +232,8 @@ function testCourseEmail() {
   Logger.log('已寄雙講師版測試信至 ' + Session.getActiveUser().getEmail());
 }
 
-function testCourseEmailMorris() {
+// 通用單場版測試 · 把 soloInstructor / soloTopic 換成任何值都能跑
+function testCourseEmailSolo() {
   sendCourseConfirmEmail({
     name: '王大明', jobTitle: '生產部經理',
     email: Session.getActiveUser().getEmail(),
@@ -247,24 +241,11 @@ function testCourseEmailMorris() {
     companyName: '測試股份有限公司', taxId: '12345678',
     referral: '逢甲大學創新育成中心',
     cohort: '台中｜4月12日(六) 13:00-17:00｜台中訓練中心',
-    soloInstructor: 'Morris',
+    soloInstructor: 'Morris · 盧業興',
+    soloTopic: 'AI 落地實戰(n8n × Antigravity)',
     note: ''
   });
-  Logger.log('已寄 Morris 單場版測試信至 ' + Session.getActiveUser().getEmail());
-}
-
-function testCourseEmailVictor() {
-  sendCourseConfirmEmail({
-    name: '王大明', jobTitle: '資訊部經理',
-    email: Session.getActiveUser().getEmail(),
-    phone: '0912345678', gender: '男', meal: '葷',
-    companyName: '測試股份有限公司', taxId: '12345678',
-    referral: '中華亞太智慧物聯發展協會',
-    cohort: '高雄｜5月10日(六) 09:00-12:00｜高雄場地',
-    soloInstructor: 'Victor',
-    note: ''
-  });
-  Logger.log('已寄 Victor 單場版測試信至 ' + Session.getActiveUser().getEmail());
+  Logger.log('已寄通用單場版測試信至 ' + Session.getActiveUser().getEmail());
 }
 
 // ════════ 工具函式 ════════
