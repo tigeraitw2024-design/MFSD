@@ -309,21 +309,33 @@
     max-width: 580px;
     margin-left: auto;
   }
+  .hex-slot { position: relative; grid-column: span 2; min-width: 0; perspective: 900px; }
+  .hex-slot:nth-child(1) { grid-column: 1 / 3; }
+  .hex-slot:nth-child(2) { grid-column: 3 / 5; }
+  .hex-slot:nth-child(3) { grid-column: 2 / 4; margin-top: calc(-28.87% + 5px); }
+  /* 卡片下方的地面陰影(跟著傾斜反向移動) */
+  .hex-shadow {
+    position: absolute; left: 5%; right: 5%; top: 10%; bottom: -6%;
+    filter: blur(14px); opacity: 0.45; pointer-events: none; z-index: 0;
+    will-change: transform, opacity;
+  }
+  .hex-shadow::before { content: ""; position: absolute; inset: 0; clip-path: var(--hex); background: rgba(17,17,17,0.45); }
   .hex-card {
-    position: relative;
-    width: 100%; min-width: 0; justify-self: stretch; align-self: start; overflow: hidden;
-    grid-column: span 2;
+    position: relative; z-index: 1;
+    width: 100%; min-width: 0; overflow: hidden;
     aspect-ratio: 0.866 / 1;
     clip-path: var(--hex);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     text-align: center;
     padding: 18% 13%;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
   }
   .hex-card:hover { transform: translateY(-6px); }
-  .hex-card:nth-child(1) { grid-column: 1 / 3; }
-  .hex-card:nth-child(2) { grid-column: 3 / 5; }
-  .hex-card:nth-child(3) { grid-column: 2 / 4; margin-top: calc(-28.87% + 5px); }
+  /* JS 接手後改由彈簧驅動,關掉 CSS transition / hover */
+  .hex-cluster.is-live .hex-card { transition: none; }
+  .hex-cluster.is-live .hex-card:hover { transform: none; }
+  .hex-inner { position: relative; will-change: transform; }
   .hex-orange { background: var(--org-grad); color: #111111; }
   .hex-black  { background: #111111; color: #FFFFFF; }
   .hex-peach  { background: #F8D3B4; color: #111111; }
@@ -640,31 +652,34 @@
 
         <div class="hex-cluster">
           <!-- 成果 01 · 橘漸層 -->
-          <div class="hex-card hex-orange">
+          <div class="hex-slot"><div class="hex-shadow" aria-hidden="true"></div>
+          <div class="hex-card hex-orange"><div class="hex-inner">
             <div class="hex-label">公司行銷內容產出</div>
             <div class="hex-num">01</div>
             <div class="hex-title">AI 內容產出</div>
             <span class="hex-rule"></span>
             <div class="hex-sub">貼文 / 圖片 / 短影音自動化</div>
-          </div>
+          </div></div></div>
 
           <!-- 成果 02 · 黑(核心) -->
-          <div class="hex-card hex-black">
+          <div class="hex-slot"><div class="hex-shadow" aria-hidden="true"></div>
+          <div class="hex-card hex-black"><div class="hex-inner">
             <div class="hex-label">★ 核心</div>
             <div class="hex-num">02</div>
             <div class="hex-title">企業自己的 AI 工具</div>
             <span class="hex-rule"></span>
             <div class="hex-sub">SDD + Low-Code · 3 天做完</div>
-          </div>
+          </div></div></div>
 
           <!-- 成果 03 · 淡橘 -->
-          <div class="hex-card hex-peach">
+          <div class="hex-slot"><div class="hex-shadow" aria-hidden="true"></div>
+          <div class="hex-card hex-peach"><div class="hex-inner">
             <div class="hex-label">部門級 RAG 知識庫</div>
             <div class="hex-num">03</div>
             <div class="hex-title">部門級知識庫</div>
             <span class="hex-rule"></span>
             <div class="hex-sub">RAG + MCP · 跨系統串接</div>
-          </div>
+          </div></div></div>
         </div>
 
         <!-- 底部小 caption -->
@@ -2975,6 +2990,80 @@ document.getElementById('f_contactPhone').addEventListener('blur', e => {
       levels.forEach(el => el.classList.remove('active'));
     });
   });
+})();
+</script>
+<!-- ════════ Hero 蜂巢卡:滑鼠跟隨傾斜(彈簧物理 · 無顏色特效)════════ -->
+<script>
+(function hexTilt() {
+  const cluster = document.querySelector('.hex-cluster');
+  if (!cluster) return;
+  const slots = Array.from(cluster.querySelectorAll('.hex-slot'));
+  if (!slots.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
+  // 手刻彈簧(k=120, d=10):故意欠阻尼,放開時會微微回彈一次
+  class Spring {
+    constructor(k, d) { this.x = 0; this.v = 0; this.target = 0; this.k = k; this.d = d; }
+    step(dt) { const a = this.k * (this.target - this.x) - this.d * this.v; this.v += a * dt; this.x += this.v * dt; return this.x; }
+  }
+  const MAX_RX = 11, MAX_RY = 15;   // 傾斜上限(度)
+  const items = slots.map((slot, i) => ({
+    slot,
+    card: slot.querySelector('.hex-card'),
+    inner: slot.querySelector('.hex-inner'),
+    shadow: slot.querySelector('.hex-shadow'),
+    sx: new Spring(120, 10), sy: new Spring(120, 10),
+    phase: i * 2.1
+  }));
+  cluster.classList.add('is-live');
+
+  // 滑鼠在整個 Hero 區塊內移動,三張卡都朝滑鼠方向傾斜
+  const zone = cluster.closest('section') || cluster;
+  let hovering = false, px = 0, py = 0;
+  zone.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch') return;
+    hovering = true; px = e.clientX; py = e.clientY;
+  });
+  zone.addEventListener('pointerleave', () => { hovering = false; });
+
+  let raf = 0, last = 0, t = 0, visible = true;
+  function frame(now) {
+    if (!last) last = now;
+    const dt = clamp((now - last) / 1000, 0, 0.05);
+    last = now; t += dt;
+    for (const it of items) {
+      if (hovering) {
+        const r = it.slot.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const nx = clamp((px - cx) / (r.width * 1.1), -1, 1);
+        const ny = clamp((py - cy) / (r.height * 1.1), -1, 1);
+        it.sy.target = nx * MAX_RY;
+        it.sx.target = -ny * MAX_RX;
+      } else {
+        // 沒有滑鼠時的輕微搖擺,三張卡相位錯開
+        it.sy.target = Math.sin(t * 0.5 + it.phase) * 4;
+        it.sx.target = Math.cos(t * 0.37 + it.phase) * 3;
+      }
+      const rx = it.sx.step(dt), ry = it.sy.step(dt);
+      it.card.style.transform = 'rotateX(' + rx.toFixed(3) + 'deg) rotateY(' + ry.toFixed(3) + 'deg)';
+      if (it.inner) it.inner.style.transform = 'translate(' + (ry * 0.35).toFixed(2) + 'px, ' + (-rx * 0.35).toFixed(2) + 'px)';
+      if (it.shadow) {
+        const lean = (Math.abs(rx) + Math.abs(ry)) / (MAX_RX + MAX_RY);
+        it.shadow.style.transform = 'translate(' + (-ry * 1.6).toFixed(2) + 'px, ' + (rx * 1.2).toFixed(2) + 'px) scale(' + (1 + lean * 0.08).toFixed(3) + ')';
+        it.shadow.style.opacity = (0.45 + lean * 0.35).toFixed(3);
+      }
+    }
+    raf = requestAnimationFrame(frame);
+  }
+  function start() { if (!raf) { last = 0; raf = requestAnimationFrame(frame); } }
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  function sync() { (visible && document.visibilityState !== 'hidden') ? start() : stop(); }
+  // 捲離畫面或切到別的分頁就暫停,省電
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => { visible = es.some(e => e.isIntersecting); sync(); }, { threshold: 0.05 }).observe(cluster);
+  } else start();
+  document.addEventListener('visibilitychange', sync);
 })();
 </script>
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cdeb4199032c42cba563a51bf018538c"}'></script><!-- End Cloudflare Web Analytics -->
