@@ -1,6 +1,6 @@
 /**
  * Google Apps Script · AI 智造落地(在職菁英課程)報名後端
- * 課程:AI 智造落地
+ * 課程:AI 智造落地實戰班：從找出痛點到產線升級的務實指南
  *
  * 這份程式「綁定」你開啟 Apps Script 時所在的那份 Google Sheet,
  * 不用再填 Sheet ID。
@@ -146,10 +146,10 @@ function sendCourseConfirmEmail(data) {
   const datetime = (parts[1] || '—').trim();
   const place    = (parts[2] || '—').trim();
 
-  const subject = '【報名確認】AI 智造落地';
+  const subject = '【報名確認】AI 智造落地實戰班：從找出痛點到產線升級的務實指南';
   const body =
     (data.name || '') + ' ' + (data.jobTitle || '') + ' 您好,\n\n' +
-    '感謝您報名「AI 智造落地」在職菁英課程,\n' +
+    '感謝您報名「AI 智造落地實戰班：從找出痛點到產線升級的務實指南」在職菁英課程,\n' +
     '30 小時實戰,把 Low-Code、RAG、AI Agent 帶回工廠。\n' +
     '我們已收到您的報名資料。\n\n' +
     '▌您的報名資訊\n' +

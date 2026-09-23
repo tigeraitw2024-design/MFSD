@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="AI 智造落地｜30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠｜電光 / 化材產業在職菁英課程">
-<title>AI 智造落地｜在職菁英課程</title>
+<meta name="description" content="AI 智造落地實戰班：從找出痛點到產線升級的務實指南｜30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠｜電光 / 化材產業在職菁英課程">
+<title>AI 智造落地實戰班：從找出痛點到產線升級的務實指南｜在職菁英課程</title>
 
 <!-- Open Graph / 社群分享預覽 -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="虎智科技 TigerAI">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:url" content="https://mfsd.pages.dev/course-smart/">
-<meta property="og:title" content="AI 智造落地｜在職菁英課程">
+<meta property="og:title" content="AI 智造落地實戰班：從找出痛點到產線升級的務實指南｜在職菁英課程">
 <meta property="og:description" content="30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠。電光 / 化材產業在職菁英課程。。">
 <meta property="og:image" content="https://mfsd.pages.dev/course-smart/assets/og-card.png">
-<meta property="og:image:alt" content="AI 智造落地 · 在職菁英課程">
+<meta property="og:image:alt" content="AI 智造落地實戰班：從找出痛點到產線升級的務實指南 · 在職菁英課程">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AI 智造落地｜在職菁英課程">
+<meta name="twitter:title" content="AI 智造落地實戰班：從找出痛點到產線升級的務實指南｜在職菁英課程">
 <meta name="twitter:description" content="30 小時實戰，帶回可運行的 AI 工具與 RAG 知識庫。電光 / 化材產業實作課程。">
 <meta name="twitter:image" content="https://mfsd.pages.dev/course-smart/assets/og-card.png">
 
@@ -160,20 +160,24 @@
     position: relative;
     border-radius: var(--radius);
   }
+  /* 報名表單卡:白底亮色(同其他卡片語言) */
   .card-gold {
-    background: #111111;
-    color: #FFFFFF;
+    background: #FFFFFF;
+    color: #2B2B2B;
     border: 2px solid #111111;
-    box-shadow: 0 6px 0 rgba(17,17,17,0.18);
+    box-shadow: 0 6px 0 rgba(17,17,17,0.10);
     position: relative;
     border-radius: var(--radius);
   }
-  .card-gold .text-ink-900, .card-gold .text-ink-800 { color: #FFFFFF !important; }
-  .card-gold .text-ink-700, .card-gold .text-ink-600 { color: #E4EAF3 !important; }
-  .card-gold .text-ink-500 { color: #9AA6B8 !important; }
-  .card-gold .text-gold-light, .card-gold .text-gold { color: var(--lime) !important; }
+  .card-gold .text-ink-900, .card-gold .text-ink-800 { color: #111111 !important; }
+  .card-gold .text-ink-700, .card-gold .text-ink-600 { color: #2B2B2B !important; }
+  .card-gold .text-ink-500 { color: #5A6472 !important; }
+  .card-gold .text-gold-light, .card-gold .text-gold { color: #1470C8 !important; }
   .card-gold .bg-gold { background: var(--lime) !important; }
-  .card-gold .border-gold\/50, .card-gold .border-gold\/20 { border-color: rgba(200,249,76,0.5) !important; }
+  .card-gold .border-gold\/50, .card-gold .border-gold\/20 { border-color: rgba(17,17,17,0.18) !important; }
+  /* 表單內的 label 與提示文字 */
+  .card-gold label { color: #2B2B2B; }
+  .card-gold .text-red-400 { color: #D93B30 !important; }
 
   /* 角落裝飾:右上小綠圓點 */
   .card-glass::before, .card-gold::before { display: none; }
@@ -268,6 +272,10 @@
   .hero-title { font-weight: 900; letter-spacing: -0.02em; line-height: 1.08; color: #FFFFFF; }
   .hero-title .hl-big { display: block; font-size: clamp(2.4rem, 6vw, 4.2rem); }
   .hero-title .hl-lime { color: var(--lime); }
+  .hero-sub {
+    color: var(--lime); font-weight: 900;
+    font-size: clamp(1.05rem, 2.1vw, 1.45rem); line-height: 1.4; letter-spacing: 0.01em;
+  }
   .hero-card {
     background: #FFFFFF; border: 2px solid #111111; border-radius: 16px;
     padding: 1rem 1.1rem; display: flex; align-items: center; gap: 1rem;
@@ -531,9 +539,11 @@
         <div class="lg:col-span-7">
           <span class="hero-tag">在職菁英課程 · 2026</span>
 
-          <h1 class="hero-title mt-6 mb-5">
-            <span class="hl-big">AI <span class="hl-lime">智造</span>落地</span>
+          <h1 class="hero-title mt-6 mb-3">
+            <span class="hl-big">AI <span class="hl-lime">智造</span>落地<br>實戰班</span>
           </h1>
+
+          <p class="hero-sub mb-4">從找出痛點到產線升級的務實指南</p>
 
           <p class="text-white text-lg sm:text-xl font-bold leading-snug mb-4">
             30 小時實戰，把 Low-Code、RAG、AI Agent 帶回工廠。
@@ -2091,7 +2101,7 @@
           <input type="checkbox" id="f_consent" name="consent" required class="mt-1 accent-rd w-5 h-5 flex-shrink-0">
           <span class="text-[13px] text-ink-700 leading-relaxed">
             本人已閱讀
-            <button type="button" onclick="openConsentModal()" class="text-gold-light underline font-bold hover:text-white transition">在職菁英課程 資料蒐集、處理及利用之告知暨同意書</button>
+            <button type="button" onclick="openConsentModal()" class="text-[#1470C8] underline font-bold hover:text-ink-900 transition">在職菁英課程 資料蒐集、處理及利用之告知暨同意書</button>
             ,並同意經濟部產業發展署及工研院在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
           </span>
         </label>
@@ -2276,15 +2286,15 @@
 
       <!-- 課程聯絡窗口(表單內) -->
       <div class="pt-5 mt-2 border-t border-gold/20 text-center">
-        <div class="text-[11px] tracking-[0.28em] mb-3" style="color:rgba(20,112,200,0.75)">課程聯絡窗口</div>
+        <div class="text-[11px] tracking-[0.28em] mb-3" style="color:#1470C8">課程聯絡窗口</div>
         <div class="grid sm:grid-cols-2 gap-4 text-sm">
           <div>
-            <div class="font-bold" style="color:#fff">虎智科技 &nbsp; 紀先生</div>
-            <div class="font-mono mt-1" style="color:rgba(255,255,255,0.65)">02-66058192</div>
+            <div class="font-bold" style="color:#111">虎智科技 &nbsp; 紀先生</div>
+            <div class="font-mono mt-1" style="color:#5A6472">02-66058192</div>
           </div>
           <div>
-            <div class="font-bold" style="color:#fff">工研院 &nbsp; 許雅婷</div>
-            <div class="font-mono mt-1" style="color:rgba(255,255,255,0.65)">07-2625889 分機 117</div>
+            <div class="font-bold" style="color:#111">工研院 &nbsp; 許雅婷</div>
+            <div class="font-mono mt-1" style="color:#5A6472">07-2625889 分機 117</div>
           </div>
         </div>
       </div>
@@ -2293,8 +2303,8 @@
     <!-- 成功訊息 -->
     <div id="successBox" class="hidden mt-8 card-gold p-10 text-center">
       <div class="text-gold-light text-sm tracking-[0.3em] mb-5">報名已確認</div>
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid #fff;background:rgba(255,255,255,0.08)">
-        <span class="text-3xl font-black" style="color:#fff">✓</span>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid #111;background:var(--lime)">
+        <span class="text-3xl font-black" style="color:#111">✓</span>
       </div>
       <h3 class="text-3xl font-black text-ink-900 mb-3">報名成功</h3>
       <p class="text-ink-700 mb-7 leading-relaxed">將於 <span class="text-gold-light font-bold">開課前 3 天</span> 發送行前通知,請留意信箱</p>
@@ -2466,7 +2476,7 @@
 // ══════════════════════ 設定 ══════════════════════
 const CONFIG = {
   // ⚠️ 暫時沿用在職菁英的 Apps Script;AI 智造落地專用的部署好後換成新 URL
-  SHEET_WEBHOOK: 'https://script.google.com/macros/s/AKfycbyBepTPhLzLRmoWWHr7sJzuTNE1s7vSkw2-A53nttZ70uCh_g7ns9xr6bt8rZevhZ5r9Q/exec',
+  SHEET_WEBHOOK: 'https://script.google.com/macros/s/AKfycbxJ2jhtOwCytdFZPIbEqsn3miR_oLCMKx6FGt3md1LFQRfQIEBmb5WgdzSfjQP14qjr5w/exec',
   // 梯次資料來源:「梯次目錄」分頁的發布 CSV(A=縣市 B=日期 C=時間 D=地點,從第 2 列起)
   COHORTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTjWdl3nmRYjWFUv57o8t7t_OowDQlE1Ez6YY89kggI1AdFNxxTMIqk2DxfG-DJDtpIX7hLg_COCNR5/pub?gid=0&single=true&output=csv'
 };
