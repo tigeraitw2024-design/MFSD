@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自動抓進五個課程網站的照片輪播
+sync_photos.py — 把 Google Drive 公開資料夾裡的「全部照片」自動抓進六個課程網站的照片輪播
 
 Drive 裡放什麼就輪播什麼(不去重、不過濾),要拿掉的照片直接在 Drive 刪掉再重跑。
 
@@ -60,6 +60,7 @@ TARGETS = [
     (ROOT / "course-elite" / "assets" / "photos", SQUARE),
     (ROOT / "course-enterprise" / "assets" / "photos", SQUARE),
     (ROOT / "course-tour" / "assets" / "photos", SQUARE),
+    (ROOT / "course-smart" / "assets" / "photos", SQUARE),
 ]
 
 QUALITY = 78

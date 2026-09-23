@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root { --lime:#C8F94C; --blue:#2F9BF2; --ink:#111; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{width:1200px;height:630px;overflow:hidden;}
+  body{font-family:'Noto Sans TC',system-ui,sans-serif;background:#F4F8FD;position:relative;
+       background-image:radial-gradient(circle at 1px 1px, rgba(47,155,242,0.12) 1px, transparent 0);background-size:26px 26px;}
+  .card{position:absolute;inset:28px;background:var(--blue);border:3px solid var(--ink);border-radius:34px;box-shadow:0 10px 0 var(--ink);overflow:hidden;padding:44px 48px;}
+  .dot{position:absolute;border-radius:999px;background:var(--lime);}
+  .lockup{display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.14em;color:#fff;font-weight:700;}
+  .lockup img{height:40px;}
+  .lockup .sep{width:1px;height:16px;background:rgba(255,255,255,.5);}
+  .tag{display:inline-block;background:var(--lime);color:var(--ink);border:2.5px solid var(--ink);border-radius:999px;font-weight:900;font-size:15px;letter-spacing:.2em;padding:7px 18px;margin-top:30px;}
+  h1{margin-top:20px;font-size:86px;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1.02;}
+  h1 .lime{color:var(--lime);}
+  .sub{margin-top:18px;font-size:24px;font-weight:700;color:#fff;line-height:1.45;}
+  .pill{display:inline-block;margin-top:20px;background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:10px 22px;font-size:18px;font-weight:900;color:var(--ink);}
+  .cards{position:absolute;right:48px;top:150px;width:380px;display:flex;flex-direction:column;gap:12px;}
+  .c{background:#fff;border:2.5px solid var(--ink);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;}
+  .c.dark{background:var(--ink);}
+  .c .n{flex-shrink:0;width:46px;height:46px;border-radius:999px;background:var(--lime);border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:16px;color:var(--ink);}
+  .c .t{font-weight:900;font-size:18px;color:var(--ink);line-height:1.2;}
+  .c .s{font-size:13px;color:#5A6472;margin-top:2px;}
+  .c.dark .t{color:#fff;} .c.dark .s{color:#C3CCDA;}
+  .foot{position:absolute;left:48px;bottom:36px;font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.22em;color:rgba(255,255,255,.85);}
+</style></head>
+<body>
+<div class="card">
+  <div class="dot" style="width:200px;height:200px;right:-60px;top:-60px;opacity:.9;"></div>
+  <div class="dot" style="width:90px;height:90px;right:150px;bottom:-30px;opacity:.5;"></div>
+  <div class="lockup">
+    <img src="assets/logo.png" alt="">
+    <span>主辦 經濟部產業發展署</span><span class="sep"></span><span>執行 虎智科技 TigerAI</span>
+  </div>
+  <div class="tag">在職菁英課程 · 2026 · 電光 / 化材產業</div>
+  <h1>AI <span class="lime">智造</span>落地</h1>
+  <div class="sub">30 小時實戰，把 Low-Code、RAG、<br>AI Agent 帶回工廠。</div>
+  <div class="pill">30 小時 · 4 天完成 · 3 個成果帶回公司</div>
+  <div class="cards">
+    <div class="c"><div class="n">01</div><div><div class="t">AI 內容產出</div><div class="s">貼文 / 圖片 / 短影音自動化</div></div></div>
+    <div class="c dark"><div class="n">02</div><div><div class="t">企業自己的 AI 工具</div><div class="s">SDD + Low-Code · 3 天做完</div></div></div>
+    <div class="c"><div class="n">03</div><div><div class="t">部門級知識庫</div><div class="s">RAG + MCP · 跨系統串接</div></div></div>
+  </div>
+  <div class="foot">mfsd.pages.dev/course-smart</div>
+</div>
+</body></html>
