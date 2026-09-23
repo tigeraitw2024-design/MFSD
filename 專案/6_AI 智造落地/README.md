@@ -28,10 +28,11 @@
 - **課程照片**：`專案/sync_photos.py` 已把本站加入同步目標，65 張與其他站同一批。
 - **分享圖**：`assets/og-card.png` 為小紅書風新圖。
 
-## 上線前你要做的兩件事
+## 上線前你要做的一件事
 
-1. **Cloudflare Pages 新增專案**：Build output directory 設 `course-smart`，即可有網址。
-2. **Apps Script**：目前 `SHEET_WEBHOOK` 仍指向在職菁英的後端，報名資料會進舊 Sheet。請開新 Sheet → 擴充功能 → Apps Script → 貼上 `apps-script.js` → 執行 `setupCourseSheet` → 部署為網頁應用程式（執行身份「我」、存取權「任何人」）→ 把 Web App URL 給 Claude 換上。
+網址已自動生效（整個 repo 一次部署），不用另外開 Cloudflare 專案。
+
+**Apps Script**：目前 `SHEET_WEBHOOK` 仍指向在職菁英的後端，報名資料會進舊 Sheet。請開新 Sheet → 擴充功能 → Apps Script → 貼上 `apps-script.js` → 執行 `setupCourseSheet` → 部署為網頁應用程式（執行身份「我」、存取權「任何人」）→ 把 Web App URL 給 Claude 換上。
 
 ## 還沒決定、等你給的
 
