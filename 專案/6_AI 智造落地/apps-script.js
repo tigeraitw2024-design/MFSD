@@ -179,7 +179,7 @@ function sendCourseConfirmEmail(data) {
     '──────────────────\n' +
     '本課程聯絡窗口\n' +
     '．虎智科技  紀先生   02-66058192\n' +
-    '．工研院  吳佳蓉  049-2324030\n';
+    '．工研院  胡家寧  02-2341-4105 分機 350\n';
 
   MailApp.sendEmail({ to: to, subject: subject, body: body, name: '虎智科技 TigerAI' });
 }
