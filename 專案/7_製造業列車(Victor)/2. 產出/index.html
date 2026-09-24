@@ -1308,7 +1308,7 @@
 // ══════════════════════ 設定 ══════════════════════
 const CONFIG = {
   SHEET_WEBHOOK: 'https://script.google.com/macros/s/AKfycbwN1GtIio6Qkc-08vqilLjo9Hi6VNKgRXhsJdDAyOfJ41QErd69zxm-BG4J6Z3LZx23pQ/exec',
-  COHORTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7jZ4XXdhwsVf3c0YnqfoOhq9U9cA1Qb43CUfeyAN8KmsSbaX538apfqbW6FXTxcihQxjZ74cEmg2w/pub?gid=0&single=true&output=csv'
+  COHORTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaWi-qfyTMTiDRlBur2vDshdFS6I1Wq0Qd5WyVOHYhfjqFJQjbW7Sibed7T8LYgfWBkx82TTiFVdPd/pub?gid=0&single=true&output=csv'
 };
 
 const COHORTS_FALLBACK = [
@@ -1460,8 +1460,7 @@ function parseCohortCSV(text) {
     soloInstructor: (r[4] || '').trim(),   // 空=雙講師 · 有填=單場(顯示什麼就填什麼)
     soloTopic: (r[5] || '').trim(),        // 單場主題(空則顯示「單場專題」)
     capacity: 30
-  })).filter(c => c.date)
-    .filter(c => !c.soloInstructor);   // 本站只賣雙講師完整版 · 單場(Sheet 有填講師)留給 MORRIS 站
+  })).filter(c => c.date);   // 本站有自己的梯次目錄 Sheet,列出來的就是全部,不再過濾
 }
 
 function parseFlexDate(str) {
