@@ -6,7 +6,7 @@
  *    本站只賣雙講師完整版,梯次目錄的「單場講師」欄留空即可。
  *
  * ════════ 部署步驟(SOP 跟前面課程一樣) ════════
- *   1. 新建 Google Sheet,複製 URL 裡的 SPREADSHEET_ID 貼到下面 SHEET_ID
+ *   1. 新建 Google Sheet,從該 Sheet 的「擴充功能 → Apps Script」開啟(這樣才會自動綁定,不用填 ID)
  *   2. Sheet → 擴充功能 → Apps Script → 貼這整份到 Code.gs
  *   3. Ctrl+S 存檔
  *   4. 函式下拉選 setupCourseSheet → Run(第一次會跳授權,同意 Gmail 寄信權限)
@@ -21,7 +21,18 @@
  *      千萬不要按「新增部署」— 會產生新 URL,前端就抓不到。
  */
 
-const SHEET_ID = '';   // ← 新開 Sheet 後把網址裡的 ID 貼這裡(專案 4 那份不要動)
+// 從 Sheet 的「擴充功能 → Apps Script」開出來的程式會自動綁定那份 Sheet,SHEET_ID 留空即可。
+// 只有「獨立建立」的 Apps Script 才需要填:打開 Sheet,網址中間那串就是 ID
+//   https://docs.google.com/spreadsheets/d/【這一段就是 ID】/edit
+const SHEET_ID = '';
+
+// 取得要寫入的 Sheet:優先用綁定的,沒有才用 SHEET_ID
+function getSS() {
+  const bound = SpreadsheetApp.getActiveSpreadsheet();
+  if (bound) return bound;
+  if (SHEET_ID) return SpreadsheetApp.openById(SHEET_ID);
+  throw new Error('找不到要寫入的 Sheet:這份程式不是從 Sheet 的「擴充功能 → Apps Script」開出來的,請把 Sheet 網址裡的 ID 填進上面的 SHEET_ID');
+}
 const SHEET_COURSE = '製造業列車(Victor)報名表單';
 const SHEET_COHORT = '梯次目錄';
 
@@ -68,7 +79,7 @@ function doGet(e) {
 function courseCounts() {
   const counts = {};
   try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const ss = getSS();
     const sheet = ss.getSheetByName(SHEET_COURSE);
     if (sheet && sheet.getLastRow() > 1) {
       // 報名場次 = 第 11 欄
@@ -85,7 +96,7 @@ function courseCounts() {
 
 // ════════ 寫入:報名 + 寄確認信 ════════
 function logCourseSignup(data) {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ss = getSS();
   let sheet = ss.getSheetByName(SHEET_COURSE);
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
@@ -190,7 +201,7 @@ function sendCourseConfirmEmail(data) {
 // ════════ 測試工具 ════════
 
 function setupCourseSheet() {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ss = getSS();
   let sheet = ss.getSheetByName(SHEET_COURSE);
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
@@ -199,7 +210,7 @@ function setupCourseSheet() {
 
 // ⭐ 一鍵建全部:報名表單 + 梯次目錄 + 塞範例資料
 function setupAll() {
-  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const ss = getSS();
 
   // 1. 報名表單分頁
   let sheet = ss.getSheetByName(SHEET_COURSE);
