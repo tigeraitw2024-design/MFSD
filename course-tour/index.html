@@ -1342,8 +1342,7 @@ function parseCohortCSV(text) {
     soloInstructor: (r[4] || '').trim(),   // 空=雙講師 · 有填=單場(顯示什麼就填什麼)
     soloTopic: (r[5] || '').trim(),        // 單場主題(空則顯示「單場專題」)
     capacity: 30
-  })).filter(c => c.date)
-    .filter(c => /morris/i.test(c.soloInstructor));   // 本站只賣 MORRIS 專場 · 雙講師完整版在 course-tour-victor
+  })).filter(c => c.date);   // 本站有自己的梯次目錄 Sheet,列出來的就是全部,不再過濾
 }
 
 function parseFlexDate(str) {
