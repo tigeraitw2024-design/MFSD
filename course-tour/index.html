@@ -47,6 +47,7 @@
 
 <style>
   html { scroll-behavior: smooth; overflow-x: hidden; }
+  section[id] { scroll-margin-top: 72px; }   /* 錨點不被固定導覽列蓋住 */
   body {
     background: #0A1128;
     color: #FFFFFF;
@@ -1695,6 +1696,40 @@ document.getElementById('f_phone').addEventListener('blur', e => {
       fill(right, list.filter((_, i) => i % 2 === 1));   // 雙數張往右
     })
     .catch(() => {});
+})();
+</script>
+<!-- QR Code 掃進來直接停在報名表(網址帶 #why 等錨點則照舊;往上捲仍可看完整課程介紹) -->
+<script>
+(function () {
+  if (location.hash) return;                       // 有指定錨點 → 不介入
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  var NAV = 64, stopped = false;
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { stopped = true; }, { passive: true, once: true });
+  });
+
+  function jump() {
+    if (stopped) return;
+    var el = document.getElementById('signup');
+    if (!el) return;
+    var y = el.getBoundingClientRect().top + window.pageYOffset - NAV;
+    if (Math.abs(y - window.pageYOffset) < 2) return;
+    var root = document.documentElement, keep = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';             // 蓋掉 smooth,直接到位不動畫
+    window.scrollTo(0, y);
+    root.style.scrollBehavior = keep;
+  }
+
+  // 上方照片牆、梯次資料陸續載入會把版面往下推,持續校正到穩定為止
+  var deadline = Date.now() + 6000;
+  var timer = setInterval(function () {
+    if (stopped || Date.now() > deadline) { clearInterval(timer); return; }
+    jump();
+  }, 200);
+
+  document.addEventListener('DOMContentLoaded', jump);
+  window.addEventListener('load', jump);
 })();
 </script>
 </body>
