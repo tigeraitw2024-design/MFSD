@@ -9,7 +9,7 @@ Drive 裡放什麼就輪播什麼(不去重、不過濾),要拿掉的照片直�
   2. 只下載還沒下載過的照片到 專案/.photo_cache/(Drive 刪掉的也跟著移除;影片、非圖片一律跳過)
   3. 每張:依 EXIF 轉正 → 置中裁切 → 壓縮成 JPG
        - AI 升級計劃(course-upgrade):六角形比例 640×740
-       - 其他四站(course / course-elite / course-enterprise / course-tour):正方形 640×640
+       - 其他五站(course / course-elite / course-enterprise / course-tour / course-tour-victor):正方形 640×640
   4. 依子資料夾輪流排序(輪播才不會連續同一場),輸出 p01.jpg、p02.jpg…
   5. 每站產 assets/photos/manifest.json,網頁載入時自動讀清單長出輪播
 
@@ -60,6 +60,7 @@ TARGETS = [
     (ROOT / "course-elite" / "assets" / "photos", SQUARE),
     (ROOT / "course-enterprise" / "assets" / "photos", SQUARE),
     (ROOT / "course-tour" / "assets" / "photos", SQUARE),
+    (ROOT / "course-tour-victor" / "assets" / "photos", SQUARE),
     (ROOT / "course-smart" / "assets" / "photos", SQUARE),
 ]
 
