@@ -199,38 +199,23 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
 
-  /* ─────── Hero 講師(人物無底 · 整體放大 20% · 標籤徹底往外推)─────── */
+  /* ─────── Hero 講師(照片自帶漸層 · 整體往上置中 · 標籤徹底往外推)─────── */
   .hero-ins-stack {
     position: relative;
     width: 100%;
-    min-height: 672px;         /* 原 560 × 1.2 */
+    min-height: 540px;
     padding: 0;
     overflow: visible;
     background: transparent;
   }
-  /* 底部淡霧 · 用徑向漸層避免方形邊緣,看不到任何框 */
-  .hero-ins-stack::before {
-    content: '';
-    position: absolute;
-    left: 50%; bottom: -5%;
-    transform: translateX(-50%);
-    width: 110%; height: 55%;
-    background: radial-gradient(ellipse at 50% 100%,
-      rgba(174, 209, 184, 0.55) 0%,
-      rgba(174, 209, 184, 0.25) 45%,
-      transparent 80%);
-    pointer-events: none;
-    z-index: 0;
-    border-radius: 0;    /* 不要圓角 · 不要框 */
-  }
+  /* 照片已內建底部漸層,CSS 不再加 */
   .hero-ins {
     position: absolute;
-    width: 78%;                /* 原 65% × 1.2 ≈ 78% */
+    width: 78%;
     z-index: 2;
-    bottom: 0;
   }
-  .hero-ins.left  { left: -14%;  bottom: 0;  z-index: 3; }
-  .hero-ins.right { right: -14%; bottom: 48px; z-index: 2; }
+  .hero-ins.left  { left: -14%;  top: 0;     z-index: 3; }   /* 左講師:整體往上 */
+  .hero-ins.right { right: -14%; top: 48px;  z-index: 2; }   /* 右講師:低 48px */
   .hero-ins img {
     width: 100%;
     height: auto; display: block;
@@ -241,7 +226,7 @@
   .hero-ins .label {
     position: absolute;
     z-index: 4;
-    bottom: 28%;
+    top: 38%;
   }
   .hero-ins.left  .label { left: -8%;  text-align: left; }
   .hero-ins.right .label { right: -8%; text-align: right; }
@@ -267,13 +252,13 @@
   }
 
   @media (max-width: 1023px) {
-    .hero-ins-stack { min-height: 576px; }   /* 原 480 × 1.2 */
+    .hero-ins-stack { min-height: 460px; }
     .hero-ins .name { font-size: 18px; }
   }
   @media (max-width: 480px) {
-    .hero-ins-stack { min-height: 456px; }   /* 原 380 × 1.2 */
+    .hero-ins-stack { min-height: 380px; }
     .hero-ins.left  { left: -16%; }
-    .hero-ins.right { right: -16%; bottom: 28px; }
+    .hero-ins.right { right: -16%; top: 32px; }
     .hero-ins .name { font-size: 15px; }
     .hero-ins .role { font-size: 10px; }
   }
