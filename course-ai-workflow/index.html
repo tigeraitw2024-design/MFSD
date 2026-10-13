@@ -222,6 +222,13 @@
     height: auto; display: block;
     object-fit: contain; object-position: center bottom;
     /* 不加 drop-shadow(避免跟照片內建漸層打架 · 製造斷層)*/
+    animation: hero-bob 5s ease-in-out infinite;
+  }
+  /* 左講師上 / 右講師下 蹺蹺板:右用負的 delay 讓波形反相 */
+  .hero-ins.right img { animation-delay: -2.5s; }
+  @keyframes hero-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
   }
   @keyframes heroInsIn {
     0%   { opacity: 0; transform: translateY(32px) scale(0.96); }
@@ -266,6 +273,7 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .hero-ins { opacity: 1; animation: none; }
+    .hero-ins img { animation: none; }
   }
 
   @media (max-width: 1023px) {
