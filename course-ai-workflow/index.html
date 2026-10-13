@@ -195,51 +195,52 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
 
-  /* ─────── Hero 講師(人物無底 · 底部由下往上淡出漸層 · 標籤分左右兩邊)─────── */
+  /* ─────── Hero 講師(人物無底 · 整體放大 20% · 標籤徹底往外推)─────── */
   .hero-ins-stack {
     position: relative;
     width: 100%;
-    min-height: 560px;
+    min-height: 672px;         /* 原 560 × 1.2 */
     padding: 0;
     overflow: visible;
-    background: transparent;  /* 人物下方不要底色 */
+    background: transparent;
   }
-  /* 底部漸層 · 從下往上淡出(ref 效果 · 像人物站在霧裡) */
+  /* 底部淡霧 · 用徑向漸層避免方形邊緣,看不到任何框 */
   .hero-ins-stack::before {
     content: '';
     position: absolute;
-    inset: auto 0 0 0;
-    height: 60%;
-    background: linear-gradient(0deg,
+    left: 50%; bottom: -5%;
+    transform: translateX(-50%);
+    width: 110%; height: 55%;
+    background: radial-gradient(ellipse at 50% 100%,
       rgba(174, 209, 184, 0.55) 0%,
-      rgba(174, 209, 184, 0.25) 40%,
-      transparent 100%);
+      rgba(174, 209, 184, 0.25) 45%,
+      transparent 80%);
     pointer-events: none;
     z-index: 0;
-    border-radius: 24px;
+    border-radius: 0;    /* 不要圓角 · 不要框 */
   }
   .hero-ins {
     position: absolute;
-    width: 65%;                 /* 大 · 製造重疊感 */
+    width: 78%;                /* 原 65% × 1.2 ≈ 78% */
     z-index: 2;
     bottom: 0;
   }
-  .hero-ins.left  { left: -8%;  bottom: 0;  z-index: 3; }   /* 左講師在前 */
-  .hero-ins.right { right: -8%; bottom: 40px; z-index: 2; } /* 右講師在後 · 抬高 40px */
+  .hero-ins.left  { left: -14%;  bottom: 0;  z-index: 3; }
+  .hero-ins.right { right: -14%; bottom: 48px; z-index: 2; }
   .hero-ins img {
     width: 100%;
     height: auto; display: block;
     object-fit: contain; object-position: center bottom;
     filter: drop-shadow(0 24px 40px rgba(31,58,43,0.35));
   }
-  /* 標籤:左講師標籤完全放最左 · 右講師標籤完全放最右 · 不會卡在中間撞一起 */
+  /* 標籤:徹底推到容器外側 · 不壓到人物 */
   .hero-ins .label {
     position: absolute;
     z-index: 4;
-    bottom: 20%;
+    bottom: 28%;
   }
-  .hero-ins.left  .label { left: 0;  text-align: left; }
-  .hero-ins.right .label { right: 0; text-align: right; }
+  .hero-ins.left  .label { left: -8%;  text-align: left; }
+  .hero-ins.right .label { right: -8%; text-align: right; }
   .hero-ins .role {
     display: block;
     font-size: 11px;
@@ -258,21 +259,22 @@
     letter-spacing: 0.04em;
     line-height: 1.2;
     text-shadow: 0 1px 4px rgba(255,255,255,0.95);
+    white-space: nowrap;
   }
 
   @media (max-width: 1023px) {
-    .hero-ins-stack { min-height: 480px; }
+    .hero-ins-stack { min-height: 576px; }   /* 原 480 × 1.2 */
     .hero-ins .name { font-size: 18px; }
   }
   @media (max-width: 480px) {
-    .hero-ins-stack { min-height: 380px; }
-    .hero-ins.left  { left: -12%; }
-    .hero-ins.right { right: -12%; bottom: 24px; }
+    .hero-ins-stack { min-height: 456px; }   /* 原 380 × 1.2 */
+    .hero-ins.left  { left: -16%; }
+    .hero-ins.right { right: -16%; bottom: 28px; }
     .hero-ins .name { font-size: 15px; }
     .hero-ins .role { font-size: 10px; }
   }
 
-  /* ─────── 講師獨立 section 卡(圓形頭像 · 單張大)─────── */
+  /* ─────── 講師獨立 section 卡(圓形頭像 · 單張大 · 放大 20%)─────── */
   .instructor-card {
     background: transparent;
     text-align: center;
@@ -281,17 +283,17 @@
   }
   .instructor-card:hover { transform: translateY(-3px); }
   .instructor-photo {
-    width: 220px;
+    width: 264px;              /* 原 220 × 1.2 */
     aspect-ratio: 1 / 1;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.2rem;
     background: linear-gradient(180deg, #E7F0E5 0%, #CFE1CB 100%);
     border-radius: 999px;
     overflow: hidden;
     box-shadow: 0 10px 24px -10px rgba(31, 58, 43, 0.3);
     position: relative;
-    border: 4px solid #fff;
+    border: 5px solid #fff;
     outline: 1.5px solid var(--strong);
-    outline-offset: -4px;
+    outline-offset: -5px;
   }
   .instructor-photo img {
     width: 115%; height: 115%;
@@ -303,21 +305,21 @@
     transform: translate(-50%, -50%);
   }
   @media (max-width: 640px) {
-    .instructor-photo { width: 160px; }
+    .instructor-photo { width: 192px; }   /* 原 160 × 1.2 */
   }
   .instructor-label { background: transparent; padding: 0; text-align: center; }
   .instructor-label .role {
     display: inline-block;
-    font-size: 11px; letter-spacing: 0.22em;
+    font-size: 13px; letter-spacing: 0.22em;      /* 原 11 */
     color: #fff; background: var(--strong);
-    padding: 3px 12px; border-radius: 999px;
+    padding: 4px 14px; border-radius: 999px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
   }
   .instructor-label .name {
     display: block;
-    font-weight: 900; font-size: 17px; color: var(--deep);
+    font-weight: 900; font-size: 20px; color: var(--deep);   /* 原 17 */
     letter-spacing: 0.02em;
   }
 
