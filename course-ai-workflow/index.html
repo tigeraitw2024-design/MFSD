@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 工作流程 · 嘉義班 · 從 AI 工具使用到智慧工作流程 | 虎智科技 TigerAI</title>
+<meta name="description" content="製造業 AI 工作流程實戰 · 嘉義班 · 四日 30 小時實體課程。張惟翔(AI 增幅者)+ 謝侑霖(AI 自動症)雙講師,5 大主題:提示詞工程、企業 Agent、流程自動化、技術文件 AI 化。2026/11/9 開課。">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mfsd.pages.dev/course-ai-workflow/">
+<meta property="og:title" content="製造業 AI 工作流程 · 嘉義班 · 4日 30h 實體課程">
+<meta property="og:description" content="張惟翔(AI 增幅者) + 謝侑霖(AI 自動症) 雙講師;5 大主題;從提示詞工程到 Agent 建置、流程自動化、技術文件 AI 化 · 嘉義 2026/11/9 開課">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="製造業 AI 工作流程 · 嘉義班 · 4日 30h 實體課程">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌱%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"Noto Sans TC"', '"Inter"', 'system-ui', 'sans-serif'],
+          mono: ['"Inter"', 'ui-monospace', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --bg-soft:     #EEF4EC;
+    --bg-contrast: #E0EBDC;
+    --deep:        #1F3A2B;
+    --mid:         #3E6B52;
+    --strong:      #4D9B6A;
+    --white:       #FFFFFF;
+    --text-main:   #2C3A33;
+    --text-mid:    #6B7A72;
+    --text-light:  #9EACA3;
+    --line:        rgba(31, 58, 43, 0.08);
+    --line-strong: rgba(31, 58, 43, 0.14);
+  }
+
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  section[id] { scroll-margin-top: 72px; }
+  body {
+    background: var(--bg-soft);
+    color: var(--text-main);
+    font-family: 'Noto Sans TC', 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'palt' 1;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    max-width: 100vw;
+    line-height: 1.65;
+  }
+
+  /* ─────── 有機綠圓裝飾 ─────── */
+  .blob {
+    position: absolute; border-radius: 50%; pointer-events: none;
+    filter: blur(2px); opacity: 0.45;
+    animation: breathe 14s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+  .blob-strong { background: #B6D4BC; }
+  .blob-mid { background: #CBDEC6; }
+  .blob-faint { background: #D7E6D1; opacity: 0.6; }
+  @keyframes breathe {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(14px,-18px) scale(1.04); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .blob { animation: none; }
+  }
+
+  /* ─────── 容器 ─────── */
+  .container-wide { max-width: 1180px; margin-left: auto; margin-right: auto; padding-left: 1.25rem; padding-right: 1.25rem; }
+
+  /* ─────── 綠 pill 標籤 ─────── */
+  .pill-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--strong); color: #fff;
+    padding: 7px 16px; border-radius: 999px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.08em;
+  }
+  .pill-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: #fff; color: var(--deep);
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+    border: 1.5px solid var(--deep);
+  }
+  .pill-ghost {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--bg-contrast); color: var(--deep);
+    padding: 6px 12px; border-radius: 999px;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.05em;
+  }
+
+  /* ─────── 段落 eyebrow(區塊編號)─────── */
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 12px; letter-spacing: 0.32em; font-weight: 700;
+    color: var(--mid); text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+  }
+  .section-eyebrow::before, .section-eyebrow::after {
+    content: ''; display: inline-block; width: 32px; height: 1.5px; background: var(--mid); opacity: 0.55;
+  }
+
+  /* ─────── 標題 ─────── */
+  .section-title {
+    font-size: clamp(1.9rem, 4.4vw, 3rem);
+    font-weight: 900; color: var(--deep);
+    letter-spacing: -0.01em; line-height: 1.22;
+  }
+  .section-sub {
+    color: var(--text-mid); font-size: 16px; line-height: 1.9;
+    max-width: 680px; margin-left: auto; margin-right: auto;
+  }
+  .hero-title {
+    font-weight: 900; color: var(--deep);
+    letter-spacing: -0.015em;
+    font-size: clamp(2.1rem, 5.6vw, 3.75rem);
+    line-height: 1.2;
+  }
+  .hero-sub {
+    color: var(--mid); font-weight: 700;
+    font-size: clamp(1rem, 1.9vw, 1.25rem);
+    line-height: 1.6;
+  }
+  h3, h4 { color: var(--deep); }
+
+  /* ─────── 卡片 ─────── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.65rem;
+    box-shadow: 0 2px 10px -4px rgba(31, 58, 43, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px -10px rgba(31, 58, 43, 0.18);
+    border-color: var(--line-strong);
+  }
+  .card-head {
+    background: var(--deep); color: #fff;
+    padding: 10px 16px;
+    border-radius: 12px 12px 0 0;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.1em;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+
+  /* ─────── 講師卡 ─────── */
+  .instructor-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px -14px rgba(31, 58, 43, 0.22);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  .instructor-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 42px -14px rgba(31, 58, 43, 0.3);
+  }
+  .instructor-photo {
+    aspect-ratio: 3/4;
+    width: 100%;
+    background: linear-gradient(180deg, var(--bg-contrast) 0%, #fff 100%);
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: hidden;
+  }
+  .instructor-photo img {
+    width: 100%; height: 100%;
+    object-fit: contain; object-position: center bottom;
+    display: block;
+  }
+  .instructor-label {
+    background: var(--deep); color: #fff;
+    padding: 12px 16px;
+    text-align: left;
+  }
+  .instructor-label .role {
+    font-size: 11px; letter-spacing: 0.22em;
+    color: #B6D4BC; font-weight: 700;
+    margin-bottom: 2px;
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+  }
+  .instructor-label .name {
+    font-weight: 900; font-size: 17px; color: #fff;
+  }
+
+  /* ─────── 按鈕 ─────── */
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: var(--deep); color: #fff !important;
+    padding: 0.95rem 1.85rem; border-radius: 999px;
+    font-weight: 900; font-size: 15px; letter-spacing: 0.06em;
+    border: none; cursor: pointer;
+    box-shadow: 0 6px 18px -6px rgba(31, 58, 43, 0.45);
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: var(--mid);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px -6px rgba(31, 58, 43, 0.55);
+  }
+  .btn-outline {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    background: transparent; color: var(--deep);
+    padding: 0.9rem 1.85rem; border-radius: 999px;
+    font-weight: 700; font-size: 15px;
+    border: 1.5px solid var(--deep); cursor: pointer;
+    transition: all 0.2s ease; text-decoration: none;
+  }
+  .btn-outline:hover { background: var(--deep); color: #fff !important; }
+
+  /* ─────── 表單 ─────── */
+  .form-input, .form-input:focus {
+    background: #fff;
+    color: var(--text-main);
+    border: 1.5px solid rgba(31,58,43,0.15);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+  }
+  .form-input::placeholder { color: var(--text-light); }
+  .form-input:focus { outline: none; border-color: var(--strong); box-shadow: 0 0 0 3px rgba(77, 155, 106, 0.18); }
+  .form-input.error { border-color: #DC2626; }
+  select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F3A2B' stroke-width='2' opacity='0.7'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 18px;
+    padding-right: 40px;
+  }
+  select.form-input option { background: #fff; color: var(--text-main); }
+  select.form-input option:disabled { color: var(--text-light); }
+
+  /* ─────── 大數字編號 ─────── */
+  .unit-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; font-size: 2.5rem; line-height: 1;
+    color: var(--strong);
+    letter-spacing: -0.03em;
+  }
+  .big-date {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    color: var(--deep);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  /* ─────── nav ─────── */
+  .nav-bar {
+    backdrop-filter: saturate(180%) blur(14px);
+    background: rgba(238, 244, 236, 0.85);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-link {
+    color: var(--text-mid); font-weight: 700; font-size: 14px;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: var(--deep); }
+
+  /* ─────── floating CTA ─────── */
+  .floating-cta {
+    position: fixed; right: 1.25rem; bottom: 1.25rem;
+    z-index: 50; padding: 0.95rem 1.6rem;
+    background: var(--deep);
+    color: #fff !important;
+    border-radius: 999px; font-weight: 900; font-size: 14px; letter-spacing: 0.1em;
+    box-shadow: 0 12px 30px -8px rgba(31, 58, 43, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+  }
+  .floating-cta:hover {
+    transform: translateY(-2px);
+    background: var(--mid);
+  }
+
+  /* ─────── 進場動畫 ─────── */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); will-change: opacity, transform; }
+  .reveal.from-left { transform: translateX(-30px); }
+  .reveal.from-right { transform: translateX(30px); }
+  .reveal.in-view { opacity: 1; transform: translate(0,0); }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+  }
+
+  /* ─────── 中文斷行 ─────── */
+  .card h3, .section-title, .hero-title {
+    word-break: keep-all;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+
+  /* ─────── 單元 badge ─────── */
+  .unit-badge {
+    display: inline-block;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    background: var(--bg-contrast); color: var(--deep);
+    border: 1px solid var(--line-strong);
+  }
+
+  /* ─────── 主題大卡(5 大主題)─────── */
+  .theme-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .theme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px -14px rgba(31, 58, 43, 0.22);
+  }
+  .theme-card .theme-head {
+    background: var(--deep); color: #fff;
+    padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .theme-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; font-size: 1.5rem;
+    color: #B6D4BC;
+    line-height: 1;
+  }
+  .theme-title {
+    font-weight: 900; font-size: 16px; color: #fff;
+    line-height: 1.3;
+  }
+  .theme-body {
+    padding: 1.1rem 1.25rem 1.4rem;
+    color: var(--text-main);
+    font-size: 14.5px;
+    line-height: 1.85;
+  }
+
+  /* ─────── 能力條目 ─────── */
+  .goal-row {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .goal-row:hover {
+    border-color: var(--strong);
+    transform: translateX(3px);
+  }
+  .goal-num {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900; font-size: 1.75rem;
+    color: var(--strong); line-height: 1;
+    flex-shrink: 0; min-width: 44px;
+  }
+  .goal-title {
+    font-weight: 900; font-size: 16px; color: var(--deep);
+    margin-bottom: 4px;
+  }
+  .goal-desc {
+    color: var(--text-mid); font-size: 14px; line-height: 1.75;
+  }
+
+  /* ─────── 單元內容(大綱卡)─────── */
+  .unit-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .unit-card:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 10px 26px -14px rgba(31, 58, 43, 0.2);
+  }
+  .unit-head-bar {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.1rem 1.4rem;
+    background: var(--bg-contrast);
+    border-bottom: 1px solid var(--line);
+  }
+  .unit-content {
+    padding: 1.3rem 1.4rem 1.5rem;
+  }
+  .unit-content ol {
+    counter-reset: li;
+    padding-left: 0;
+    list-style: none;
+  }
+  .unit-content ol li {
+    counter-increment: li;
+    padding-left: 32px;
+    position: relative;
+    margin-bottom: 10px;
+    color: var(--text-main);
+    font-size: 14.5px;
+    line-height: 1.85;
+  }
+  .unit-content ol li::before {
+    content: counter(li);
+    position: absolute; left: 0; top: 2px;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bg-contrast);
+    color: var(--deep);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700; font-size: 12px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+
+  /* ─────── 梯次卡 ─────── */
+  .cohort-card {
+    background: #fff;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 16px;
+    padding: 1.6rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .cohort-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -12px rgba(31, 58, 43, 0.22);
+  }
+
+  /* ─────── 聯絡窗口卡 ─────── */
+  .contact-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+    display: flex; gap: 1rem; align-items: center;
+  }
+  .contact-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--bg-contrast);
+    color: var(--deep);
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  /* ─────── FAQ-ish details(保留備用)─────── */
+  details summary { list-style: none; cursor: pointer; }
+  details summary::-webkit-details-marker { display: none; }
+
+  /* ─────── 手機微調 ─────── */
+  @media (max-width: 640px) {
+    .container-wide { padding-left: 1rem; padding-right: 1rem; }
+    .unit-number { font-size: 2rem; }
+    .card { padding: 1.2rem; }
+    .big-date { font-size: 2.1rem; }
+  }
+
+  /* 單人場次通知框 */
+  .solo-notice {
+    background: #FEF9C3; border: 1px solid #FACC15;
+    color: #713F12;
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 13px; line-height: 1.6;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ══════════════════════ NAV ══════════════════════ -->
+<nav class="fixed top-0 left-0 right-0 z-40 nav-bar">
+  <div class="container-wide flex items-center justify-between h-16">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="font-black tracking-tight transition text-sm sm:text-base" style="color:var(--deep)">
+      虎智科技 <span style="color:var(--strong)">TigerAI</span>
+    </a>
+    <div class="hidden md:flex items-center gap-7">
+      <a href="#why" class="nav-link">課程定位</a>
+      <a href="#themes" class="nav-link">5 大主題</a>
+      <a href="#goals" class="nav-link">能力目標</a>
+      <a href="#syllabus" class="nav-link">單元大綱</a>
+      <a href="#instructors" class="nav-link">講師</a>
+      <a href="#cohorts" class="nav-link">開課資訊</a>
+      <a href="#signup" class="btn-primary" style="padding:0.5rem 1.3rem; font-size:13px;">立即報名</a>
+    </div>
+    <a href="#signup" class="md:hidden btn-primary" style="padding:0.5rem 1rem; font-size:12px;">報名</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════ HERO ══════════════════════ -->
+<section class="pt-28 pb-16 sm:pt-36 sm:pb-24 relative overflow-hidden">
+  <!-- 有機綠圓裝飾 -->
+  <div class="blob blob-strong" style="width:420px;height:420px;top:-120px;right:-130px;"></div>
+  <div class="blob blob-mid" style="width:300px;height:300px;bottom:-80px;left:-100px;animation-delay:-6s;"></div>
+  <div class="blob blob-faint" style="width:200px;height:200px;top:40%;right:40%;animation-delay:-3s;"></div>
+
+  <div class="container-wide relative">
+
+    <div class="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+      <!-- 左:主標 -->
+      <div class="lg:col-span-7 reveal">
+        <div class="mb-5">
+          <span class="pill-eyebrow">製造業 AI 導入實戰 · 嘉義班</span>
+        </div>
+
+        <h1 class="hero-title mb-5">
+          <span class="block">從 AI 工具使用</span>
+          <span class="block">到<span style="color:var(--strong)">智慧工作流程</span></span>
+          <span class="block" style="font-size:0.72em;color:var(--mid);font-weight:700;margin-top:0.4em;">把 AI 真正裝進製造現場與部門工作</span>
+        </h1>
+
+        <!-- 日期大數字 + 地點 -->
+        <div class="flex flex-wrap items-end gap-5 sm:gap-7 mb-7 pt-2">
+          <div>
+            <div style="font-size:11px;letter-spacing:0.28em;color:var(--text-light);font-weight:700;margin-bottom:4px;font-family:'Inter',sans-serif;">OPEN DATE</div>
+            <div class="big-date" style="font-size:clamp(2rem, 5vw, 2.8rem);">2026 . 11 . 09</div>
+            <div class="mt-1" style="font-size:13px;color:var(--mid);font-weight:700;">起 · 共四日 30 小時</div>
+          </div>
+          <div class="hidden sm:block" style="width:1px;height:52px;background:var(--line-strong);"></div>
+          <div>
+            <div style="font-size:11px;letter-spacing:0.28em;color:var(--text-light);font-weight:700;margin-bottom:4px;font-family:'Inter',sans-serif;">VENUE</div>
+            <div style="font-size:16px;font-weight:900;color:var(--deep);">嘉義 · 國華街 245 號 5F</div>
+            <div class="mt-1" style="font-size:13px;color:var(--mid);">嘉義火車站步行 12 分鐘</div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2 mb-7">
+          <span class="pill-ghost">4 日 30 小時</span>
+          <span class="pill-ghost">雙講師授課</span>
+          <span class="pill-ghost">5 大主題</span>
+          <span class="pill-ghost">實作演練</span>
+          <span class="pill-ghost">限額 30 人</span>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <a href="#signup" class="btn-primary">立即報名 →</a>
+          <a href="#syllabus" class="btn-outline">看單元大綱</a>
+        </div>
+      </div>
+
+      <!-- 右:2 位講師卡 -->
+      <div class="lg:col-span-5 reveal from-right">
+        <div class="grid grid-cols-2 gap-4 sm:gap-5 max-w-md mx-auto lg:max-w-none">
+          <div class="instructor-card">
+            <div class="instructor-photo">
+              <img src="assets/instructor-chang.png" alt="張惟翔 · AI 增幅者" loading="eager" decoding="async">
+            </div>
+            <div class="instructor-label">
+              <div class="role">AI 增幅者</div>
+              <div class="name">張惟翔</div>
+            </div>
+          </div>
+          <div class="instructor-card">
+            <div class="instructor-photo">
+              <img src="assets/instructor-leo.png" alt="謝侑霖 LEO · AI 自動症" loading="eager" decoding="async">
+            </div>
+            <div class="instructor-label">
+              <div class="role">AI 自動症</div>
+              <div class="name">謝侑霖 LEO</div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 text-center" style="font-size:12px;color:var(--text-light);letter-spacing:0.14em;font-weight:700;">
+          本班講師 · 兩位全程授課
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════ WHY ══════════════════════ -->
+<section id="why" class="py-16 sm:py-20 relative">
+  <div class="container-wide">
+    <div class="max-w-3xl mx-auto reveal">
+      <div class="text-center mb-10">
+        <div class="section-eyebrow mb-4">01 &nbsp;/&nbsp; POSITIONING</div>
+        <h2 class="section-title mb-5">為什麼要上這堂課</h2>
+      </div>
+      <p class="text-center" style="color:var(--text-main);font-size:17px;line-height:2;">
+        大部分 AI 課只教「工具怎麼用」。<br>
+        這堂課教你把 AI <strong style="color:var(--deep)">真的裝進部門工作</strong>裡 — 四日 30 小時,從提示詞工程、Agent 建置、流程自動化,到技術文件 AI 化,<strong style="color:var(--deep)">每一單元都附實作演練</strong>。
+      </p>
+      <p class="text-center mt-6" style="color:var(--text-mid);font-size:15px;line-height:1.9;">
+        對象:電子資訊 / 電子零組件 / EMS / PCB 業 · 推動數位轉型或業務需用 AI 之中階員工與主管
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 5 大主題 ══════════════════════ -->
+<section id="themes" class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="blob blob-faint" style="width:320px;height:320px;top:10%;left:-120px;"></div>
+  <div class="container-wide relative">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow mb-4">02 &nbsp;/&nbsp; THEMES</div>
+      <h2 class="section-title mb-4">5 大主題 · 四日 30 小時</h2>
+      <p class="section-sub">從 AI 原理到企業導入規劃 · 從提示詞工程到技術文件 AI 化,五大主題環環相扣,把 AI 做到真的能跑。</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="theme-card reveal">
+        <div class="theme-head">
+          <div class="theme-num">01</div>
+          <div class="theme-title">生成式 AI 理論、通用模型認知<br>與提示詞工程</div>
+        </div>
+        <div class="theme-body">
+          從 AI 原理與能力邊界切入,比較主流生成式 AI 模型特性與部署方式,並透過提示詞三大框架與 SOP 結構化拆解演練,將企業 know-how 轉化為 AI 可執行的結構化任務。
+        </div>
+      </div>
+
+      <div class="theme-card reveal" style="transition-delay:0.08s">
+        <div class="theme-head">
+          <div class="theme-num">02</div>
+          <div class="theme-title">企業 AI Agent 建置與調校</div>
+        </div>
+        <div class="theme-body">
+          以 Low-Code 平台為實作環境,練習知識來源整備、角色任務定義、回應邏輯設計與測試調校,培養企業級 Agent 開發與品質驗收能力。
+        </div>
+      </div>
+
+      <div class="theme-card reveal" style="transition-delay:0.16s">
+        <div class="theme-head">
+          <div class="theme-num">03</div>
+          <div class="theme-title">AI 簡報與營運行銷流程自動化</div>
+        </div>
+        <div class="theme-body">
+          導入提案簡報、型錄文案、開發信與社群素材之批次產製,並延伸至營運內部作業與行銷客服流程之 AI 輔助設計,強化內容產出效率與品質控管能力。
+        </div>
+      </div>
+
+      <div class="theme-card reveal" style="transition-delay:0.24s">
+        <div class="theme-head">
+          <div class="theme-num">04</div>
+          <div class="theme-title">企業流程自動化設計與建構</div>
+        </div>
+        <div class="theme-body">
+          從流程盤點、節點拆解到實機建構,帶領學員完成一條可運作之自動化流程,並整合 AI Agent 與企業既有系統。
+        </div>
+      </div>
+
+      <div class="theme-card reveal lg:col-span-1 md:col-span-2" style="transition-delay:0.32s">
+        <div class="theme-head">
+          <div class="theme-num">05</div>
+          <div class="theme-title">技術文件 AI 化與導入落地規劃</div>
+        </div>
+        <div class="theme-body">
+          以 RAG 觀念完成規格書、BOM 與圖說之盤點分級與轉檔整備,並建立 AI 導入路線圖、權限治理與數位轉型實務觀念。
+        </div>
+      </div>
+
+      <!-- 占位卡 - 課程總覽 -->
+      <div class="reveal md:hidden lg:flex rounded-2xl p-6 flex-col justify-center" style="background:var(--deep);color:#fff;transition-delay:0.4s">
+        <div style="font-size:11px;letter-spacing:0.3em;color:#B6D4BC;font-weight:700;margin-bottom:12px;">AI WORKFLOW · CHIAYI</div>
+        <div class="big-date" style="font-size:2rem;color:#fff;margin-bottom:12px;">30<span style="font-size:0.5em;margin-left:4px;">hr</span></div>
+        <div style="font-weight:900;font-size:18px;line-height:1.5;margin-bottom:8px;">把 AI 真的<br>裝進部門工作</div>
+        <div style="font-size:13px;color:#B6D4BC;line-height:1.7;">四日 · 雙講師 · 5 大主題<br>每一單元都附實作演練</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 5 大能力目標 ══════════════════════ -->
+<section id="goals" class="py-16 sm:py-24 relative" style="background:var(--bg-contrast);">
+  <div class="container-wide">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow mb-4">03 &nbsp;/&nbsp; OUTCOMES</div>
+      <h2 class="section-title mb-4">5 大能力目標</h2>
+      <p class="section-sub">完訓後能帶走的、能用在工作現場的具體能力。</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-3">
+      <div class="goal-row reveal">
+        <div class="goal-num">01</div>
+        <div>
+          <div class="goal-title">AI 基本認知能力</div>
+          <div class="goal-desc">理解生成式 AI、通用模型及多模態 AI 的核心概念、能力邊界與企業應用場景。</div>
+        </div>
+      </div>
+      <div class="goal-row reveal" style="transition-delay:0.08s">
+        <div class="goal-num">02</div>
+        <div>
+          <div class="goal-title">AI 任務設計能力</div>
+          <div class="goal-desc">能將企業 Know-how、SOP 與工作流程拆解為 AI 可執行的結構化任務。</div>
+        </div>
+      </div>
+      <div class="goal-row reveal" style="transition-delay:0.16s">
+        <div class="goal-num">03</div>
+        <div>
+          <div class="goal-title">企業 AI 建置能力</div>
+          <div class="goal-desc">能實際操作 AI Agent 與自動化平台,建立企業內部 AI 應用原型。</div>
+        </div>
+      </div>
+      <div class="goal-row reveal" style="transition-delay:0.24s">
+        <div class="goal-num">04</div>
+        <div>
+          <div class="goal-title">流程自動化思考</div>
+          <div class="goal-desc">能設計並建構含人工審核節點之自動化流程,串接 AI 模型與企業既有系統。</div>
+        </div>
+      </div>
+      <div class="goal-row reveal" style="transition-delay:0.32s">
+        <div class="goal-num">05</div>
+        <div>
+          <div class="goal-title">AI 導入實作</div>
+          <div class="goal-desc">能辨識企業適合導入 AI 之工作場景,規劃應用、流程自動化及治理機制。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 單元大綱 ══════════════════════ -->
+<section id="syllabus" class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="blob blob-faint" style="width:260px;height:260px;bottom:-80px;right:-80px;"></div>
+  <div class="container-wide relative">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow mb-4">04 &nbsp;/&nbsp; SYLLABUS</div>
+      <h2 class="section-title mb-4">單元內容大綱</h2>
+      <p class="section-sub">前 3 單元為正式課綱 · 後 5 單元講師保留依現場學員狀況調整之空間。</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto space-y-5">
+
+      <!-- 單元 01 -->
+      <div class="unit-card reveal">
+        <div class="unit-head-bar">
+          <div class="unit-number">01</div>
+          <div>
+            <div class="unit-badge mb-1">從屬主題 1</div>
+            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">生成式 AI 原理與能力邊界</h3>
+          </div>
+        </div>
+        <div class="unit-content">
+          <ol>
+            <li>大型語言模型運作邏輯、Token 推論的白話理解、AI 幻覺成因與製造業正確性風險</li>
+            <li>通用模型選型比較:ChatGPT / Claude / Gemini / 地端開源模型之定位;雲端 vs 本機/私有部署之成本、資安與效能</li>
+            <li>企業使用規範:AI 資安風險、資料政策與使用倫理</li>
+            <li>製造業 AI 應用場景盤點:生產管理、行政作業、文件處理、資訊分析與跨部門協作之應用潛力與導入優先順序</li>
+            <li>演練:分組盤點部門日常任務,標記可導入 AI 之工作場景</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 單元 02 -->
+      <div class="unit-card reveal">
+        <div class="unit-head-bar">
+          <div class="unit-number">02</div>
+          <div>
+            <div class="unit-badge mb-1">從屬主題 1</div>
+            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">提示詞工程與企業 SOP 任務拆解</h3>
+          </div>
+        </div>
+        <div class="unit-content">
+          <ol>
+            <li>提示詞三大框架:角色任務(Role–Task–Format)、情境約束(Context–Constraint–Example)、流程分解(Step-by-Step)</li>
+            <li>調校與輸出控制:迭代技巧、反例設計、固定欄位輸出以銜接後續系統</li>
+            <li>SOP 轉化:隱性知識顯性化訪談法;任務拆解四步(輸入、判斷規則、輸出、驗收)</li>
+            <li>實作:各組挑選一份現行 SOP,拆解為 AI 可執行之任務規格書,並產出部門共用提示詞模板</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 單元 03 -->
+      <div class="unit-card reveal">
+        <div class="unit-head-bar">
+          <div class="unit-number">03</div>
+          <div>
+            <div class="unit-badge mb-1">從屬主題 2</div>
+            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">企業 AI Agent 概念與知識來源整備</h3>
+          </div>
+        </div>
+        <div class="unit-content">
+          <ol>
+            <li>思維轉換:AI 工具 vs AI Agent 之本質差異;Agent 四大組成(角色指令、知識來源、可用工具、輸出規格)</li>
+            <li>平台導覽與環境啟用:工作區設定與權限角色配置</li>
+            <li>資料整備實務:以 Excel 或文字檔為輸入源,欄位設計、資料清理與避免 AI 誤讀之表格寫法</li>
+            <li>知識來源設定:知識切分與檢索參數調整</li>
+            <li>實作:完成工作區設定,匯入整備後資料並建立具備知識來源之 Agent 原型</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 單元 04-08 簡列 -->
+      <div class="reveal">
+        <div class="rounded-2xl p-6 sm:p-7" style="background:#fff;border:1px dashed var(--line-strong);">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="unit-badge" style="background:#fff;border:1px solid var(--deep);color:var(--deep);">單元 04 – 08</div>
+            <div style="font-size:13px;color:var(--text-mid);font-weight:700;">依現場學員狀況 · 講師保留調整空間</div>
+          </div>
+          <ul class="space-y-2.5" style="font-size:14.5px;color:var(--text-main);line-height:1.75;">
+            <li class="flex gap-3"><span class="font-mono font-black" style="color:var(--strong);min-width:40px;">04</span><span>Agent 回應邏輯設計與調校</span></li>
+            <li class="flex gap-3"><span class="font-mono font-black" style="color:var(--strong);min-width:40px;">05</span><span>AI 簡報自動化(型錄文案、開發信、社群素材)</span></li>
+            <li class="flex gap-3"><span class="font-mono font-black" style="color:var(--strong);min-width:40px;">06</span><span>營運行銷流程自動化</span></li>
+            <li class="flex gap-3"><span class="font-mono font-black" style="color:var(--strong);min-width:40px;">07</span><span>企業流程自動化設計與建構(整合節點)</span></li>
+            <li class="flex gap-3"><span class="font-mono font-black" style="color:var(--strong);min-width:40px;">08</span><span>技術文件 AI 化 + RAG 導入落地規劃</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ INSTRUCTORS ══════════════════════ -->
+<section id="instructors" class="py-16 sm:py-24 relative" style="background:var(--bg-contrast);">
+  <div class="container-wide">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow mb-4">05 &nbsp;/&nbsp; INSTRUCTORS</div>
+      <h2 class="section-title mb-4">本班講師</h2>
+      <p class="section-sub">兩位全程授課 · 從提示詞工程到流程自動化、技術文件 AI 化,一條完整帶你跑完。</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
+      <!-- 張惟翔 -->
+      <div class="reveal from-left">
+        <div class="instructor-card">
+          <div class="instructor-photo" style="aspect-ratio:4/5;">
+            <img src="assets/instructor-chang.png" alt="張惟翔 · AI 增幅者">
+          </div>
+          <div class="instructor-label">
+            <div class="role">AI 增幅者</div>
+            <div class="name">張惟翔</div>
+          </div>
+        </div>
+        <div class="mt-5">
+          <p style="color:var(--text-main);font-size:15px;line-height:1.9;">
+            專注將 AI 工具的「使用技巧」轉化為可落地的企業工作流程,從提示詞工程、Agent 建置到流程自動化設計,幫助企業把 AI 能力真正放進每日工作裡。
+          </p>
+        </div>
+      </div>
+
+      <!-- 謝侑霖 LEO -->
+      <div class="reveal from-right" style="transition-delay:0.15s">
+        <div class="instructor-card">
+          <div class="instructor-photo" style="aspect-ratio:4/5;">
+            <img src="assets/instructor-leo.png" alt="謝侑霖 LEO · AI 自動症">
+          </div>
+          <div class="instructor-label">
+            <div class="role">AI 自動症</div>
+            <div class="name">謝侑霖 LEO</div>
+          </div>
+        </div>
+        <div class="mt-5">
+          <p style="color:var(--text-main);font-size:15px;line-height:1.9;">
+            從 Agent 平台實作、企業自動化導入到技術文件 AI 化,擅長以 Low-Code 工具快速帶出可運作的 AI 應用,把看似複雜的導入拆成能立即執行的步驟。
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ COHORTS · 開課資訊 ══════════════════════ -->
+<section id="cohorts" class="py-16 sm:py-24 relative">
+  <div class="container-wide">
+    <div class="text-center mb-14 reveal">
+      <div class="section-eyebrow mb-4">06 &nbsp;/&nbsp; COHORT</div>
+      <h2 class="section-title mb-4">開課資訊</h2>
+      <p class="section-sub">嘉義班 · 四日 30 小時 · 限額 30 人</p>
+    </div>
+
+    <div class="max-w-3xl mx-auto">
+      <div id="cohortList" class="space-y-5"></div>
+
+      <!-- 固定資訊補充 -->
+      <div class="mt-10 grid sm:grid-cols-2 gap-4">
+        <div class="card" style="padding:1.3rem 1.4rem;">
+          <div class="flex items-start gap-3">
+            <div class="contact-icon" style="width:38px;height:38px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div style="font-size:11px;letter-spacing:0.22em;color:var(--text-light);font-weight:700;margin-bottom:4px;">LOCATION</div>
+              <div style="font-weight:900;color:var(--deep);">嘉義市西區國華街 245 號 5 樓</div>
+              <div class="mt-1" style="font-size:13px;color:var(--text-mid);line-height:1.7;">
+                距嘉義火車站約 800 公尺(步行約 12 分鐘)<br>
+                大樓 3、4 樓設有停車場 · 費用依現場公告
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="padding:1.3rem 1.4rem;">
+          <div class="flex items-start gap-3">
+            <div class="contact-icon" style="width:38px;height:38px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <div style="font-size:11px;letter-spacing:0.22em;color:var(--text-light);font-weight:700;margin-bottom:4px;">SCHEDULE</div>
+              <div style="font-weight:900;color:var(--deep);">4 日 30 小時</div>
+              <div class="mt-1" style="font-size:13px;color:var(--text-mid);line-height:1.7;">
+                2026/11/9 (一)、11/10 (二)<br>
+                2026/11/16 (一)、11/17 (二)<br>
+                每日 09:00 – 17:30(含午休)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ SIGNUP ══════════════════════ -->
+<section id="signup" class="py-16 sm:py-24 relative overflow-hidden" style="background:var(--bg-contrast);">
+  <div class="blob blob-faint" style="width:280px;height:280px;top:-100px;right:-100px;"></div>
+  <div class="container-wide relative" style="max-width:780px;">
+    <div class="text-center mb-10">
+      <div class="section-eyebrow mb-4">07 &nbsp;/&nbsp; SIGN UP</div>
+      <h2 class="section-title mb-4">課程報名</h2>
+      <p class="section-sub">填寫下列資料即可完成報名,開課前 3 天會發送行前通知。</p>
+    </div>
+
+    <form id="signupForm" class="card" style="padding: 2rem 1.75rem;">
+
+      <!-- 同意書 gate -->
+      <div id="consentGate" class="text-center py-4">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-5" style="border:2px solid var(--strong);background:rgba(77,155,106,0.08);color:var(--strong);">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/>
+            <polyline points="9 12 11 14 15 10"/>
+          </svg>
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black mb-2" style="color:var(--deep)">請先閱讀個人資料告知書</h3>
+        <p class="text-sm mb-6 max-w-md mx-auto leading-relaxed" style="color:var(--text-mid)">依《個人資料保護法》,報名前需閱讀並同意本課程個資蒐集告知書。閱讀後勾選同意,即可開始填寫報名資料。</p>
+
+        <button type="button" onclick="openConsentModal()" class="btn-outline mb-5">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          閱讀個資告知書
+        </button>
+
+        <label class="flex items-start gap-3 cursor-pointer max-w-xl mx-auto text-left px-3 py-3 rounded transition" style="background:rgba(31,58,43,0.03);">
+          <input type="checkbox" id="f_consent" name="consent" required class="mt-1 w-5 h-5 flex-shrink-0" style="accent-color:var(--strong);">
+          <span class="text-sm leading-relaxed" style="color:var(--text-main)">
+            本人已閱讀
+            <button type="button" onclick="openConsentModal()" class="font-bold underline hover:opacity-70 transition" style="color:var(--strong)">AI 工作流程 · 嘉義班 資料蒐集、處理及利用之告知暨同意書</button>
+            ,並同意虎智科技在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
+          </span>
+        </label>
+      </div>
+
+      <!-- 表單欄位 -->
+      <div id="formFields" class="hidden space-y-6">
+
+        <!-- 學員資訊 -->
+        <div>
+          <h3 class="font-bold text-base mb-3 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>學員資訊
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">中文姓名 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_name" name="name" required class="form-input px-4 py-2.5" placeholder="王大明">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">職稱 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_jobTitle" name="jobTitle" required class="form-input px-4 py-2.5" placeholder="生產部經理">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">E-Mail <span style="color:#DC2626">*</span></label>
+              <input type="email" id="f_email" name="email" required class="form-input px-4 py-2.5" placeholder="you@example.com">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">手機 <span style="color:#DC2626">*</span></label>
+              <input type="tel" id="f_phone" name="phone" required class="form-input px-4 py-2.5" placeholder="0912345678">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">性別 <span style="color:#DC2626">*</span></label>
+              <select id="f_gender" name="gender" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="男">男</option>
+                <option value="女">女</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">用餐選擇 <span style="color:#DC2626">*</span></label>
+              <select id="f_meal" name="meal" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="葷">葷</option>
+                <option value="素">素</option>
+                <option value="不用餐">不用餐</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 公司資訊 -->
+        <div>
+          <h3 class="font-bold text-base mb-3 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>公司資訊
+          </h3>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">公司名稱 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_companyName" name="companyName" required class="form-input px-4 py-2.5" placeholder="○○股份有限公司">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">公司統編 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_taxId" name="taxId" required inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">邀請單位 / 推薦來源 <span style="color:#DC2626">*</span></label>
+              <select id="f_referral" name="referral" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 · 誰邀請你來? —</option>
+                <option value="虎智科技">虎智科技</option>
+                <option value="講師 張惟翔 · AI 增幅者">講師 張惟翔 · AI 增幅者</option>
+                <option value="講師 謝侑霖 LEO · AI 自動症">講師 謝侑霖 LEO · AI 自動症</option>
+                <option value="中華亞太智慧物聯發展協會">中華亞太智慧物聯發展協會</option>
+                <option disabled>─── 嘉義在地單位 ───</option>
+                <option value="嘉義縣政府">嘉義縣政府</option>
+                <option value="嘉義市政府">嘉義市政府</option>
+                <option value="嘉義縣工業會">嘉義縣工業會</option>
+                <option value="嘉義縣電子電機工業同業公會">嘉義縣電子電機工業同業公會</option>
+                <option disabled>─── EMBA ───</option>
+                <option value="台灣大學 EMBA">台灣大學 EMBA</option>
+                <option value="政治大學 EMBA">政治大學 EMBA</option>
+                <option value="中山大學 EMBA">中山大學 EMBA</option>
+                <option value="中央大學 EMBA">中央大學 EMBA</option>
+                <option value="成功大學 EMBA">成功大學 EMBA</option>
+                <option value="陽明交通大學 EMBA">陽明交通大學 EMBA</option>
+                <option value="台灣科技大學 EMBA">台灣科技大學 EMBA</option>
+                <option value="清華大學 EMBA">清華大學 EMBA</option>
+                <option value="中正大學 EMBA">中正大學 EMBA</option>
+                <option value="中興大學 EMBA">中興大學 EMBA</option>
+                <option value="逢甲大學 EMBA">逢甲大學 EMBA</option>
+                <option value="東海大學 EMBA">東海大學 EMBA</option>
+                <option value="其他">其他(請填寫)</option>
+              </select>
+              <div id="referralOtherWrap" class="hidden mt-3">
+                <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">其他 - 請填寫</label>
+                <input type="text" id="f_referralOther" name="referralOther" class="form-input px-4 py-2.5" placeholder="請填寫邀請單位或介紹人">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 梯次 -->
+        <div>
+          <h3 class="font-bold text-base mb-3 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>選擇報名場次 <span style="color:#DC2626">*</span>
+          </h3>
+          <select id="f_cohort" name="cohort" required class="form-input px-4 py-3">
+            <option value="">— 請選擇場次 —</option>
+          </select>
+          <div id="soloNotice" class="hidden solo-notice mt-3"></div>
+        </div>
+
+        <!-- 其他 -->
+        <div>
+          <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">報名留言 <span class="font-normal" style="color:var(--text-light)">(選填,128 字內)</span></label>
+          <textarea id="f_note" name="note" maxlength="128" rows="3" class="form-input px-4 py-2.5" placeholder="任何想告訴我們的事,例如飲食禁忌、無障礙需求⋯⋯"></textarea>
+        </div>
+
+      </div>
+
+      <button type="submit" id="submitBtn" class="hidden btn-primary w-full text-base py-4 mt-2" style="border-radius:10px; font-size:16px; width:100%;">
+        送出報名 →
+      </button>
+
+    </form>
+
+    <!-- 成功訊息 -->
+    <div id="successBox" class="hidden mt-8 card text-center" style="padding: 2.5rem 1.75rem;">
+      <div style="font-size:12px;letter-spacing:0.3em;font-weight:700;color:var(--strong);margin-bottom:1.25rem;">報名已確認</div>
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-5" style="border:2px solid var(--strong);background:rgba(77,155,106,0.1);color:var(--strong)">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="text-2xl font-black mb-3" style="color:var(--deep)">報名成功</h3>
+      <p style="color:var(--text-mid);line-height:1.9;">將於 <span class="font-bold" style="color:var(--strong)">開課前 3 天</span> 發送行前通知,請留意信箱。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CONTACT ══════════════════════ -->
+<section id="contact" class="py-16 sm:py-20 relative">
+  <div class="container-wide">
+    <div class="text-center mb-10 reveal">
+      <div class="section-eyebrow mb-4">08 &nbsp;/&nbsp; CONTACT</div>
+      <h2 class="section-title mb-4">聯絡窗口</h2>
+      <p class="section-sub">報名、企業包班、課程內容相關問題,歡迎直接聯繫。</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
+      <div class="contact-card reveal">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="flex-1">
+          <div style="font-size:11px;letter-spacing:0.22em;color:var(--text-light);font-weight:700;margin-bottom:3px;">虎智科技 TigerAI</div>
+          <div class="font-black" style="color:var(--deep);font-size:17px;">紀先生</div>
+          <a href="tel:0266058192" class="font-mono inline-block mt-1 hover:underline" style="color:var(--mid);font-weight:700;">02-66058192</a>
+        </div>
+      </div>
+      <div class="contact-card reveal" style="transition-delay:0.1s">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="flex-1">
+          <div style="font-size:11px;letter-spacing:0.22em;color:var(--text-light);font-weight:700;margin-bottom:3px;">嘉義在地窗口</div>
+          <div class="font-black" style="color:var(--deep);font-size:17px;">郭哿埼 (KE CHI)</div>
+          <a href="tel:0972629215" class="font-mono inline-block mt-1 hover:underline" style="color:var(--mid);font-weight:700;">0972-629-215</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 同意書彈窗 ══════════════════════ -->
+<div id="consentModal" class="hidden fixed inset-0 z-[100] items-center justify-center p-4" style="display:none; background:rgba(31,58,43,0.55);" onclick="if(event.target===this)closeConsentModal()">
+  <div class="max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-xl shadow-2xl" style="background:#fff; color:var(--text-main); border:1px solid var(--line-strong)">
+    <div class="sticky top-0 px-6 py-4 flex justify-between items-center" style="background:var(--deep); color:#fff;">
+      <h3 class="font-black text-base" style="color:#fff">個人資料蒐集、處理及利用之告知暨同意書</h3>
+      <button type="button" onclick="closeConsentModal()" class="text-2xl leading-none hover:opacity-70" style="color:#fff">×</button>
+    </div>
+    <div class="px-6 py-6 text-[14px] leading-relaxed space-y-6" style="color:var(--text-main)">
+      <div>
+        <h4 class="font-black text-center text-base mb-4" style="color:var(--deep)">虎智科技個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <p class="font-bold mb-3" style="color:var(--deep)">告知事項</p>
+        <p class="mb-4">虎智科技有限公司(下稱本公司)為了執行「AI 工作流程 · 嘉義班」課程,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>蒐集目的:為本課程相關辦理、活動、通訊、開立發票、寄送行前通知與課後追蹤,以及本公司內部行政管理與服務改善。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、手機、E-Mail、邀請單位。</li>
+          <li>利用期間:至蒐集目的消失為止,或您以書面要求刪除為止。</li>
+          <li>利用地區:中華民國地區及本公司辦事處所在地區。</li>
+          <li>利用者:本公司及承辦本課程之受託服務廠商。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、電話及其他合法方式利用之。</li>
+          <li>您得以書面主張下列權利:
+            <div class="pl-4 mt-2 font-bold space-y-1">
+              <div>(一)查詢或請求閱覽</div>
+              <div>(二)請求製給複製本</div>
+              <div>(三)請求補充或更正</div>
+              <div>(四)請求停止蒐集、處理或利用</div>
+              <div>(五)請求刪除</div>
+            </div>
+            <p class="mt-3 font-normal">若有上述需求,請與本公司承辦人員聯繫:
+              <span class="block mt-2 font-bold">．虎智科技 紀先生 02-66058192</span>
+              <span class="block mt-1 font-bold">．嘉義在地窗口 郭哿埼 (KE CHI) 0972-629-215</span>
+            </p>
+          </li>
+          <li>您若不簽署本告知暨同意書,本公司將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對本公司所持有您的個資,本公司會按照個資法相關規定保密並予以妥善保管。</li>
+        </ol>
+      </div>
+    </div>
+    <div class="sticky bottom-0 px-6 py-4 flex justify-end" style="background:#fff;border-top:1px solid var(--line);">
+      <button type="button" onclick="closeConsentModal()" class="btn-primary" style="padding:0.6rem 1.5rem; font-size:14px;">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ 浮動報名按鈕 ══════════════════════ -->
+<a href="#signup" class="floating-cta">立即報名 →</a>
+
+<!-- ══════════════════════ FOOTER ══════════════════════ -->
+<footer class="py-12 px-4 sm:px-6 lg:px-8 mt-0 relative" style="border-top:1px solid var(--line);background:var(--bg-contrast);">
+  <div class="container-wide text-center">
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;" class="inline-block group cursor-pointer">
+      <div class="font-black text-base tracking-tight transition group-hover:opacity-70" style="color:var(--deep)">
+        虎智科技 <span style="color:var(--strong)">TigerAI</span>
+      </div>
+      <div class="text-[13px] tracking-widest font-mono mt-2 transition group-hover:opacity-70" style="color:var(--text-light)">↑ 回到頂端</div>
+    </a>
+
+    <div class="mt-8 pt-6 max-w-2xl mx-auto" style="border-top:1px solid var(--line);">
+      <div class="text-[11px] tracking-[0.28em] mb-3 font-bold" style="color:var(--strong)">COURSE CONTACT</div>
+      <div class="text-sm leading-relaxed" style="color:var(--text-main)">
+        <div><span class="font-bold">虎智科技 · 紀先生</span> <span class="font-mono ml-2" style="color:var(--text-mid)">02-66058192</span></div>
+        <div class="mt-1"><span class="font-bold">嘉義 · 郭哿埼 (KE CHI)</span> <span class="font-mono ml-2" style="color:var(--text-mid)">0972-629-215</span></div>
+      </div>
+      <div class="mt-6 text-xs" style="color:var(--text-light)">
+        © 虎智科技 TigerAI · AI 工作流程 嘉義班 · 2026
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════ 設定 ══════════════════════
+const CONFIG = {
+  SHEET_WEBHOOK: 'PASTE_APPS_SCRIPT_URL_HERE',    // 等 Apps Script 部署好填
+  COHORTS_CSV_URL: 'PASTE_COHORTS_CSV_URL_HERE'   // 等 Sheet 發布 CSV 填
+};
+const REG_CUTOFF_DAYS = 3;
+
+const COHORTS_FALLBACK = [
+  { city: '嘉義', date: '11月9日~11月17日(四日)', time: '每日 09:00-17:30 · 共 30h', location: '嘉義市西區國華街 245 號 5 樓', soloInstructor: '', soloTopic: '', capacity: 30 }
+];
+
+// ── 統編 · 必填 · 自動濾非數字並限 8 碼 ──
+const taxIdInput = document.getElementById('f_taxId');
+if (taxIdInput) {
+  taxIdInput.addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
+  });
+}
+
+// ── Reveal 進場 ──
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+}
+
+// ── 同意書彈窗 ──
+function openConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.remove('hidden'); m.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeConsentModal() {
+  const m = document.getElementById('consentModal');
+  m.classList.add('hidden'); m.style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('consentModal');
+    if (m && !m.classList.contains('hidden')) closeConsentModal();
+  }
+});
+
+// ── 邀請單位選「其他」→ 展開文字欄 ──
+document.getElementById('f_referral').addEventListener('change', e => {
+  const wrap = document.getElementById('referralOtherWrap');
+  const other = document.getElementById('f_referralOther');
+  if (e.target.value === '其他') {
+    wrap.classList.remove('hidden');
+    other.required = true;
+  } else {
+    wrap.classList.add('hidden');
+    other.required = false;
+    other.value = '';
+  }
+});
+
+// ── 同意 checkbox → 展開表單 ──
+document.getElementById('f_consent').addEventListener('change', e => {
+  const fields = document.getElementById('formFields');
+  const btn = document.getElementById('submitBtn');
+  if (e.target.checked) {
+    fields.classList.remove('hidden');
+    btn.classList.remove('hidden');
+    setTimeout(() => {
+      const firstInput = fields.querySelector('input, select, textarea');
+      if (firstInput) firstInput.focus({ preventScroll: true });
+      fields.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  } else {
+    fields.classList.add('hidden');
+    btn.classList.add('hidden');
+  }
+});
+
+// ── CSV 解析 ──
+function parseCSV(text) {
+  const rows = []; let row = []; let cell = ''; let inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+      else if (c === '"') { inQ = false; }
+      else { cell += c; }
+    } else {
+      if (c === '"') { inQ = true; }
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; }
+      else if (c === '\r') {}
+      else { cell += c; }
+    }
+  }
+  if (cell.length || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+
+function parseCohortCSV(text) {
+  const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+  if (rows.length < 2) return [];
+  return rows.slice(1).map(r => ({
+    city: (r[0] || '').trim(),
+    date: (r[1] || '').trim(),
+    time: (r[2] || '').trim(),
+    location: (r[3] || '').trim(),
+    soloInstructor: (r[4] || '').trim(),
+    soloTopic: (r[5] || '').trim(),
+    capacity: 30
+  })).filter(c => c.date);
+}
+
+function parseFlexDate(str) {
+  if (!str) return null;
+  const s = String(str).trim();
+  let y, m, d, mt;
+  if ((mt = s.match(/(\d{4})\s*[\/\-.年]\s*(\d{1,2})\s*[\/\-.月]\s*(\d{1,2})/))) {
+    y = +mt[1]; m = +mt[2]; d = +mt[3];
+  } else if ((mt = s.match(/(\d{1,2})\s*[\/\-月]\s*(\d{1,2})/))) {
+    m = +mt[1]; d = +mt[2];
+  } else {
+    const dd = new Date(s);
+    return isNaN(dd.getTime()) ? null : dd;
+  }
+  if (y === undefined) {
+    const now = new Date(); y = now.getFullYear();
+    if ((new Date(y, m - 1, d) - now) / 86400000 < -30) y += 1;
+  }
+  const out = new Date(y, m - 1, d);
+  return isNaN(out.getTime()) ? null : out;
+}
+
+function daysUntil(dateStr) {
+  const d = parseFlexDate(dateStr);
+  if (!d) return null;
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  d.setHours(0, 0, 0, 0);
+  return Math.round((d - today) / 86400000);
+}
+
+function normCohortKey(label) {
+  const parts = String(label).split('｜');
+  if (parts.length < 2) return String(label);
+  const dt = (parts[1] || '').trim();
+  const sp = dt.indexOf(' ');
+  const datePart = sp >= 0 ? dt.slice(0, sp) : dt;
+  const rest = sp >= 0 ? dt.slice(sp + 1) : '';
+  const pd = parseFlexDate(datePart);
+  const norm = pd ? `${pd.getFullYear()}-${pd.getMonth() + 1}-${pd.getDate()}` : datePart;
+  return [parts[0], (norm + (rest ? ' ' + rest : '')).trim(), parts[2] || ''].join('｜');
+}
+
+function countdownBadge(dateStr) {
+  const days = daysUntil(dateStr);
+  if (days === null) return '<span style="color:var(--text-light);font-size:12px;">日期待定</span>';
+  if (days > 0) return `<span style="color:var(--strong);font-weight:900;font-size:14px;">距開課還有 ${days} 天</span>`;
+  if (days === 0) return '<span style="color:#D97706;font-weight:900;font-size:14px;">今天開課</span>';
+  return '<span style="color:var(--text-light);font-size:12px;">已結束</span>';
+}
+
+function renderCohorts(cohorts, counts) {
+  counts = counts || {};
+  window.__cohorts = cohorts;
+  const list = document.getElementById('cohortList');
+  const select = document.getElementById('f_cohort');
+  list.innerHTML = '';
+  select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+
+  const normCounts = {};
+  Object.keys(counts).forEach(k => {
+    const nk = normCohortKey(k);
+    normCounts[nk] = (normCounts[nk] || 0) + counts[k];
+  });
+  const labelOf = (co) => [co.city, [co.date, co.time].filter(Boolean).join(' '), co.location].filter(Boolean).join('｜');
+  const takenOf = (co) => normCounts[normCohortKey(labelOf(co))] || 0;
+
+  cohorts.forEach((co) => {
+    const label = labelOf(co);
+    const taken = takenOf(co);
+    const remaining = Math.max(0, co.capacity - taken);
+    const full = remaining <= 0;
+    const days = daysUntil(co.date);
+    const closed = days !== null && days <= REG_CUTOFF_DAYS;
+    let statusHtml;
+    if (closed) statusHtml = '<span style="color:#DC2626;font-weight:700;font-size:14px;">報名已截止</span>';
+    else if (full) statusHtml = '<span style="color:#D97706;font-weight:700;font-size:14px;">已額滿 · 開放候補</span>';
+    else statusHtml = `<span style="color:var(--text-mid);font-size:13px;">剩餘名額 <span style="color:var(--strong);font-weight:900;font-size:18px;">${remaining}</span> / ${co.capacity} 人</span>`;
+
+    const soloLine = co.soloInstructor
+      ? `<div class="mt-3 solo-notice">注意:本場為「${co.soloInstructor}」單場專題${co.soloTopic ? '(' + co.soloTopic + ')' : ''},非雙講師四日完整課程。</div>`
+      : '';
+
+    const card = document.createElement('div');
+    card.className = 'cohort-card';
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div class="flex items-center gap-3">
+          <span class="pill-eyebrow">${co.city || '嘉義班'}</span>
+          <span style="font-size:11px;color:var(--text-light);font-family:'Inter',sans-serif;letter-spacing:0.18em;font-weight:700;">COHORT</span>
+        </div>
+        <div class="text-right">${countdownBadge(co.date)}</div>
+      </div>
+      <div class="space-y-2.5 text-sm mb-5" style="color:var(--text-main);">
+        <div class="flex gap-3"><span style="color:var(--text-light);font-size:11px;letter-spacing:0.14em;width:40px;flex-shrink:0;padding-top:3px;font-weight:700;">日期</span><span class="font-black" style="color:var(--deep);">${co.date || '-'}</span></div>
+        <div class="flex gap-3"><span style="color:var(--text-light);font-size:11px;letter-spacing:0.14em;width:40px;flex-shrink:0;padding-top:3px;font-weight:700;">時間</span><span>${co.time || '-'}</span></div>
+        <div class="flex gap-3"><span style="color:var(--text-light);font-size:11px;letter-spacing:0.14em;width:40px;flex-shrink:0;padding-top:3px;font-weight:700;">地點</span><span>${co.location || '-'}</span></div>
+      </div>
+      <div class="pt-4 flex justify-between items-center" style="border-top:1px solid var(--line);">
+        <div>${statusHtml}</div>
+        <a href="#signup" class="btn-primary" style="padding:0.55rem 1.2rem;font-size:13px;">立即報名 →</a>
+      </div>
+      ${soloLine}`;
+    list.appendChild(card);
+
+    const opt = document.createElement('option');
+    opt.value = label;
+    opt.textContent = label + (closed ? '(報名已截止)' : full ? '(候補)' : '');
+    if (closed) opt.disabled = true;
+    select.appendChild(opt);
+  });
+}
+
+// ── 選單變動 · 若是 solo 顯示提示框 ──
+document.getElementById('f_cohort').addEventListener('change', e => {
+  const notice = document.getElementById('soloNotice');
+  const selCo = (window.__cohorts || []).find(c => {
+    const lbl = [c.city, [c.date, c.time].filter(Boolean).join(' '), c.location].filter(Boolean).join('｜');
+    return lbl === e.target.value;
+  });
+  if (selCo && selCo.soloInstructor) {
+    notice.textContent = `注意:本場為「${selCo.soloInstructor}」單場專題${selCo.soloTopic ? '(' + selCo.soloTopic + ')' : ''},非雙講師四日完整課程。`;
+    notice.classList.remove('hidden');
+  } else {
+    notice.classList.add('hidden');
+  }
+});
+
+async function loadCohorts() {
+  let cohorts = COHORTS_FALLBACK;
+  if (CONFIG.COHORTS_CSV_URL && !CONFIG.COHORTS_CSV_URL.includes('PASTE_')) {
+    try {
+      const res = await fetch(CONFIG.COHORTS_CSV_URL);
+      if (res.ok) {
+        const parsed = parseCohortCSV(await res.text());
+        if (parsed.length) cohorts = parsed;
+      }
+    } catch (e) {}
+  }
+  let counts = {};
+  if (CONFIG.SHEET_WEBHOOK && !CONFIG.SHEET_WEBHOOK.includes('PASTE_')) {
+    try {
+      const r = await fetch(CONFIG.SHEET_WEBHOOK + '?action=counts');
+      if (r.ok) counts = await r.json();
+    } catch (e) {}
+  }
+  const upcoming = cohorts.filter(c => {
+    const d = daysUntil(c.date);
+    return d === null || d >= 0;
+  });
+  renderCohorts(upcoming.length ? upcoming : cohorts, counts);
+}
+loadCohorts();
+
+// ── 表單送出 ──
+document.getElementById('signupForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = document.getElementById('submitBtn');
+
+  // 統編 · 必填 · 8 碼
+  const taxId = form.taxId.value.trim();
+  if (!/^\d{8}$/.test(taxId)) {
+    alert('請填寫公司統編(8 位數字)');
+    document.getElementById('f_taxId').focus(); return;
+  }
+
+  if (!form.consent.checked) {
+    alert('請先閱讀並勾選「個人資料蒐集、處理及利用之告知暨同意書」');
+    document.getElementById('f_consent').focus(); return;
+  }
+
+  const referralSel = form.referral.value;
+  const referralVal = referralSel === '其他'
+    ? '其他:' + (form.referralOther.value.trim() || '未填')
+    : referralSel;
+
+  const selCo = (window.__cohorts || []).find(c => {
+    const lbl = [c.city, [c.date, c.time].filter(Boolean).join(' '), c.location].filter(Boolean).join('｜');
+    return lbl === form.cohort.value;
+  });
+  const soloInstructor = (selCo && selCo.soloInstructor) ? selCo.soloInstructor.trim() : '';
+  const soloTopic = (selCo && selCo.soloTopic) ? selCo.soloTopic.trim() : '';
+
+  const data = {
+    type: 'course_signup',
+    timestamp: new Date().toISOString(),
+    name: form.name.value, jobTitle: form.jobTitle.value, email: form.email.value, phone: form.phone.value,
+    gender: form.gender.value, meal: form.meal.value,
+    companyName: form.companyName.value, taxId: taxId, referral: referralVal,
+    cohort: form.cohort.value,
+    soloInstructor: soloInstructor,
+    soloTopic: soloTopic,
+    note: form.note.value,
+    consent: '已同意 ' + new Date().toISOString()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '送出中...';
+
+  try {
+    if (CONFIG.SHEET_WEBHOOK && !CONFIG.SHEET_WEBHOOK.includes('PASTE_')) {
+      await fetch(CONFIG.SHEET_WEBHOOK, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data)
+      });
+    } else {
+      console.warn('[DEMO 模式] 未設定 Apps Script URL,僅 log:', data);
+      alert('目前為測試模式(後端 Apps Script 未部署),資料未真的寫入。');
+    }
+    form.classList.add('hidden');
+    const success = document.getElementById('successBox');
+    success.classList.remove('hidden');
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (err) {
+    alert('送出失敗,請稍後再試');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '送出報名 →';
+  }
+});
+
+// 格式錯誤紅框
+document.getElementById('f_email').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+document.getElementById('f_phone').addEventListener('blur', e => {
+  const v = e.target.value.trim();
+  if (v && !/^[\d\-+()\s]{7,}$/.test(v)) e.target.classList.add('error');
+  else e.target.classList.remove('error');
+});
+</script>
+
+</body>
+</html>
