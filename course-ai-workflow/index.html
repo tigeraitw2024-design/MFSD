@@ -195,42 +195,51 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
 
-  /* ─────── Hero 講師(照 Panasonic ref · 左右分佈 · 高低差 · 橫向無底色標籤)─────── */
+  /* ─────── Hero 講師(照 Panasonic ref · 大 · 重疊 · 標籤貼身 · 底部漸層)─────── */
   .hero-ins-stack {
     position: relative;
     width: 100%;
-    min-height: 480px;
-    padding: 20px 0 0;
+    min-height: 560px;
+    padding: 0;
+    overflow: hidden;
   }
-  /* 底部漸層(照 ref · 從底色往更深的綠漸層) */
+  /* 底部深綠漸層(照 ref · 從上到下漸深 · 讓人物浮凸) */
   .hero-ins-stack::after {
     content: '';
     position: absolute;
     inset: auto 0 0 0;
-    height: 180px;
-    background: linear-gradient(180deg, transparent 0%, rgba(174, 209, 184, 0.4) 50%, rgba(62, 107, 82, 0.35) 100%);
+    height: 280px;
+    background: linear-gradient(180deg,
+      transparent 0%,
+      rgba(174, 209, 184, 0.5) 40%,
+      rgba(62, 107, 82, 0.6) 80%,
+      rgba(31, 58, 43, 0.75) 100%);
     pointer-events: none;
     z-index: 0;
+    border-radius: 0 0 24px 24px;
   }
   .hero-ins {
     position: absolute;
-    width: 48%;
-    display: flex; flex-direction: column; align-items: center;
+    width: 70%;                 /* 放大到 70% 寬 · 製造重疊 */
     z-index: 2;
+    bottom: 0;
   }
-  .hero-ins.left  { left: 0;  top: 30px; }      /* 左講師:稍微高 */
-  .hero-ins.right { right: 0; top: 70px; }      /* 右講師:稍微低(高低差 40px) */
+  .hero-ins.left  { left: -10%;  bottom: 0; z-index: 3; }   /* 左講師在前 · 稍微超出邊緣 */
+  .hero-ins.right { right: -10%; bottom: 50px; z-index: 2;}  /* 右講師在後 · 稍微高 50px 製造錯落 */
   .hero-ins img {
-    width: 100%; max-width: 240px;
+    width: 100%;
     height: auto; display: block;
     object-fit: contain; object-position: center bottom;
-    filter: drop-shadow(0 20px 32px rgba(31,58,43,0.25));
+    filter: drop-shadow(0 24px 40px rgba(31,58,43,0.4));
   }
-  /* 文字橫排 · 無底色 · 直接上字 */
+  /* 文字橫排 · 無底色 · 貼在人物旁邊 */
   .hero-ins .label {
-    margin-top: 8px;
+    position: absolute;
     text-align: center;
+    z-index: 4;
   }
+  .hero-ins.left .label  { top: 10%; right: -10px; text-align: right; }
+  .hero-ins.right .label { top: 15%; left: -10px;  text-align: left; }
   .hero-ins .role {
     display: block;
     font-size: 11px;
@@ -239,26 +248,26 @@
     font-weight: 700;
     margin-bottom: 4px;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.8);
   }
   .hero-ins .name {
     display: block;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
     color: var(--deep);
     letter-spacing: 0.04em;
     line-height: 1.2;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.85);
   }
 
   @media (max-width: 1023px) {
-    .hero-ins-stack { min-height: 400px; }
-    .hero-ins img { max-width: 200px; }
-    .hero-ins .name { font-size: 17px; }
+    .hero-ins-stack { min-height: 480px; }
+    .hero-ins .name { font-size: 18px; }
   }
   @media (max-width: 480px) {
-    .hero-ins-stack { min-height: 340px; padding: 10px 0 0; }
-    .hero-ins.left  { top: 20px; }
-    .hero-ins.right { top: 50px; }
-    .hero-ins img { max-width: 160px; }
+    .hero-ins-stack { min-height: 380px; }
+    .hero-ins.left  { left: -15%; }
+    .hero-ins.right { right: -15%; bottom: 30px; }
     .hero-ins .name { font-size: 15px; }
     .hero-ins .role { font-size: 10px; }
   }
