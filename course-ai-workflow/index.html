@@ -13,7 +13,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="製造業 AI 工作流程 · 嘉義班 · 4日 30h 實體課程">
 
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌱%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/favicon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -549,8 +553,48 @@
     display: inline-flex; align-items: center; justify-content: center;
   }
 
-  /* ─────── 梯次卡 ─────── */
+  /* ─────── 現場照片輪播(照 course-elite · 綠色化配色)─────── */
+  .pstrip {
+    --pw: 220px; --ph: 140px; --pg: 14px;
+    --pr: 14px; --pbg: #fff;
+    --pb: 1.5px solid rgba(31,58,43,0.1);
+    --ps: 0 10px 24px -14px rgba(31,58,43,0.3);
+    position: relative;
+    display: grid; gap: 14px;
+    padding: 10px 0;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .pstrip-row { display: flex; width: max-content; will-change: transform; }
+  .pstrip-left  { animation: pstrip-l var(--pd, 90s) linear infinite; }
+  .pstrip-right { animation: pstrip-r var(--pd, 90s) linear infinite; }
+  .pstrip:hover .pstrip-row { animation-play-state: paused; }
+  .ptile {
+    flex: 0 0 var(--pw); height: var(--ph);
+    margin-right: var(--pg);
+    border-radius: var(--pr);
+    background: var(--pbg); border: var(--pb);
+    overflow: hidden; box-shadow: var(--ps);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  .ptile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .ptile:hover { transform: scale(1.05); filter: brightness(1.06); }
+  @keyframes pstrip-l { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+  @keyframes pstrip-r { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (max-width: 640px) { .pstrip { --pw: 150px; --ph: 100px; --pg: 10px; } }
+  @media (prefers-reduced-motion: reduce) { .pstrip-row { animation: none; } }
+
+  /* ─────── 梯次(橫向 track · 可左右滑 · 照 course-tour)─────── */
+  .cohort-track {
+    display: flex; gap: 1.25rem;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    padding: 0.5rem 0.25rem 1rem;
+    scrollbar-width: none;
+  }
+  .cohort-track::-webkit-scrollbar { display: none; }
   .cohort-card {
+    flex: 0 0 min(380px, 88%);
+    scroll-snap-align: start;
     background: #fff;
     border: 1.5px solid var(--line-strong);
     border-radius: 16px;
@@ -970,6 +1014,46 @@
   </div>
 </section>
 
+<!-- ══════════════════════ LIVE · 課程現場照片輪播 ══════════════════════ -->
+<section id="live" class="py-16 sm:py-24 relative overflow-hidden">
+  <div class="container-wide text-center mb-10 reveal">
+    <div class="section-eyebrow mb-4">★ &nbsp;/&nbsp; 實戰現場</div>
+    <h2 class="section-title mb-4">講師陪跑 · 做到能落地為止</h2>
+    <p class="section-sub">不是坐著聽完就走 · 講師在旁邊一起把工具做出來,卡住的地方當場解,回公司隔天就能用。</p>
+  </div>
+  <div class="pstrip" aria-label="課程現場照片輪播">
+    <div class="pstrip-row pstrip-left">
+      <div class="ptile"><img src="/course-elite/assets/photos/p01.jpg" alt="課程現場 1" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p03.jpg" alt="課程現場 3" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p05.jpg" alt="課程現場 5" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p07.jpg" alt="課程現場 7" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p09.jpg" alt="課程現場 9" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p11.jpg" alt="課程現場 11" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p13.jpg" alt="課程現場 13" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p15.jpg" alt="課程現場 15" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p17.jpg" alt="課程現場 17" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p19.jpg" alt="課程現場 19" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p21.jpg" alt="課程現場 21" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p23.jpg" alt="課程現場 23" loading="lazy" decoding="async"></div>
+    </div>
+    <div class="pstrip-row pstrip-right">
+      <div class="ptile"><img src="/course-elite/assets/photos/p02.jpg" alt="課程現場 2" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p04.jpg" alt="課程現場 4" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p06.jpg" alt="課程現場 6" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p08.jpg" alt="課程現場 8" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p10.jpg" alt="課程現場 10" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p12.jpg" alt="課程現場 12" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p14.jpg" alt="課程現場 14" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p16.jpg" alt="課程現場 16" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p18.jpg" alt="課程現場 18" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p20.jpg" alt="課程現場 20" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p22.jpg" alt="課程現場 22" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p24.jpg" alt="課程現場 24" loading="lazy" decoding="async"></div>
+    </div>
+  </div>
+  <p class="text-center text-[13px] mt-6 tracking-[0.18em]" style="color:var(--text-light)">※ 課程照片</p>
+</section>
+
 <!-- ══════════════════════ COHORTS · 開課資訊 ══════════════════════ -->
 <section id="cohorts" class="py-16 sm:py-24 relative">
   <div class="container-wide">
@@ -980,7 +1064,7 @@
     </div>
 
     <div class="max-w-3xl mx-auto">
-      <div id="cohortList" class="space-y-5"></div>
+      <div id="cohortList" class="cohort-track"></div>
     </div>
   </div>
 </section>
