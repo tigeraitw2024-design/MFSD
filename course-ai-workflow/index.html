@@ -195,55 +195,95 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
 
-  /* ─────── Hero 講師(照 ref · 去背大照片直接浮 · 無底卡 · 上下重疊堆疊)─────── */
+  /* ─────── Hero 講師(照 ref 日系海報 · 斜橢圓色塊 + 人物壓左上 + 直書姓名)─────── */
   .hero-ins-stack {
     position: relative;
     width: 100%;
-    min-height: 540px;
+    min-height: 560px;
   }
   .hero-ins {
     position: absolute;
-    display: flex; align-items: flex-end; gap: 0.5rem;
+    width: 340px;
+    height: 260px;
   }
-  .hero-ins.top    { top: 0;    right: 0; }
-  .hero-ins.bottom { bottom: 0; right: 10%; }   /* 下講師稍微往左錯開,製造重疊感 */
-  .hero-ins img {
-    width: 230px; height: auto;
-    object-fit: contain; object-position: bottom;
+  .hero-ins.top    { top: 0;    right: 10px; }
+  .hero-ins.bottom { bottom: 0; right: 60px; }   /* 下講師稍微往左錯開,製造重疊感 */
+
+  /* 斜向橢圓色塊(背景) */
+  .hero-ins .blob {
+    position: absolute;
+    right: 30px; bottom: 10px;
+    width: 240px; height: 180px;
+    border-radius: 50%;
+    transform: rotate(-14deg);
+    z-index: 1;
+    box-shadow: 0 20px 40px -18px rgba(31,58,43,0.3);
+  }
+  .hero-ins.top .blob    { background: var(--mid); }    /* 上講師:中綠 */
+  .hero-ins.bottom .blob { background: var(--deep); }   /* 下講師:深綠(更強) */
+
+  /* 去背人物照片 · 切橢圓 · 壓在色塊左上角 */
+  .hero-ins .photo {
+    position: absolute;
+    top: -10px; left: 0;
+    width: 230px; height: 260px;
+    z-index: 2;
+    overflow: hidden;
+    /* 傾斜橢圓切,跟色塊同方向 */
+    clip-path: ellipse(55% 58% at 48% 42%);
+  }
+  .hero-ins .photo img {
+    width: 100%; height: 100%;
+    object-fit: contain; object-position: center bottom;
     display: block;
-    filter: drop-shadow(0 10px 24px rgba(31,58,43,0.2));
   }
+
+  /* 右側直書姓名+頭銜 */
   .hero-ins .label {
+    position: absolute;
+    right: 0; top: 20px;
     writing-mode: vertical-rl;
     text-orientation: upright;
-    letter-spacing: 0.1em;
-    padding: 4px 0;
-    align-self: center;
-    display: flex; flex-direction: column; gap: 0.5rem;
+    z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    height: 220px;
   }
   .hero-ins .role {
-    display: inline-block;
     writing-mode: horizontal-tb;
+    text-orientation: mixed;
+    display: inline-block;
     font-size: 10px; letter-spacing: 0.22em;
     background: var(--strong); color: #fff;
     padding: 3px 10px; border-radius: 999px;
     font-weight: 700;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
-    text-orientation: mixed;
     white-space: nowrap;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    padding: 10px 4px;
+    letter-spacing: 0.18em;
+    line-height: 1.1;
   }
   .hero-ins .name {
-    font-size: 20px; font-weight: 900; color: var(--deep);
-    letter-spacing: 0.1em;
+    font-size: 22px; font-weight: 900; color: var(--deep);
+    letter-spacing: 0.14em;
+    line-height: 1.1;
   }
+
   @media (max-width: 1023px) {
-    .hero-ins-stack { min-height: 440px; max-width: 380px; margin: 0 auto; }
-    .hero-ins img { width: 190px; }
+    .hero-ins-stack { min-height: 460px; max-width: 380px; margin: 0 auto; }
+    .hero-ins { width: 300px; height: 220px; }
+    .hero-ins .blob { width: 210px; height: 160px; }
+    .hero-ins .photo { width: 200px; height: 220px; }
+    .hero-ins .name { font-size: 19px; }
   }
   @media (max-width: 480px) {
-    .hero-ins-stack { min-height: 380px; max-width: 320px; }
-    .hero-ins img { width: 160px; }
+    .hero-ins-stack { min-height: 400px; max-width: 320px; }
+    .hero-ins { width: 260px; height: 200px; }
+    .hero-ins .blob { width: 180px; height: 140px; }
+    .hero-ins .photo { width: 170px; height: 200px; }
     .hero-ins .name { font-size: 17px; }
+    .hero-ins .label { height: 180px; }
   }
 
   /* ─────── 講師獨立 section 卡(圓形頭像 · 單張大)─────── */
@@ -637,22 +677,24 @@
         </div>
       </div>
 
-      <!-- 右:講師去背大照 · 上下堆疊重疊(照 ref · 沒有卡 · 直書姓名)-->
+      <!-- 右:講師(照 ref · 斜橢圓色塊 + 人物壓左上 + 直書姓名 · 上下堆疊)-->
       <div class="lg:col-span-5 reveal from-right">
         <div class="hero-ins-stack">
           <div class="hero-ins top">
+            <div class="blob"></div>
+            <div class="photo"><img src="assets/instructor-chang.png" alt="張惟翔 · AI 增幅者" loading="eager" decoding="async"></div>
             <div class="label">
               <span class="role">AI 增幅者</span>
               <span class="name">張惟翔</span>
             </div>
-            <img src="assets/instructor-chang.png" alt="張惟翔 · AI 增幅者" loading="eager" decoding="async">
           </div>
           <div class="hero-ins bottom">
+            <div class="blob"></div>
+            <div class="photo"><img src="assets/instructor-leo.png" alt="謝侑霖 LEO · AI 自動症" loading="eager" decoding="async"></div>
             <div class="label">
               <span class="role">AI 自動症</span>
               <span class="name">謝侑霖 LEO</span>
             </div>
-            <img src="assets/instructor-leo.png" alt="謝侑霖 LEO · AI 自動症" loading="eager" decoding="async">
           </div>
         </div>
       </div>
