@@ -302,13 +302,12 @@
     outline-offset: -6px;
   }
   .instructor-photo img {
-    width: 115%; height: 115%;
-    object-fit: contain;
-    object-position: center 10%;
+    width: 100%; height: 100%;
+    object-fit: cover;          /* 填滿圓框 · 底部不留缺口 */
+    object-position: center 18%;/* 錨點稍微往上 · 保留頭頂 · 身體往下填 */
     display: block;
     position: absolute;
-    left: 50%; top: 55%;
-    transform: translate(-50%, -50%);
+    inset: 0;
   }
   @media (max-width: 640px) {
     .instructor-photo { width: 220px; }   /* 192 × 1.15 */
@@ -628,6 +627,8 @@
   /* ─────── FAQ-ish details(保留備用)─────── */
   details summary { list-style: none; cursor: pointer; }
   details summary::-webkit-details-marker { display: none; }
+  .faq-icon { transition: transform 0.3s ease; display: inline-block; }
+  details[open] .faq-icon { transform: rotate(45deg); }
 
   /* ─────── 手機微調 ─────── */
   @media (max-width: 640px) {
@@ -661,6 +662,7 @@
       <a href="#goals" class="nav-link">能力目標</a>
       <a href="#syllabus" class="nav-link">單元大綱</a>
       <a href="#instructors" class="nav-link">講師</a>
+      <a href="#faq" class="nav-link">常見問題</a>
       <a href="#cohorts" class="nav-link">開課資訊</a>
       <a href="#signup" class="btn-primary" style="padding:0.5rem 1.3rem; font-size:13px;">立即報名</a>
     </div>
@@ -1025,35 +1027,125 @@
   </div>
   <div class="pstrip" aria-label="課程現場照片輪播">
     <div class="pstrip-row pstrip-left">
-      <div class="ptile"><img src="/course-elite/assets/photos/p01.jpg" alt="課程現場 1" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p03.jpg" alt="課程現場 3" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p05.jpg" alt="課程現場 5" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p07.jpg" alt="課程現場 7" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p09.jpg" alt="課程現場 9" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p11.jpg" alt="課程現場 11" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p13.jpg" alt="課程現場 13" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p15.jpg" alt="課程現場 15" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p17.jpg" alt="課程現場 17" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p19.jpg" alt="課程現場 19" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p21.jpg" alt="課程現場 21" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p23.jpg" alt="課程現場 23" loading="lazy" decoding="async"></div>
+      <!-- 第一份 12 張 -->
+      <div class="ptile"><img src="/course-elite/assets/photos/p01.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p03.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p05.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p07.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p09.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p11.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p13.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p15.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p17.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p19.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p21.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p23.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <!-- 第二份(重複)· 用於 -50% 循環無縫銜接 -->
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p01.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p03.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p05.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p07.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p09.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p11.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p13.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p15.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p17.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p19.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p21.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p23.jpg" alt="" loading="lazy" decoding="async"></div>
     </div>
     <div class="pstrip-row pstrip-right">
-      <div class="ptile"><img src="/course-elite/assets/photos/p02.jpg" alt="課程現場 2" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p04.jpg" alt="課程現場 4" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p06.jpg" alt="課程現場 6" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p08.jpg" alt="課程現場 8" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p10.jpg" alt="課程現場 10" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p12.jpg" alt="課程現場 12" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p14.jpg" alt="課程現場 14" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p16.jpg" alt="課程現場 16" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p18.jpg" alt="課程現場 18" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p20.jpg" alt="課程現場 20" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p22.jpg" alt="課程現場 22" loading="lazy" decoding="async"></div>
-      <div class="ptile"><img src="/course-elite/assets/photos/p24.jpg" alt="課程現場 24" loading="lazy" decoding="async"></div>
+      <!-- 第一份 12 張 -->
+      <div class="ptile"><img src="/course-elite/assets/photos/p02.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p04.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p06.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p08.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p10.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p12.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p14.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p16.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p18.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p20.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p22.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <div class="ptile"><img src="/course-elite/assets/photos/p24.jpg" alt="課程現場" loading="lazy" decoding="async"></div>
+      <!-- 第二份(重複)· 用於 -50% 循環無縫銜接 -->
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p02.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p04.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p06.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p08.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p10.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p12.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p14.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p16.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p18.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p20.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p22.jpg" alt="" loading="lazy" decoding="async"></div>
+      <div class="ptile" aria-hidden="true"><img src="/course-elite/assets/photos/p24.jpg" alt="" loading="lazy" decoding="async"></div>
     </div>
   </div>
   <p class="text-center text-[13px] mt-6 tracking-[0.18em]" style="color:var(--text-light)">※ 課程照片</p>
+</section>
+
+<!-- ══════════════════════ FAQ · 常見問題 ══════════════════════ -->
+<section id="faq" class="py-16 sm:py-24 relative">
+  <div class="container-wide" style="max-width:820px;">
+    <div class="text-center mb-12 reveal">
+      <div class="section-eyebrow mb-4">07 &nbsp;/&nbsp; FAQ</div>
+      <h2 class="section-title mb-4">常見問題</h2>
+    </div>
+    <div class="space-y-3">
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold tracking-[0.2em]" style="color:var(--strong);">Q 01</span>
+            <span class="font-bold" style="color:var(--deep);">需要程式基礎嗎?</span>
+          </div>
+          <span class="faq-icon text-2xl" style="color:var(--strong);">＋</span>
+        </summary>
+        <p class="mt-4 leading-relaxed pl-16 text-sm" style="color:var(--text-mid);">不用。本課程以 Low-Code / No-Code 工具為主(n8n、Agent 平台、提示詞工程),搭配生活化範例,零程式基礎的在職員工也能跟上並產出。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold tracking-[0.2em]" style="color:var(--strong);">Q 02</span>
+            <span class="font-bold" style="color:var(--deep);">課程多長?四天 30 小時怎麼安排?</span>
+          </div>
+          <span class="faq-icon text-2xl" style="color:var(--strong);">＋</span>
+        </summary>
+        <p class="mt-4 leading-relaxed pl-16 text-sm" style="color:var(--text-mid);">共 4 天 30 小時實體課程(2026/11/9、11/10、11/16、11/17),每日 09:00-17:30(含午休)。分兩週交替進行,中間一週讓學員消化、把課堂實作搬回公司現場試跑。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold tracking-[0.2em]" style="color:var(--strong);">Q 03</span>
+            <span class="font-bold" style="color:var(--deep);">要帶什麼設備?有提供工具嗎?</span>
+          </div>
+          <span class="faq-icon text-2xl" style="color:var(--strong);">＋</span>
+        </summary>
+        <p class="mt-4 leading-relaxed pl-16 text-sm" style="color:var(--text-mid);">請攜帶個人筆電(MacOS / Windows 皆可)· 當日提供實作用的 AI Agent 平台帳號與環境,學員實作完成的 Agent / 自動化流程可直接帶回公司延續使用。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold tracking-[0.2em]" style="color:var(--strong);">Q 04</span>
+            <span class="font-bold" style="color:var(--deep);">適合哪些產業?不是製造業可以報嗎?</span>
+          </div>
+          <span class="faq-icon text-2xl" style="color:var(--strong);">＋</span>
+        </summary>
+        <p class="mt-4 leading-relaxed pl-16 text-sm" style="color:var(--text-mid);">主軸對應電子資訊 / 電子零組件 / EMS / PCB 業的實際場景(SOP 轉化、技術文件、BOM 盤點、產線營運)· 其他製造或服務業也歡迎報名,實作題材可自行帶部門工作來拆解。</p>
+      </details>
+      <details class="card p-5 reveal">
+        <summary class="flex justify-between items-center gap-4 cursor-pointer">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-bold tracking-[0.2em]" style="color:var(--strong);">Q 05</span>
+            <span class="font-bold" style="color:var(--deep);">完訓後有後續支援嗎?</span>
+          </div>
+          <span class="faq-icon text-2xl" style="color:var(--strong);">＋</span>
+        </summary>
+        <p class="mt-4 leading-relaxed pl-16 text-sm" style="color:var(--text-mid);">完訓後持續開放學員群組,課堂上建立的 AI Skill / 流程自動化回公司遇到的問題,講師會定期進群協助疑難排解,也會不定期分享延伸應用案例。</p>
+      </details>
+    </div>
+  </div>
 </section>
 
 <!-- ══════════════════════ COHORTS · 開課資訊 ══════════════════════ -->
