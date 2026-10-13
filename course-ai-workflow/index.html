@@ -199,7 +199,7 @@
     display: flex; align-items: center; gap: 0.5rem;
   }
 
-  /* ─────── Hero 講師(照片自帶漸層 · 整體往上置中 · 標籤徹底往外推)─────── */
+  /* ─────── Hero 講師(照片自帶漸層 · 整體置中 · 進場動畫)─────── */
   .hero-ins-stack {
     position: relative;
     width: 100%;
@@ -208,24 +208,30 @@
     overflow: visible;
     background: transparent;
   }
-  /* 照片已內建底部漸層,CSS 不再加 */
   .hero-ins {
     position: absolute;
     width: 78%;
-    z-index: 2;
+    opacity: 0;
+    animation: heroInsIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
   }
-  .hero-ins.left  { left: -14%;  top: 0;     z-index: 3; }   /* 左講師:整體往上 */
-  .hero-ins.right { right: -14%; top: 48px;  z-index: 2; }   /* 右講師:低 48px */
+  /* z-index 對調:右講師在前、左講師在後 */
+  .hero-ins.left  { left: -14%;  top: 0;     z-index: 2; animation-delay: 0.3s; }
+  .hero-ins.right { right: -14%; top: 48px;  z-index: 3; animation-delay: 0.5s; }
   .hero-ins img {
     width: 100%;
     height: auto; display: block;
     object-fit: contain; object-position: center bottom;
-    filter: drop-shadow(0 24px 40px rgba(31,58,43,0.35));
+    /* 不加 drop-shadow(避免跟照片內建漸層打架 · 製造斷層)*/
   }
-  /* 標籤:徹底推到容器外側 · 不壓到人物 */
+  @keyframes heroInsIn {
+    0%   { opacity: 0; transform: translateY(32px) scale(0.96); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* 標籤:徹底推到容器外側 · 加厚暈光陰影讓字清楚可讀 */
   .hero-ins .label {
     position: absolute;
-    z-index: 4;
+    z-index: 10;
     top: 38%;
   }
   .hero-ins.left  .label { left: -8%;  text-align: left; }
@@ -238,7 +244,12 @@
     font-weight: 700;
     margin-bottom: 4px;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
-    text-shadow: 0 1px 3px rgba(255,255,255,0.9);
+    /* 加厚暈光(white halo)· 字壓到人也看得清 */
+    text-shadow:
+      0 0 8px rgba(255,255,255,0.95),
+      0 0 16px rgba(255,255,255,0.85),
+      0 0 24px rgba(255,255,255,0.7),
+      0 1px 3px rgba(255,255,255,1);
   }
   .hero-ins .name {
     display: block;
@@ -247,8 +258,15 @@
     color: var(--deep);
     letter-spacing: 0.04em;
     line-height: 1.2;
-    text-shadow: 0 1px 4px rgba(255,255,255,0.95);
     white-space: nowrap;
+    text-shadow:
+      0 0 10px rgba(255,255,255,0.98),
+      0 0 20px rgba(255,255,255,0.9),
+      0 0 32px rgba(255,255,255,0.75),
+      0 2px 4px rgba(255,255,255,1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-ins { opacity: 1; animation: none; }
   }
 
   @media (max-width: 1023px) {
@@ -964,7 +982,7 @@
       <div class="reveal from-left">
         <div class="instructor-card">
           <div class="instructor-photo" style="aspect-ratio:4/5;">
-            <img src="assets/instructor-chang.png" alt="張惟翔 · AI 增幅者">
+            <img src="assets/instructor-chang-full.png" alt="張惟翔 · AI 增幅者">
           </div>
           <div class="instructor-label">
             <div class="role">AI 增幅者</div>
@@ -982,7 +1000,7 @@
       <div class="reveal from-right" style="transition-delay:0.15s">
         <div class="instructor-card">
           <div class="instructor-photo" style="aspect-ratio:4/5;">
-            <img src="assets/instructor-leo.png" alt="謝侑霖 LEO · AI 自動症">
+            <img src="assets/instructor-leo-full.png" alt="謝侑霖 LEO · AI 自動症">
           </div>
           <div class="instructor-label">
             <div class="role">AI 自動症</div>
