@@ -480,53 +480,119 @@
     line-height: 1.85;
   }
 
-  /* ─────── 能力條目 ─────── */
+  /* ─────── 能力條目(新 · 左大數字 + 右文字 + 底色軌道)─────── */
   .goal-row {
-    display: flex; gap: 1rem; align-items: flex-start;
-    padding: 1.1rem 1.25rem;
+    position: relative;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 1.2rem; align-items: center;
+    padding: 1.6rem 1.6rem 1.6rem 0;
     background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    transition: border-color 0.25s ease, transform 0.25s ease;
+    border-radius: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+  }
+  .goal-row::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: linear-gradient(180deg, var(--strong), var(--mid));
+    transform: scaleY(0.4);
+    transform-origin: center;
+    transition: transform 0.4s ease;
   }
   .goal-row:hover {
-    border-color: var(--strong);
-    transform: translateX(3px);
+    transform: translateX(6px);
+    box-shadow: 0 20px 40px -22px rgba(31, 58, 43, 0.3);
   }
+  .goal-row:hover::before { transform: scaleY(1); }
   .goal-num {
     font-family: 'Inter', sans-serif;
-    font-weight: 900; font-size: 1.75rem;
-    color: var(--strong); line-height: 1;
-    flex-shrink: 0; min-width: 44px;
+    font-weight: 900; font-size: 3.6rem;
+    color: var(--deep); line-height: 0.9;
+    letter-spacing: -0.04em;
+    text-align: center;
+    position: relative;
+  }
+  .goal-num::after {
+    content: '';
+    display: block;
+    width: 32px; height: 3px;
+    background: var(--strong);
+    margin: 10px auto 0;
+    border-radius: 2px;
   }
   .goal-title {
-    font-weight: 900; font-size: 16px; color: var(--deep);
-    margin-bottom: 4px;
+    font-weight: 900; font-size: 20px; color: var(--deep);
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+  }
+  .goal-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px;
+  }
+  .goal-tag {
+    font-size: 11px; letter-spacing: 0.1em;
+    padding: 3px 10px; border-radius: 999px;
+    background: #E7F0E5; color: var(--deep);
+    font-weight: 700;
   }
   .goal-desc {
-    color: var(--text-mid); font-size: 14px; line-height: 1.75;
+    color: var(--text-mid); font-size: 15px; line-height: 1.8;
+  }
+  @media (max-width: 480px) {
+    .goal-row { grid-template-columns: 60px 1fr; padding: 1.2rem 1.2rem 1.2rem 0; gap: 0.9rem; }
+    .goal-num { font-size: 2.4rem; }
+    .goal-num::after { width: 20px; height: 2px; }
+    .goal-title { font-size: 17px; }
   }
 
-  /* ─────── 單元內容(大綱卡)─────── */
+  /* ─────── 單元內容(新 · 左 sticky 標題欄 + 右檢核清單)─────── */
   .unit-card {
     background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 2px 10px -4px rgba(31, 58, 43, 0.08);
   }
   .unit-card:hover {
-    border-color: var(--line-strong);
-    box-shadow: 0 10px 26px -14px rgba(31, 58, 43, 0.2);
+    box-shadow: 0 20px 40px -20px rgba(31, 58, 43, 0.22);
+  }
+  /* 左彩條 */
+  .unit-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: linear-gradient(180deg, var(--deep), var(--strong));
+  }
+  .unit-grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 0;
+  }
+  @media (max-width: 768px) {
+    .unit-grid { grid-template-columns: 1fr; }
   }
   .unit-head-bar {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1.1rem 1.4rem;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+    padding: 1.6rem 1.4rem 1.6rem 1.8rem;
     background: var(--bg-contrast);
-    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  @media (max-width: 768px) {
+    .unit-head-bar { border-right: none; border-bottom: 1px solid var(--line); padding: 1.3rem 1.4rem 1.3rem 1.8rem; flex-direction: row; align-items: center; }
+  }
+  .unit-head-bar .unit-number {
+    font-size: 3.2rem;
+    color: var(--strong);
+  }
+  @media (max-width: 768px) {
+    .unit-head-bar .unit-number { font-size: 2.6rem; }
   }
   .unit-content {
-    padding: 1.3rem 1.4rem 1.5rem;
+    padding: 1.6rem 1.8rem 1.8rem;
   }
   .unit-content ol {
     counter-reset: li;
@@ -535,18 +601,32 @@
   }
   .unit-content ol li {
     counter-increment: li;
-    padding-left: 32px;
+    padding: 10px 0 12px 36px;
     position: relative;
-    margin-bottom: 10px;
     color: var(--text-main);
-    font-size: 14.5px;
-    line-height: 1.85;
+    font-size: 15px;
+    line-height: 1.8;
+    border-bottom: 1px dashed rgba(31,58,43,0.08);
   }
+  .unit-content ol li:last-child { border-bottom: none; }
   .unit-content ol li::before {
-    content: counter(li);
-    position: absolute; left: 0; top: 2px;
-    width: 22px; height: 22px;
+    content: '';
+    position: absolute; left: 0; top: 18px;
+    width: 20px; height: 20px;
     border-radius: 50%;
+    background: var(--bg-contrast);
+    border: 1.5px solid var(--strong);
+  }
+  .unit-content ol li::after {
+    content: '';
+    position: absolute; left: 7px; top: 25px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--strong);
+  }
+  /* 保留備用:原本的 counter 字樣式(新設計不用)*/
+  .unit-content ol li.show-number::before {
+    content: counter(li);
     background: var(--bg-contrast);
     color: var(--deep);
     font-family: 'Inter', sans-serif;
@@ -837,11 +917,16 @@
       <p class="section-sub">完訓後能帶走的、能用在工作現場的具體能力。</p>
     </div>
 
-    <div class="max-w-3xl mx-auto space-y-3">
+    <div class="max-w-3xl mx-auto space-y-4">
       <div class="goal-row reveal">
         <div class="goal-num">01</div>
         <div>
           <div class="goal-title">AI 基本認知能力</div>
+          <div class="goal-tags">
+            <span class="goal-tag">核心概念</span>
+            <span class="goal-tag">能力邊界</span>
+            <span class="goal-tag">應用場景</span>
+          </div>
           <div class="goal-desc">理解生成式 AI、通用模型及多模態 AI 的核心概念、能力邊界與企業應用場景。</div>
         </div>
       </div>
@@ -849,6 +934,11 @@
         <div class="goal-num">02</div>
         <div>
           <div class="goal-title">AI 任務設計能力</div>
+          <div class="goal-tags">
+            <span class="goal-tag">SOP 拆解</span>
+            <span class="goal-tag">結構化任務</span>
+            <span class="goal-tag">Know-how 顯性化</span>
+          </div>
           <div class="goal-desc">能將企業 Know-how、SOP 與工作流程拆解為 AI 可執行的結構化任務。</div>
         </div>
       </div>
@@ -856,6 +946,11 @@
         <div class="goal-num">03</div>
         <div>
           <div class="goal-title">企業 AI 建置能力</div>
+          <div class="goal-tags">
+            <span class="goal-tag">Agent 建置</span>
+            <span class="goal-tag">Low-Code 平台</span>
+            <span class="goal-tag">原型驗證</span>
+          </div>
           <div class="goal-desc">能實際操作 AI Agent 與自動化平台,建立企業內部 AI 應用原型。</div>
         </div>
       </div>
@@ -863,6 +958,11 @@
         <div class="goal-num">04</div>
         <div>
           <div class="goal-title">流程自動化思考</div>
+          <div class="goal-tags">
+            <span class="goal-tag">流程設計</span>
+            <span class="goal-tag">人工審核節點</span>
+            <span class="goal-tag">系統串接</span>
+          </div>
           <div class="goal-desc">能設計並建構含人工審核節點之自動化流程,串接 AI 模型與企業既有系統。</div>
         </div>
       </div>
@@ -870,6 +970,11 @@
         <div class="goal-num">05</div>
         <div>
           <div class="goal-title">AI 導入實作</div>
+          <div class="goal-tags">
+            <span class="goal-tag">場景辨識</span>
+            <span class="goal-tag">導入規劃</span>
+            <span class="goal-tag">治理機制</span>
+          </div>
           <div class="goal-desc">能辨識企業適合導入 AI 之工作場景,規劃應用、流程自動化及治理機制。</div>
         </div>
       </div>
@@ -891,60 +996,66 @@
 
       <!-- 單元 01 -->
       <div class="unit-card reveal">
-        <div class="unit-head-bar">
-          <div class="unit-number">01</div>
-          <div>
-            <div class="unit-badge mb-1">從屬主題 1</div>
-            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">生成式 AI 原理與能力邊界</h3>
+        <div class="unit-grid">
+          <div class="unit-head-bar">
+            <div class="unit-number">01</div>
+            <div>
+              <div class="unit-badge mb-2">從屬主題 1</div>
+              <h3 class="font-black" style="color:var(--deep);line-height:1.4;font-size:17px;">生成式 AI 原理與能力邊界</h3>
+            </div>
           </div>
-        </div>
-        <div class="unit-content">
-          <ol>
-            <li>大型語言模型運作邏輯、Token 推論的白話理解、AI 幻覺成因與製造業正確性風險</li>
-            <li>通用模型選型比較:ChatGPT / Claude / Gemini / 地端開源模型之定位;雲端 vs 本機/私有部署之成本、資安與效能</li>
-            <li>企業使用規範:AI 資安風險、資料政策與使用倫理</li>
-            <li>製造業 AI 應用場景盤點:生產管理、行政作業、文件處理、資訊分析與跨部門協作之應用潛力與導入優先順序</li>
-            <li>演練:分組盤點部門日常任務,標記可導入 AI 之工作場景</li>
-          </ol>
+          <div class="unit-content">
+            <ol>
+              <li>大型語言模型運作邏輯、Token 推論的白話理解、AI 幻覺成因與製造業正確性風險</li>
+              <li>通用模型選型比較:ChatGPT / Claude / Gemini / 地端開源模型之定位;雲端 vs 本機/私有部署之成本、資安與效能</li>
+              <li>企業使用規範:AI 資安風險、資料政策與使用倫理</li>
+              <li>製造業 AI 應用場景盤點:生產管理、行政作業、文件處理、資訊分析與跨部門協作之應用潛力與導入優先順序</li>
+              <li>演練:分組盤點部門日常任務,標記可導入 AI 之工作場景</li>
+            </ol>
+          </div>
         </div>
       </div>
 
       <!-- 單元 02 -->
       <div class="unit-card reveal">
-        <div class="unit-head-bar">
-          <div class="unit-number">02</div>
-          <div>
-            <div class="unit-badge mb-1">從屬主題 1</div>
-            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">提示詞工程與企業 SOP 任務拆解</h3>
+        <div class="unit-grid">
+          <div class="unit-head-bar">
+            <div class="unit-number">02</div>
+            <div>
+              <div class="unit-badge mb-2">從屬主題 1</div>
+              <h3 class="font-black" style="color:var(--deep);line-height:1.4;font-size:17px;">提示詞工程與企業 SOP 任務拆解</h3>
+            </div>
           </div>
-        </div>
-        <div class="unit-content">
-          <ol>
-            <li>提示詞三大框架:角色任務(Role–Task–Format)、情境約束(Context–Constraint–Example)、流程分解(Step-by-Step)</li>
-            <li>調校與輸出控制:迭代技巧、反例設計、固定欄位輸出以銜接後續系統</li>
-            <li>SOP 轉化:隱性知識顯性化訪談法;任務拆解四步(輸入、判斷規則、輸出、驗收)</li>
-            <li>實作:各組挑選一份現行 SOP,拆解為 AI 可執行之任務規格書,並產出部門共用提示詞模板</li>
-          </ol>
+          <div class="unit-content">
+            <ol>
+              <li>提示詞三大框架:角色任務(Role–Task–Format)、情境約束(Context–Constraint–Example)、流程分解(Step-by-Step)</li>
+              <li>調校與輸出控制:迭代技巧、反例設計、固定欄位輸出以銜接後續系統</li>
+              <li>SOP 轉化:隱性知識顯性化訪談法;任務拆解四步(輸入、判斷規則、輸出、驗收)</li>
+              <li>實作:各組挑選一份現行 SOP,拆解為 AI 可執行之任務規格書,並產出部門共用提示詞模板</li>
+            </ol>
+          </div>
         </div>
       </div>
 
       <!-- 單元 03 -->
       <div class="unit-card reveal">
-        <div class="unit-head-bar">
-          <div class="unit-number">03</div>
-          <div>
-            <div class="unit-badge mb-1">從屬主題 2</div>
-            <h3 class="font-black text-base sm:text-lg" style="color:var(--deep);line-height:1.4;">企業 AI Agent 概念與知識來源整備</h3>
+        <div class="unit-grid">
+          <div class="unit-head-bar">
+            <div class="unit-number">03</div>
+            <div>
+              <div class="unit-badge mb-2">從屬主題 2</div>
+              <h3 class="font-black" style="color:var(--deep);line-height:1.4;font-size:17px;">企業 AI Agent 概念與知識來源整備</h3>
+            </div>
           </div>
-        </div>
-        <div class="unit-content">
-          <ol>
-            <li>思維轉換:AI 工具 vs AI Agent 之本質差異;Agent 四大組成(角色指令、知識來源、可用工具、輸出規格)</li>
-            <li>平台導覽與環境啟用:工作區設定與權限角色配置</li>
-            <li>資料整備實務:以 Excel 或文字檔為輸入源,欄位設計、資料清理與避免 AI 誤讀之表格寫法</li>
-            <li>知識來源設定:知識切分與檢索參數調整</li>
-            <li>實作:完成工作區設定,匯入整備後資料並建立具備知識來源之 Agent 原型</li>
-          </ol>
+          <div class="unit-content">
+            <ol>
+              <li>思維轉換:AI 工具 vs AI Agent 之本質差異;Agent 四大組成(角色指令、知識來源、可用工具、輸出規格)</li>
+              <li>平台導覽與環境啟用:工作區設定與權限角色配置</li>
+              <li>資料整備實務:以 Excel 或文字檔為輸入源,欄位設計、資料清理與避免 AI 誤讀之表格寫法</li>
+              <li>知識來源設定:知識切分與檢索參數調整</li>
+              <li>實作:完成工作區設定,匯入整備後資料並建立具備知識來源之 Agent 原型</li>
+            </ol>
+          </div>
         </div>
       </div>
 
