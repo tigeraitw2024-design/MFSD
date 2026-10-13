@@ -203,20 +203,20 @@
   .hero-ins-stack {
     position: relative;
     width: 100%;
-    min-height: 540px;
+    min-height: 620px;        /* 540 × 1.15 */
     padding: 0;
     overflow: visible;
     background: transparent;
   }
   .hero-ins {
     position: absolute;
-    width: 78%;
+    width: 90%;               /* 78% × 1.15 */
     opacity: 0;
     animation: heroInsIn 1s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
   }
   /* z-index 對調:右講師在前、左講師在後 */
-  .hero-ins.left  { left: -14%;  top: 0;     z-index: 2; animation-delay: 0.3s; }
-  .hero-ins.right { right: -14%; top: 48px;  z-index: 3; animation-delay: 0.5s; }
+  .hero-ins.left  { left: -20%;  top: 0;     z-index: 2; animation-delay: 0.3s; }
+  .hero-ins.right { right: -20%; top: 55px;  z-index: 3; animation-delay: 0.5s; }
   .hero-ins img {
     width: 100%;
     height: auto; display: block;
@@ -238,13 +238,12 @@
   .hero-ins.right .label { right: -8%; text-align: right; }
   .hero-ins .role {
     display: block;
-    font-size: 11px;
+    font-size: 13px;          /* 11 × 1.15 ≈ 13 */
     letter-spacing: 0.22em;
     color: var(--strong);
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
-    /* 加厚暈光(white halo)· 字壓到人也看得清 */
     text-shadow:
       0 0 8px rgba(255,255,255,0.95),
       0 0 16px rgba(255,255,255,0.85),
@@ -253,7 +252,7 @@
   }
   .hero-ins .name {
     display: block;
-    font-size: 22px;
+    font-size: 25px;          /* 22 × 1.15 ≈ 25 */
     font-weight: 900;
     color: var(--deep);
     letter-spacing: 0.04em;
@@ -270,15 +269,15 @@
   }
 
   @media (max-width: 1023px) {
-    .hero-ins-stack { min-height: 460px; }
-    .hero-ins .name { font-size: 18px; }
+    .hero-ins-stack { min-height: 530px; }   /* 460 × 1.15 */
+    .hero-ins .name { font-size: 21px; }
   }
   @media (max-width: 480px) {
-    .hero-ins-stack { min-height: 380px; }
-    .hero-ins.left  { left: -16%; }
-    .hero-ins.right { right: -16%; top: 32px; }
-    .hero-ins .name { font-size: 15px; }
-    .hero-ins .role { font-size: 10px; }
+    .hero-ins-stack { min-height: 440px; }   /* 380 × 1.15 */
+    .hero-ins.left  { left: -18%; }
+    .hero-ins.right { right: -18%; top: 37px; }
+    .hero-ins .name { font-size: 17px; }
+    .hero-ins .role { font-size: 11px; }
   }
 
   /* ─────── 講師獨立 section 卡(圓形頭像 · 單張大 · 放大 20%)─────── */
@@ -290,17 +289,17 @@
   }
   .instructor-card:hover { transform: translateY(-3px); }
   .instructor-photo {
-    width: 264px;              /* 原 220 × 1.2 */
+    width: 304px;              /* 264 × 1.15 */
     aspect-ratio: 1 / 1;
-    margin: 0 auto 1.2rem;
+    margin: 0 auto 1.4rem;
     background: linear-gradient(180deg, #E7F0E5 0%, #CFE1CB 100%);
     border-radius: 999px;
     overflow: hidden;
-    box-shadow: 0 10px 24px -10px rgba(31, 58, 43, 0.3);
+    box-shadow: 0 12px 28px -10px rgba(31, 58, 43, 0.3);
     position: relative;
-    border: 5px solid #fff;
+    border: 6px solid #fff;
     outline: 1.5px solid var(--strong);
-    outline-offset: -5px;
+    outline-offset: -6px;
   }
   .instructor-photo img {
     width: 115%; height: 115%;
@@ -312,21 +311,21 @@
     transform: translate(-50%, -50%);
   }
   @media (max-width: 640px) {
-    .instructor-photo { width: 192px; }   /* 原 160 × 1.2 */
+    .instructor-photo { width: 220px; }   /* 192 × 1.15 */
   }
   .instructor-label { background: transparent; padding: 0; text-align: center; }
   .instructor-label .role {
     display: inline-block;
-    font-size: 13px; letter-spacing: 0.22em;      /* 原 11 */
+    font-size: 15px; letter-spacing: 0.22em;      /* 13 × 1.15 */
     color: #fff; background: var(--strong);
-    padding: 4px 14px; border-radius: 999px;
+    padding: 5px 16px; border-radius: 999px;
     font-weight: 700;
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     font-family: 'Inter', 'Noto Sans TC', sans-serif;
   }
   .instructor-label .name {
     display: block;
-    font-weight: 900; font-size: 20px; color: var(--deep);   /* 原 17 */
+    font-weight: 900; font-size: 23px; color: var(--deep);   /* 20 × 1.15 */
     letter-spacing: 0.02em;
   }
 
@@ -990,7 +989,7 @@
           </div>
         </div>
         <div class="mt-5">
-          <p style="color:var(--text-main);font-size:15px;line-height:1.9;">
+          <p style="color:var(--text-main);font-size:17px;line-height:1.9;">
             專注將 AI 工具的「使用技巧」轉化為可落地的企業工作流程,從提示詞工程、Agent 建置到流程自動化設計,幫助企業把 AI 能力真正放進每日工作裡。
           </p>
         </div>
@@ -1008,7 +1007,7 @@
           </div>
         </div>
         <div class="mt-5">
-          <p style="color:var(--text-main);font-size:15px;line-height:1.9;">
+          <p style="color:var(--text-main);font-size:17px;line-height:1.9;">
             從 Agent 平台實作、企業自動化導入到技術文件 AI 化,擅長以 Low-Code 工具快速帶出可運作的 AI 應用,把看似複雜的導入拆成能立即執行的步驟。
           </p>
         </div>
