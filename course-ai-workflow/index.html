@@ -1314,7 +1314,7 @@
           <input type="checkbox" id="f_consent" name="consent" required class="mt-1 w-5 h-5 flex-shrink-0" style="accent-color:var(--strong);">
           <span class="text-sm leading-relaxed" style="color:var(--text-main)">
             本人已閱讀
-            <button type="button" onclick="openConsentModal()" class="font-bold underline hover:opacity-70 transition" style="color:var(--strong)">個人資料蒐集、處理及利用之告知暨同意書</button>
+            <button type="button" onclick="openConsentModal()" class="font-bold underline hover:opacity-70 transition" style="color:var(--strong)">AI 工作流程 · 嘉義班 資料蒐集、處理及利用之告知暨同意書</button> · 並同意經濟部產業發展署及工研院在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
             ,並同意虎智科技在符合上述告知事項範圍內蒐集、處理及利用本人的個資。本項同意得以電子文件方式表達。
           </span>
         </label>
@@ -1342,10 +1342,6 @@
               <input type="email" id="f_email" name="email" required class="form-input px-4 py-2.5" placeholder="you@example.com">
             </div>
             <div>
-              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">手機 <span style="color:#DC2626">*</span></label>
-              <input type="tel" id="f_phone" name="phone" required class="form-input px-4 py-2.5" placeholder="0912345678">
-            </div>
-            <div>
               <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">性別 <span style="color:#DC2626">*</span></label>
               <select id="f_gender" name="gender" required class="form-input px-4 py-2.5">
                 <option value="">— 請選擇 —</option>
@@ -1353,7 +1349,7 @@
                 <option value="女">女</option>
               </select>
             </div>
-            <div>
+            <div class="sm:col-span-2">
               <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">用餐選擇 <span style="color:#DC2626">*</span></label>
               <select id="f_meal" name="meal" required class="form-input px-4 py-2.5">
                 <option value="">— 請選擇 —</option>
@@ -1372,45 +1368,82 @@
           </h3>
           <div class="grid sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">公司名稱 <span style="color:#DC2626">*</span></label>
-              <input type="text" id="f_companyName" name="companyName" required class="form-input px-4 py-2.5" placeholder="○○股份有限公司">
-            </div>
-            <div>
               <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">公司統編 <span style="color:#DC2626">*</span></label>
               <input type="text" id="f_taxId" name="taxId" required inputmode="numeric" maxlength="8" pattern="\d{8}" class="form-input px-4 py-2.5" placeholder="00000000">
             </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">公司名稱 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_companyName" name="companyName" required class="form-input px-4 py-2.5" placeholder="○○股份有限公司">
+            </div>
             <div class="sm:col-span-2">
-              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">邀請單位 / 推薦來源 <span style="color:#DC2626">*</span></label>
-              <select id="f_referral" name="referral" required class="form-input px-4 py-2.5">
-                <option value="">— 請選擇 · 誰邀請你來? —</option>
-                <option value="虎智科技">虎智科技</option>
-                <option value="講師 張惟翔 · AI 增幅者">講師 張惟翔 · AI 增幅者</option>
-                <option value="講師 謝侑霖 LEO · AI 自動症">講師 謝侑霖 LEO · AI 自動症</option>
-                <option value="中華亞太智慧物聯發展協會">中華亞太智慧物聯發展協會</option>
-                <option disabled>─── 嘉義在地單位 ───</option>
-                <option value="嘉義縣政府">嘉義縣政府</option>
-                <option value="嘉義市政府">嘉義市政府</option>
-                <option value="嘉義縣工業會">嘉義縣工業會</option>
-                <option value="嘉義縣電子電機工業同業公會">嘉義縣電子電機工業同業公會</option>
-                <option disabled>─── EMBA ───</option>
-                <option value="台灣大學 EMBA">台灣大學 EMBA</option>
-                <option value="政治大學 EMBA">政治大學 EMBA</option>
-                <option value="中山大學 EMBA">中山大學 EMBA</option>
-                <option value="中央大學 EMBA">中央大學 EMBA</option>
-                <option value="成功大學 EMBA">成功大學 EMBA</option>
-                <option value="陽明交通大學 EMBA">陽明交通大學 EMBA</option>
-                <option value="台灣科技大學 EMBA">台灣科技大學 EMBA</option>
-                <option value="清華大學 EMBA">清華大學 EMBA</option>
-                <option value="中正大學 EMBA">中正大學 EMBA</option>
-                <option value="中興大學 EMBA">中興大學 EMBA</option>
-                <option value="逢甲大學 EMBA">逢甲大學 EMBA</option>
-                <option value="東海大學 EMBA">東海大學 EMBA</option>
-                <option value="其他">其他(請填寫)</option>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">產業別 <span style="color:#DC2626">*</span></label>
+              <select id="f_industry" name="industry" required class="form-input px-4 py-2.5">
+                <option value="">— 請選擇 —</option>
+                <option value="電子零組件業">電子零組件業</option>
+                <option value="電腦電子產品及光學製品業">電腦電子產品及光學製品業</option>
+                <option value="電力設備及配備業">電力設備及配備業</option>
+                <option value="金屬製品業">金屬製品業</option>
+                <option value="基本金屬業">基本金屬業</option>
+                <option value="機械設備業">機械設備業</option>
+                <option value="產業用機械設備維修及安裝業">產業用機械設備維修及安裝業</option>
+                <option value="汽車及其零件業">汽車及其零件業</option>
+                <option value="其他運輸工具及其零件業">其他運輸工具及其零件業</option>
+                <option value="食品及飼品業">食品及飼品業</option>
+                <option value="飲料及菸草業">飲料及菸草業</option>
+                <option value="紡織業">紡織業</option>
+                <option value="成衣及服飾品業">成衣及服飾品業</option>
+                <option value="皮革毛皮製品業">皮革毛皮製品業</option>
+                <option value="木竹製品業">木竹製品業</option>
+                <option value="紙漿、紙及紙製品業">紙漿、紙及紙製品業</option>
+                <option value="印刷及資料儲存媒體複製業">印刷及資料儲存媒體複製業</option>
+                <option value="石油及煤製品業">石油及煤製品業</option>
+                <option value="化學材料及肥料業">化學材料及肥料業</option>
+                <option value="其他化學製品業">其他化學製品業</option>
+                <option value="藥品及醫用化學製品業">藥品及醫用化學製品業</option>
+                <option value="橡膠製品業">橡膠製品業</option>
+                <option value="塑膠製品業">塑膠製品業</option>
+                <option value="非金屬礦物製品業(建材)">非金屬礦物製品業(建材)</option>
+                <option value="家具業">家具業</option>
+                <option value="其他製造業">其他製造業</option>
+                <option value="其他(非製造業)">其他(非製造業)</option>
               </select>
-              <div id="referralOtherWrap" class="hidden mt-3">
-                <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">其他 - 請填寫</label>
-                <input type="text" id="f_referralOther" name="referralOther" class="form-input px-4 py-2.5" placeholder="請填寫邀請單位或介紹人">
-              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 輔導資訊 -->
+        <div>
+          <h3 class="font-bold text-base mb-3 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>輔導資訊
+          </h3>
+          <div class="mb-5">
+            <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">輔導的單位 <span style="color:#DC2626">*</span></label>
+            <select id="f_advisor" name="advisor" required class="form-input px-4 py-2.5">
+              <option value="">— 請選擇 —</option>
+              <option value="工研院綠能所">工研院綠能所</option>
+              <option disabled>─────────</option>
+              <option value="工研院感測中心">工研院感測中心</option>
+              <option value="工研院資通所">工研院資通所</option>
+              <option value="工研院(材化所-化材)">工研院(材化所-化材)</option>
+              <option value="工研院電光所">工研院電光所</option>
+              <option value="工研院(材化所-織機)">工研院(材化所-織機)</option>
+              <option value="工研院(生醫所-生物工程醫藥保健組)">工研院(生醫所-生物工程醫藥保健組)</option>
+              <option value="工研院(生醫所-藥理臨床研究部)">工研院(生醫所-藥理臨床研究部)</option>
+              <option value="工研院(機械所-智慧機械技術組)">工研院(機械所-智慧機械技術組)</option>
+              <option value="工研院中分院">工研院中分院</option>
+              <option value="工研院(材化所-應材)">工研院(材化所-應材)</option>
+              <option value="其他">其他</option>
+            </select>
+            <div id="advisorOtherWrap" class="hidden mt-3">
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">輔導單位 - 其他</label>
+              <input type="text" id="f_advisorOther" name="advisorOther" class="form-input px-4 py-2.5" placeholder="請填寫單位名稱">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-bold mb-2" style="color:var(--deep)">是否為受輔導廠商 <span style="color:#DC2626">*</span></label>
+            <div class="flex gap-6 text-sm" style="color:var(--text-main)">
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="isAdvised" value="是" required style="accent-color:var(--strong);"> 是</label>
+              <label class="flex items-center gap-2 cursor-pointer"><input type="radio" name="isAdvised" value="否" style="accent-color:var(--strong);"> 否</label>
             </div>
           </div>
         </div>
@@ -1418,12 +1451,34 @@
         <!-- 梯次 -->
         <div>
           <h3 class="font-bold text-base mb-3 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
-            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>選擇報名場次 <span style="color:#DC2626">*</span>
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>選擇報名梯次 <span style="color:#DC2626">*</span>
           </h3>
           <select id="f_cohort" name="cohort" required class="form-input px-4 py-3">
-            <option value="">— 請選擇場次 —</option>
+            <option value="">— 請選擇梯次 —</option>
           </select>
           <div id="soloNotice" class="hidden solo-notice mt-3"></div>
+        </div>
+
+        <!-- 聯絡窗口 -->
+        <div>
+          <h3 class="font-bold text-base mb-1 pb-2 flex items-center gap-2" style="color:var(--deep);border-bottom:1px solid var(--line);">
+            <span class="block w-1 h-4 rounded" style="background:var(--strong);"></span>聯絡窗口
+          </h3>
+          <p class="text-xs mb-3" style="color:var(--text-light)">通常填 HR 或協助報名的主管;若學員本人即為聯絡人,填學員自己也可以</p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">聯絡人姓名 <span style="color:#DC2626">*</span></label>
+              <input type="text" id="f_contactName" name="contactName" required class="form-input px-4 py-2.5" placeholder="王大明">
+            </div>
+            <div>
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">聯絡人手機 <span style="color:#DC2626">*</span></label>
+              <input type="tel" id="f_contactPhone" name="contactPhone" required class="form-input px-4 py-2.5" placeholder="0912345678">
+            </div>
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-bold mb-1.5" style="color:var(--deep)">聯絡人 E-Mail <span style="color:#DC2626">*</span></label>
+              <input type="email" id="f_contactEmail" name="contactEmail" required class="form-input px-4 py-2.5" placeholder="you@example.com">
+            </div>
+          </div>
         </div>
 
         <!-- 其他 -->
@@ -1467,18 +1522,18 @@
       <h3 class="font-black text-base" style="color:#fff">個人資料蒐集、處理及利用之告知暨同意書</h3>
       <button type="button" onclick="closeConsentModal()" class="text-2xl leading-none hover:opacity-70" style="color:#fff">×</button>
     </div>
-    <div class="px-6 py-6 text-[14px] leading-relaxed space-y-6" style="color:var(--text-main)">
+    <div class="px-6 py-6 text-[14px] leading-relaxed space-y-8" style="color:var(--text-main)">
       <div>
-        <h4 class="font-black text-center text-base mb-4" style="color:var(--deep)">虎智科技個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <h4 class="font-black text-center text-base mb-4" style="color:var(--deep)">經濟部產業發展署個人資料蒐集、處理及利用之告知暨同意書</h4>
         <p class="font-bold mb-3" style="color:var(--deep)">告知事項</p>
-        <p class="mb-4">虎智科技有限公司(下稱本公司)為了執行「AI 工作流程 · 嘉義班」課程,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <p class="mb-4">經濟部產業發展署(下稱本署)為了執行「次產業輔導團_在職菁英培訓」,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
         <ol class="list-decimal pl-6 space-y-2">
-          <li>蒐集目的:為本課程相關辦理、活動、通訊、開立發票、寄送行前通知與課後追蹤,以及本公司內部行政管理與服務改善。</li>
-          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、手機、E-Mail、邀請單位。</li>
-          <li>利用期間:至蒐集目的消失為止,或您以書面要求刪除為止。</li>
-          <li>利用地區:中華民國地區及本公司辦事處所在地區。</li>
-          <li>利用者:本公司及承辦本課程之受託服務廠商。</li>
-          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、電話及其他合法方式利用之。</li>
+          <li>蒐集目的:為本課程相關辦理或執行業務、活動、計畫、提供服務及供本會用於內部行政管理、陳報經濟部產業發展署之蒐集目的,而須獲取個人資料。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、Email</li>
+          <li>利用期間:至蒐集目的消失為止。</li>
+          <li>利用地區:中華民國地區及本署辦事處所在地區。</li>
+          <li>利用者:本署及其他與本署有業務往來之公務及非公務機關。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、傳真及其他合法方式利用之。</li>
           <li>您得以書面主張下列權利:
             <div class="pl-4 mt-2 font-bold space-y-1">
               <div>(一)查詢或請求閱覽</div>
@@ -1487,14 +1542,51 @@
               <div>(四)請求停止蒐集、處理或利用</div>
               <div>(五)請求刪除</div>
             </div>
-            <p class="mt-3 font-normal">若有上述需求,請與本公司承辦人員聯繫:
-              <span class="block mt-2 font-bold">．虎智科技 紀先生 02-66058192</span>
-              <span class="block mt-1 font-bold">．嘉義在地窗口 郭哿埼 (KE CHI) 0972-629-215</span>
+            <p class="mt-3 font-normal">若有上述需求,請與承辦人員聯繫,本署將依法進行回覆:
+              <span class="block mt-2 font-bold">．課程　虎智科技 紀先生 02-66058192</span>
+              <span class="block font-bold">．嘉義在地窗口　郭哿埼 (KE CHI) 0972-629-215</span>
             </p>
           </li>
-          <li>您若不簽署本告知暨同意書,本公司將無法提供您特定目的範圍內之相關服務。</li>
-          <li>對本公司所持有您的個資,本公司會按照個資法相關規定保密並予以妥善保管。</li>
+          <li>您若不簽署本告知暨同意書,本署將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對本署所持有您的個資,本署會按照政府相關法規保密並予以妥善保管。</li>
         </ol>
+        <p class="text-right mt-4">中華民國 115 年 10 月 14 日</p>
+      </div>
+
+      <hr style="border-color:var(--line);">
+
+      <div>
+        <h4 class="font-black text-center text-base mb-4" style="color:var(--deep)">財團法人工業技術研究院個人資料蒐集、處理及利用之告知暨同意書</h4>
+        <p class="font-bold mb-3" style="color:var(--deep)">告知事項</p>
+        <p class="mb-4">經濟部產業發展署及財團法人工業技術研究院(工研院)為了執行【次產業輔導團_在職菁英培訓】,將蒐集、處理及利用您的個人資料(下稱個資),謹先告知下列事項:</p>
+        <ol class="list-decimal pl-6 space-y-2">
+          <li>蒐集目的:為本課程相關辦理或執行業務、活動、計畫、提供服務及供本會用於內部行政管理、陳報經濟部產業發展署之蒐集目的,而須獲取個人資料。</li>
+          <li>個資類別:公司名稱、統一編號、姓名、性別、職稱、Email</li>
+          <li>利用期間:至蒐集目的消失為止。</li>
+          <li>利用地區:中華民國地區及工研院駐點及辦事處所在地區。</li>
+          <li>利用者:經濟部產業發展署、工研院及其他與經濟部產業發展署或工研院有業務往來之公務及非公務機關。</li>
+          <li>利用方式:在不違反蒐集目的的前提下,以網際網路、電子郵件、書面、傳真及其他合法方式利用之。</li>
+          <li>您得以書面主張下列權利:
+            <div class="pl-4 mt-2 font-bold space-y-1">
+              <div>(一)查詢或請求閱覽</div>
+              <div>(二)請求製給複製本</div>
+              <div>(三)請求補充或更正</div>
+              <div>(四)請求停止蒐集、處理或利用</div>
+              <div>(五)請求刪除</div>
+            </div>
+            <p class="mt-3 font-normal">若有上述需求,請與本活動聯絡人聯繫,工研院將依法進行回覆:
+              <span class="block mt-2 font-bold">．課程　虎智科技 紀先生 02-66058192</span>
+              <span class="block font-bold">．嘉義在地窗口　郭哿埼 (KE CHI) 0972-629-215</span>
+            </p>
+          </li>
+          <li>若未提供正確個資,經濟部產業發展署或工研院將無法提供您特定目的範圍內之相關服務。</li>
+          <li>對經濟部產業發展署及工研院所持有您的個資,經濟部產業發展署及工研院會按照政府相關法規保密並予以妥善保管。</li>
+        </ol>
+        <div class="mt-4">
+          <p>經濟部產業發展署</p>
+          <p>財團法人工業技術研究院</p>
+        </div>
+        <p class="text-right mt-4">中華民國 115 年 10 月 14 日</p>
       </div>
     </div>
     <div class="sticky bottom-0 px-6 py-4 flex justify-end" style="background:#fff;border-top:1px solid var(--line);">
@@ -1570,10 +1662,10 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── 邀請單位選「其他」→ 展開文字欄 ──
-document.getElementById('f_referral').addEventListener('change', e => {
-  const wrap = document.getElementById('referralOtherWrap');
-  const other = document.getElementById('f_referralOther');
+// ── 輔導的單位選「其他」→ 展開文字欄 ──
+document.getElementById('f_advisor').addEventListener('change', e => {
+  const wrap = document.getElementById('advisorOtherWrap');
+  const other = document.getElementById('f_advisorOther');
   if (e.target.value === '其他') {
     wrap.classList.remove('hidden');
     other.required = true;
@@ -1809,10 +1901,11 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
     document.getElementById('f_consent').focus(); return;
   }
 
-  const referralSel = form.referral.value;
-  const referralVal = referralSel === '其他'
-    ? '其他:' + (form.referralOther.value.trim() || '未填')
-    : referralSel;
+  // 輔導單位選「其他」· 拼接自填內容
+  const advisorSel = form.advisor.value;
+  const advisorVal = advisorSel === '其他'
+    ? '其他:' + (form.advisorOther.value.trim() || '未填')
+    : advisorSel;
 
   const selCo = (window.__cohorts || []).find(c => {
     const lbl = [c.city, [c.date, c.time].filter(Boolean).join(' '), c.location].filter(Boolean).join('｜');
@@ -1824,12 +1917,18 @@ document.getElementById('signupForm').addEventListener('submit', async e => {
   const data = {
     type: 'course_signup',
     timestamp: new Date().toISOString(),
-    name: form.name.value, jobTitle: form.jobTitle.value, email: form.email.value, phone: form.phone.value,
+    name: form.name.value, jobTitle: form.jobTitle.value, email: form.email.value,
     gender: form.gender.value, meal: form.meal.value,
-    companyName: form.companyName.value, taxId: taxId, referral: referralVal,
+    companyName: form.companyName.value, taxId: taxId,
+    industry: form.industry.value,
+    advisor: advisorVal,
+    isAdvised: form.isAdvised.value,
     cohort: form.cohort.value,
     soloInstructor: soloInstructor,
     soloTopic: soloTopic,
+    contactName: form.contactName.value,
+    contactPhone: form.contactPhone.value,
+    contactEmail: form.contactEmail.value,
     note: form.note.value,
     consent: '已同意 ' + new Date().toISOString()
   };

@@ -27,21 +27,26 @@ const SHEET_COHORT = '梯次目錄';
 const SHEET_BACKUP = '_備份_AI工作流程報名表單';   // 隱藏備份分頁 · 用於防誤刪
 const COHORT_CAPACITY_DEFAULT = 30;   // 預設每梯次名額(梯次沒填就用這個)
 
+// 2026-10-14 改為「次產業輔導團在職菁英培訓」版 · 欄位對齊 course-enterprise
 const COURSE_HEADERS = [
   '時間戳',
-  '中文姓名', '職稱', 'E-Mail', '手機', '性別', '用餐選擇',
-  '公司名稱', '統編', '邀請單位',
-  '報名場次',
+  '中文姓名', '職稱', 'E-Mail', '性別', '用餐選擇',
+  '統編', '公司名稱', '產業別',
+  '輔導的單位', '是否為受輔導廠商',
+  '報名梯次',
+  '聯絡人姓名', '聯絡人手機', '聯絡人E-Mail',
   '報名留言', '同意狀態',
   '寄信狀態',
-  '單場講師',   // col 15 · 空=雙講師 · 有值=單場(Sheet 填什麼帶什麼)
-  '單場主題',   // col 16 · 單場的課程主題(Sheet 帶)
-  '錄取狀態',   // col 17 · 正取 / 候補(後端自動判斷 · 看目前這場次已幾人)
-  '取消 Token'  // col 18 · 隱式 UUID · 給信件「取消報名」連結用
+  '單場講師',   // col 19 · 空=雙講師 · 有值=單場(Sheet 填什麼帶什麼)
+  '單場主題',   // col 20 · 單場的課程主題(Sheet 帶)
+  '錄取狀態',   // col 21 · 正取 / 候補(後端自動判斷)
+  '取消 Token'  // col 22 · 隱式 UUID · 給信件「取消報名」連結用
 ];
-const COURSE_MAIL_STATUS_COL = 14;
-const COURSE_ADMIT_STATUS_COL = 17;
-const COURSE_CANCEL_TOKEN_COL = 18;
+const COURSE_MAIL_STATUS_COL = 18;
+const COURSE_ADMIT_STATUS_COL = 21;
+const COURSE_CANCEL_TOKEN_COL = 22;
+// 報名梯次在 col 12(courseCounts 要用)
+const COURSE_COHORT_COL = 12;
 
 // 梯次目錄 Sheet 欄位
 //   單場講師/主題 → 空白=雙講師場;有填=單場專場
@@ -93,7 +98,7 @@ function handleCancel(token) {
 
     // 讀對應列資料
     const row = sheet.getRange(targetRow, 1, 1, COURSE_HEADERS.length).getValues()[0];
-    const name = row[1], email = row[3], cohort = row[10];
+    const name = row[1], email = row[3], cohort = row[COURSE_COHORT_COL - 1];
     const currentAdmit = String(row[COURSE_ADMIT_STATUS_COL - 1] || '').trim();
 
     // 若已取消過,擋
@@ -205,8 +210,8 @@ function courseCounts() {
     const ss = SpreadsheetApp.openById(SHEET_ID);
     const sheet = ss.getSheetByName(SHEET_COURSE);
     if (sheet && sheet.getLastRow() > 1) {
-      // 報名場次 = 第 11 欄
-      const values = sheet.getRange(2, 11, sheet.getLastRow() - 1, 1).getValues();
+      // 報名梯次 = 第 12 欄
+      const values = sheet.getRange(2, COURSE_COHORT_COL, sheet.getLastRow() - 1, 1).getValues();
       values.forEach(r => {
         const key = String(r[0] || '').trim();
         if (key) counts[key] = (counts[key] || 0) + 1;
@@ -239,15 +244,24 @@ function logCourseSignup(data) {
 
   const rowData = [
     data.timestamp || new Date().toISOString(),
-    data.name || '', data.jobTitle || '', data.email || '', data.phone || '', data.gender || '', data.meal || '',
-    data.companyName || '', data.taxId || '', data.referral || '',
+    // 學員 (2-6)
+    data.name || '', data.jobTitle || '', data.email || '', data.gender || '', data.meal || '',
+    // 公司 (7-9)
+    data.taxId || '', data.companyName || '', data.industry || '',
+    // 輔導 (10-11)
+    data.advisor || '', data.isAdvised || '',
+    // 梯次 (12)
     data.cohort || '',
+    // 聯絡窗口 (13-15)
+    data.contactName || '', data.contactPhone || '', data.contactEmail || '',
+    // 其他 (16-17)
     data.note || '', data.consent || '',
-    '',                            // col 14 · 寄信狀態(下方 setValue 填)
-    data.soloInstructor || '',     // col 15 · 單場講師
-    data.soloTopic || '',          // col 16 · 單場主題
-    '',                            // col 17 · 錄取狀態(下方 setValue 填)
-    cancelToken                    // col 18 · 取消 token
+    // 系統 (18-22)
+    '',                            // col 18 · 寄信狀態(下方 setValue 填)
+    data.soloInstructor || '',     // col 19 · 單場講師
+    data.soloTopic || '',          // col 20 · 單場主題
+    '',                            // col 21 · 錄取狀態(下方 setValue 填)
+    cancelToken                    // col 22 · 取消 token
   ];
 
   console.log('[DIAG] 主表 getLastRow 寫入前:', sheet.getLastRow());
@@ -267,7 +281,7 @@ function logCourseSignup(data) {
   const capacity = cohortMeta.capacity;
   let positionInCohort = 1;
   if (myCohort && sheet.getLastRow() > 1) {
-    const allCohorts = sheet.getRange(2, 11, sheet.getLastRow() - 1, 1).getValues();
+    const allCohorts = sheet.getRange(2, COURSE_COHORT_COL, sheet.getLastRow() - 1, 1).getValues();
     positionInCohort = allCohorts.filter(r => String(r[0] || '').trim() === myCohort).length;
   }
   const isWaitlist = positionInCohort > capacity;
@@ -343,14 +357,23 @@ function recoverFromGmailSent() {
       existing.add(to);
       addedRows.push([
         Utilities.formatDate(msg.getDate(), 'Asia/Taipei', "yyyy-MM-dd'T'HH:mm:ss"),
-        parsed.name, parsed.jobTitle, to, parsed.phone, '', parsed.meal,
-        parsed.companyName, parsed.taxId, parsed.referral,
+        // 學員
+        parsed.name, parsed.jobTitle, to, '', parsed.meal,
+        // 公司(回補信件沒有 · 填已知欄位)
+        parsed.taxId, parsed.companyName, '',
+        // 輔導(回補信件沒有)
+        '', '',
+        // 梯次
         parsed.cohort,
+        // 聯絡窗口(回補信件沒有)
+        '', '', '',
+        // 其他
         '', '[Gmail 回補]',
+        // 系統
         '✅ 回補 ' + Utilities.formatDate(msg.getDate(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm'),
         parsed.soloInstructor, parsed.soloTopic,
-        '[Gmail 回補 · 未判定]',   // col 17 錄取狀態
-        ''                         // col 18 取消 Token · 回補不給(不能取消歷史資料)
+        '[Gmail 回補 · 未判定]',
+        ''                         // 取消 Token · 回補不給(不能取消歷史資料)
       ]);
     });
   });
@@ -479,15 +502,18 @@ function sendCourseConfirmEmail(data, isWaitlist, positionInCohort) {
     '▌您的報名資訊\n' +
     '　公司名稱:' + (data.companyName || '') + '\n' +
     (data.taxId ? '　公司統編:' + data.taxId + '\n' : '') +
-    '　邀請單位:' + (data.referral || '') + '\n' +
+    '　產業別  :' + (data.industry || '') + '\n' +
     '　報名學員:' + (data.name || '') + ' / ' + (data.jobTitle || '') + '\n' +
-    '　手機    :' + (data.phone || '') + '\n' +
+    '　性別    :' + (data.gender || '') + '\n' +
     '　用餐選擇:' + (data.meal || '') + '\n' +
-    '　報名場次:\n' +
+    '　輔導單位:' + (data.advisor || '') + '\n' +
+    '　受輔導  :' + (data.isAdvised || '') + '\n' +
+    '　報名梯次:\n' +
     '　　．開課縣市:' + city + '\n' +
     '　　．上課時間:' + datetime + '\n' +
     '　　．上課地點:' + place + '\n' +
     (solo ? '　　．講師模式:' + solo + ' · ' + topic + '\n' : '') +
+    '　公司聯絡窗口:' + (data.contactName || '') + ' / ' + (data.contactPhone || '') + ' / ' + (data.contactEmail || '') + '\n' +
     '\n' +
     courseBlock +
     '▌行前提醒\n' +
@@ -562,54 +588,42 @@ function getFirstCohortForTest() {
   }
 }
 
-function testCourseEmail() {
-  const c = getFirstCohortForTest();
-  sendCourseConfirmEmail({
+// 測試用資料(所有 testCourseEmail* 共用 · 新欄位全部塞入)
+function _buildTestData(c) {
+  return {
     name: '王大明', jobTitle: '生產部經理',
     email: Session.getActiveUser().getEmail(),
-    phone: '0912345678', gender: '男', meal: '葷',
-    companyName: '測試電子股份有限公司', taxId: '12345678',
-    referral: '虎智科技',
+    gender: '男', meal: '葷',
+    taxId: '12345678', companyName: '測試電子股份有限公司', industry: '電子零組件業',
+    advisor: '工研院綠能所', isAdvised: '是',
     cohort: c.cohort,
+    contactName: '李經理', contactPhone: '0912345678', contactEmail: Session.getActiveUser().getEmail(),
     note: '素食一份',
     _cancelToken: 'TEST-' + new Date().getTime()
-  }, false, 1);
+  };
+}
+
+function testCourseEmail() {
+  const c = getFirstCohortForTest();
+  sendCourseConfirmEmail(_buildTestData(c), false, 1);
   Logger.log('已寄【正取版】測試信至 ' + Session.getActiveUser().getEmail());
 }
 
 // 候補版測試(第 31 位 · 應該會出現候補 banner 跟取消連結)
 function testCourseEmailWaitlist() {
   const c = getFirstCohortForTest();
-  sendCourseConfirmEmail({
-    name: '王大明', jobTitle: '生產部經理',
-    email: Session.getActiveUser().getEmail(),
-    phone: '0912345678', gender: '男', meal: '葷',
-    companyName: '測試電子股份有限公司', taxId: '12345678',
-    referral: '虎智科技',
-    cohort: c.cohort,
-    note: '素食一份',
-    _cancelToken: 'TEST-' + new Date().getTime()
-  }, true, 31);
+  sendCourseConfirmEmail(_buildTestData(c), true, 31);
   Logger.log('已寄【候補版】測試信至 ' + Session.getActiveUser().getEmail());
 }
 
 // 通用單場版測試 · 從 Sheet 第一筆有「單場講師」值的梯次抓;沒有就用假的
 function testCourseEmailSolo() {
   const c = getFirstCohortForTest();
-  const soloInstructor = c.soloInstructor || '張惟翔 · AI 增幅者';
-  const soloTopic = c.soloTopic || '提示詞工程 + Agent 建置單日工作坊';
-  sendCourseConfirmEmail({
-    name: '王大明', jobTitle: '生產部經理',
-    email: Session.getActiveUser().getEmail(),
-    phone: '0912345678', gender: '男', meal: '葷',
-    companyName: '測試電子股份有限公司', taxId: '12345678',
-    referral: '虎智科技',
-    cohort: c.cohort,
-    soloInstructor: soloInstructor,
-    soloTopic: soloTopic,
-    note: '',
-    _cancelToken: 'TEST-' + new Date().getTime()
-  }, false, 1);
+  const data = _buildTestData(c);
+  data.soloInstructor = c.soloInstructor || '張惟翔 · AI 增幅者';
+  data.soloTopic = c.soloTopic || '提示詞工程 + Agent 建置單日工作坊';
+  data.note = '';
+  sendCourseConfirmEmail(data, false, 1);
   Logger.log('已寄通用單場版測試信至 ' + Session.getActiveUser().getEmail());
 }
 
