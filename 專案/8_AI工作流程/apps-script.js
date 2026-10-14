@@ -24,6 +24,7 @@
 const SHEET_ID = 'PASTE_SHEET_ID_HERE';      // ← 新建 Sheet 後把 URL 裡 /d/ 跟 /edit 中間那串貼這
 const SHEET_COURSE = 'AI工作流程報名表單';
 const SHEET_COHORT = '梯次目錄';
+const SHEET_BACKUP = '_備份_AI工作流程報名表單';   // 隱藏備份分頁 · 用於防誤刪
 
 const COURSE_HEADERS = [
   '時間戳',
@@ -81,13 +82,23 @@ function courseCounts() {
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// ════════ 寫入:報名 + 寄確認信 ════════
+// ════════ 寫入:報名 + 寄確認信(含 3 層備份)════════
 function logCourseSignup(data) {
+  // 【第 1 層】console.log 原始資料 · 絕對不可刪
+  // Google Cloud Logging 保留 ≥ 7 天 · Sheet 全毀也救得回
+  console.log('[SIGNUP_RAW]', new Date().toISOString(), JSON.stringify(data));
+
   const ss = SpreadsheetApp.openById(SHEET_ID);
+
+  // 【第 3 層】DIAG log · 診斷寫入狀況
+  console.log('[DIAG] Spreadsheet:', ss.getName(), '(' + ss.getId() + ')');
+  console.log('[DIAG] 所有分頁:', ss.getSheets().map(s => s.getName() + '(' + s.getLastRow() + ')').join(' / '));
+
   let sheet = ss.getSheetByName(SHEET_COURSE);
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
-  sheet.appendRow([
+
+  const rowData = [
     data.timestamp || new Date().toISOString(),
     data.name || '', data.jobTitle || '', data.email || '', data.phone || '', data.gender || '', data.meal || '',
     data.companyName || '', data.taxId || '', data.referral || '',
@@ -96,9 +107,38 @@ function logCourseSignup(data) {
     '',                            // col 14 · 寄信狀態(下方 setValue 填)
     data.soloInstructor || '',     // col 15 · 單場講師
     data.soloTopic || ''           // col 16 · 單場主題
-  ]);
-  const row = sheet.getLastRow();
+  ];
 
+  console.log('[DIAG] 主表 getLastRow 寫入前:', sheet.getLastRow());
+  sheet.appendRow(rowData);
+  const row = sheet.getLastRow();
+  console.log('[DIAG] 主表 getLastRow 寫入後:', row);
+
+  // 寫入驗證:讀回看是不是剛剛寫的
+  const verifyName = sheet.getRange(row, 2).getValue();
+  if (verifyName !== (data.name || '')) {
+    console.log('[DIAG] ⚠️⚠️⚠️ 寫入驗證失敗 · 讀回姓名:', verifyName, '預期:', data.name);
+  }
+
+  // 【第 2 層】隱藏備份分頁 · 雙寫(主表萬一被誤刪 · 這份還在)
+  try {
+    let backup = ss.getSheetByName(SHEET_BACKUP);
+    if (!backup) {
+      backup = ss.insertSheet(SHEET_BACKUP, ss.getSheets().length);
+      ensureHeaders(backup, COURSE_HEADERS);
+      backup.hideSheet();
+      // 保護備份分頁 · 禁止編輯
+      const protection = backup.protect().setDescription('備份用 · 禁止編輯');
+      protection.removeEditors(protection.getEditors());
+      if (protection.canDomainEdit()) protection.setDomainEdit(false);
+    }
+    backup.appendRow(rowData);
+    console.log('[DIAG] 備份分頁已寫入 · getLastRow:', backup.getLastRow());
+  } catch (err) {
+    console.log('[DIAG] ❌ 備份失敗(主表仍成功):', err.toString());
+  }
+
+  // 寄確認信
   let mailStatus;
   try {
     sendCourseConfirmEmail(data);
@@ -109,6 +149,91 @@ function logCourseSignup(data) {
   sheet.getRange(row, COURSE_MAIL_STATUS_COL).setValue(mailStatus);
 
   return jsonResp({ ok: true });
+}
+
+// ════════ 救援 · 從 Gmail 寄件夾回補資料 ════════
+// 執行方式:Apps Script 編輯器函式下拉選 recoverFromGmailSent → ▶️ 執行
+// 以 Email 為 dedup key · Sheet 已有則跳過
+function recoverFromGmailSent() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  let sheet = ss.getSheetByName(SHEET_COURSE);
+  if (!sheet) throw new Error('找不到報名表單分頁 ' + SHEET_COURSE);
+  ensureHeaders(sheet, COURSE_HEADERS);
+
+  const existing = new Set();
+  if (sheet.getLastRow() > 1) {
+    const emailCol = sheet.getRange(2, 4, sheet.getLastRow() - 1, 1).getValues();
+    emailCol.forEach(r => {
+      const e = String(r[0] || '').trim().toLowerCase();
+      if (e) existing.add(e);
+    });
+  }
+  console.log('Sheet 現有 ' + existing.size + ' 筆(以 Email 計)');
+
+  const query = 'from:me subject:("【報名確認】AI 工作流程") newer_than:90d';
+  const threads = GmailApp.search(query, 0, 200);
+  console.log('Gmail 搜到 ' + threads.length + ' 封確認信');
+
+  const addedRows = [];
+  const skipped = [];
+  threads.forEach(thread => {
+    thread.getMessages().forEach(msg => {
+      const to = (msg.getTo() || '').toLowerCase().replace(/.*<|>.*/g, '').trim();
+      if (!to) return;
+      if (existing.has(to)) { skipped.push(to); return; }
+      const body = msg.getPlainBody();
+      const parsed = parseConfirmEmail(body);
+      if (!parsed.name) { skipped.push(to + '(parse 失敗)'); return; }
+      existing.add(to);
+      addedRows.push([
+        Utilities.formatDate(msg.getDate(), 'Asia/Taipei', "yyyy-MM-dd'T'HH:mm:ss"),
+        parsed.name, parsed.jobTitle, to, parsed.phone, '', parsed.meal,
+        parsed.companyName, parsed.taxId, parsed.referral,
+        parsed.cohort,
+        '', '[Gmail 回補]',
+        '✅ 回補 ' + Utilities.formatDate(msg.getDate(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm'),
+        parsed.soloInstructor, parsed.soloTopic
+      ]);
+    });
+  });
+
+  if (addedRows.length > 0) {
+    const startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, addedRows.length, COURSE_HEADERS.length).setValues(addedRows);
+  }
+  console.log('✅ 補回 ' + addedRows.length + ' 筆 · 跳過 ' + skipped.length + ' 筆');
+  return { added: addedRows.length, skipped: skipped.length };
+}
+
+function parseConfirmEmail(body) {
+  const grab = (re) => { const m = body.match(re); return m ? m[1].trim() : ''; };
+  const studentLine = grab(/報名學員[::]\s*(.+)/);
+  let name = '', jobTitle = '';
+  if (studentLine) {
+    const sp = studentLine.split(/\s*\/\s*/);
+    name = (sp[0] || '').trim();
+    jobTitle = (sp[1] || '').trim();
+  }
+  const city     = grab(/開課縣市[::]\s*(.+)/);
+  const datetime = grab(/上課時間[::]\s*(.+)/);
+  const place    = grab(/上課地點[::]\s*(.+)/);
+  const cohort = [city, datetime, place].filter(x => x && x !== '—').join('｜');
+  const soloRaw = grab(/講師模式[::]\s*(.+)/);
+  let soloInstructor = '', soloTopic = '';
+  if (soloRaw) {
+    const sp = soloRaw.split(/\s*·\s*/);
+    soloInstructor = (sp[0] || '').trim();
+    soloTopic = (sp[1] || '').trim();
+  }
+  return {
+    name, jobTitle,
+    phone:       grab(/手機\s*[::]\s*(.+)/),
+    companyName: grab(/公司名稱[::]\s*(.+)/),
+    taxId:       grab(/公司統編[::]\s*(.+)/),
+    referral:    grab(/邀請單位[::]\s*(.+)/),
+    meal:        grab(/用餐選擇[::]\s*(.+)/),
+    cohort, soloInstructor, soloTopic
+  };
 }
 
 // ════════ 寄送:報名確認信 ════════
