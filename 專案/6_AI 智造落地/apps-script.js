@@ -214,6 +214,125 @@ function sendCourseConfirmEmail(data) {
   MailApp.sendEmail({ to: to, subject: subject, body: body, name: '虎智科技 TigerAI' });
 }
 
+// ════════ 緊急:從 Gmail 寄件夾救回報名資料 ════════
+// 用法:
+//   1. 把這份 code 貼到 Apps Script 存檔
+//   2. 函式下拉選 recoverFromGmailSent · 執行(第一次會要你授權 Gmail 讀取權限 · 同意)
+//   3. 執行紀錄會告訴你補了幾筆
+//   4. 看 Sheet · 補回的資料會在最後面
+// 說明:
+//   - 以「報名學員的 Email」當 dedup key · Sheet 已有就跳過
+//   - Email 裡沒有的欄位(性別、聯絡人 E-Mail、報名留言、同意狀態)留空
+//   - 時間戳用寄信時間代替(不是原本報名的 timestamp,但接近)
+function recoverFromGmailSent() {
+  const ss = getSS();
+  let sheet = ss.getSheetByName(SHEET_COURSE);
+  if (!sheet) throw new Error('找不到報名表單分頁 ' + SHEET_COURSE);
+  ensureHeaders(sheet, COURSE_HEADERS);
+
+  // 1. 收集現有 Sheet 的 Email(作為 dedup key)
+  const existing = new Set();
+  if (sheet.getLastRow() > 1) {
+    const emailCol = sheet.getRange(2, 4, sheet.getLastRow() - 1, 1).getValues();   // D 欄 E-Mail
+    emailCol.forEach(r => {
+      const e = String(r[0] || '').trim().toLowerCase();
+      if (e) existing.add(e);
+    });
+  }
+  console.log('Sheet 現有 ' + existing.size + ' 筆報名(以 Email 計)');
+
+  // 2. 搜尋 Gmail 寄件夾所有報名確認信(過去 60 天)
+  const query = 'from:me subject:("【報名確認】AI 智造落地") newer_than:60d';
+  const threads = GmailApp.search(query, 0, 200);
+  console.log('Gmail 搜到 ' + threads.length + ' 封報名確認信 thread');
+
+  const addedRows = [];
+  const skipped = [];
+  threads.forEach(thread => {
+    thread.getMessages().forEach(msg => {
+      const to = (msg.getTo() || '').toLowerCase().replace(/.*<|>.*/g, '').trim();
+      if (!to) return;
+      if (existing.has(to)) { skipped.push(to); return; }
+
+      const body = msg.getPlainBody();
+      const parsed = parseConfirmEmail(body);
+      if (!parsed.name) { skipped.push(to + ' (無法 parse)'); return; }
+
+      existing.add(to);
+      addedRows.push([
+        Utilities.formatDate(msg.getDate(), 'Asia/Taipei', "yyyy-MM-dd'T'HH:mm:ss"),
+        parsed.name,                 // 中文姓名
+        parsed.jobTitle,             // 職稱
+        to,                          // E-Mail
+        '',                          // 性別(信裡沒有 · 留空)
+        parsed.meal,                 // 用餐選擇
+        parsed.taxId,                // 統編
+        parsed.companyName,          // 公司名稱
+        parsed.industry,             // 產業別
+        parsed.advisor,              // 輔導的單位
+        parsed.isAdvised,            // 是否為受輔導廠商
+        parsed.cohort,               // 報名梯次(拼回 city｜datetime｜place)
+        parsed.contactName,          // 聯絡人姓名
+        parsed.contactPhone,         // 聯絡人手機
+        '',                          // 聯絡人 E-Mail(信裡沒有 · 留空)
+        '',                          // 報名留言(信裡沒有 · 留空)
+        '[Gmail 回補]',              // 同意狀態
+        '✅ 已寄出 ' + Utilities.formatDate(msg.getDate(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm') + '(回補)'
+      ]);
+    });
+  });
+
+  // 3. 批次寫入
+  if (addedRows.length > 0) {
+    const startRow = sheet.getLastRow() + 1;
+    sheet.getRange(startRow, 1, addedRows.length, COURSE_HEADERS.length).setValues(addedRows);
+  }
+  console.log('✅ 補回 ' + addedRows.length + ' 筆 · 跳過 ' + skipped.length + ' 筆(已存在或無法 parse)');
+  if (skipped.length > 0) console.log('跳過的:', skipped.slice(0, 20).join(', '));
+  return { added: addedRows.length, skipped: skipped.length };
+}
+
+// 從信件 body 解析各欄位
+function parseConfirmEmail(body) {
+  const grab = (re) => {
+    const m = body.match(re);
+    return m ? m[1].trim() : '';
+  };
+  // 「報名學員:王大明 / 生產部經理」
+  const studentLine = grab(/報名學員[::]\s*(.+)/);
+  let name = '', jobTitle = '';
+  if (studentLine) {
+    const sp = studentLine.split(/\s*\/\s*/);
+    name = (sp[0] || '').trim();
+    jobTitle = (sp[1] || '').trim();
+  }
+  // 「公司聯絡窗口:XX / 09xx」
+  const contactLine = grab(/公司聯絡窗口[::]\s*(.+)/);
+  let contactName = '', contactPhone = '';
+  if (contactLine) {
+    const sp = contactLine.split(/\s*\/\s*/);
+    contactName = (sp[0] || '').trim();
+    contactPhone = (sp[1] || '').trim();
+  }
+  // 報名梯次拆城市/時間/地點 → 拼回 city｜datetime｜place
+  const city     = grab(/開課縣市[::]\s*(.+)/);
+  const datetime = grab(/上課時間[::]\s*(.+)/);
+  const place    = grab(/上課地點[::]\s*(.+)/);
+  const cohort = [city, datetime, place].filter(x => x && x !== '—').join('｜');
+
+  return {
+    name, jobTitle,
+    companyName: grab(/公司名稱[::]\s*(.+)/),
+    taxId:       grab(/公司統編[::]\s*(.+)/),
+    industry:    grab(/產業別\s*[::]\s*(.+)/),
+    meal:        grab(/用餐選擇[::]\s*(.+)/),
+    advisor:     grab(/輔導單位[::]\s*(.+)/),
+    isAdvised:   grab(/是否受輔導[::]\s*(.+)/),
+    cohort,
+    contactName, contactPhone
+  };
+}
+
 // ════════ 測試工具 ════════
 
 // 貼完程式先手動跑一次:建好「AI智造落地報名表單」分頁並補齊欄位、順便完成授權
