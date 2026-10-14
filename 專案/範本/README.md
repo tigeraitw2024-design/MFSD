@@ -78,6 +78,36 @@ Google Cloud Logging ≥ 7 天 · Sheet 全毀也救得回。
 - 2026-10-14 · course-smart 寄 50 封信但 Sheet 只有 30 列(事後查發現版本記錄顯示資料被誤刪 → **沒備份就救不回來**)
 - 2026-10-14 · 8_AI工作流程 嘉義場 code 寫死地點 → 新竹場無法複用(用戶抓到:**要加梯次欄位讓 Sheet 自己填**)
 
+## 鐵則 3 · 所有 email 用 TigerAI 標準 EDM 版型
+
+虎智科技寄給客戶的 email(報名確認、候補、取消、行前通知等)**一律用 HTML EDM 版型** · 不能回去貼純文字。
+
+**標準結構(從上到下):**
+1. Brand bar(深綠底 + 虎智 TigerAI logo)
+2. Hero banner(淡綠底 + eyebrow pill + 課程名)
+3. 候補警示 card(if applicable · 橘底)
+4. 問候語
+5. 分區卡 Card:報名資訊 / 梯次 / 課程 / 行前提醒(各自白底 + emoji icon section-head)
+6. CTA 大按鈕(深綠 pill · 例:取消報名)
+7. Footer(深綠底 · 聯絡窗口)
+8. 版權
+
+**色票**(與網站同一套 · 薄荷森綠):
+```
+#1F3A2B deep  · #3E6B52 mid  · #4D9B6A strong
+#EEF4EC bg    · #FFFFFF card · #F6FAF4 tint  · #E0EBDC line
+#2C3A33 text main · #6B7A72 text mid · #9EACA3 text light
+```
+
+**技術規範:**
+- `MailApp.sendEmail({ to, subject, body, htmlBody, name })` 同時傳純文字跟 HTML
+- Table-based layout(email client 相容)
+- inline styles only(不要 `<style>` tag)
+- 字體:`'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif`
+- 外層 max-width 640px 置中
+
+細節見 memory [[tigerai-edm-standard-style]]。
+
 ## 參考實作
 
-`專案/8_AI工作流程/apps-script.js` — 兩條鐵則都已落實的範本
+`專案/8_AI工作流程/apps-script.js` — 三條鐵則都已落實的範本 · 包含 `buildHtmlEmail(opts)` 標準 EDM 函式

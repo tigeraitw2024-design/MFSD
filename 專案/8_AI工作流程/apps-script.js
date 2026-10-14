@@ -547,102 +547,198 @@ function sendCourseConfirmEmail(data, isWaitlist, positionInCohort) {
   MailApp.sendEmail({ to: to, subject: subject, body: body, htmlBody: htmlBody, name: '虎智科技 TigerAI' });
 }
 
-// ════════ HTML Email 版型(含「取消報名」按鈕) ════════
+// ════════════════════════════════════════════════════════
+// 虎智科技 TigerAI 標準 EDM Email 版型
+// ────────────────────────────────────────────────────────
+// 設計規範(其他課程 email 要延用):
+//   · 深綠 brand header bar + 虎智 TigerAI logo
+//   · Hero banner 大標題(主題名 + 課程名)
+//   · 候補警示(橘底 · 若適用)
+//   · 分區卡:報名資訊 / 梯次 / 課程 / 提醒(各自白底卡 · emoji icon)
+//   · CTA 大按鈕 · 深綠 pill
+//   · 深綠 footer bar + 聯絡窗口 + 版權
+// Palette(與網站一致):
+//   deep #1F3A2B · mid #3E6B52 · strong #4D9B6A
+//   bg #EEF4EC · card #FFFFFF · card-tint #F6FAF4 · line #E0EBDC
+//   text main #2C3A33 · text mid #6B7A72 · text light #9EACA3
+// ════════════════════════════════════════════════════════
 function buildHtmlEmail(opts) {
   const { name, jobTitle, headline, courseBlock, city, datetime, place,
           data, solo, topic, transportInfo, parkingInfo,
           isWaitlist, positionInCohort, capacity, cancelUrl } = opts;
 
   const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  const nl2br = s => esc(s).replace(/\n/g, '<br>');
 
-  // 候補 banner(紅橘底強調)
-  const waitlistHtml = isWaitlist ? (
-    '<div style="background:#FFF4E6;border:2px solid #F59E0B;border-radius:10px;padding:18px 20px;margin:0 0 24px;">' +
-      '<div style="font-size:14px;font-weight:900;color:#B45309;margin-bottom:8px;">📋 您為本梯次候補(第 ' + (positionInCohort - capacity) + ' 位候補)</div>' +
-      '<div style="font-size:13px;color:#78350F;line-height:1.75;">' +
-        '本梯次已達 ' + capacity + ' 人上限 · 您為候補身分。<br>' +
-        '原則上您仍可依預定時間到場。若因名額控管無法參加 · 我們會<strong>個別來信通知</strong>您。<br>' +
-        '若開課前未收到我們另行通知 · 代表候補成功 · 請依下方資訊按時到場。' +
+  // ─── 色票 ───
+  const C = {
+    deep: '#1F3A2B', mid: '#3E6B52', strong: '#4D9B6A',
+    bg: '#EEF4EC', card: '#FFFFFF', tint: '#F6FAF4', line: '#E0EBDC',
+    textMain: '#2C3A33', textMid: '#6B7A72', textLight: '#9EACA3',
+    warnBg: '#FFF4E6', warnBorder: '#F59E0B', warnText: '#B45309', warnDeep: '#78350F'
+  };
+
+  // ─── 共用小元件 ───
+  const brandBar =
+    '<div style="background:' + C.deep + ';padding:18px 28px;border-radius:16px 16px 0 0;text-align:left;">' +
+      '<div style="color:#fff;font-size:16px;font-weight:900;letter-spacing:0.08em;">' +
+        '<span style="color:' + C.strong + ';">⚡</span> 虎智科技 <span style="color:' + C.strong + ';">TigerAI</span>' +
+      '</div>' +
+    '</div>';
+
+  const heroBanner =
+    '<div style="background:' + C.tint + ';padding:28px 28px 24px;border-bottom:1px solid ' + C.line + ';">' +
+      '<div style="font-size:11px;letter-spacing:0.3em;color:' + C.strong + ';font-weight:700;margin-bottom:8px;">' +
+        (isWaitlist ? '📋 候補登記確認' : '✓ 報名已確認') +
+      '</div>' +
+      '<div style="font-size:22px;font-weight:900;color:' + C.deep + ';line-height:1.3;">AI 工作流程 · 嘉義班</div>' +
+      '<div style="font-size:13px;color:' + C.mid + ';margin-top:6px;">從 AI 工具使用到智慧工作流程 · 四日 30 小時實體課程</div>' +
+    '</div>';
+
+  const waitlistCard = isWaitlist ? (
+    '<div style="margin:20px 28px 0;background:' + C.warnBg + ';border-left:4px solid ' + C.warnBorder + ';border-radius:8px;padding:16px 20px;">' +
+      '<div style="font-size:14px;font-weight:900;color:' + C.warnText + ';margin-bottom:8px;">📋 您為本梯次候補(第 ' + (positionInCohort - capacity) + ' 位候補)</div>' +
+      '<div style="font-size:13px;color:' + C.warnDeep + ';line-height:1.75;">' +
+        '本梯次已達 ' + capacity + ' 人上限。原則上您仍可依預定時間到場 · ' +
+        '若因名額控管無法參加 · 我們會<strong>個別來信通知</strong>。' +
       '</div>' +
     '</div>'
   ) : '';
 
-  // 取消按鈕 block
-  const cancelBtnHtml = cancelUrl ? (
-    '<div style="margin:32px 0 8px;text-align:center;">' +
-      '<a href="' + esc(cancelUrl) + '" style="display:inline-block;background:#1F3A2B;color:#fff!important;text-decoration:none;padding:14px 36px;border-radius:999px;font-weight:900;font-size:15px;letter-spacing:0.08em;box-shadow:0 6px 18px -6px rgba(31,58,43,0.4);">' +
-        '✕ 取消報名' +
-      '</a>' +
-    '</div>' +
-    '<div style="text-align:center;font-size:12px;color:#9EACA3;margin:0 0 24px;letter-spacing:0.08em;">' +
-      '點了會寄取消確認信給您 · 無需再回信告知 · 謝謝' +
-    '</div>'
-  ) : '';
+  const greeting =
+    '<div style="padding:24px 28px 0;">' +
+      '<div style="font-size:16px;color:' + C.deep + ';font-weight:700;margin-bottom:8px;">' +
+        esc(name) + ' ' + esc(jobTitle) + ' 您好,' +
+      '</div>' +
+      '<div style="font-size:14px;color:' + C.textMain + ';line-height:1.9;">' +
+        esc(headline).replace(/\n/g, '<br>').replace(/,/g, '，') +
+      '</div>' +
+    '</div>';
 
-  // 報名資訊欄位
+  // 分區卡 heading
+  const sectionHead = (icon, label) =>
+    '<div style="padding:0 28px;margin-top:28px;">' +
+      '<div style="display:inline-block;background:' + C.deep + ';color:#fff;padding:6px 14px;border-radius:999px;font-size:11px;letter-spacing:0.22em;font-weight:700;">' +
+        esc(icon) + ' &nbsp; ' + esc(label) +
+      '</div>' +
+    '</div>';
+
   const infoRow = (k, v) => v ? (
-    '<tr><td style="padding:8px 14px;color:#6B7A72;font-size:13px;letter-spacing:0.08em;white-space:nowrap;vertical-align:top;">' + esc(k) + '</td>' +
-    '<td style="padding:8px 14px;color:#1F3A2B;font-size:14px;line-height:1.7;">' + esc(v) + '</td></tr>'
+    '<tr>' +
+      '<td style="padding:10px 16px;color:' + C.textMid + ';font-size:12px;letter-spacing:0.1em;white-space:nowrap;vertical-align:top;width:30%;border-bottom:1px solid ' + C.line + ';">' + esc(k) + '</td>' +
+      '<td style="padding:10px 16px;color:' + C.deep + ';font-size:14px;line-height:1.7;border-bottom:1px solid ' + C.line + ';">' + esc(v) + '</td>' +
+    '</tr>'
   ) : '';
 
-  const infoTable =
-    '<table style="width:100%;border-collapse:collapse;background:#F6FAF4;border-radius:10px;overflow:hidden;margin:16px 0 0;">' +
-      infoRow('公司名稱', data.companyName) +
-      infoRow('公司統編', data.taxId) +
-      infoRow('產業別', data.industry) +
-      infoRow('報名學員', (data.name || '') + ' / ' + (data.jobTitle || '')) +
-      infoRow('性別', data.gender) +
-      infoRow('用餐選擇', data.meal) +
-      infoRow('輔導單位', data.advisor) +
-      infoRow('是否受輔導', data.isAdvised) +
-      '<tr><td style="padding:8px 14px;color:#6B7A72;font-size:13px;letter-spacing:0.08em;white-space:nowrap;vertical-align:top;">報名梯次</td>' +
-      '<td style="padding:8px 14px;color:#1F3A2B;font-size:14px;line-height:1.7;">' +
-        '<div><strong>開課縣市</strong> · ' + esc(city) + '</div>' +
-        '<div><strong>上課時間</strong> · ' + esc(datetime) + '</div>' +
-        '<div><strong>上課地點</strong> · ' + esc(place) + '</div>' +
-        (solo ? '<div style="color:#4D9B6A;font-weight:700;margin-top:4px;">★ 講師模式 · ' + esc(solo) + ' · ' + esc(topic) + '</div>' : '') +
-      '</td></tr>' +
-      infoRow('公司聯絡窗口', (data.contactName || '') + ' / ' + (data.contactPhone || '') + ' / ' + (data.contactEmail || '')) +
-    '</table>';
+  // ─── Card 1:報名資訊 ───
+  const signupCard =
+    sectionHead('👤', '您的報名資訊') +
+    '<div style="padding:0 28px;margin-top:12px;">' +
+      '<table style="width:100%;border-collapse:collapse;background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:10px;overflow:hidden;">' +
+        infoRow('公司名稱', data.companyName) +
+        infoRow('公司統編', data.taxId) +
+        infoRow('產業別', data.industry) +
+        infoRow('報名學員', (data.name || '') + ' / ' + (data.jobTitle || '')) +
+        infoRow('性別', data.gender) +
+        infoRow('用餐選擇', data.meal) +
+        infoRow('輔導單位', data.advisor) +
+        infoRow('是否受輔導', data.isAdvised) +
+        infoRow('聯絡窗口', (data.contactName || '') + ' / ' + (data.contactPhone || '') + ' / ' + (data.contactEmail || '')) +
+      '</table>' +
+    '</div>';
 
-  // 行前提醒
-  const reminders = [
-    '請攜帶個人筆電(MacOS / Windows 皆可)',
-    '課程當天請提早 10 分鐘報到',
-    '開課前 3 天將發送行前通知信',
-    transportInfo ? '交通:' + transportInfo : '',
-    parkingInfo ? '停車:' + parkingInfo : '',
-    '如需改期或取消 · 請於開課 3 日前來信告知(或點下方取消報名按鈕)'
-  ].filter(Boolean);
-  const reminderHtml = '<ul style="padding-left:1.2em;margin:12px 0 0;color:#2C3A33;font-size:14px;line-height:1.85;">' +
-    reminders.map(r => '<li>' + esc(r) + '</li>').join('') + '</ul>';
-
-  return (
-    '<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8"></head>' +
-    '<body style="margin:0;padding:0;background:#EEF4EC;font-family:\'Noto Sans TC\',\'PingFang TC\',\'Microsoft JhengHei\',sans-serif;">' +
-    '<div style="max-width:640px;margin:0 auto;padding:28px 16px;">' +
-      '<div style="background:#fff;border-radius:16px;padding:36px 28px 32px;box-shadow:0 20px 50px -24px rgba(31,58,43,0.25);">' +
-        waitlistHtml +
-        '<div style="font-size:16px;color:#1F3A2B;font-weight:700;margin-bottom:6px;">' + esc(name) + ' ' + esc(jobTitle) + ' 您好,</div>' +
-        '<div style="font-size:14px;color:#3E6B52;line-height:1.9;margin-bottom:20px;">' + nl2br(headline).replace(/,<br>/g, '，<br>') + '</div>' +
-        '<div style="font-size:12px;letter-spacing:0.22em;color:#4D9B6A;font-weight:700;margin-top:24px;">▌您的報名資訊</div>' +
-        infoTable +
-        '<div style="font-size:12px;letter-spacing:0.22em;color:#4D9B6A;font-weight:700;margin:28px 0 10px;">▌課程資訊</div>' +
-        '<div style="font-size:14px;color:#2C3A33;line-height:1.85;white-space:pre-line;">' + esc(courseBlock.replace(/^▌課程資訊\n/, '')) + '</div>' +
-        '<div style="font-size:12px;letter-spacing:0.22em;color:#4D9B6A;font-weight:700;margin:24px 0 0;">▌行前提醒</div>' +
-        reminderHtml +
-        cancelBtnHtml +
-        '<div style="border-top:1px solid rgba(31,58,43,0.1);margin-top:28px;padding-top:20px;text-align:center;">' +
-          '<div style="font-size:11px;letter-spacing:0.28em;color:#4D9B6A;font-weight:700;margin-bottom:10px;">本課程聯絡窗口</div>' +
-          '<div style="font-size:14px;color:#2C3A33;line-height:1.9;">' +
-            '<div><strong>虎智科技 · 紀先生</strong> &nbsp;<span style="color:#6B7A72;font-family:monospace;">02-66058192</span></div>' +
-            '<div><strong>郭哿埼 KE CHI</strong> &nbsp;<span style="color:#6B7A72;font-family:monospace;">0972-629-215</span></div>' +
-          '</div>' +
+  // ─── Card 2:報名梯次 ───
+  const cohortCard =
+    sectionHead('📅', '報名梯次') +
+    '<div style="padding:0 28px;margin-top:12px;">' +
+      '<div style="background:' + C.tint + ';border:1px solid ' + C.line + ';border-radius:10px;padding:18px 20px;">' +
+        '<div style="font-size:18px;font-weight:900;color:' + C.deep + ';margin-bottom:12px;">' + esc(city) + '</div>' +
+        '<div style="font-size:14px;color:' + C.textMain + ';line-height:1.9;">' +
+          '<div><span style="color:' + C.textMid + ';font-size:12px;letter-spacing:0.1em;margin-right:10px;">時間</span>' + esc(datetime) + '</div>' +
+          '<div><span style="color:' + C.textMid + ';font-size:12px;letter-spacing:0.1em;margin-right:10px;">地點</span>' + esc(place) + '</div>' +
+          (solo ? '<div style="margin-top:10px;padding:8px 12px;background:' + C.strong + ';color:#fff;border-radius:6px;font-size:12px;font-weight:700;display:inline-block;">★ 單場專題 · ' + esc(solo) + ' · ' + esc(topic) + '</div>' : '') +
         '</div>' +
       '</div>' +
-      '<div style="text-align:center;font-size:11px;color:#9EACA3;margin-top:16px;letter-spacing:0.14em;">虎智科技 TigerAI · AI 工作流程 · 嘉義班</div>' +
-    '</div></body></html>'
+    '</div>';
+
+  // ─── Card 3:課程資訊 ───
+  const courseContent = esc(courseBlock.replace(/^▌課程資訊\n/, '')).replace(/\n/g, '<br>');
+  const courseCard =
+    sectionHead('📚', '課程資訊') +
+    '<div style="padding:0 28px;margin-top:12px;">' +
+      '<div style="background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:10px;padding:18px 20px;font-size:14px;color:' + C.textMain + ';line-height:1.9;">' +
+        courseContent +
+      '</div>' +
+    '</div>';
+
+  // ─── Card 4:行前提醒 ───
+  const reminders = [
+    { icon: '💻', text: '請攜帶個人筆電(MacOS / Windows 皆可)' },
+    { icon: '⏰', text: '課程當天請提早 10 分鐘報到' },
+    { icon: '📨', text: '開課前 3 天將發送行前通知信' },
+    transportInfo ? { icon: '🚉', text: '交通 · ' + transportInfo } : null,
+    parkingInfo   ? { icon: '🅿️', text: '停車 · ' + parkingInfo } : null,
+    { icon: '📝', text: '如需改期或取消 · 可點下方按鈕 · 或於開課 3 日前來信告知' }
+  ].filter(Boolean);
+  const reminderList = reminders.map(r =>
+    '<tr>' +
+      '<td style="padding:10px 0 10px 4px;width:28px;font-size:16px;vertical-align:top;line-height:1.6;">' + r.icon + '</td>' +
+      '<td style="padding:10px 0;color:' + C.textMain + ';font-size:14px;line-height:1.75;border-bottom:1px solid ' + C.line + ';">' + esc(r.text) + '</td>' +
+    '</tr>'
+  ).join('');
+  const reminderCard =
+    sectionHead('⚡', '行前提醒') +
+    '<div style="padding:0 28px;margin-top:12px;">' +
+      '<div style="background:' + C.card + ';border:1px solid ' + C.line + ';border-radius:10px;padding:4px 20px 12px;">' +
+        '<table style="width:100%;border-collapse:collapse;">' + reminderList + '</table>' +
+      '</div>' +
+    '</div>';
+
+  // ─── 取消按鈕 ───
+  const cancelCard = cancelUrl ? (
+    '<div style="padding:36px 28px 8px;text-align:center;">' +
+      '<a href="' + esc(cancelUrl) + '" style="display:inline-block;background:' + C.deep + ';color:#fff!important;text-decoration:none;padding:15px 42px;border-radius:999px;font-weight:900;font-size:15px;letter-spacing:0.1em;box-shadow:0 10px 24px -8px rgba(31,58,43,0.45);">' +
+        '✕ &nbsp; 取消報名' +
+      '</a>' +
+      '<div style="font-size:12px;color:' + C.textLight + ';margin-top:12px;letter-spacing:0.08em;line-height:1.7;">' +
+        '點了會寄取消確認信給您 · 無需再回信告知 · 謝謝' +
+      '</div>' +
+    '</div>'
+  ) : '';
+
+  // ─── Footer ───
+  const footer =
+    '<div style="background:' + C.deep + ';padding:28px;border-radius:0 0 16px 16px;margin-top:36px;">' +
+      '<div style="font-size:11px;letter-spacing:0.3em;color:' + C.strong + ';font-weight:700;margin-bottom:14px;text-align:center;">本課程聯絡窗口</div>' +
+      '<div style="font-size:14px;color:#fff;line-height:2;text-align:center;">' +
+        '<div><strong>虎智科技 · 紀先生</strong> &nbsp;<span style="color:#B6D4BC;font-family:monospace;">02-66058192</span></div>' +
+        '<div><strong>郭哿埼 KE CHI</strong> &nbsp;<span style="color:#B6D4BC;font-family:monospace;">0972-629-215</span></div>' +
+      '</div>' +
+    '</div>';
+
+  // ─── 組合 ───
+  return (
+    '<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>' + (isWaitlist ? '候補登記確認' : '報名確認') + '</title></head>' +
+    '<body style="margin:0;padding:0;background:' + C.bg + ';font-family:\'Noto Sans TC\',\'PingFang TC\',\'Microsoft JhengHei\',sans-serif;">' +
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;background:' + C.bg + ';padding:28px 16px;">' +
+      '<tr><td align="center">' +
+        '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="max-width:640px;width:100%;background:' + C.card + ';border-radius:16px;overflow:hidden;box-shadow:0 20px 60px -24px rgba(31,58,43,0.25);">' +
+          '<tr><td>' + brandBar + '</td></tr>' +
+          '<tr><td>' + heroBanner + '</td></tr>' +
+          (waitlistCard ? '<tr><td>' + waitlistCard + '</td></tr>' : '') +
+          '<tr><td>' + greeting + '</td></tr>' +
+          '<tr><td>' + signupCard + '</td></tr>' +
+          '<tr><td>' + cohortCard + '</td></tr>' +
+          '<tr><td>' + courseCard + '</td></tr>' +
+          '<tr><td>' + reminderCard + '</td></tr>' +
+          '<tr><td>' + cancelCard + '</td></tr>' +
+          '<tr><td>' + footer + '</td></tr>' +
+        '</table>' +
+        '<div style="font-size:11px;color:' + C.textLight + ';margin-top:16px;letter-spacing:0.2em;">© 虎智科技 TigerAI</div>' +
+      '</td></tr>' +
+    '</table>' +
+    '</body></html>'
   );
 }
 
