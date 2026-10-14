@@ -21,7 +21,7 @@
  *      千萬不要按「新增部署」— 會產生新 URL,前端就抓不到。
  */
 
-const SHEET_ID = 'PASTE_SHEET_ID_HERE';      // ← 新建 Sheet 後把 URL 裡 /d/ 跟 /edit 中間那串貼這
+const SHEET_ID = '1GCSnwhSErrTHAZYUdztsdBHEtFlLnFm1H3biuyCnNC4';
 const SHEET_COURSE = 'AI工作流程報名表單';
 const SHEET_COHORT = '梯次目錄';
 const SHEET_BACKUP = '_備份_AI工作流程報名表單';   // 隱藏備份分頁 · 用於防誤刪
@@ -350,30 +350,55 @@ function setupAll() {
   Logger.log('全部建置完成 · 現在到「檔案 → 共用 → 發布到網路」把「梯次目錄」發布成 CSV');
 }
 
-function testCourseEmail() {
-  sendCourseConfirmEmail({
-    name: '王大明', jobTitle: '生產部經理',
-    email: Session.getActiveUser().getEmail(),
-    phone: '0912345678', gender: '男', meal: '葷',
-    companyName: '測試電子股份有限公司', taxId: '12345678',
-    referral: '虎智科技',
-    cohort: '嘉義｜2026/11/9 ~ 11/17 每日 09:00-17:30｜嘉義市西區國華街 245 號 5 樓',
-    note: '素食一份'
-  });
-  Logger.log('已寄雙講師版測試信至 ' + Session.getActiveUser().getEmail());
+// 從 Sheet 的梯次目錄抓第一筆 · 動態組測試用 cohort 字串
+function getFirstCohortForTest() {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_COHORT);
+    if (!sheet || sheet.getLastRow() < 2) return '嘉義｜待設定｜待設定';
+    const row = sheet.getRange(2, 1, 1, COHORT_HEADERS.length).getValues()[0];
+    const city = (row[0] || '').trim();
+    const date = (row[1] || '').trim();
+    const time = (row[2] || '').trim();
+    const place = (row[3] || '').trim();
+    const solo = (row[4] || '').trim();
+    const topic = (row[5] || '').trim();
+    const cohortStr = [city, [date, time].filter(Boolean).join(' '), place].filter(Boolean).join('｜');
+    return { cohort: cohortStr, soloInstructor: solo, soloTopic: topic };
+  } catch (err) {
+    Logger.log('⚠️ 讀 Sheet 梯次失敗 · 用 fallback:' + err.toString());
+    return { cohort: '嘉義｜待設定｜待設定', soloInstructor: '', soloTopic: '' };
+  }
 }
 
-// 通用單場版測試 · 把 soloInstructor / soloTopic 換成任何值都能跑
-function testCourseEmailSolo() {
+function testCourseEmail() {
+  const c = getFirstCohortForTest();
   sendCourseConfirmEmail({
     name: '王大明', jobTitle: '生產部經理',
     email: Session.getActiveUser().getEmail(),
     phone: '0912345678', gender: '男', meal: '葷',
     companyName: '測試電子股份有限公司', taxId: '12345678',
     referral: '虎智科技',
-    cohort: '嘉義｜2026/11/9 09:00-17:30｜嘉義市西區國華街 245 號 5 樓',
-    soloInstructor: '張惟翔 · AI 增幅者',
-    soloTopic: '提示詞工程 + Agent 建置單日工作坊',
+    cohort: c.cohort,          // 從 Sheet 抓第一筆 · 永遠跟最新梯次同步
+    note: '素食一份'
+  });
+  Logger.log('已寄雙講師版測試信至 ' + Session.getActiveUser().getEmail() + ' · 用的梯次:' + c.cohort);
+}
+
+// 通用單場版測試 · 從 Sheet 第一筆有「單場講師」值的梯次抓;沒有就用假的
+function testCourseEmailSolo() {
+  const c = getFirstCohortForTest();
+  const soloInstructor = c.soloInstructor || '張惟翔 · AI 增幅者';
+  const soloTopic = c.soloTopic || '提示詞工程 + Agent 建置單日工作坊';
+  sendCourseConfirmEmail({
+    name: '王大明', jobTitle: '生產部經理',
+    email: Session.getActiveUser().getEmail(),
+    phone: '0912345678', gender: '男', meal: '葷',
+    companyName: '測試電子股份有限公司', taxId: '12345678',
+    referral: '虎智科技',
+    cohort: c.cohort,
+    soloInstructor: soloInstructor,
+    soloTopic: soloTopic,
     note: ''
   });
   Logger.log('已寄通用單場版測試信至 ' + Session.getActiveUser().getEmail());
