@@ -91,47 +91,77 @@ function courseCounts() {
 
 // ════════ 寫入:課程報名(寫資料 + 寄確認信 + 記錄寄信狀態) ════════
 function logCourseSignup(data) {
+  // ────── DIAGNOSTIC LOGGING(抓資料為什麼不見的 bug · 2026-10-14 加)──────
+  console.log('[DIAG] === logCourseSignup 開始 ===');
+  console.log('[DIAG] 時間:', new Date().toISOString());
+  console.log('[DIAG] 收到報名:', JSON.stringify({ name: data.name, email: data.email, company: data.companyName }));
+
   const ss = getSS();
+  console.log('[DIAG] Spreadsheet ID:', ss.getId());
+  console.log('[DIAG] Spreadsheet URL:', ss.getUrl());
+  console.log('[DIAG] Spreadsheet 名稱:', ss.getName());
+  console.log('[DIAG] 所有分頁:', ss.getSheets().map(s => s.getName() + '(' + s.getLastRow() + ' 列)').join(' / '));
+
   let sheet = ss.getSheetByName(SHEET_COURSE);
-  if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
+  if (!sheet) {
+    console.log('[DIAG] ⚠️ 找不到分頁 ' + SHEET_COURSE + ' · 建立新分頁');
+    sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
+  }
+  console.log('[DIAG] 目標分頁:', sheet.getName(), '· getLastRow(寫入前):', sheet.getLastRow());
+
   ensureHeaders(sheet, COURSE_HEADERS);
-  sheet.appendRow([
+  console.log('[DIAG] ensureHeaders 完成 · getLastRow:', sheet.getLastRow());
+
+  const rowData = [
     data.timestamp || new Date().toISOString(),
-    // 學員
     data.name || '',
     data.jobTitle || '',
     data.email || '',
     data.gender || '',
     data.meal || '',
-    // 公司
     data.taxId || '',
     data.companyName || '',
     data.industry || '',
-    // 輔導
     data.advisor || '',
     data.isAdvised || '',
-    // 梯次
     data.cohort || '',
-    // 聯絡窗口
     data.contactName || '',
     data.contactPhone || '',
     data.contactEmail || '',
-    // 其他
     data.note || '',
     data.consent || '',
-    // 寄信狀態(下面寄完再填回)
     ''
-  ]);
+  ];
+
+  try {
+    sheet.appendRow(rowData);
+    console.log('[DIAG] ✅ appendRow 成功');
+  } catch (err) {
+    console.log('[DIAG] ❌ appendRow 失敗:', err.toString(), err.stack);
+    throw err;
+  }
+
   const row = sheet.getLastRow();
+  console.log('[DIAG] 寫入後 getLastRow:', row);
+  // 驗證寫入 · 讀回那一列第 2 欄(姓名)看是不是剛剛寫的
+  const verifyName = sheet.getRange(row, 2).getValue();
+  console.log('[DIAG] 驗證讀回姓名:', verifyName, '預期:', data.name);
+  if (verifyName !== data.name) {
+    console.log('[DIAG] ⚠️⚠️⚠️ 寫入驗證失敗 · 讀回的姓名跟預期不一樣!');
+  }
 
   let mailStatus;
   try {
     sendCourseConfirmEmail(data);
     mailStatus = '✅ 已寄出 ' + Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
+    console.log('[DIAG] 寄信成功');
   } catch (err) {
     mailStatus = '❌ 寄信失敗:' + err.message;
+    console.log('[DIAG] 寄信失敗:', err.toString());
   }
   sheet.getRange(row, COURSE_MAIL_STATUS_COL).setValue(mailStatus);
+  console.log('[DIAG] 寄信狀態已填回 col', COURSE_MAIL_STATUS_COL);
+  console.log('[DIAG] === logCourseSignup 結束 ===');
 
   return jsonResp({ ok: true });
 }
