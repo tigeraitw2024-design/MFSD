@@ -25,7 +25,7 @@ const SHEET_ID = '1GCSnwhSErrTHAZYUdztsdBHEtFlLnFm1H3biuyCnNC4';
 const SHEET_COURSE = 'AI工作流程報名表單';
 const SHEET_COHORT = '梯次目錄';
 const SHEET_BACKUP = '_備份_AI工作流程報名表單';   // 隱藏備份分頁 · 用於防誤刪
-const COHORT_CAPACITY = 30;   // 每梯次名額 · 第 31 位起列為候補
+const COHORT_CAPACITY_DEFAULT = 30;   // 預設每梯次名額(梯次沒填就用這個)
 
 const COURSE_HEADERS = [
   '時間戳',
@@ -43,13 +43,17 @@ const COURSE_MAIL_STATUS_COL = 14;
 const COURSE_ADMIT_STATUS_COL = 17;
 const COURSE_CANCEL_TOKEN_COL = 18;
 
-// 梯次目錄:單場講師 + 單場主題兩欄搭配使用
-//   單場講師欄空白 → 雙講師場;有填 → 單場專場,顯示什麼寫什麼
-//   單場主題欄 → 這場的課程內容/主題敘述(前端提示條與信件都會直接引用)
-const COHORT_HEADERS = ['開課縣市', '課程日期', '課程時間', '課程地點', '單場講師', '單場主題'];
+// 梯次目錄 Sheet 欄位
+//   單場講師/主題 → 空白=雙講師場;有填=單場專場
+//   交通說明/停車說明 → 選填 · 每個場次填自己的 · 空白則信件不顯示該行
+//   名額 → 選填 · 每個場次自己填 · 空白則用預設 30
+const COHORT_HEADERS = ['開課縣市', '課程日期', '課程時間', '課程地點', '單場講師', '單場主題', '交通', '停車', '名額'];
 // 範例場次(setupAll 第一次跑會塞這 1 列 · 之後你直接改 Sheet)
 const COHORT_SEED = [
-  ['嘉義', '2026/11/9 ~ 11/17(四日)', '每日 09:00-17:30 · 共 30h', '嘉義市西區國華街 245 號 5 樓', '', '']
+  ['嘉義', '2026/11/9 ~ 11/17(四日)', '每日 09:00-17:30 · 共 30h', '嘉義市西區國華街 245 號 5 樓', '', '',
+    '嘉義火車站步行約 12 分鐘(約 800 公尺)',
+    '大樓 3、4 樓設有停車場(費用依現場公告)',
+    30]
 ];
 
 // ════════ 入口 ════════
@@ -168,6 +172,32 @@ function cancelPage(status, message, meta) {
   return HtmlService.createHtmlOutput(html).setTitle(title + ' · AI 工作流程');
 }
 
+// 從梯次目錄抓這場的 meta(capacity / 交通 / 停車)
+// cohortString 格式:'城市｜日期 時間｜地點'
+function getCohortMeta(cohortString) {
+  const fallback = { capacity: COHORT_CAPACITY_DEFAULT, transportInfo: '', parkingInfo: '' };
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const cohortSheet = ss.getSheetByName(SHEET_COHORT);
+    if (!cohortSheet || cohortSheet.getLastRow() < 2) return fallback;
+    const rows = cohortSheet.getRange(2, 1, cohortSheet.getLastRow() - 1, COHORT_HEADERS.length).getValues();
+    for (let i = 0; i < rows.length; i++) {
+      const r = rows[i];
+      const rowLabel = [String(r[0] || '').trim(),
+                        [String(r[1] || '').trim(), String(r[2] || '').trim()].filter(Boolean).join(' '),
+                        String(r[3] || '').trim()].filter(Boolean).join('｜');
+      if (rowLabel === cohortString) {
+        return {
+          capacity: parseInt(r[8], 10) || COHORT_CAPACITY_DEFAULT,  // col I 名額
+          transportInfo: String(r[6] || '').trim(),                 // col G 交通
+          parkingInfo:   String(r[7] || '').trim()                  // col H 停車
+        };
+      }
+    }
+  } catch (err) { /* 查不到就用 fallback */ }
+  return fallback;
+}
+
 // 回傳各場次目前報名人數
 function courseCounts() {
   const counts = {};
@@ -231,17 +261,19 @@ function logCourseSignup(data) {
     console.log('[DIAG] ⚠️⚠️⚠️ 寫入驗證失敗 · 讀回姓名:', verifyName, '預期:', data.name);
   }
 
-  // 【錄取判定】寫入後 · 查「同一場次」目前有幾人(含我自己)· 第 N 位 > 30 就是候補
+  // 【錄取判定】寫入後 · 查「同一場次」目前有幾人(含我自己)· 第 N 位 > 名額 就是候補
   const myCohort = (data.cohort || '').trim();
+  const cohortMeta = getCohortMeta(myCohort);
+  const capacity = cohortMeta.capacity;
   let positionInCohort = 1;
   if (myCohort && sheet.getLastRow() > 1) {
     const allCohorts = sheet.getRange(2, 11, sheet.getLastRow() - 1, 1).getValues();
     positionInCohort = allCohorts.filter(r => String(r[0] || '').trim() === myCohort).length;
   }
-  const isWaitlist = positionInCohort > COHORT_CAPACITY;
-  const admitStatus = isWaitlist ? '候補 (第 ' + (positionInCohort - COHORT_CAPACITY) + ' 位)' : '正取 (第 ' + positionInCohort + ' 位)';
+  const isWaitlist = positionInCohort > capacity;
+  const admitStatus = isWaitlist ? '候補 (第 ' + (positionInCohort - capacity) + ' 位)' : '正取 (第 ' + positionInCohort + ' 位)';
   sheet.getRange(row, COURSE_ADMIT_STATUS_COL).setValue(admitStatus);
-  console.log('[DIAG] 錄取狀態:', admitStatus, '(同梯次第', positionInCohort, '位 / 名額', COHORT_CAPACITY, ')');
+  console.log('[DIAG] 錄取狀態:', admitStatus, '(同梯次第', positionInCohort, '位 / 名額', capacity, ')');
 
   // 【第 2 層】隱藏備份分頁 · 雙寫(主表萬一被誤刪 · 這份還在)
   try {
@@ -376,12 +408,18 @@ function sendCourseConfirmEmail(data, isWaitlist, positionInCohort) {
   const solo     = String(data.soloInstructor || '').trim();   // 有值 = 單場
   const topic    = String(data.soloTopic || '').trim() || '單場專題';
 
-  // 候補提醒 banner(放信件最上方 · 很醒目)
+  // 從梯次目錄抓這場的 meta(名額/交通/停車)
+  const cohortMeta = getCohortMeta(data.cohort);
+  const transportInfo = cohortMeta.transportInfo;
+  const parkingInfo = cohortMeta.parkingInfo;
+  const capacity = cohortMeta.capacity;
+
+  // 候補提醒 banner(放信件最上方 · 很醒目 · 名額跟著 Sheet 的設定走)
   const waitlistBanner = isWaitlist ? (
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
-    '📋 您為本梯次候補(第 ' + (positionInCohort - COHORT_CAPACITY) + ' 位候補)\n' +
+    '📋 您為本梯次候補(第 ' + (positionInCohort - capacity) + ' 位候補)\n' +
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
-    '本梯次已達 ' + COHORT_CAPACITY + ' 人上限 · 您為候補身分。\n' +
+    '本梯次已達 ' + capacity + ' 人上限 · 您為候補身分。\n' +
     '原則上您仍可以依預定時間到場上課。\n' +
     '若因名額控管無法參加,我們會「個別來信通知」您,請留意信箱。\n' +
     '若開課前未收到我們另行通知,代表候補成功 · 請依下方資訊按時到場。\n\n' +
@@ -456,8 +494,8 @@ function sendCourseConfirmEmail(data, isWaitlist, positionInCohort) {
     '　．請攜帶個人筆電(MacOS / Windows 皆可)\n' +
     '　．課程當天請提早 10 分鐘報到\n' +
     '　．開課前 3 天將發送行前通知信\n' +
-    '　．交通:嘉義火車站步行約 12 分鐘(約 800 公尺)\n' +
-    '　．停車:大樓 3、4 樓設有停車場(費用依現場公告)\n' +
+    (transportInfo ? '　．交通:' + transportInfo + '\n' : '') +
+    (parkingInfo   ? '　．停車:' + parkingInfo + '\n' : '') +
     '　．如需改期或取消,請於開課 3 日前來信告知\n\n' +
     cancelBlock +
     '如有任何問題,歡迎隨時與我們聯繫,期待課堂上見!\n\n' +

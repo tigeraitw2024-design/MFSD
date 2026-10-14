@@ -1633,7 +1633,10 @@ function parseCohortCSV(text) {
     location: (r[3] || '').trim(),
     soloInstructor: (r[4] || '').trim(),
     soloTopic: (r[5] || '').trim(),
-    capacity: 30
+    // 新增:交通、停車、名額(Sheet col G/H/I)· 名額空白用 30
+    transport: (r[6] || '').trim(),
+    parking:   (r[7] || '').trim(),
+    capacity:  parseInt(r[8], 10) || 30
   })).filter(c => c.date);
 }
 
