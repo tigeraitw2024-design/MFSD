@@ -25,6 +25,7 @@ const SHEET_ID = '1GCSnwhSErrTHAZYUdztsdBHEtFlLnFm1H3biuyCnNC4';
 const SHEET_COURSE = 'AI工作流程報名表單';
 const SHEET_COHORT = '梯次目錄';
 const SHEET_BACKUP = '_備份_AI工作流程報名表單';   // 隱藏備份分頁 · 用於防誤刪
+const COHORT_CAPACITY = 30;   // 每梯次名額 · 第 31 位起列為候補
 
 const COURSE_HEADERS = [
   '時間戳',
@@ -34,9 +35,13 @@ const COURSE_HEADERS = [
   '報名留言', '同意狀態',
   '寄信狀態',
   '單場講師',   // col 15 · 空=雙講師 · 有值=單場(Sheet 填什麼帶什麼)
-  '單場主題'    // col 16 · 單場的課程主題(Sheet 帶)
+  '單場主題',   // col 16 · 單場的課程主題(Sheet 帶)
+  '錄取狀態',   // col 17 · 正取 / 候補(後端自動判斷 · 看目前這場次已幾人)
+  '取消 Token'  // col 18 · 隱式 UUID · 給信件「取消報名」連結用
 ];
 const COURSE_MAIL_STATUS_COL = 14;
+const COURSE_ADMIT_STATUS_COL = 17;
+const COURSE_CANCEL_TOKEN_COL = 18;
 
 // 梯次目錄:單場講師 + 單場主題兩欄搭配使用
 //   單場講師欄空白 → 雙講師場;有填 → 單場專場,顯示什麼寫什麼
@@ -59,8 +64,108 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  if (e && e.parameter && e.parameter.action === 'counts') return courseCounts();
+  if (e && e.parameter) {
+    if (e.parameter.action === 'counts') return courseCounts();
+    if (e.parameter.action === 'cancel' && e.parameter.token) return handleCancel(e.parameter.token);
+  }
   return ContentService.createTextOutput('AI 工作流程 · 嘉義班 報名 API 運作中 ✓');
+}
+
+// ════════ 處理取消報名 ════════
+// 使用者點 Email 裡的連結(?action=cancel&token=XXX)· 回傳 HTML 頁面
+function handleCancel(token) {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const sheet = ss.getSheetByName(SHEET_COURSE);
+    if (!sheet || sheet.getLastRow() < 2) return cancelPage('error', '找不到報名資料');
+
+    // 掃 Token 欄找對應列
+    const tokens = sheet.getRange(2, COURSE_CANCEL_TOKEN_COL, sheet.getLastRow() - 1, 1).getValues();
+    let targetRow = -1;
+    for (let i = 0; i < tokens.length; i++) {
+      if (String(tokens[i][0] || '').trim() === token) { targetRow = i + 2; break; }
+    }
+    if (targetRow === -1) return cancelPage('error', '取消連結無效 · 可能已取消過或連結失效');
+
+    // 讀對應列資料
+    const row = sheet.getRange(targetRow, 1, 1, COURSE_HEADERS.length).getValues()[0];
+    const name = row[1], email = row[3], cohort = row[10];
+    const currentAdmit = String(row[COURSE_ADMIT_STATUS_COL - 1] || '').trim();
+
+    // 若已取消過,擋
+    if (currentAdmit.indexOf('已取消') === 0) {
+      return cancelPage('ok', '您已經取消過報名了 · 無需再次取消', { name, cohort });
+    }
+
+    // 標記為已取消
+    const cancelStamp = Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
+    sheet.getRange(targetRow, COURSE_ADMIT_STATUS_COL).setValue('已取消 ' + cancelStamp + ' (原:' + currentAdmit + ')');
+
+    // 寄確認信給對方
+    try {
+      const parts = String(cohort || '').split('｜');
+      const city = (parts[0] || '').trim();
+      const datetime = (parts[1] || '').trim();
+      MailApp.sendEmail({
+        to: email,
+        subject: '【取消確認】AI 工作流程 · 嘉義班 已取消您的報名',
+        body: name + ' 您好,\n\n' +
+          '我們已收到您的取消通知,您報名的以下場次已取消:\n\n' +
+          '　．開課縣市:' + city + '\n' +
+          '　．上課時間:' + datetime + '\n\n' +
+          '取消時間:' + cancelStamp + '\n\n' +
+          '若為誤點取消 · 或改期後想重新報名 · 請直接聯繫:\n' +
+          '　．虎智科技  紀先生  02-66058192\n' +
+          '　．郭哿埼  0972-629215\n\n' +
+          '感謝您曾支持本課程 · 期待未來再相見。\n',
+        name: '虎智科技 TigerAI'
+      });
+    } catch (err) { /* 寄信失敗不中斷 */ }
+
+    return cancelPage('ok', '已成功取消您的報名', { name, cohort, cancelStamp });
+  } catch (err) {
+    return cancelPage('error', '取消失敗 · 錯誤:' + err.toString());
+  }
+}
+
+function cancelPage(status, message, meta) {
+  meta = meta || {};
+  const isOk = status === 'ok';
+  const bg = isOk ? '#EEF4EC' : '#FEE2E2';
+  const barColor = isOk ? '#4D9B6A' : '#DC2626';
+  const emoji = isOk ? '✓' : '⚠';
+  const title = isOk ? '已成功取消' : '取消失敗';
+
+  const metaBlock = meta.name ? (
+    '<div style="background:#fff;border:1px solid rgba(0,0,0,0.08);border-radius:12px;padding:20px;margin-top:24px;text-align:left;">' +
+      '<div style="font-size:11px;letter-spacing:0.22em;color:#6B7A72;font-weight:700;margin-bottom:10px;">取消內容</div>' +
+      '<div style="font-size:15px;color:#1F3A2B;line-height:1.9;">' +
+        '<div><strong>姓名</strong>　' + (meta.name || '') + '</div>' +
+        (meta.cohort ? '<div><strong>場次</strong>　' + meta.cohort + '</div>' : '') +
+        (meta.cancelStamp ? '<div><strong>時間</strong>　' + meta.cancelStamp + '</div>' : '') +
+      '</div>' +
+    '</div>'
+  ) : '';
+
+  const html =
+    '<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="UTF-8">' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+    '<title>' + title + ' · AI 工作流程</title>' +
+    '<style>body{margin:0;padding:0;background:' + bg + ';font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;}' +
+    '.card{background:#fff;max-width:480px;width:92%;padding:48px 32px 40px;border-radius:20px;text-align:center;box-shadow:0 20px 60px -20px rgba(31,58,43,0.25);}' +
+    '.icon{width:72px;height:72px;border-radius:50%;background:' + barColor + ';color:#fff;font-size:40px;line-height:72px;display:inline-block;margin-bottom:20px;font-weight:700;}' +
+    '.title{font-size:26px;font-weight:900;color:#1F3A2B;margin:0 0 12px;}' +
+    '.msg{color:#3E6B52;font-size:16px;line-height:1.8;margin:0 0 8px;}' +
+    '.note{color:#9EACA3;font-size:12px;letter-spacing:0.18em;margin-top:28px;font-weight:700;}' +
+    '</style></head><body><div class="card">' +
+    '<div class="icon">' + emoji + '</div>' +
+    '<h1 class="title">' + title + '</h1>' +
+    '<p class="msg">' + message + '</p>' +
+    metaBlock +
+    '<div class="note">虎智科技 TigerAI</div>' +
+    '</div></body></html>';
+
+  return HtmlService.createHtmlOutput(html).setTitle(title + ' · AI 工作流程');
 }
 
 // 回傳各場次目前報名人數
@@ -98,6 +203,10 @@ function logCourseSignup(data) {
   if (!sheet) sheet = ss.insertSheet(SHEET_COURSE, ss.getSheets().length);
   ensureHeaders(sheet, COURSE_HEADERS);
 
+  // 產一組取消 token(給 Email 連結用)
+  const cancelToken = Utilities.getUuid();
+  data._cancelToken = cancelToken;
+
   const rowData = [
     data.timestamp || new Date().toISOString(),
     data.name || '', data.jobTitle || '', data.email || '', data.phone || '', data.gender || '', data.meal || '',
@@ -106,7 +215,9 @@ function logCourseSignup(data) {
     data.note || '', data.consent || '',
     '',                            // col 14 · 寄信狀態(下方 setValue 填)
     data.soloInstructor || '',     // col 15 · 單場講師
-    data.soloTopic || ''           // col 16 · 單場主題
+    data.soloTopic || '',          // col 16 · 單場主題
+    '',                            // col 17 · 錄取狀態(下方 setValue 填)
+    cancelToken                    // col 18 · 取消 token
   ];
 
   console.log('[DIAG] 主表 getLastRow 寫入前:', sheet.getLastRow());
@@ -120,6 +231,18 @@ function logCourseSignup(data) {
     console.log('[DIAG] ⚠️⚠️⚠️ 寫入驗證失敗 · 讀回姓名:', verifyName, '預期:', data.name);
   }
 
+  // 【錄取判定】寫入後 · 查「同一場次」目前有幾人(含我自己)· 第 N 位 > 30 就是候補
+  const myCohort = (data.cohort || '').trim();
+  let positionInCohort = 1;
+  if (myCohort && sheet.getLastRow() > 1) {
+    const allCohorts = sheet.getRange(2, 11, sheet.getLastRow() - 1, 1).getValues();
+    positionInCohort = allCohorts.filter(r => String(r[0] || '').trim() === myCohort).length;
+  }
+  const isWaitlist = positionInCohort > COHORT_CAPACITY;
+  const admitStatus = isWaitlist ? '候補 (第 ' + (positionInCohort - COHORT_CAPACITY) + ' 位)' : '正取 (第 ' + positionInCohort + ' 位)';
+  sheet.getRange(row, COURSE_ADMIT_STATUS_COL).setValue(admitStatus);
+  console.log('[DIAG] 錄取狀態:', admitStatus, '(同梯次第', positionInCohort, '位 / 名額', COHORT_CAPACITY, ')');
+
   // 【第 2 層】隱藏備份分頁 · 雙寫(主表萬一被誤刪 · 這份還在)
   try {
     let backup = ss.getSheetByName(SHEET_BACKUP);
@@ -127,22 +250,23 @@ function logCourseSignup(data) {
       backup = ss.insertSheet(SHEET_BACKUP, ss.getSheets().length);
       ensureHeaders(backup, COURSE_HEADERS);
       backup.hideSheet();
-      // 保護備份分頁 · 禁止編輯
       const protection = backup.protect().setDescription('備份用 · 禁止編輯');
       protection.removeEditors(protection.getEditors());
       if (protection.canDomainEdit()) protection.setDomainEdit(false);
     }
-    backup.appendRow(rowData);
+    const backupRowData = rowData.slice();
+    backupRowData[COURSE_ADMIT_STATUS_COL - 1] = admitStatus;  // 備份也記錄錄取狀態
+    backup.appendRow(backupRowData);
     console.log('[DIAG] 備份分頁已寫入 · getLastRow:', backup.getLastRow());
   } catch (err) {
     console.log('[DIAG] ❌ 備份失敗(主表仍成功):', err.toString());
   }
 
-  // 寄確認信
+  // 寄確認信(傳 isWaitlist 進去 · 決定要不要加候補提醒)
   let mailStatus;
   try {
-    sendCourseConfirmEmail(data);
-    mailStatus = '✅ 已寄出 ' + Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
+    sendCourseConfirmEmail(data, isWaitlist, positionInCohort);
+    mailStatus = (isWaitlist ? '[候補] ' : '') + '✅ 已寄出 ' + Utilities.formatDate(new Date(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm');
   } catch (err) {
     mailStatus = '❌ 寄信失敗:' + err.message;
   }
@@ -192,7 +316,9 @@ function recoverFromGmailSent() {
         parsed.cohort,
         '', '[Gmail 回補]',
         '✅ 回補 ' + Utilities.formatDate(msg.getDate(), 'Asia/Taipei', 'yyyy-MM-dd HH:mm'),
-        parsed.soloInstructor, parsed.soloTopic
+        parsed.soloInstructor, parsed.soloTopic,
+        '[Gmail 回補 · 未判定]',   // col 17 錄取狀態
+        ''                         // col 18 取消 Token · 回補不給(不能取消歷史資料)
       ]);
     });
   });
@@ -238,7 +364,8 @@ function parseConfirmEmail(body) {
 
 // ════════ 寄送:報名確認信 ════════
 // 兩種模式:雙講師(現行寫死內容) · 通用單場(講師名/主題全由 Sheet 帶,套到任何講師)
-function sendCourseConfirmEmail(data) {
+// isWaitlist = true 時信件主旨加「【候補】」· 內文加候補提醒 block
+function sendCourseConfirmEmail(data, isWaitlist, positionInCohort) {
   const to = String(data.email || '').trim();
   if (!to) throw new Error('無 Email');
 
@@ -249,10 +376,22 @@ function sendCourseConfirmEmail(data) {
   const solo     = String(data.soloInstructor || '').trim();   // 有值 = 單場
   const topic    = String(data.soloTopic || '').trim() || '單場專題';
 
+  // 候補提醒 banner(放信件最上方 · 很醒目)
+  const waitlistBanner = isWaitlist ? (
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+    '📋 您為本梯次候補(第 ' + (positionInCohort - COHORT_CAPACITY) + ' 位候補)\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+    '本梯次已達 ' + COHORT_CAPACITY + ' 人上限 · 您為候補身分。\n' +
+    '原則上您仍可以依預定時間到場上課。\n' +
+    '若因名額控管無法參加,我們會「個別來信通知」您,請留意信箱。\n' +
+    '若開課前未收到我們另行通知,代表候補成功 · 請依下方資訊按時到場。\n\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n'
+  ) : '';
+
   let subject, headline, courseBlock;
   if (solo) {
     // ── 通用單場版 · 講師/主題從 Sheet 拉,不 hardcode ──
-    subject = '【報名確認】AI 工作流程 · ' + solo + ' 單場 · ' + topic;
+    subject = (isWaitlist ? '【候補】' : '【報名確認】') + 'AI 工作流程 · ' + solo + ' 單場 · ' + topic;
     headline =
       '感謝您報名「AI 工作流程 · ' + solo + ' 單場」,\n' +
       '本場為 ' + solo + ' 單講師專場 · 主題:' + topic + '。\n' +
@@ -283,7 +422,20 @@ function sendCourseConfirmEmail(data) {
       '　．完訓後能看懂 AI、拆得解流程、建得起應用、推得動落地\n\n';
   }
 
+  // 取消報名連結(每筆報名有獨一無二 token)
+  const cancelToken = data._cancelToken || '';
+  const cancelUrl = cancelToken
+    ? (ScriptApp.getService().getUrl() + '?action=cancel&token=' + encodeURIComponent(cancelToken))
+    : '';
+  const cancelBlock = cancelUrl ? (
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+    '🔗 如需取消報名,請點以下連結(一次性 · 點了即生效):\n' +
+    cancelUrl + '\n' +
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n'
+  ) : '';
+
   const body =
+    waitlistBanner +
     (data.name || '') + ' ' + (data.jobTitle || '') + ' 您好,\n\n' +
     headline +
     '▌您的報名資訊\n' +
@@ -307,6 +459,7 @@ function sendCourseConfirmEmail(data) {
     '　．交通:嘉義火車站步行約 12 分鐘(約 800 公尺)\n' +
     '　．停車:大樓 3、4 樓設有停車場(費用依現場公告)\n' +
     '　．如需改期或取消,請於開課 3 日前來信告知\n\n' +
+    cancelBlock +
     '如有任何問題,歡迎隨時與我們聯繫,期待課堂上見!\n\n' +
     '──────────────────\n' +
     '本課程聯絡窗口\n' +
@@ -379,10 +532,27 @@ function testCourseEmail() {
     phone: '0912345678', gender: '男', meal: '葷',
     companyName: '測試電子股份有限公司', taxId: '12345678',
     referral: '虎智科技',
-    cohort: c.cohort,          // 從 Sheet 抓第一筆 · 永遠跟最新梯次同步
-    note: '素食一份'
-  });
-  Logger.log('已寄雙講師版測試信至 ' + Session.getActiveUser().getEmail() + ' · 用的梯次:' + c.cohort);
+    cohort: c.cohort,
+    note: '素食一份',
+    _cancelToken: 'TEST-' + new Date().getTime()
+  }, false, 1);
+  Logger.log('已寄【正取版】測試信至 ' + Session.getActiveUser().getEmail());
+}
+
+// 候補版測試(第 31 位 · 應該會出現候補 banner 跟取消連結)
+function testCourseEmailWaitlist() {
+  const c = getFirstCohortForTest();
+  sendCourseConfirmEmail({
+    name: '王大明', jobTitle: '生產部經理',
+    email: Session.getActiveUser().getEmail(),
+    phone: '0912345678', gender: '男', meal: '葷',
+    companyName: '測試電子股份有限公司', taxId: '12345678',
+    referral: '虎智科技',
+    cohort: c.cohort,
+    note: '素食一份',
+    _cancelToken: 'TEST-' + new Date().getTime()
+  }, true, 31);
+  Logger.log('已寄【候補版】測試信至 ' + Session.getActiveUser().getEmail());
 }
 
 // 通用單場版測試 · 從 Sheet 第一筆有「單場講師」值的梯次抓;沒有就用假的
@@ -399,8 +569,9 @@ function testCourseEmailSolo() {
     cohort: c.cohort,
     soloInstructor: soloInstructor,
     soloTopic: soloTopic,
-    note: ''
-  });
+    note: '',
+    _cancelToken: 'TEST-' + new Date().getTime()
+  }, false, 1);
   Logger.log('已寄通用單場版測試信至 ' + Session.getActiveUser().getEmail());
 }
 
