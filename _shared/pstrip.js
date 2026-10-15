@@ -21,8 +21,8 @@
   const MANIFEST_URL = '/_shared/media_manifest.json';
   // Drive 直連格式
   const photoUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
-  // 影片縮圖(Drive 自動產)· 當封面用 · 不需要播放
-  const videoThumbUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+  // iframe preview · 保證能播 · 會有 Drive logo
+  const videoIframeUrl = id => `https://drive.google.com/file/d/${id}/preview`;
 
   // 每一行要幾個 tile(超過就讓它無限輪播)
   const TILES_PER_ROW = 14;
@@ -40,26 +40,15 @@
     return img;
   }
 
-  // 影片用「縮圖當封面 + 右下 play icon」· 保證能顯示
-  // (Drive 的 <video> inline 播放常壞 · 改用縮圖策略最穩)
+  // 影片 iframe · 保證能播 · 會顯示 Drive 的控制列
   function tileVideo(item) {
-    const img = document.createElement('img');
-    img.src = videoThumbUrl(item.id);
-    img.alt = '課程影片';
-    img.loading = 'lazy';
-    img.decoding = 'async';
-    img.referrerPolicy = 'no-referrer';
-    img.addEventListener('error', () => {
-      img.parentElement && (img.parentElement.style.display = 'none');
-    });
-    // 疊一個 play icon
-    const wrap = document.createDocumentFragment();
-    wrap.appendChild(img);
-    const badge = document.createElement('span');
-    badge.textContent = '▶';
-    badge.style.cssText = 'position:absolute;right:8px;bottom:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;line-height:1;padding:3px 6px;border-radius:4px;pointer-events:none;';
-    wrap.appendChild(badge);
-    return wrap;
+    const iframe = document.createElement('iframe');
+    iframe.src = videoIframeUrl(item.id);
+    iframe.allow = 'autoplay';
+    iframe.loading = 'lazy';
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.style.cssText = 'width:100%;height:100%;border:0;display:block;';
+    return iframe;
   }
 
   function makeTile(item) {
