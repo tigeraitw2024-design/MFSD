@@ -21,8 +21,10 @@
   const MANIFEST_URL = '/_shared/media_manifest.json';
   // Drive 直連格式
   const photoUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
-  // iframe preview · 保證能播 · 會有 Drive logo
-  const videoIframeUrl = id => `https://drive.google.com/file/d/${id}/preview`;
+  // 影片縮圖(第一幀 · Drive 自動產)
+  const videoThumbUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+  // 點了跳到 Drive 新分頁播
+  const videoOpenUrl  = id => `https://drive.google.com/file/d/${id}/view`;
 
   // 每一行要幾個 tile(超過就讓它無限輪播)
   const TILES_PER_ROW = 14;
@@ -40,15 +42,42 @@
     return img;
   }
 
-  // 影片 iframe · 保證能播 · 會顯示 Drive 的控制列
+  // 影片 = 縮圖 + ▶ 浮標 · 點了跳 Drive 新分頁播
   function tileVideo(item) {
-    const iframe = document.createElement('iframe');
-    iframe.src = videoIframeUrl(item.id);
-    iframe.allow = 'autoplay';
-    iframe.loading = 'lazy';
-    iframe.setAttribute('allowfullscreen', '');
-    iframe.style.cssText = 'width:100%;height:100%;border:0;display:block;';
-    return iframe;
+    const wrap = document.createElement('a');
+    wrap.href = videoOpenUrl(item.id);
+    wrap.target = '_blank';
+    wrap.rel = 'noopener';
+    wrap.style.cssText = 'display:block;width:100%;height:100%;position:relative;text-decoration:none;';
+
+    const img = document.createElement('img');
+    img.src = videoThumbUrl(item.id);
+    img.alt = '課程現場影片';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.referrerPolicy = 'no-referrer';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+    img.addEventListener('error', () => {
+      wrap.parentElement && (wrap.parentElement.style.display = 'none');
+    });
+
+    const badge = document.createElement('div');
+    badge.setAttribute('aria-hidden', 'true');
+    badge.style.cssText = [
+      'position:absolute',
+      'top:50%','left:50%',
+      'transform:translate(-50%,-50%)',
+      'width:44px','height:44px',
+      'border-radius:50%',
+      'background:rgba(0,0,0,0.55)',
+      'display:flex','align-items:center','justify-content:center',
+      'pointer-events:none',
+    ].join(';');
+    badge.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+
+    wrap.appendChild(img);
+    wrap.appendChild(badge);
+    return wrap;
   }
 
   function makeTile(item) {
