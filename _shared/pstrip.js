@@ -21,9 +21,8 @@
   const MANIFEST_URL = '/_shared/media_manifest.json';
   // Drive 直連格式
   const photoUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
-  const videoUrl = id => `https://drive.google.com/uc?export=download&id=${id}`;
-  // 若 inline <video> 不能播,可改用 iframe 版 fallback
-  // const videoIframeUrl = id => `https://drive.google.com/file/d/${id}/preview`;
+  // 影片縮圖(Drive 自動產)· 當封面用 · 不需要播放
+  const videoThumbUrl = id => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
 
   // 每一行要幾個 tile(超過就讓它無限輪播)
   const TILES_PER_ROW = 14;
@@ -34,33 +33,39 @@
     img.alt = '課程現場';
     img.loading = 'lazy';
     img.decoding = 'async';
-    img.referrerPolicy = 'no-referrer';   // 某些 Drive 連結需要
+    img.referrerPolicy = 'no-referrer';
+    img.addEventListener('error', () => {
+      img.parentElement && (img.parentElement.style.display = 'none');
+    });
     return img;
   }
 
+  // 影片用「縮圖當封面 + 右下 play icon」· 保證能顯示
+  // (Drive 的 <video> inline 播放常壞 · 改用縮圖策略最穩)
   function tileVideo(item) {
-    const v = document.createElement('video');
-    v.autoplay = true;
-    v.muted = true;
-    v.loop = true;
-    v.playsInline = true;
-    v.setAttribute('playsinline', '');     // iOS
-    v.preload = 'metadata';
-    v.src = videoUrl(item.id);
-    v.style.objectFit = 'cover';
-    v.style.width = '100%';
-    v.style.height = '100%';
-    v.style.display = 'block';
-    // 若影片載不起來 · 隱藏整個 tile 不要空洞
-    v.addEventListener('error', () => {
-      v.parentElement && (v.parentElement.style.display = 'none');
+    const img = document.createElement('img');
+    img.src = videoThumbUrl(item.id);
+    img.alt = '課程影片';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.referrerPolicy = 'no-referrer';
+    img.addEventListener('error', () => {
+      img.parentElement && (img.parentElement.style.display = 'none');
     });
-    return v;
+    // 疊一個 play icon
+    const wrap = document.createDocumentFragment();
+    wrap.appendChild(img);
+    const badge = document.createElement('span');
+    badge.textContent = '▶';
+    badge.style.cssText = 'position:absolute;right:8px;bottom:6px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;line-height:1;padding:3px 6px;border-radius:4px;pointer-events:none;';
+    wrap.appendChild(badge);
+    return wrap;
   }
 
   function makeTile(item) {
     const tile = document.createElement('div');
     tile.className = 'ptile';
+    tile.style.position = 'relative';   // badge 定位用
     if (item.kind === 'photo') tile.appendChild(tilePhoto(item));
     else tile.appendChild(tileVideo(item));
     return tile;
