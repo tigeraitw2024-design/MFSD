@@ -89,32 +89,96 @@
     return tile;
   }
 
-  // 把 photos 跟 videos 交錯合併(大概每 4 張照片插 1 支影片)
-  function mergeMedia(photos, videos) {
-    const merged = [];
-    let vi = 0;
-    const videoEvery = Math.max(1, Math.ceil(photos.length / Math.max(1, videos.length)));
-    for (let i = 0; i < photos.length; i++) {
-      merged.push({ ...photos[i], kind: 'photo' });
-      if (vi < videos.length && (i + 1) % videoEvery === 0) {
-        merged.push({ ...videos[vi++], kind: 'video' });
-      }
+  // Fisher-Yates shuffle · in-place
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
     }
-    // 剩下的影片附在尾巴
-    while (vi < videos.length) merged.push({ ...videos[vi++], kind: 'video' });
-    return merged;
+    return arr;
+  }
+
+  // 按 subfolder 分桶 · 桶內洗牌
+  function makeBuckets(items) {
+    const buckets = {};
+    items.forEach(it => {
+      const key = it.subfolder || '(root)';
+      (buckets[key] = buckets[key] || []).push(it);
+    });
+    Object.values(buckets).forEach(shuffle);
+    return buckets;
+  }
+
+  // 一列:從多個 subfolder 桶 round-robin 取 · phaseOffset 讓兩列起點錯開
+  // kind='photo' 或 'video' · 加在 item 上
+  function roundRobinTake(buckets, want, phaseOffset, kind) {
+    const keys = Object.keys(buckets);
+    if (!keys.length) return [];
+    const out = [];
+    let step = 0;
+    while (out.length < want) {
+      let took = 0;
+      for (let k = 0; k < keys.length; k++) {
+        const key = keys[(step + phaseOffset + k) % keys.length];
+        const b = buckets[key];
+        if (b && b.length) {
+          out.push({ ...b.shift(), kind });
+          took++;
+          if (out.length >= want) break;
+        }
+      }
+      if (!took) break;   // 所有桶空了
+      step++;
+    }
+    return out;
+  }
+
+  // 把影片均勻散進一列照片中(避免影片全擠一起)
+  function sprinkleVideos(photos, videos) {
+    if (!videos.length) return photos;
+    const total = photos.length + videos.length;
+    const positions = new Set();
+    // 想要的 video 位置 · 大致等距分布
+    for (let i = 0; i < videos.length; i++) {
+      const pos = Math.floor(((i + 0.5) * total) / videos.length);
+      positions.add(Math.min(total - 1, Math.max(0, pos)));
+    }
+    const out = [];
+    let pi = 0, vi = 0;
+    for (let i = 0; i < total; i++) {
+      if (positions.has(i) && vi < videos.length) out.push(videos[vi++]);
+      else if (pi < photos.length) out.push(photos[pi++]);
+      else if (vi < videos.length) out.push(videos[vi++]);
+    }
+    return out;
   }
 
   function fillPstrip(container, manifest) {
-    const merged = mergeMedia(manifest.photos || [], manifest.videos || []);
-    if (!merged.length) {
+    const allPhotos = manifest.photos || [];
+    const allVideos = manifest.videos || [];
+    if (!allPhotos.length && !allVideos.length) {
       container.style.display = 'none';
       return;
     }
 
-    // 分成兩列:奇數 index 左列、偶數 index 右列
-    const leftItems = merged.filter((_, i) => i % 2 === 0).slice(0, TILES_PER_ROW);
-    const rightItems = merged.filter((_, i) => i % 2 === 1).slice(0, TILES_PER_ROW);
+    // 兩列各自 round-robin · 起點錯開 1 格(避免左右平行同 subfolder)
+    const photoBuckets = makeBuckets(allPhotos);
+    const videoBuckets = makeBuckets(allVideos);
+
+    // 每列的 photo / video 配額
+    const videoPerRow = Math.min(
+      Math.ceil(TILES_PER_ROW / 4),             // 大概 4 格 1 支
+      Math.ceil(allVideos.length / 2)           // 影片總數也要撐得起兩列
+    );
+    const photoPerRow = TILES_PER_ROW - videoPerRow;
+
+    const leftPhotos  = roundRobinTake(photoBuckets, photoPerRow, 0, 'photo');
+    const leftVideos  = roundRobinTake(videoBuckets, videoPerRow, 0, 'video');
+    const rightPhotos = roundRobinTake(photoBuckets, photoPerRow, 1, 'photo');
+    const rightVideos = roundRobinTake(videoBuckets, videoPerRow, 1, 'video');
+
+    const leftItems  = sprinkleVideos(leftPhotos,  leftVideos);
+    const rightItems = sprinkleVideos(rightPhotos, rightVideos);
 
     container.innerHTML = '';
 
