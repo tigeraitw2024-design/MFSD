@@ -1,0 +1,50 @@
+name: Sync media manifest (weekly)
+
+# 每週一凌晨 3 點(台北時間)自動從 Drive 重抓照片 · 更新 _shared/media_manifest.json
+# UTC 的週日 19:00 = 台北週一 03:00
+# 也可以到 Actions 頁面手動按「Run workflow」立即跑一次
+on:
+  schedule:
+    - cron: '0 19 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write   # 讓 action 能 push 回來
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install gdown requests
+
+      - name: Run sync script
+        run: python "專案/sync_media_manifest.py"
+
+      - name: Commit + push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # 判斷有沒有實質變化(排除只變 generated 時間戳的情況)
+          if git diff --quiet -- _shared/media_manifest.json; then
+            echo "No changes."
+            exit 0
+          fi
+          # 檢查是不是只有 timestamp 變
+          CHANGE_LINES=$(git diff --unified=0 _shared/media_manifest.json | grep -E '^[+-]' | grep -vE '^(---|\+\+\+|[+-]\s*"generated")' | wc -l)
+          if [ "$CHANGE_LINES" -eq 0 ]; then
+            echo "Only timestamp changed · 不 commit"
+            git checkout _shared/media_manifest.json
+            exit 0
+          fi
+          git add _shared/media_manifest.json
+          git commit -m "chore(sync): weekly media manifest refresh"
+          git push
