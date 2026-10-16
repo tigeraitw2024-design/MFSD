@@ -155,30 +155,16 @@
 
   function fillPstrip(container, manifest) {
     const allPhotos = manifest.photos || [];
-    const allVideos = manifest.videos || [];
-    if (!allPhotos.length && !allVideos.length) {
+    if (!allPhotos.length) {
       container.style.display = 'none';
       return;
     }
 
-    // 兩列各自 round-robin · 起點錯開 1 格(避免左右平行同 subfolder)
+    // 只顯示照片 · 影片不放
+    // 兩列各自 round-robin by subfolder · 起點錯開 1 格(避免左右平行同場次)
     const photoBuckets = makeBuckets(allPhotos);
-    const videoBuckets = makeBuckets(allVideos);
-
-    // 每列的 photo / video 配額
-    const videoPerRow = Math.min(
-      Math.ceil(TILES_PER_ROW / 4),             // 大概 4 格 1 支
-      Math.ceil(allVideos.length / 2)           // 影片總數也要撐得起兩列
-    );
-    const photoPerRow = TILES_PER_ROW - videoPerRow;
-
-    const leftPhotos  = roundRobinTake(photoBuckets, photoPerRow, 0, 'photo');
-    const leftVideos  = roundRobinTake(videoBuckets, videoPerRow, 0, 'video');
-    const rightPhotos = roundRobinTake(photoBuckets, photoPerRow, 1, 'photo');
-    const rightVideos = roundRobinTake(videoBuckets, videoPerRow, 1, 'video');
-
-    const leftItems  = sprinkleVideos(leftPhotos,  leftVideos);
-    const rightItems = sprinkleVideos(rightPhotos, rightVideos);
+    const leftItems  = roundRobinTake(photoBuckets, TILES_PER_ROW, 0, 'photo');
+    const rightItems = roundRobinTake(photoBuckets, TILES_PER_ROW, 1, 'photo');
 
     container.innerHTML = '';
 
