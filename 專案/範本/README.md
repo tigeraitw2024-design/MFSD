@@ -20,6 +20,20 @@
 
 沒放的話 Claude 會用 SVG / 文字型預設。
 
+## 課程現場照片(輪播 pstrip)
+
+**不放在這裡** · 走 Google Drive 公開資料夾 · **全部課程共用一份 manifest**。
+
+- 清單檔:`_shared/media_manifest.json`
+- 產生 script:`專案/sync_media_manifest.py`
+- 設定在 script 開頭的 `DRIVE_FOLDER_URLS = [...]`(可以放多個 Drive 連結)
+- 新增 Drive 連結:編輯那個 list · 跑 `python 專案/sync_media_manifest.py` · commit + push
+- **自動排程**:GitHub Actions `.github/workflows/sync-media-manifest.yml` 每週一台北 03:00 自動跑
+- 想要立即更新:到 GitHub Actions 頁手動 Run workflow · 或跟 Claude 說「幫我重抓 Drive 照片」
+
+7 個 course 的 `index.html` 都已經載 `/_shared/pstrip.js` · 吃同一份 manifest · 一改全部同步。
+新建 course 複製現有的 pstrip 區塊即可(空容器 `<div class="pstrip" data-pstrip-auto></div>` + `<script src="/_shared/pstrip.js" defer></script>`)。
+
 ## 填完後
 
 對 Claude 說「跑 [這個專案名]」就會開工。
