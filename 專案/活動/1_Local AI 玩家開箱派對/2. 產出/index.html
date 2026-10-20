@@ -570,15 +570,20 @@ section.block .body{
 }
 .agenda li:last-child{ border-bottom: none; }
 
-/* scroll-linked reveal · JS 直接依 scroll 位置設 style · 連續 */
+/* scroll reveal · 每項獨立 trigger · 滾到 viewport 中偏下才顯示 · 無 blur */
 .agenda li{
   opacity: 0;
-  transform: translateY(30px);
-  filter: blur(3px);
-  will-change: opacity, transform, filter;
+  transform: translateY(40px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.agenda li.show{
+  opacity: 1;
+  transform: translateY(0);
 }
 @media (prefers-reduced-motion: reduce){
-  .agenda li{ opacity: 1 !important; transform: none !important; filter: none !important; }
+  .agenda li{ opacity: 1 !important; transform: none !important; transition: none !important; }
 }
 .agenda .time{
   color: var(--cyan);
@@ -2388,43 +2393,26 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
 
-/* ─────── AGENDA scroll-linked reveal · 跟 scroll 位置連續同步 ─────── */
-(function initAgendaScrollLinked() {
+/* ─────── AGENDA scroll reveal · 每項獨立 trigger · 一個一個出 ─────── */
+(function initAgendaReveal() {
   const items = document.querySelectorAll('.agenda li');
   if (!items.length) return;
-
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) {
-    items.forEach(el => {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.style.filter = 'none';
-    });
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('show'));
     return;
   }
-
-  let ticking = false;
-  function schedule() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => { ticking = false; update(); });
-  }
-  function update() {
-    const vH = window.innerHeight;
-    const triggerY = vH * 0.85;   // 從 viewport 下方 85% 位置開始出現
-    const completeY = vH * 0.40;  // 滾到 viewport 中偏上完全顯示
-    items.forEach(item => {
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.top + rect.height / 2;
-      const p = Math.max(0, Math.min(1, (triggerY - itemCenter) / (triggerY - completeY)));
-      item.style.opacity = String(p);
-      item.style.transform = `translateY(${(1 - p) * 24}px)`;
-      item.style.filter = p >= 0.96 ? '' : `blur(${(1 - p) * 2.5}px)`;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        io.unobserve(entry.target);   // 顯示後就不再觀察 · 不會往回縮
+      }
     });
-  }
-  update();
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule);
+  }, {
+    threshold: 0,
+    rootMargin: '0px 0px -25% 0px',   // 項目要滾到 viewport 下方 75% 位置才 trigger
+  });
+  items.forEach(el => io.observe(el));
 })();
 
 /* ─────── FAQ toggle ─────── */
