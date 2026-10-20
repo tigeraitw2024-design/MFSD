@@ -904,16 +904,15 @@ section.block .body{
   color: var(--text);
   cursor: pointer;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
 }
 .faq-q::before{
   content: 'Q.';
   font-family: var(--mono);
   color: var(--cyan);
   font-size: 14px;
-  margin-right: 10px;
+  flex-shrink: 0;
 }
 .faq-q::after{
   content: '+';
@@ -923,6 +922,7 @@ section.block .body{
   font-weight: 300;
   transition: transform 0.2s;
   flex-shrink: 0;
+  margin-left: auto;   /* 推 + 到最右 · 問題文字靠左 */
 }
 .faq-item.open .faq-q::after{ transform: rotate(45deg); color: var(--cyan); }
 .faq-a{
@@ -1485,7 +1485,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
     <p class="sub">
       <span lang="zh">
         一場為 Local AI 玩家、Server 自架者、AI 工程落地實作者準備的開箱夜。<br />
-        <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS Afterparty</span>。<br />
+        <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS 晚上派對</span>。<br />
         參加 Local AI 現場 · 或者 · 把你的作品搬上台。
       </span>
       <span lang="en">
@@ -1505,7 +1505,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <div class="cell">
         <div class="label"><span lang="zh">// 時間</span><span lang="en">// TIME</span></div>
         <div class="val">14:00 → 20:00</div>
-        <div class="val-sub"><span lang="zh">含 Afterparty</span><span lang="en">incl. Afterparty</span></div>
+        <div class="val-sub"><span lang="zh">含晚上派對</span><span lang="en">incl. Afterparty</span></div>
       </div>
       <div class="cell">
         <div class="label"><span lang="zh">// 地點</span><span lang="en">// VENUE</span></div>
@@ -1653,7 +1653,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
               <span lang="en">Count Me In</span>
             </span>
             <span class="desc">
-              <span lang="zh">看最硬核的 Local AI 現場 · 可加報 Afterparty · 票價折抵 NT$100</span>
+              <span lang="zh">看最硬核的 Local AI 現場 · 可加報晚上派對 · 票價折抵 NT$100</span>
               <span lang="en">See the hardest-core Local AI scene · optional Afterparty · NT$100 off ticket</span>
             </span>
             <span class="arrow-row">
@@ -1714,10 +1714,10 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <div class="mode">
         <div class="idx">// 03</div>
         <div class="k"><span lang="zh">當派對人</span><span lang="en">AS PARTY GOER</span></div>
-        <h3><span lang="zh">留下來參加 Afterparty</span><span lang="en">Stay for the Afterparty</span></h3>
+        <h3><span lang="zh">留下來參加晚上派對</span><span lang="en">Stay for the Afterparty</span></h3>
         <p>
-          <span lang="zh">18:00 之後 OOPS 自己辦的 Afterparty · 不限議程、不限話題。
-          報名時勾一下加報就好 · 票價折抵 NT$100。真正的 Networking 在這裡發生。</span>
+          <span lang="zh">18:00 之後 OOPS 自己辦的晚上派對 · 不限議程、不限話題。
+          報名時勾一下加報就好 · 票價折抵 NT$100。真正的交流在這裡發生。</span>
           <span lang="en">OOPS-hosted Afterparty from 18:00 · no agenda, no restrictions.
           Just tick the opt-in when you sign up · NT$100 off the ticket. The real
           networking happens here.</span>
@@ -1784,7 +1784,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <span lang="en">Timeline of the day (tentative)</span>
     </h3>
     <p class="body">
-      <span lang="zh">以下為流程模型 · 實際時段依場地與合作方確認結果微調。保留晚間 Afterparty。</span>
+      <span lang="zh">以下為流程模型 · 實際時段依場地與合作方確認結果微調。保留晚上派對。</span>
       <span lang="en">A model schedule · actual timing adjusts after venue & partner confirmations.
       Afterparty slot stays.</span>
     </p>
@@ -1902,11 +1902,11 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <span class="time">18:00 – 20:00</span>
           <span class="evt">
             <strong>
-              <span lang="zh">OOPS Afterparty</span>
+              <span lang="zh">OOPS 晚上派對</span>
               <span lang="en">OOPS Afterparty</span>
             </strong><span class="tag party"><span lang="zh">加報</span><span lang="en">OPT-IN</span></span>
             <span class="desc">
-              <span lang="zh">OOPS 主辦晚間 Afterparty。可選加報 · 票價折抵 NT$100。</span>
+              <span lang="zh">OOPS 主辦的晚上派對。可選加報 · 票價折抵 NT$100。</span>
               <span lang="en">OOPS-hosted evening Afterparty. Optional opt-in · NT$100 off the ticket.</span>
             </span>
           </span>
@@ -1989,7 +1989,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <span lang="en">Is there a fee?</span>
         </div>
         <div class="faq-a">
-          <span lang="zh">一般活動費用與名額依最終公告為準。Afterparty 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</span>
+          <span lang="zh">一般活動費用與名額依最終公告為準。晚上派對原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</span>
           <span lang="en">Main event fee & seat count per final announcement. Afterparty price announced by OOPS · NT$100 off via this signup.</span>
         </div>
       </div>
@@ -2025,11 +2025,11 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       </div>
       <div class="faq-item">
         <div class="faq-q">
-          <span lang="zh">Afterparty 一定要加報嗎?</span>
+          <span lang="zh">晚上派對一定要加報嗎?</span>
           <span lang="en">Do I have to opt into Afterparty?</span>
         </div>
         <div class="faq-a">
-          <span lang="zh">不一定。Afterparty 是自選加報項目 · 只參加一般活動完全沒問題。</span>
+          <span lang="zh">不一定。晚上派對是自選加報項目 · 只參加一般活動完全沒問題。</span>
           <span lang="en">No. Afterparty is an optional add-on · joining only the main event is fine.</span>
         </div>
       </div>
@@ -2253,8 +2253,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <span lang="en">Count Me In</span>
     </h3>
     <p class="modal-desc">
-      <span lang="zh">一般活動報名表 · 包含是否加報 OOPS Afterparty。
-      Afterparty 原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。</span>
+      <span lang="zh">一般活動報名表 · 包含是否加報 OOPS 晚上派對。
+      晚上派對原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。</span>
       <span lang="en">Main event signup · includes OOPS Afterparty opt-in.
       Afterparty price, drinks, payment pending OOPS announcement · currently only NT$100 discount confirmed.</span>
     </p>
@@ -2297,7 +2297,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
             <input type="checkbox" name="afterparty" value="yes" />
             <div>
               <div class="main">
-                <span lang="zh">加報 OOPS Afterparty(18:00–20:00)</span>
+                <span lang="zh">加報 OOPS 晚上派對(18:00–20:00)</span>
                 <span lang="en">Opt in to OOPS Afterparty (18:00–20:00)</span>
               </div>
               <div class="sub">
@@ -2327,7 +2327,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <span lang="en">&gt; SIGN UP</span>
         </button>
         <div class="form-note">
-          <span lang="zh">// 送出後會收到報名確認信 · 一般活動與 Afterparty 分開記錄。</span>
+          <span lang="zh">// 送出後會收到報名確認信 · 一般活動與晚上派對分開記錄。</span>
           <span lang="en">// Confirmation email will follow · main event & Afterparty are tracked separately.</span>
         </div>
       </div>
@@ -2347,7 +2347,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <span lang="en">Host Admin Login</span>
     </h3>
     <p class="modal-desc">
-      <span lang="zh">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出 Afterparty 加報清單。</span>
+      <span lang="zh">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出晚上派對加報清單。</span>
       <span lang="en">TigerAI hosts only. Once in: pick featured speakers · view signup list · export Afterparty opt-ins.</span>
     </p>
 
