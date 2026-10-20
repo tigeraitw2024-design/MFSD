@@ -542,46 +542,47 @@ section.block .body{
 
 /* ─────── AGENDA (terminal log) ─────── */
 .agenda{
-  background: var(--bg-elev);
-  border: 1px solid var(--line);
-  padding: 32px;
   font-family: var(--mono);
   font-size: 14px;
-  overflow-x: auto;
 }
 .agenda .meta-line{
   color: var(--text-dim);
-  margin-bottom: 20px;
-  padding-bottom: 20px;
-  border-bottom: 1px dashed var(--line-hi);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 16px 24px;
+  margin-bottom: 12px;
 }
 .agenda .meta-line .k{ color: var(--green); }
 .agenda ul{
   list-style: none;
-  padding: 0; margin: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;        /* 方塊之間的縫 */
 }
+/* 每個時段都是獨立方塊 */
 .agenda li{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 22px 26px;
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 20px;
-  padding: 14px 0;
-  border-bottom: 1px dotted var(--line);
   align-items: start;
-}
-.agenda li:last-child{ border-bottom: none; }
-
-/* scroll reveal · 每項獨立 trigger · 滾到 viewport 中偏下才顯示 · 無 blur */
-.agenda li{
+  /* scroll reveal: 從下滑上去「貼」到上面的方塊 */
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(60px);
   transition:
     opacity 0.5s ease-out,
-    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s;
 }
 .agenda li.show{
   opacity: 1;
   transform: translateY(0);
 }
+.agenda li:hover{ border-color: var(--line-hi); }
 @media (prefers-reduced-motion: reduce){
   .agenda li{ opacity: 1 !important; transform: none !important; transition: none !important; }
 }
@@ -615,8 +616,9 @@ section.block .body{
 .agenda .evt .tag.closed{ background: var(--amber); color: #000; }
 
 @media (max-width: 640px){
-  .agenda{ padding: 20px; font-size: 13px; }
-  .agenda li{ grid-template-columns: 1fr; gap: 4px; }
+  .agenda{ font-size: 13px; }
+  .agenda .meta-line{ padding: 14px 18px; }
+  .agenda li{ grid-template-columns: 1fr; gap: 6px; padding: 18px 20px; }
 }
 
 .agenda-note{
