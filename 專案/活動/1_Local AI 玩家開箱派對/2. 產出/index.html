@@ -1020,12 +1020,355 @@ footer .copy .status .dot{
 /* 隱藏 anchor offset */
 .anchor { scroll-margin-top: 80px; }
 
+/* ─────── CTA v2 · tilt + mascot ─────── */
+.cta-stage{
+  position: relative;
+  padding: 20px 60px;
+  margin-top: 48px;
+}
+@media (max-width: 820px){ .cta-stage{ padding: 20px 20px; } }
+.cta-stage .divider{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 80%;
+  background: linear-gradient(to bottom, transparent, var(--line-hi) 20%, var(--line-hi) 80%, transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+@media (max-width: 820px){ .cta-stage .divider{ display: none; } }
+
+.cta-pair-v2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: stretch;
+  position: relative;
+}
+@media (max-width: 820px){ .cta-pair-v2{ grid-template-columns: 1fr; gap: 24px; } }
+
+.cta-cell{
+  position: relative;
+  min-height: 260px;
+  perspective: 1000px;
+}
+.cta-cell .mascot{
+  position: absolute;
+  top: -24px;
+  width: 110px;
+  height: 140px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: opacity 0.3s ease-out, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 20px currentColor);
+}
+.cta-cell.left .mascot{
+  left: -30px;
+  color: var(--cyan);
+}
+.cta-cell.right .mascot{
+  right: -30px;
+  color: var(--magenta);
+}
+.cta-cell:hover .mascot,
+.cta-cell:focus-within .mascot{
+  opacity: 1;
+  transform: translateY(-10px) scale(1);
+}
+.cta-cell.left:hover .mascot{ transform: translateY(-10px) translateX(-6px) scale(1); }
+.cta-cell.right:hover .mascot{ transform: translateY(-10px) translateX(6px) scale(1); }
+
+.cta-btn{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 260px;
+  padding: 36px 32px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  color: inherit;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.2s,
+              background 0.2s,
+              box-shadow 0.3s;
+  overflow: hidden;
+}
+.cta-btn::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.cta-btn.magenta::before{ background: var(--magenta); }
+
+.cta-cell.left:hover .cta-btn,
+.cta-cell.left:focus-within .cta-btn{
+  transform: rotate(-5deg) translateY(-4px);
+  border-color: var(--cyan);
+  background: var(--bg-card);
+  box-shadow: 0 20px 40px -20px rgba(0, 245, 255, 0.4);
+}
+.cta-cell.right:hover .cta-btn,
+.cta-cell.right:focus-within .cta-btn{
+  transform: rotate(5deg) translateY(-4px);
+  border-color: var(--magenta);
+  background: var(--bg-card);
+  box-shadow: 0 20px 40px -20px rgba(255, 46, 166, 0.4);
+}
+.cta-cell:hover .cta-btn::before,
+.cta-cell:focus-within .cta-btn::before{ transform: scaleX(1); }
+
+.cta-btn .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+.cta-btn.magenta .tag{ color: var(--magenta); }
+.cta-btn .title{
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0;
+}
+.cta-btn .desc{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin: 0;
+}
+.cta-btn .arrow-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cta-cell.left:hover .cta-btn .arrow-row{ color: var(--cyan); }
+.cta-cell.right:hover .cta-btn .arrow-row{ color: var(--magenta); }
+.cta-btn .arrow-row .arr{ transition: transform 0.3s; }
+.cta-cell:hover .cta-btn .arrow-row .arr{ transform: translateX(6px); }
+
+/* ─────── MODAL ─────── */
+.modal{
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal.show{ display: flex; }
+.modal::before{
+  content:'';
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 7, 12, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: -1;
+  animation: modal-fade 0.2s ease-out;
+}
+@keyframes modal-fade { from { opacity: 0; } }
+
+.modal-panel{
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  background: var(--bg-elev);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 40px -10px rgba(0, 245, 255, 0.3);
+  padding: 40px;
+  animation: modal-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.modal.magenta .modal-panel{
+  border-color: var(--magenta);
+  box-shadow: 0 0 40px -10px rgba(255, 46, 166, 0.3);
+}
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+}
+@media (max-width: 640px){
+  .modal{ padding: 20px 12px; }
+  .modal-panel{ padding: 28px 20px; }
+}
+
+.modal-close{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+  line-height: 1;
+}
+.modal-close:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.modal.magenta .modal-close:hover{
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+
+.modal-tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.modal.magenta .modal-tag{ color: var(--magenta); }
+.modal h3{
+  font-family: var(--sans);
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+}
+.modal .modal-desc{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.modal .form-wrap{
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+body.modal-open { overflow: hidden; }
+
+/* ─────── ADMIN LOGIN SECTION (bottom) ─────── */
+.admin-section{
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.admin-section::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 400px; height: 400px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.admin-card{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 36px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+@media (max-width: 640px){
+  .admin-card{ grid-template-columns: 1fr; text-align: center; }
+}
+.admin-card .mascot-admin{
+  position: absolute;
+  bottom: -2px;
+  right: 30px;
+  width: 90px;
+  height: 110px;
+  color: var(--green);
+  filter: drop-shadow(0 0 15px var(--green));
+  pointer-events: none;
+}
+@media (max-width: 640px){ .admin-card .mascot-admin{ display: none; } }
+
+.admin-card .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.admin-card h3{
+  font-family: var(--sans);
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.admin-card p{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.6;
+}
+.admin-card .btn-admin{
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  z-index: 2;
+  position: relative;
+}
+.admin-card .btn-admin:hover{
+  background: var(--green);
+  color: #000;
+}
+
 /* 禁用動畫使用者 */
 @media (prefers-reduced-motion: reduce) {
   .hero h1 .en::before,
   .hero h1 .en::after,
   .topbar .term .cursor,
-  .eyebrow .dot { animation: none; }
+  .eyebrow .dot,
+  .cta-btn,
+  .mascot { animation: none; transition: none; }
+  .cta-cell:hover .cta-btn { transform: none; }
 }
 </style>
 </head>
@@ -1088,19 +1431,95 @@ footer .copy .status .dot{
       </div>
     </div>
 
-    <div class="cta-pair">
-      <a href="#submit" class="cta">
-        <div class="arrow">→</div>
-        <div class="tag">&gt; boot_speaker.exe</div>
-        <div class="title">我要上台展示 AI</div>
-        <div class="desc">主辦精選 2–3 位 · 投稿不等於入選 · 審核後聯繫</div>
-      </a>
-      <a href="#signup" class="cta magenta">
-        <div class="arrow">→</div>
-        <div class="tag">&gt; join_party.exe</div>
-        <div class="title">我要報名參加</div>
-        <div class="desc">可加報 OOPS Afterparty · 票價折抵 NT$100</div>
-      </a>
+    <div class="cta-stage">
+      <div class="divider" aria-hidden="true"></div>
+      <div class="cta-pair-v2">
+        <!-- LEFT · Speaker -->
+        <div class="cta-cell left">
+          <!-- Mascot: Hacker · 戴帽子+耳機+螢光眼 -->
+          <svg class="mascot" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- 連帽 / hood -->
+            <path d="M18,38 Q18,10 55,8 Q92,10 92,38 L92,55 Q55,42 18,55 Z"
+                  fill="currentColor" opacity="0.18"/>
+            <path d="M18,38 Q18,10 55,8 Q92,10 92,38"
+                  fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- 臉 shadow -->
+            <ellipse cx="55" cy="48" rx="26" ry="22" fill="#07070C"/>
+            <ellipse cx="55" cy="48" rx="26" ry="22" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <!-- 螢光眼 (pixel LED) -->
+            <rect x="40" y="43" width="7" height="4" fill="currentColor"/>
+            <rect x="63" y="43" width="7" height="4" fill="currentColor"/>
+            <!-- 嘴 (pixel bar) -->
+            <rect x="48" y="56" width="14" height="2" fill="currentColor" opacity="0.7"/>
+            <!-- 身體 -->
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="currentColor" opacity="0.15"/>
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <!-- 身體 circuit 線 -->
+            <line x1="42" y1="92" x2="68" y2="92" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <line x1="55" y1="92" x2="55" y2="110" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <circle cx="55" cy="110" r="2.5" fill="currentColor"/>
+            <!-- 麥克風 (右手舉起) -->
+            <line x1="80" y1="80" x2="96" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <rect x="92" y="40" width="8" height="12" rx="4" fill="currentColor"/>
+            <rect x="94" y="52" width="4" height="4" fill="currentColor"/>
+            <!-- 耳機 -->
+            <path d="M22,42 Q22,28 36,30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="26" y="42" width="7" height="10" rx="2" fill="currentColor"/>
+          </svg>
+          <button type="button" class="cta-btn" data-open-modal="speaker">
+            <span class="tag">&gt; boot_speaker.exe</span>
+            <span class="title">我要上台展示 AI</span>
+            <span class="desc">把你跑過的 Local AI 作品搬上台 · 主辦精選 2–3 位 · 投稿不等於入選</span>
+            <span class="arrow-row">
+              <span>SUBMIT YOUR DEMO</span>
+              <span class="arr">→</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- RIGHT · Signup -->
+        <div class="cta-cell right">
+          <!-- Mascot: Raver · 墨鏡+舉手+耳機 -->
+          <svg class="mascot" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- 頭 -->
+            <circle cx="55" cy="38" r="28" fill="currentColor" opacity="0.15"/>
+            <circle cx="55" cy="38" r="28" fill="none" stroke="currentColor" stroke-width="2.5"/>
+            <!-- 墨鏡 (單一長條) -->
+            <path d="M32,36 L78,36 L78,46 L62,46 L58,42 L52,42 L48,46 L32,46 Z"
+                  fill="#07070C" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <!-- 墨鏡裡的 reflection (pixel) -->
+            <rect x="37" y="39" width="4" height="2" fill="currentColor"/>
+            <rect x="68" y="39" width="4" height="2" fill="currentColor"/>
+            <!-- 嘴 (咧嘴 YEAH) -->
+            <path d="M46,56 Q55,62 64,56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <!-- 身體 -->
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="currentColor" opacity="0.12"/>
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <!-- 身體 pattern (triangle 洋紅 vibe) -->
+            <path d="M48,96 L62,96 L55,108 Z" fill="currentColor" opacity="0.4"/>
+            <!-- 舉手 YO (右手 up) -->
+            <line x1="80" y1="80" x2="90" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <!-- 握拳 (fist pixel) -->
+            <rect x="84" y="24" width="12" height="12" rx="2" fill="currentColor"/>
+            <rect x="84" y="22" width="4" height="4" fill="currentColor" opacity="0.6"/>
+            <rect x="90" y="22" width="4" height="4" fill="currentColor" opacity="0.6"/>
+            <!-- 耳機 -->
+            <path d="M27,30 Q27,18 42,20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="24" y="32" width="7" height="10" rx="2" fill="currentColor"/>
+            <path d="M83,30 Q83,18 68,20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="79" y="32" width="7" height="10" rx="2" fill="currentColor"/>
+          </svg>
+          <button type="button" class="cta-btn magenta" data-open-modal="signup">
+            <span class="tag">&gt; join_party.exe</span>
+            <span class="title">我要報名參加</span>
+            <span class="desc">看最硬核的 Local AI 現場 · 可加報 Afterparty · 票價折抵 NT$100</span>
+            <span class="arrow-row">
+              <span>JOIN THE PARTY</span>
+              <span class="arr">→</span>
+            </span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1165,7 +1584,7 @@ footer .copy .status .dot{
       <span class="k">[ AWAITING SELECTION ]</span>
       主辦正在審核中 · 入選名單確定後會顯示在這裡。
       <br /><br />
-      <a href="#submit" style="color: var(--magenta)">&gt; 投稿你的 Demo →</a>
+      <a href="#" data-open-modal="speaker" style="color: var(--magenta)">&gt; 投稿你的 Demo →</a>
     </div>
   </div>
 </section>
@@ -1297,15 +1716,141 @@ footer .copy .status .dot{
   </div>
 </section>
 
-<!-- ═══════════════ FORM A · SUBMIT SPEAKER ═══════════════ -->
-<section id="submit" class="block anchor">
+<!-- (前 #submit / #signup section 已改為 modal · 由 Hero 的 CTA 開啟) -->
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" class="block anchor">
   <div class="wrap">
-    <div class="form-head">
-      <span class="tag">&gt; boot_speaker.exe</span>
-      <h2 style="margin: 0;">// SUBMIT_YOUR_DEMO</h2>
+    <h2><span class="num">05 /</span> // FAQ</h2>
+    <h3 class="lead">常見問題</h3>
+
+    <div class="faq-list" id="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">活動要收費嗎?</div>
+        <div class="faq-a">一般活動費用與名額依最終公告為準。Afterparty 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">我送出「我要上台展示 AI」就會被安排上台嗎?</div>
+        <div class="faq-a">不會。所有投稿會進主辦審核 · 精選名額最多 3 位。入選我們會用你留的 email 聯繫 · 未入選者資料不會公開展示。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">現場有 Free Token 可以體驗嗎?</div>
+        <div class="faq-a">是。但 Token 體驗流程須通過技術驗收後才會開放現場掃碼。未通過前以 Server 展示、操作影片、流程示意呈現。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">我不是技術人員 · 也能來嗎?</div>
+        <div class="faq-a">可以。現場有產品介紹、合作流程說明、硬體 Demo · 不需要寫程式。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Afterparty 一定要加報嗎?</div>
+        <div class="faq-a">不一定。Afterparty 是自選加報項目 · 只參加一般活動完全沒問題。</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">活動流程會跟報名簡介完全一樣嗎?</div>
+        <div class="faq-a">目前流程為暫定模型 · 實際時段依場地與合作方最終確認結果微調。活動前 1 週會寄 email 通知最終時間表。</div>
+      </div>
     </div>
-    <h3 class="lead">我要上台展示 AI</h3>
-    <p class="body">
+  </div>
+</section>
+
+<!-- ═══════════════ PARTNERS ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="partners-head">
+      <span class="k">// HOSTED_BY</span>
+    </div>
+    <div class="partners-row">
+      <div class="p"><img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" /></div>
+    </div>
+
+    <div class="partners-head">
+      <span class="k">// IN_COLLABORATION_WITH</span>
+    </div>
+    <div class="partners-row">
+      <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
+      <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
+      <div class="p"><img src="assets/小象出海 LOGO.png" alt="小象出海" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ ADMIN LOGIN ═══════════════ -->
+<section class="admin-section">
+  <div class="wrap">
+    <div class="admin-card">
+      <!-- Mascot: Admin · 綠色終端機風小人 -->
+      <svg class="mascot-admin" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- 頭 -->
+        <circle cx="45" cy="32" r="22" fill="currentColor" opacity="0.15"/>
+        <circle cx="45" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
+        <!-- 墨鏡護目鏡(駭客) -->
+        <rect x="26" y="29" width="38" height="7" fill="#07070C" stroke="currentColor" stroke-width="1.5"/>
+        <rect x="30" y="31" width="4" height="2" fill="currentColor"/>
+        <rect x="56" y="31" width="4" height="2" fill="currentColor"/>
+        <!-- 嘴 (-) -->
+        <line x1="38" y1="45" x2="52" y2="45" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <!-- 身體 -->
+        <path d="M22,60 L68,60 L72,106 L18,106 Z" fill="currentColor" opacity="0.1"/>
+        <path d="M22,60 L68,60 L72,106 L18,106 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <!-- 鎖頭 icon on body -->
+        <rect x="38" y="75" width="14" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M40,75 L40,70 Q40,66 45,66 Q50,66 50,70 L50,75" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="45" cy="81" r="1.5" fill="currentColor"/>
+      </svg>
+      <div>
+        <div class="tag">&gt; admin_console</div>
+        <h3>主辦端後台</h3>
+        <p>投稿審核 · 精選勾選 · 一般報名 / Afterparty 名單匯出 · 寄信狀態</p>
+      </div>
+      <button type="button" class="btn-admin" data-open-modal="admin">&gt; 主辦登入</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="brand">
+      <img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" />
+      <p>LOCAL AI 玩家開箱派對<br />2026.11.04 · 台北 · 茹曦酒店 15F</p>
+      <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
+        > powered_by: 虎智科技 TigerAI<br />
+        > in_collab: OOPS × TUL × 小象出海
+      </p>
+    </div>
+    <div>
+      <h4>// SECTIONS</h4>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#speakers">Featured Speakers</a></li>
+        <li><a href="#agenda">Agenda</a></li>
+        <li><a href="#venue">Venue</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>// ACTIONS</h4>
+      <ul>
+        <li><a href="#" data-open-modal="speaker">我要上台展示 AI</a></li>
+        <li><a href="#" data-open-modal="signup">我要報名參加</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="copy" style="grid-column: 1 / -1;">
+      <span>© 2026 虎智科技 TigerAI · All rights reserved.</span>
+      <span class="status"><span class="dot"></span>EVENT_STATUS: OPEN_FOR_SIGNUP</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Modal: Speaker Submit -->
+<div class="modal" id="modal-speaker" role="dialog" aria-labelledby="modal-speaker-title" aria-hidden="true">
+  <div class="modal-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">&gt; boot_speaker.exe</div>
+    <h3 id="modal-speaker-title">我要上台展示 AI</h3>
+    <p class="modal-desc">
       送出投稿等於主辦開始審核 · 不代表自動入選。主辦精選後會以你留的聯絡方式通知。
       最多上架 3 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。
     </p>
@@ -1395,17 +1940,15 @@ footer .copy .status .dot{
       <div class="form-status" id="speaker-status"></div>
     </form>
   </div>
-</section>
+</div>
 
-<!-- ═══════════════ FORM B · SIGNUP ═══════════════ -->
-<section id="signup" class="block anchor">
-  <div class="wrap">
-    <div class="form-head magenta">
-      <span class="tag">&gt; join_party.exe</span>
-      <h2 style="margin: 0;">// JOIN_THE_PARTY</h2>
-    </div>
-    <h3 class="lead">我要報名參加</h3>
-    <p class="body">
+<!-- Modal: Signup -->
+<div class="modal magenta" id="modal-signup" role="dialog" aria-labelledby="modal-signup-title" aria-hidden="true">
+  <div class="modal-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">&gt; join_party.exe</div>
+    <h3 id="modal-signup-title">我要報名參加</h3>
+    <p class="modal-desc">
       一般活動報名表 · 包含是否加報 OOPS Afterparty。
       Afterparty 原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。
     </p>
@@ -1472,100 +2015,67 @@ footer .copy .status .dot{
       <div class="form-status" id="signup-status"></div>
     </form>
   </div>
-</section>
+</div>
 
-<!-- ═══════════════ FAQ ═══════════════ -->
-<section id="faq" class="block anchor">
-  <div class="wrap">
-    <h2><span class="num">05 /</span> // FAQ</h2>
-    <h3 class="lead">常見問題</h3>
+<!-- Modal: Admin Login (placeholder · 之後接 Apps Script) -->
+<div class="modal" id="modal-admin" role="dialog" aria-labelledby="modal-admin-title" aria-hidden="true">
+  <div class="modal-panel" style="max-width: 440px;">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag" style="color: var(--green);">&gt; admin_console --login</div>
+    <h3 id="modal-admin-title">主辦端登入</h3>
+    <p class="modal-desc">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出 Afterparty 加報清單。</p>
 
-    <div class="faq-list" id="faq-list">
-      <div class="faq-item">
-        <div class="faq-q">活動要收費嗎?</div>
-        <div class="faq-a">一般活動費用與名額依最終公告為準。Afterparty 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</div>
+    <form id="admin-form" novalidate>
+      <div class="field" style="margin-bottom: 16px;">
+        <label>管理員密碼</label>
+        <input type="password" name="passcode" placeholder="············" autocomplete="current-password" />
+        <div class="hint">// 密碼存在 Apps Script PropertiesService · 可隨時更換</div>
       </div>
-      <div class="faq-item">
-        <div class="faq-q">我送出「我要上台展示 AI」就會被安排上台嗎?</div>
-        <div class="faq-a">不會。所有投稿會進主辦審核 · 精選名額最多 3 位。入選我們會用你留的 email 聯繫 · 未入選者資料不會公開展示。</div>
+      <div class="submit-row" style="margin-top: 16px;">
+        <button type="submit" class="btn-submit" style="background: var(--green); color: #000;">&gt; LOGIN</button>
+        <div class="form-note">// 登入後重導至管理介面(待後端部署)</div>
       </div>
-      <div class="faq-item">
-        <div class="faq-q">現場有 Free Token 可以體驗嗎?</div>
-        <div class="faq-a">是。但 Token 體驗流程須通過技術驗收後才會開放現場掃碼。未通過前以 Server 展示、操作影片、流程示意呈現。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">我不是技術人員 · 也能來嗎?</div>
-        <div class="faq-a">可以。現場有產品介紹、合作流程說明、硬體 Demo · 不需要寫程式。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">Afterparty 一定要加報嗎?</div>
-        <div class="faq-a">不一定。Afterparty 是自選加報項目 · 只參加一般活動完全沒問題。</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q">活動流程會跟報名簡介完全一樣嗎?</div>
-        <div class="faq-a">目前流程為暫定模型 · 實際時段依場地與合作方最終確認結果微調。活動前 1 週會寄 email 通知最終時間表。</div>
-      </div>
-    </div>
+      <div class="form-status" id="admin-status"></div>
+    </form>
   </div>
-</section>
-
-<!-- ═══════════════ PARTNERS ═══════════════ -->
-<section class="block">
-  <div class="wrap">
-    <div class="partners-head">
-      <span class="k">// HOSTED_BY</span>
-    </div>
-    <div class="partners-row">
-      <div class="p"><img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" /></div>
-    </div>
-
-    <div class="partners-head">
-      <span class="k">// IN_COLLABORATION_WITH</span>
-    </div>
-    <div class="partners-row">
-      <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
-      <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
-      <div class="p"><img src="assets/小象出海 LOGO.png" alt="小象出海" /></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════ FOOTER ═══════════════ -->
-<footer>
-  <div class="wrap">
-    <div class="brand">
-      <img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" />
-      <p>LOCAL AI 玩家開箱派對<br />2026.11.04 · 台北 · 茹曦酒店 15F</p>
-      <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
-        > powered_by: 虎智科技 TigerAI<br />
-        > in_collab: OOPS × TUL × 小象出海
-      </p>
-    </div>
-    <div>
-      <h4>// SECTIONS</h4>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#speakers">Featured Speakers</a></li>
-        <li><a href="#agenda">Agenda</a></li>
-        <li><a href="#venue">Venue</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>// ACTIONS</h4>
-      <ul>
-        <li><a href="#submit">我要上台展示 AI</a></li>
-        <li><a href="#signup">我要報名參加</a></li>
-        <li><a href="#faq">FAQ</a></li>
-      </ul>
-    </div>
-    <div class="copy" style="grid-column: 1 / -1;">
-      <span>© 2026 虎智科技 TigerAI · All rights reserved.</span>
-      <span class="status"><span class="dot"></span>EVENT_STATUS: OPEN_FOR_SIGNUP</span>
-    </div>
-  </div>
-</footer>
+</div>
 
 <script>
+/* ─────── MODAL ─────── */
+function openModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (!el) return;
+  el.classList.add('show');
+  el.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  // focus 第一個 input
+  setTimeout(() => el.querySelector('input, select, textarea')?.focus(), 50);
+}
+function closeModal(el) {
+  el = el || document.querySelector('.modal.show');
+  if (!el) return;
+  el.classList.remove('show');
+  el.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+document.querySelectorAll('[data-open-modal]').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    openModal(btn.dataset.openModal);
+  });
+});
+document.querySelectorAll('[data-close-modal]').forEach(btn => {
+  btn.addEventListener('click', () => closeModal(btn.closest('.modal')));
+});
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) closeModal(m);   // 點背景關
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
 /* ─────── FAQ toggle ─────── */
 document.querySelectorAll('.faq-item').forEach(item => {
   item.querySelector('.faq-q').addEventListener('click', () => {
@@ -1625,6 +2135,12 @@ document.getElementById('signup-form')?.addEventListener('submit', e => {
   const status = document.getElementById('signup-status');
   submitForm(e.target, CONFIG.SIGNUP_WEBHOOK, status,
     '[ OK ] 報名已收到 · 確認信稍後寄出');
+});
+document.getElementById('admin-form')?.addEventListener('submit', e => {
+  e.preventDefault();
+  const status = document.getElementById('admin-status');
+  status.className = 'form-status error show';
+  status.textContent = '[ ERROR ] 後台尚未部署 · 等 Apps Script 做好會接上(DEMO 階段)';
 });
 
 /* ─────── 精選講者 · 從 CSV 讀 ─────── */
