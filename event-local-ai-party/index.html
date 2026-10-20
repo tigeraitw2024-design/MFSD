@@ -204,11 +204,13 @@ code, .mono { font-family: var(--mono); }
 .hero h1{
   font-family: var(--sans);
   font-weight: 700;
-  font-size: clamp(62px, 12vw, 156px);
+  font-size: clamp(52px, 9.5vw, 128px);
   line-height: 0.95;
   letter-spacing: -0.03em;
   margin-bottom: 10px;
+  max-width: 70%;
 }
+@media (max-width: 1180px){ .hero h1{ max-width: 100%; } }
 .hero h1 .en{
   display: block;
   color: var(--text);
@@ -377,9 +379,9 @@ code, .mono { font-family: var(--mono); }
 .hero-props{
   position: absolute;
   right: 0;
-  top: 60px;
-  width: 580px;
-  height: 720px;
+  top: 40px;
+  width: 440px;
+  height: 540px;
   pointer-events: none;
   z-index: 3;
 }
@@ -396,17 +398,17 @@ code, .mono { font-family: var(--mono); }
 }
 /* 廣告機 · 直立 · 偏左上 · 中等尺寸 */
 .prop-kiosk{
-  top: 60px;
-  left: 30px;
-  width: 200px;
-  filter: drop-shadow(0 0 30px rgba(0, 245, 255, 0.2));
+  top: 20px;
+  left: 10px;
+  width: 150px;
+  filter: drop-shadow(0 0 25px rgba(0, 245, 255, 0.2));
 }
 /* 機櫃 · 方正 · 偏右下 · 大尺寸 */
 .prop-rack{
-  top: 200px;
-  right: 0;
-  width: 360px;
-  filter: drop-shadow(0 0 50px rgba(0, 100, 255, 0.35));
+  top: 150px;
+  right: 10px;
+  width: 260px;
+  filter: drop-shadow(0 0 40px rgba(0, 100, 255, 0.35));
 }
 
 /* cyberpunk 對話框 */
