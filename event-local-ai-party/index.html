@@ -264,7 +264,7 @@ code, .mono { font-family: var(--mono); }
   color: var(--text-mid);
   font-size: clamp(14px, 1.6vw, 18px);
   margin-top: 28px;
-  margin-bottom: 10px;    /* 緊貼下方的 hero-props */
+  margin-bottom: 44px;
   max-width: 720px;
   line-height: 1.6;
 }
@@ -372,27 +372,27 @@ code, .mono { font-family: var(--mono); }
 .cta:hover .arrow{ color: var(--cyan); transform: translateX(4px); }
 .cta.magenta:hover .arrow{ color: var(--magenta); }
 
-/* ─────── HERO PROPS · 廣告機 + 機櫃 + cyberpunk 對話框 ─────── */
-/* 用 flex order 讓 hero-props 自然排在 meta-strip 上方 · 不用 absolute 不干擾 layout */
+/* ─────── HERO PROPS · 廣告機 + 機櫃 放在 Hero 右半邊(absolute) · 跟文字共存 ─────── */
 @media (min-width: 1181px){
-  .hero .wrap{
-    display: flex;
-    flex-direction: column;
+  .hero .wrap{ position: relative; }
+  /* 文字限左半邊 · 右半邊空出來給 props */
+  .hero .wrap > .eyebrow,
+  .hero .wrap > h1,
+  .hero .wrap > .sub,
+  .hero .wrap > .meta-strip{
+    max-width: 55%;
   }
-  .hero .wrap > .eyebrow   { order: 1; }
-  .hero .wrap > h1         { order: 2; }
-  .hero .wrap > .sub       { order: 3; }
-  .hero .wrap > .hero-props{ order: 4; }
-  .hero .wrap > .meta-strip{ order: 5; }
-  .hero .wrap > .cta-stage { order: 6; }
-
   .hero-props{
+    position: absolute;
+    top: 60px;
+    right: 24px;
+    width: 420px;
+    pointer-events: none;
+    z-index: 3;
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;      /* 兩個 prop 底部對齊 */
-    gap: 20px;
-    margin-bottom: 10px;        /* 跟 meta-strip 10px */
-    pointer-events: none;
+    align-items: flex-end;    /* 兩個底部對齊 */
+    gap: 24px;
   }
 }
 @media (max-width: 1180px){ .hero-props{ display: none; } }
