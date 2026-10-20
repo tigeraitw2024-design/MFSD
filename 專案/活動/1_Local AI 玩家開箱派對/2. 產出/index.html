@@ -377,26 +377,37 @@ code, .mono { font-family: var(--mono); }
 .hero-props{
   position: absolute;
   right: 0;
-  top: 180px;
-  display: flex;
-  align-items: flex-end;
-  gap: 40px;
+  top: 60px;
+  width: 580px;
+  height: 720px;
   pointer-events: none;
   z-index: 3;
 }
 @media (max-width: 1180px) { .hero-props { display: none; } }
 
 .prop{
-  position: relative;
+  position: absolute;
   pointer-events: auto;
 }
 .prop img{
   display: block;
   height: auto;
-  filter: drop-shadow(0 0 25px rgba(0, 245, 255, 0.12));
+  width: 100%;
 }
-.prop-kiosk img{ width: 95px; }
-.prop-rack img{ width: 170px; filter: drop-shadow(0 0 30px rgba(0, 100, 255, 0.3)); }
+/* 廣告機 · 直立 · 偏左上 · 中等尺寸 */
+.prop-kiosk{
+  top: 60px;
+  left: 30px;
+  width: 200px;
+  filter: drop-shadow(0 0 30px rgba(0, 245, 255, 0.2));
+}
+/* 機櫃 · 方正 · 偏右下 · 大尺寸 */
+.prop-rack{
+  top: 200px;
+  right: 0;
+  width: 360px;
+  filter: drop-shadow(0 0 50px rgba(0, 100, 255, 0.35));
+}
 
 /* cyberpunk 對話框 */
 .prop-bubble{
@@ -404,13 +415,13 @@ code, .mono { font-family: var(--mono); }
   background: rgba(14, 14, 24, 0.95);
   padding: 12px 16px;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
   color: var(--text);
-  white-space: nowrap;
-  min-width: 180px;
-  max-width: 260px;
+  min-width: 170px;
+  max-width: 220px;
   transition: opacity 0.3s ease-out;
+  z-index: 4;
 }
 .prop-bubble .bubble-text{
   display: block;
@@ -418,17 +429,19 @@ code, .mono { font-family: var(--mono); }
 }
 .prop-bubble.fading{ opacity: 0; }
 
+/* 廣告機 bubble · 右上方(往機櫃方向) */
 .prop-kiosk .prop-bubble{
-  left: calc(100% + 24px);
-  top: 10px;
-  border: 1px solid var(--cyan);
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.25);
-}
-.prop-rack .prop-bubble{
-  right: calc(100% + 24px);
+  left: calc(100% + 28px);
   top: 20px;
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 24px rgba(0, 245, 255, 0.3);
+}
+/* 機櫃 bubble · 左上方 */
+.prop-rack .prop-bubble{
+  right: calc(100% - 20px);
+  top: -10px;
   border: 1px solid var(--magenta);
-  box-shadow: 0 0 20px rgba(255, 46, 166, 0.25);
+  box-shadow: 0 0 24px rgba(255, 46, 166, 0.35);
   text-align: right;
 }
 
@@ -437,16 +450,16 @@ code, .mono { font-family: var(--mono); }
 .prop-bubble::after{
   content: '';
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border: 2px solid var(--cyan);
 }
 .prop-bubble::before{
-  top: -4px; left: -4px;
+  top: -5px; left: -5px;
   border-right: none; border-bottom: none;
 }
 .prop-bubble::after{
-  bottom: -4px; right: -4px;
+  bottom: -5px; right: -5px;
   border-left: none; border-top: none;
 }
 .prop-rack .prop-bubble::before,
@@ -454,30 +467,31 @@ code, .mono { font-family: var(--mono); }
   border-color: var(--magenta);
 }
 
-/* 對話框→照片 的 pointer 線 */
+/* 對話框→照片 pointer 線 + 圓點 */
 .prop-bubble .pointer{
   position: absolute;
   top: 50%;
-  width: 20px;
+  width: 24px;
   height: 1px;
   background: var(--cyan);
 }
 .prop-kiosk .prop-bubble .pointer{
-  left: -22px;
+  left: -26px;
 }
 .prop-rack .prop-bubble .pointer{
-  right: -22px;
+  right: -26px;
   background: var(--magenta);
 }
 .prop-bubble .pointer::before{
   content: '';
   position: absolute;
-  width: 5px; height: 5px;
+  width: 6px; height: 6px;
   background: inherit;
   border-radius: 50%;
+  top: -2.5px;
 }
-.prop-kiosk .prop-bubble .pointer::before{ left: -4px; top: -2px; }
-.prop-rack .prop-bubble .pointer::before{ right: -4px; top: -2px; }
+.prop-kiosk .prop-bubble .pointer::before{ left: -4px; }
+.prop-rack .prop-bubble .pointer::before{ right: -4px; }
 
 /* ─────── SECTION BASICS ─────── */
 section.block {
