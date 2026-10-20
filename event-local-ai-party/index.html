@@ -8,6 +8,14 @@
 <meta property="og:title" content="LOCAL AI 玩家開箱派對 · 2026.11.04" />
 <meta property="og:description" content="Local AI 玩家案例 × Server 體驗 × OOPS Afterparty。11/04 台北茹曦酒店 15F。" />
 <meta property="og:type" content="website" />
+<meta property="og:image" content="https://mfsd.pages.dev/event-local-ai-party/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://mfsd.pages.dev/event-local-ai-party/" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -2726,12 +2734,11 @@ document.querySelectorAll('.faq-item').forEach(item => {
 /* ─────── 時間流動的 agenda cursor ─────── */
 // (未來可加:根據當前時間在流程表上高亮正在進行的環節)
 
-/* ─────── 表單送出(stub · 等 Apps Script 綁上去) ─────── */
+/* ─────── Apps Script 設定 ─────── */
 const CONFIG = {
-  // 等 Apps Script 部好後填 Web App URL
-  SPEAKER_WEBHOOK: '',
-  SIGNUP_WEBHOOK: '',
-  // 精選講者 Sheet CSV publish URL(等 Sheet 建好後填)
+  // Apps Script Web App URL(一個 URL 處理所有 action)· 部署後填入
+  WEBHOOK: '',
+  // 「公開精選」分頁發佈成 CSV 的 URL · 設定後填入
   SPEAKERS_CSV_URL: '',
 };
 
