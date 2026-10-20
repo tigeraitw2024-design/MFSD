@@ -1573,35 +1573,58 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 
         <!-- RIGHT · Signup -->
         <div class="cta-cell right">
-          <!-- Mascot: Raver · 墨鏡+舉手+耳機 -->
-          <svg class="mascot" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <!-- 頭 -->
-            <circle cx="55" cy="38" r="28" fill="currentColor" opacity="0.15"/>
-            <circle cx="55" cy="38" r="28" fill="none" stroke="currentColor" stroke-width="2.5"/>
-            <!-- 墨鏡 (單一長條) -->
-            <path d="M32,36 L78,36 L78,46 L62,46 L58,42 L52,42 L48,46 L32,46 Z"
-                  fill="#07070C" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <!-- 墨鏡裡的 reflection (pixel) -->
-            <rect x="37" y="39" width="4" height="2" fill="currentColor"/>
-            <rect x="68" y="39" width="4" height="2" fill="currentColor"/>
-            <!-- 嘴 (咧嘴 YEAH) -->
-            <path d="M46,56 Q55,62 64,56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <!-- 身體 -->
-            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="currentColor" opacity="0.12"/>
-            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            <!-- 身體 pattern (triangle 洋紅 vibe) -->
-            <path d="M48,96 L62,96 L55,108 Z" fill="currentColor" opacity="0.4"/>
-            <!-- 舉手 YO (右手 up) -->
-            <line x1="80" y1="80" x2="90" y2="38" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-            <!-- 握拳 (fist pixel) -->
-            <rect x="84" y="24" width="12" height="12" rx="2" fill="currentColor"/>
-            <rect x="84" y="22" width="4" height="4" fill="currentColor" opacity="0.6"/>
-            <rect x="90" y="22" width="4" height="4" fill="currentColor" opacity="0.6"/>
-            <!-- 耳機 -->
-            <path d="M27,30 Q27,18 42,20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <rect x="24" y="32" width="7" height="10" rx="2" fill="currentColor"/>
-            <path d="M83,30 Q83,18 68,20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <rect x="79" y="32" width="7" height="10" rx="2" fill="currentColor"/>
+          <!-- Mascot: 一群 Ravers · 透視錯位(前大後小)· 報名的人多 -->
+          <svg class="mascot mascot-crowd" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+            <!-- 遠景小人 A (左後方 · 最小 · 最淡) -->
+            <g opacity="0.4">
+              <circle cx="18" cy="32" r="12" fill="currentColor" opacity="0.3"/>
+              <circle cx="18" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="7" y="30" width="22" height="4.5" fill="#07070C" stroke="currentColor" stroke-width="1"/>
+              <path d="M8,50 L28,50 L30,84 L6,84 Z" fill="currentColor" opacity="0.22"/>
+              <path d="M8,50 L28,50 L30,84 L6,84 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            </g>
+
+            <!-- 遠景小人 B (右後方 · 中偏小 · 稍淡 · 舉手) -->
+            <g opacity="0.6">
+              <circle cx="124" cy="24" r="15" fill="currentColor" opacity="0.28"/>
+              <circle cx="124" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="111" y="22" width="26" height="5.5" fill="#07070C" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M118,32 Q124,35 130,32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M110,46 L138,46 L142,96 L106,96 Z" fill="currentColor" opacity="0.2"/>
+              <path d="M110,46 L138,46 L142,96 L106,96 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <!-- 舉拳 -->
+              <line x1="138" y1="50" x2="142" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="138" y="18" width="8" height="8" rx="1.5" fill="currentColor"/>
+            </g>
+
+            <!-- 前景大人 (中下 · 原本的 raver · 完整) -->
+            <g>
+              <circle cx="68" cy="52" r="28" fill="currentColor" opacity="0.15"/>
+              <circle cx="68" cy="52" r="28" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <!-- 墨鏡 (長條) -->
+              <path d="M45,50 L91,50 L91,60 L75,60 L71,56 L65,56 L61,60 L45,60 Z"
+                    fill="#07070C" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <rect x="50" y="53" width="4" height="2" fill="currentColor"/>
+              <rect x="81" y="53" width="4" height="2" fill="currentColor"/>
+              <!-- 嘴 -->
+              <path d="M59,70 Q68,76 77,70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <!-- 身體 -->
+              <path d="M43,92 L93,92 L98,146 L38,146 Z" fill="currentColor" opacity="0.14"/>
+              <path d="M43,92 L93,92 L98,146 L38,146 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <!-- 身體 triangle pattern -->
+              <path d="M61,110 L75,110 L68,122 Z" fill="currentColor" opacity="0.4"/>
+              <!-- 舉手 YO -->
+              <line x1="93" y1="94" x2="104" y2="54" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
+              <rect x="98" y="42" width="12" height="12" rx="2" fill="currentColor"/>
+              <rect x="98" y="40" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <rect x="104" y="40" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <!-- 耳機 -->
+              <path d="M40,44 Q40,32 54,34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="37" y="46" width="7" height="10" rx="2" fill="currentColor"/>
+              <path d="M96,44 Q96,32 82,34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="92" y="46" width="7" height="10" rx="2" fill="currentColor"/>
+            </g>
           </svg>
           <button type="button" class="cta-btn magenta" data-open-modal="signup">
             <span class="tag">
