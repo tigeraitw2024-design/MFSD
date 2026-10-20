@@ -1714,8 +1714,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
               <span lang="en">I'll Demo My AI</span>
             </span>
             <span class="desc">
-              <span lang="zh">你用 AI 做的東西都可以拿來跑 · 主辦精選 2–3 位。入選會寄 email 通知你 · 資料也會顯示在這頁的精選區。</span>
-              <span lang="en">Anything you built with AI works. Host picks 2–3. If selected we'll email you · your info also shows in the Featured block on this page.</span>
+              <span lang="zh">你用 AI 做的東西都可以拿來跑 · 主辦精選 10 人。入選會寄 email 通知你 · 資料也會顯示在這頁的精選區 · 並免費獲得晚上派對入場券。</span>
+              <span lang="en">Anything you built with AI works. Host picks 10. If selected we'll email you · your info shows in the Featured block · plus free Afterparty entry.</span>
             </span>
             <span class="arrow-row">
               <span><span lang="zh">送出你的 Demo</span><span lang="en">SUBMIT YOUR DEMO</span></span>
@@ -1864,7 +1864,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           不限主題、不限成熟度 · 只要是你實際做過、能講給人聽的。主辦後台精選最多 3 位。</span>
           <span lang="en">Bring your Local AI builds, Agent flows, RAG systems, or hardware setups.
           Any topic, any maturity · as long as you actually built it and can talk about it.
-          Up to 3 selected by the host.</span>
+          Up to 10 selected by the host.</span>
         </p>
       </div>
       <div class="mode">
@@ -1909,7 +1909,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       </h3>
       <div class="spot-count">
         <span lang="zh">精選名額</span><span lang="en">Selected</span>
-        <span class="n">0 / 3</span> ·
+        <span class="n">0 / 10</span> ·
         <span style="color: var(--text-dim)">
           <span lang="zh">主辦精選後顯示</span>
           <span lang="en">shown after host picks</span>
@@ -1917,9 +1917,9 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       </div>
     </div>
     <p class="body">
-      <span lang="zh">所有「我要上台展示 AI 作品」投稿都會進審核 · 主辦挑出 2–3 位在這裡公開。
+      <span lang="zh">所有「我要上台展示 AI 作品」投稿都會進審核 · 主辦挑出 10 人在這裡公開。
       送出投稿不代表入選 · 入選後我們會用你留的聯絡方式通知。</span>
-      <span lang="en">All "I'll Demo My AI" submissions go through host review · 2–3 picked
+      <span lang="en">All "I'll Demo My AI" submissions go through host review · 10 picked
       shown here. Submission does NOT mean accepted · we'll contact you if selected.</span>
     </p>
 
@@ -1996,8 +1996,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
               <span lang="en">Featured talks / Enthusiast Demos</span>
             </strong>
             <span class="desc">
-              <span lang="zh">審核選出 2–3 位現場分享「問題、做法、成果」 · 其他玩家交流。</span>
-              <span lang="en">2–3 selected speakers share "problem · approach · result" · open floor for other enthusiasts.</span>
+              <span lang="zh">審核選出 10 人現場分享「問題、做法、成果」 · 其他玩家交流。</span>
+              <span lang="en">10 selected speakers share "problem · approach · result" · open floor for other enthusiasts.</span>
             </span>
           </span>
         </li>
@@ -2167,7 +2167,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <span lang="en">Does submitting "I'll Demo My AI" mean I'm on stage?</span>
         </div>
         <div class="faq-a">
-          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 3 位。入選我們會用你留的 email 聯繫 · 未入選者資料不會公開展示。</span>
+          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 10 人。入選我們會用你留的 email 聯繫 · 入選者可免費獲得晚上派對入場券 · 未入選者資料不會公開展示。</span>
           <span lang="en">No. All submissions enter host review · up to 3 selected. We'll email you if picked · non-selected submissions stay private.</span>
         </div>
       </div>
@@ -2289,9 +2289,9 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
     </h3>
     <p class="modal-desc">
       <span lang="zh">送出投稿等於主辦開始審核 · 不代表自動入選。主辦精選後會以你留的聯絡方式通知。
-      最多上架 3 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。</span>
+      最多上架 10 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。</span>
       <span lang="en">Submitting starts host review · not automatic acceptance. We'll contact
-      selected demos via the info you provide. Up to 3 shown · the "Featured Speakers"
+      selected demos via the info you provide. Up to 10 shown · the "Featured Speakers"
       block only shows fields you consent to publish.</span>
     </p>
 
@@ -2825,7 +2825,7 @@ async function loadFeaturedSpeakers() {
         ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener">&gt; VIEW RESOURCE</a></div>` : ''}
       </article>
     `).join('');
-    document.querySelector('.spot-count .n').textContent = `${featured.length} / 3`;
+    document.querySelector('.spot-count .n').textContent = `${featured.length} / 10`;
   } catch (err) {
     console.warn('載入精選講者失敗:', err);
   }
