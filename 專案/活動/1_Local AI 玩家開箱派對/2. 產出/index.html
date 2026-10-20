@@ -1593,6 +1593,63 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
   background: var(--bg-elev);
 }
 
+/* Nav 右邊「立即報名」按鈕 · magenta 突出 */
+.topbar .nav-cta{
+  background: var(--magenta);
+  color: #fff;
+  border: none;
+  padding: 7px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-left: 12px;
+}
+.topbar .nav-cta:hover{ background: #ff5bbb; }
+.topbar .nav-cta:active{ transform: translateY(1px); }
+
+/* 側邊 sticky 直立「立即報名」pill */
+.side-cta{
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--magenta);
+  color: #fff;
+  padding: 22px 10px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  text-decoration: none;
+  z-index: 50;
+  box-shadow: 0 0 24px rgba(255, 46, 166, 0.4), 0 0 60px rgba(255, 46, 166, 0.15);
+  transition: background 0.15s, padding-right 0.2s;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+.side-cta:hover{
+  background: #ff5bbb;
+  color: #fff;
+  padding-right: 14px;
+}
+.side-cta .arr{
+  writing-mode: horizontal-tb;
+  display: block;
+  font-size: 11px;
+  margin-top: 8px;
+  letter-spacing: 0;
+}
+@media (max-width: 640px){
+  .side-cta{ padding: 18px 8px; font-size: 13px; letter-spacing: 0.25em; }
+}
+@media (prefers-reduced-motion: reduce){
+  .side-cta{ transition: none; }
+}
+
 /* 禁用動畫使用者 */
 @media (prefers-reduced-motion: reduce) {
   .hero h1 .en::before,
@@ -1621,6 +1678,9 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <a href="#agenda"><span lang="zh">流程</span><span lang="en">Agenda</span></a>
       <a href="#venue"><span lang="zh">場地</span><span lang="en">Venue</span></a>
       <a href="#faq"><span lang="zh">常見問題</span><span lang="en">FAQ</span></a>
+      <button class="nav-cta" type="button" data-open-modal="signup">
+        <span lang="zh">立即報名</span><span lang="en">SIGN UP</span>
+      </button>
       <button class="lang-switch" onclick="toggleLang()" aria-label="Switch language">
         <span lang="zh">EN</span><span lang="en">中文</span>
       </button>
@@ -2280,6 +2340,11 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
     </div>
   </div>
 </footer>
+
+<!-- 側邊 sticky 立即報名 -->
+<a class="side-cta" href="#" data-open-modal="signup" aria-label="立即報名">
+  <span lang="zh">立即報名</span><span lang="en">SIGN UP</span>
+</a>
 
 <!-- ═══════════════ MODALS ═══════════════ -->
 
