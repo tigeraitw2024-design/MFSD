@@ -13,6 +13,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
 
+<!-- canvas-confetti · 全站點擊 + 送出表單時觸發彩屑 -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+
 <style>
 /* ─────── TOKENS ─────── */
 :root{
@@ -2528,6 +2531,64 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 </div>
 
 <script>
+/* ─────── CONFETTI · 全站點擊小彩屑 + 送出表單煙火 ─────── */
+(function waitConfetti(){
+  if (typeof confetti !== 'function') {
+    return setTimeout(waitConfetti, 100);
+  }
+  const COLORS = ['#00F5FF', '#FF2EA6', '#00FF88', '#FFFFFF', '#3B82F6'];
+
+  // 判斷是否為填寫表單的欄位(這些 click 不觸發 confetti)
+  function isFormField(el){
+    if (!el || !el.closest) return false;
+    const tag = (el.tagName || '').toLowerCase();
+    if (['input', 'textarea', 'select', 'option'].includes(tag)) return true;
+    if (el.isContentEditable) return true;
+    // label 跟 .field 內的 click 也不觸發(避免打字時誤發)
+    if (el.closest('label.chk')) return true;
+    if (el.closest('.field')) return true;
+    return false;
+  }
+
+  document.addEventListener('click', (e) => {
+    if (isFormField(e.target)) return;
+    confetti({
+      particleCount: 32,
+      spread: 60,
+      startVelocity: 28,
+      ticks: 70,
+      gravity: 0.9,
+      scalar: 0.9,
+      colors: COLORS,
+      origin: {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      },
+      disableForReducedMotion: true,
+    });
+  });
+
+  // 送出表單時從兩側發射煙火
+  window.fireSubmitConfetti = function(){
+    const duration = 2000;
+    const end = Date.now() + duration;
+    (function frame(){
+      if (Date.now() > end) return;
+      confetti({
+        particleCount: 4, angle: 60, spread: 55, startVelocity: 55,
+        origin: { x: 0, y: 0.65 }, colors: COLORS,
+        disableForReducedMotion: true,
+      });
+      confetti({
+        particleCount: 4, angle: 120, spread: 55, startVelocity: 55,
+        origin: { x: 1, y: 0.65 }, colors: COLORS,
+        disableForReducedMotion: true,
+      });
+      requestAnimationFrame(frame);
+    })();
+  };
+})();
+
 /* ─────── I18N · 中英切換 ─────── */
 function setLang(lang) {
   document.documentElement.setAttribute('data-lang', lang);
@@ -2675,6 +2736,7 @@ const CONFIG = {
 };
 
 async function submitForm(formEl, webhookUrl, statusEl, successMsg) {
+  window.fireSubmitConfetti?.();   // 送出就 fire 煙火
   const data = Object.fromEntries(new FormData(formEl));
   if (!webhookUrl) {
     statusEl.className = 'form-status error show';
@@ -2718,8 +2780,21 @@ document.getElementById('signup-form')?.addEventListener('submit', e => {
 document.getElementById('admin-form')?.addEventListener('submit', e => {
   e.preventDefault();
   const status = document.getElementById('admin-status');
-  status.className = 'form-status error show';
-  status.textContent = '[ ERROR ] 後台尚未部署 · 等 Apps Script 做好會接上(DEMO 階段)';
+  const fd = new FormData(e.target);
+  const passcode = (fd.get('passcode') || '').toString().trim();
+  const ADMIN_PASSCODE = '93489997';   // 虎智統編 · DEMO 階段 client-side 檢查 · 正式版會改成 Apps Script server-side
+  if (passcode === ADMIN_PASSCODE) {
+    status.className = 'form-status show';
+    status.textContent = '[ OK ] 登入成功 · 後台介面建置中 · Apps Script 部署完成會自動接上';
+    window.fireSubmitConfetti?.();
+    e.target.reset();
+  } else if (!passcode) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 請輸入密碼';
+  } else {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 密碼錯誤';
+  }
 });
 
 /* ─────── 精選講者 · 從 CSV 讀 ─────── */
