@@ -31,6 +31,7 @@
  */
 
 const SHEET_ID    = '1dar-zrj1iZwtDuhsVYeA9Lgxam9EQ9MTWsKsZX9e2QY';
+const COVER_FOLDER_ID = '18727W5wG9fMAp8ajYgPAJL9wFCImosmP';   // 講者投稿封面縮圖存這
 const EVENT_NAME  = 'Local AI 玩家開箱派對';
 const EVENT_DATE  = '2026/11/04(三)';
 const EVENT_TIME  = '14:00 – 20:00';
@@ -55,13 +56,14 @@ const SUBMIT_HEADERS = [
   '時間戳', '公開稱呼', '職稱/專長', 'Email', '手機',
   'AI 專案名稱', '解決什麼問題', 'Demo 內容', '展示形式', '預計時間',
   '設備需求', '支援資料連結', '備註', '同意公開',
-  '精選公開',      // 第 15 欄 · Admin 在這格打 ✓ 就會上架到前台
-  '入場券',        // 第 16 欄 · 精選時自動生成 10 字碼 · 入選者憑此入場
+  '精選公開',      // 15 · Admin 在這格打 ✓ 就會上架到前台
+  '入場券',        // 16 · 精選時自動生成 10 字碼
+  '封面圖',        // 17 · Drive 連結(前端上傳 · 自動縮到 1000×1000 letterbox)
   '寄信狀態', 'UA/備註'
 ];
 
 const FEATURED_HEADERS = [
-  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'is_featured'
+  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'cover_url', 'is_featured'
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -77,11 +79,11 @@ function setupAll() {
   ensureSheet_(ss, SHEETS.FEATURED,   FEATURED_HEADERS, false);
 
   // 「公開精選」分頁加 formula · 自動從「講者投稿」撈「精選公開」=✓ 的
-  // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured(第 15 欄)
+  // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured Q=cover
   const fs = ss.getSheetByName(SHEETS.FEATURED);
-  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:O, "SELECT B, C, F, H, L WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url'", 0), "")`;
+  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:Q, "SELECT B, C, F, H, L, Q WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url', Q 'cover_url'", 0), "")`;
   fs.getRange('A2').setFormula(formula);
-  fs.getRange('F2:F').setValue('TRUE');
+  fs.getRange('G2:G').setValue('TRUE');
 
   Logger.log('✅ setupAll 完成 · 5 個分頁 ready');
   Logger.log('   接下來:1) 執行 setAdminPasscode("93489997") 設密碼');
@@ -213,10 +215,11 @@ function handleSpeakerSubmit_(data) {
     data.support_url || '',
     data.note || '',
     data.consent_public ? '✓' : '',
-    '',                          // 15 精選公開 · 預設空
-    '',                          // 16 入場券 · 精選時才生成
-    '寄信中',                    // 17 寄信狀態
-    (data._ua || '').slice(0, 200), // 18 UA
+    '',                          // 15 精選公開
+    '',                          // 16 入場券
+    '',                          // 17 封面圖 · 下面 upload 後更新
+    '寄信中',                    // 18 寄信狀態
+    (data._ua || '').slice(0, 200), // 19 UA
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -229,12 +232,40 @@ function handleSpeakerSubmit_(data) {
     console.error('[SUBMIT_READBACK_FAIL] expected=' + data.public_name + ' got=' + written);
   }
 
+  // 封面圖上傳 Drive(前端已經 resize 到 1000×1000 letterbox · dataUrl 傳進來)
+  if (data.cover_image) {
+    try {
+      const coverUrl = uploadCoverToDrive_(data.cover_image, data.public_name, after);
+      sh.getRange(after, 17).setValue(coverUrl);
+      console.log(`[COVER_UPLOAD] row=${after} url=${coverUrl}`);
+    } catch (err) {
+      console.error('[COVER_UPLOAD_ERR]', err);
+      sh.getRange(after, 17).setValue('✗ ' + err.message);
+    }
+  }
+
   let mailStatus = '✓';
   try { sendSpeakerSubmitEmail_(data); }
   catch (err) { mailStatus = '✗ ' + err.message; console.error('[MAIL_SUBMIT_ERR]', err); }
-  sh.getRange(after, 17).setValue(mailStatus);
+  sh.getRange(after, 18).setValue(mailStatus);
 
   return json_({ ok: true, msg: '投稿已收到 · 等待主辦審核' });
+}
+
+/* ─────── 封面圖上傳到 Drive(前端 resize 完的 base64 dataURL) ─────── */
+function uploadCoverToDrive_(dataUrl, name, rowIndex) {
+  const match = String(dataUrl).match(/^data:image\/(png|jpe?g);base64,([\s\S]+)$/i);
+  if (!match) throw new Error('invalid image data url');
+  const mime = match[1].toLowerCase() === 'png' ? 'image/png' : 'image/jpeg';
+  const ext = mime === 'image/png' ? 'png' : 'jpg';
+  const bytes = Utilities.base64Decode(match[2]);
+  const safeName = String(name || 'speaker').replace(/[^\w一-鿿]/g, '_').substring(0, 24);
+  const filename = `${safeName}_row${rowIndex}_${Date.now()}.${ext}`;
+  const blob = Utilities.newBlob(bytes, mime, filename);
+  const folder = DriveApp.getFolderById(COVER_FOLDER_ID);
+  const file = folder.createFile(blob);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w1000`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -296,6 +327,7 @@ function handleAdminDashboard_(data) {
       support_url: r[11], note: r[12],
       featured: r[14] === '✓' || r[14] === true,
       ticket: r[15] || '',     // 入場券(10 字碼)· 精選後有
+      cover: r[16] || '',      // 封面圖 Drive URL
     })).reverse(),
   });
 }
@@ -473,9 +505,11 @@ function sendSpeakerFeaturedEmail_(data) {
       ['公開展示', '已上架到活動頁的「精選講者」區'],
     ]},
     { title: '🎫 您的入場券(給 OOPS 晚上派對)', rows: [
-      ['入場代碼', `<code style="background:#07070C;color:#00FF88;padding:4px 10px;font-family:monospace;font-size:16px;letter-spacing:2px;border:1px solid #00FF88;">${data.ticket}</code>`],
-      ['使用方式', '現場憑此代碼免費加入 OOPS 晚上派對(18:00–20:00)'],
-      ['價值', '原價待 OOPS 公告 · 本券完全免費兌換'],
+      ['QR Code',
+        `<img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.ticket)}&margin=12&bgcolor=12121E&color=00FF88&qzone=1" alt="入場券 QR" width="200" height="200" style="display:block;border:1px solid #00FF88;padding:4px;background:#12121E;" />
+         <div style="margin-top:8px;color:#00FF88;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:2px;">${data.ticket}</div>`],
+      ['使用方式', '現場出示此 QR Code · 免費加入 OOPS 晚上派對(18:00–20:00)'],
+      ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用下方 10 字代碼報身份'],
     ]},
     { title: '📅 您的上台時段', rows: [
       ['安排在', '14:35–15:35 的精選講者時段'],

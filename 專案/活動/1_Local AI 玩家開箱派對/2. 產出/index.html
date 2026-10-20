@@ -1054,6 +1054,47 @@ section.block .body{
 .form-status.error{ border-color: var(--red); color: var(--red); }
 .form-status.show{ display: block; }
 
+/* ─────── Cover upload(講者投稿封面縮圖) ─────── */
+.cover-upload-row{
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.cover-upload-row input[type="file"]{
+  position: absolute;
+  width: 1px; height: 1px; opacity: 0;
+}
+.cover-upload-btn{
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 10px 16px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cover-upload-btn:hover{ border-color: var(--cyan); color: var(--cyan); }
+.cover-preview{
+  width: 100px;
+  height: 100px;
+  border: 1px dashed var(--line-hi);
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.cover-preview img{ width: 100%; height: 100%; display: block; }
+.cover-preview-hint{
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
 /* ─────── FAQ ─────── */
 .faq-list{ border-top: 1px solid var(--line); }
 .faq-item{
@@ -2623,6 +2664,27 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           </div>
         </div>
         <div class="field full">
+          <label>
+            <span lang="zh">封面縮圖 · 建議 1000×1000px(PNG/JPG)</span>
+            <span lang="en">Cover thumbnail · recommended 1000×1000px (PNG/JPG)</span>
+          </label>
+          <div class="cover-upload-row">
+            <input type="file" id="cover-input" accept="image/png,image/jpeg" />
+            <label for="cover-input" class="cover-upload-btn">
+              <span lang="zh">&gt; 選擇圖片</span><span lang="en">&gt; CHOOSE FILE</span>
+            </label>
+            <div class="cover-preview" id="cover-preview">
+              <span class="cover-preview-hint" lang="zh">尚未選擇</span>
+              <span class="cover-preview-hint" lang="en">no image</span>
+            </div>
+          </div>
+          <div class="hint">
+            <span lang="zh">// 自動縮到 1000×1000 · 不是正方形的會上下留黑(letterbox) · 不會變形</span>
+            <span lang="en">// Auto-resized to 1000×1000 · letterboxed if not square · never distorted</span>
+          </div>
+          <input type="hidden" name="cover_image" id="cover-image-data" />
+        </div>
+        <div class="field full">
           <label><span lang="zh">備註 / 其他想說的</span><span lang="en">Notes / Anything else</span></label>
           <textarea name="note" placeholder="..."></textarea>
         </div>
@@ -3152,6 +3214,7 @@ function renderAdminSubmits(list) {
       <input type="checkbox" ${r.featured ? 'checked' : ''}
              data-row="${r.row}" data-name="${escapeAttrA(r.public_name)}"
              onchange="adminToggleFeatured(this)" />
+      ${r.cover ? `<img src="${escapeAttrA(r.cover)}" alt="cover" style="width:60px;height:60px;object-fit:cover;border:1px solid var(--line-hi);flex-shrink:0;" />` : ''}
       <div>
         <div class="meta">${escapeHtmlA(r.ts)} · ${r.featured ? '<span style="color:var(--green)">✓ 已精選</span>' : '<span style="color:var(--text-dim)">未精選</span>'}</div>
         <div class="name">${escapeHtmlA(r.public_name || '-')} <span style="color:var(--text-mid);font-weight:400;font-size:12px">· ${escapeHtmlA(r.title || '')}</span></div>
@@ -3296,6 +3359,67 @@ document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
   closeModal(document.getElementById('modal-fomo'));
   setTimeout(() => openModal('signup'), 150);
 });
+
+/* ─────── Cover upload · 前端 resize 1000×1000 letterbox ─────── */
+(function initCoverUpload(){
+  const input = document.getElementById('cover-input');
+  const preview = document.getElementById('cover-preview');
+  const hidden = document.getElementById('cover-image-data');
+  if (!input || !preview || !hidden) return;
+
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!/^image\/(png|jpeg)$/i.test(file.type)) {
+      alert('請選 PNG 或 JPG 圖片');
+      input.value = '';
+      return;
+    }
+    try {
+      preview.innerHTML = '<span class="cover-preview-hint">處理中...</span>';
+      const dataUrl = await resizeToSquare1000_(file);
+      hidden.value = dataUrl;
+      preview.innerHTML = `<img src="${dataUrl}" alt="cover preview" />`;
+    } catch (err) {
+      preview.innerHTML = '<span class="cover-preview-hint" style="color:var(--red)">處理失敗</span>';
+      alert('圖片處理失敗:' + err.message);
+      input.value = '';
+    }
+  });
+})();
+
+async function resizeToSquare1000_(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error('圖片讀取失敗'));
+      i.src = url;
+    });
+    const SIZE = 1000;
+    const canvas = document.createElement('canvas');
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext('2d');
+    // 黑底(letterbox 背景)
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    // 等比縮:長邊 fit 1000
+    const ratio = Math.min(SIZE / img.width, SIZE / img.height);
+    const w = img.width * ratio;
+    const h = img.height * ratio;
+    const dx = (SIZE - w) / 2;
+    const dy = (SIZE - h) / 2;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, dx, dy, w, h);
+    // 存 JPEG q0.88(縮大小 · 不變形)
+    return canvas.toDataURL('image/jpeg', 0.88);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
 
 /* ─────── 精選講者 · 從 CSV 讀 ─────── */
 async function loadFeaturedSpeakers() {
