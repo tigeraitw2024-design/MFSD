@@ -55,7 +55,8 @@ const SUBMIT_HEADERS = [
   '時間戳', '公開稱呼', '職稱/專長', 'Email', '手機',
   'AI 專案名稱', '解決什麼問題', 'Demo 內容', '展示形式', '預計時間',
   '設備需求', '支援資料連結', '備註', '同意公開',
-  '精選公開',      // ← Admin 在這格打 ✓ 就會上架到前台
+  '精選公開',      // 第 15 欄 · Admin 在這格打 ✓ 就會上架到前台
+  '入場券',        // 第 16 欄 · 精選時自動生成 10 字碼 · 入選者憑此入場
   '寄信狀態', 'UA/備註'
 ];
 
@@ -75,11 +76,12 @@ function setupAll() {
   ensureSheet_(ss, SHEETS.SUBMIT_BAK, SUBMIT_HEADERS,   true);
   ensureSheet_(ss, SHEETS.FEATURED,   FEATURED_HEADERS, false);
 
-  // 「公開精選」分頁加一個 formula · 自動從「講者投稿」撈 is_featured=TRUE 的
+  // 「公開精選」分頁加 formula · 自動從「講者投稿」撈「精選公開」=✓ 的
+  // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured(第 15 欄)
   const fs = ss.getSheetByName(SHEETS.FEATURED);
-  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:O, "SELECT B, C, F, H, L WHERE N='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url'", 0), "")`;
+  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:O, "SELECT B, C, F, H, L WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url'", 0), "")`;
   fs.getRange('A2').setFormula(formula);
-  fs.getRange('F2:F').setValue('TRUE');   // 標記 is_featured(給前台 parser 用)
+  fs.getRange('F2:F').setValue('TRUE');
 
   Logger.log('✅ setupAll 完成 · 5 個分頁 ready');
   Logger.log('   接下來:1) 執行 setAdminPasscode("93489997") 設密碼');
@@ -129,7 +131,8 @@ function doPost(e) {
       case 'speaker_submit':          return handleSpeakerSubmit_(data);
       case 'admin_login':             return handleAdminLogin_(data);
       case 'admin_stats':             return handleAdminStats_(data);
-      case 'admin_list_submissions':  return handleAdminListSubmissions_(data);
+      case 'admin_dashboard':         return handleAdminDashboard_(data);
+      case 'admin_toggle_featured':   return handleAdminToggleFeatured_(data);
       default:
         return json_({ ok: false, error: 'unknown_action: ' + action });
     }
@@ -210,9 +213,10 @@ function handleSpeakerSubmit_(data) {
     data.support_url || '',
     data.note || '',
     data.consent_public ? '✓' : '',
-    '',                          // 精選公開 · 預設空 · 等 admin 勾選
-    '寄信中',
-    (data._ua || '').slice(0, 200),
+    '',                          // 15 精選公開 · 預設空
+    '',                          // 16 入場券 · 精選時才生成
+    '寄信中',                    // 17 寄信狀態
+    (data._ua || '').slice(0, 200), // 18 UA
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -228,7 +232,7 @@ function handleSpeakerSubmit_(data) {
   let mailStatus = '✓';
   try { sendSpeakerSubmitEmail_(data); }
   catch (err) { mailStatus = '✗ ' + err.message; console.error('[MAIL_SUBMIT_ERR]', err); }
-  sh.getRange(after, 16).setValue(mailStatus);
+  sh.getRange(after, 17).setValue(mailStatus);
 
   return json_({ ok: true, msg: '投稿已收到 · 等待主辦審核' });
 }
@@ -252,6 +256,12 @@ function handleAdminLogin_(data) {
 function handleAdminStats_(data) {
   try { assertAdmin_(data); }
   catch (err) { return json_({ ok: false, error: err.message }); }
+  return buildStatsResponse_();
+}
+
+function handleAdminDashboard_(data) {
+  try { assertAdmin_(data); }
+  catch (err) { return json_({ ok: false, error: err.message }); }
 
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const signupSh = ss.getSheetByName(SHEETS.SIGNUP);
@@ -268,35 +278,111 @@ function handleAdminStats_(data) {
       submit_count:     tData.length,
       featured_count:   tData.filter(r => r[14] === '✓' || r[14] === true).length,
     },
-    sheet_url:     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,
+    sheet_url:        `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,
     submit_sheet_url: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit#gid=${submitSh.getSheetId()}`,
-    recent_signup: sData.slice(-5).reverse().map(r => ({
-      ts: formatTs_(r[0]), name: r[1], email: r[2],
+    signups: sData.map((r, i) => ({
+      row: i + 2,              // 1-indexed · header 佔 row 1
+      ts: formatTs_(r[0]),
+      name: r[1], email: r[2], phone: r[3],
+      company: r[4], role: r[5], interest: r[6],
       afterparty: r[7] === '✓',
-    })),
-    recent_submit: tData.slice(-5).reverse().map(r => ({
-      ts: formatTs_(r[0]), name: r[1], project: r[5],
+    })).reverse(),             // 新的在上面
+    submits: tData.map((r, i) => ({
+      row: i + 2,
+      ts: formatTs_(r[0]),
+      public_name: r[1], title: r[2], email: r[3], phone: r[4],
+      project: r[5], problem: r[6], demo: r[7],
+      format: r[8], duration: r[9],
+      support_url: r[11], note: r[12],
       featured: r[14] === '✓' || r[14] === true,
-    })),
+      ticket: r[15] || '',     // 入場券(10 字碼)· 精選後有
+    })).reverse(),
   });
 }
 
-function handleAdminListSubmissions_(data) {
+/* 給 admin_login + admin_stats 共用的 stats-only response */
+function buildStatsResponse_() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const signupSh = ss.getSheetByName(SHEETS.SIGNUP);
+  const submitSh = ss.getSheetByName(SHEETS.SUBMIT);
+  const sData = signupSh.getLastRow() > 1 ? signupSh.getRange(2, 1, signupSh.getLastRow() - 1, SIGNUP_HEADERS.length).getValues() : [];
+  const tData = submitSh.getLastRow() > 1 ? submitSh.getRange(2, 1, submitSh.getLastRow() - 1, SUBMIT_HEADERS.length).getValues() : [];
+  return json_({
+    ok: true,
+    stats: {
+      signup_count:     sData.length,
+      afterparty_count: sData.filter(r => r[7] === '✓').length,
+      submit_count:     tData.length,
+      featured_count:   tData.filter(r => r[14] === '✓' || r[14] === true).length,
+    },
+    sheet_url: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,
+  });
+}
+
+/* ─────── Admin toggle featured · 精選 + 生成入場券 + 寄入選通知 ─────── */
+function handleAdminToggleFeatured_(data) {
   try { assertAdmin_(data); }
   catch (err) { return json_({ ok: false, error: err.message }); }
 
+  const row = Number(data.row);
+  const featured = Boolean(data.featured);
+  if (!row || row < 2) return json_({ ok: false, error: 'invalid row: ' + data.row });
+
   const ss = SpreadsheetApp.openById(SHEET_ID);
   const sh = ss.getSheetByName(SHEETS.SUBMIT);
-  const rows = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, SUBMIT_HEADERS.length).getValues() : [];
-  return json_({
-    ok: true,
-    list: rows.map(r => ({
-      ts: formatTs_(r[0]),
-      public_name: r[1], title: r[2], email: r[3],
-      project: r[5], problem: r[6], demo: r[7],
-      support_url: r[11], featured: r[14] === '✓' || r[14] === true,
-    })),
-  });
+  if (!sh) return json_({ ok: false, error: '分頁不存在' });
+
+  const COL_FEATURED = 15;   // 精選公開
+  const COL_TICKET   = 16;   // 入場券
+
+  const prevFeatured = sh.getRange(row, COL_FEATURED).getValue();
+  const prevTicket   = sh.getRange(row, COL_TICKET).getValue();
+
+  // 更新 Sheet
+  sh.getRange(row, COL_FEATURED).setValue(featured ? '✓' : '');
+
+  // 從沒精選 → 精選:生成 10 字入場券 · 寄入選通知
+  if (featured && prevFeatured !== '✓') {
+    const ticket = prevTicket || generateTicketCode_();
+    sh.getRange(row, COL_TICKET).setValue(ticket);
+
+    // 讀出該 row 完整資料
+    const rowData = sh.getRange(row, 1, 1, SUBMIT_HEADERS.length).getValues()[0];
+    const emailData = {
+      public_name: rowData[1],
+      email:       rowData[3],
+      project_name:rowData[5],
+      demo_desc:   rowData[7],
+      duration:    rowData[9],
+      ticket:      ticket,
+    };
+
+    try {
+      sendSpeakerFeaturedEmail_(emailData);
+      return json_({ ok: true, msg: '✓ 已上架 + 入場券 ' + ticket + ' + 入選信已寄', ticket: ticket });
+    } catch (err) {
+      console.error('[MAIL_FEATURED_ERR]', err);
+      return json_({ ok: true, msg: '✓ Sheet 已更新 + 入場券 ' + ticket + ' · 寄信失敗:' + err.message, ticket: ticket });
+    }
+  }
+
+  // 精選 → 下架:保留入場券(避免同一人上下架時重複生成)
+  if (!featured && prevFeatured === '✓') {
+    return json_({ ok: true, msg: '✓ 已下架(入場券保留 · 重新上架不會換碼)' });
+  }
+
+  return json_({ ok: true, msg: featured ? '✓ 已精選' : '✓ 已下架' });
+}
+
+function generateTicketCode_() {
+  // 10 字 · A-Z0-9 剔除易混的 I O 0 1
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let out = '';
+  for (let i = 0; i < 10; i++) {
+    out += chars.charAt(Math.floor(Math.random() * chars.length));
+    if (i === 4) out += '-';   // 中間加一個 dash:XXXXX-XXXXX
+  }
+  return out;
 }
 
 function formatTs_(v) {
@@ -372,6 +458,50 @@ function sendSpeakerSubmitEmail_(data) {
     footer_note: '任何問題請直接回覆此信件<br>虎智科技 TigerAI · tiger.ai.tw@gmail.com',
   });
   const plain = `${name} 您好\n\n您的 Demo 投稿已收到 · 等待主辦審核。\n專案:${data.project_name}\n\n活動頁:${EVENT_URL}\n\n${SENDER_NAME}`;
+  MailApp.sendEmail({ to: data.email, subject, body: plain, htmlBody: html, name: SENDER_NAME });
+}
+
+/* ─────── 入選通知信(從沒精選 → 精選時觸發) ─────── */
+function sendSpeakerFeaturedEmail_(data) {
+  const name = data.public_name || '朋友';
+  const subject = `[入選通知] ${EVENT_NAME} · 恭喜入選精選講者 🎉`;
+  const sections = [
+    { title: '🎉 恭喜入選', rows: [
+      ['AI 專案', data.project_name || ''],
+      ['Demo 內容', truncate_(data.demo_desc, 120)],
+      ['預計時間', data.duration || '5–10 min'],
+      ['公開展示', '已上架到活動頁的「精選講者」區'],
+    ]},
+    { title: '🎫 您的入場券(給 OOPS 晚上派對)', rows: [
+      ['入場代碼', `<code style="background:#07070C;color:#00FF88;padding:4px 10px;font-family:monospace;font-size:16px;letter-spacing:2px;border:1px solid #00FF88;">${data.ticket}</code>`],
+      ['使用方式', '現場憑此代碼免費加入 OOPS 晚上派對(18:00–20:00)'],
+      ['價值', '原價待 OOPS 公告 · 本券完全免費兌換'],
+    ]},
+    { title: '📅 您的上台時段', rows: [
+      ['安排在', '14:35–15:35 的精選講者時段'],
+      ['具體時間', '活動前 1 週會寄最終 slot(例:14:40–14:50)'],
+      ['設備', '現場備 HDMI 投影 · 自備筆電 · 需要穩定網路請提早告知'],
+    ]},
+    { title: '📅 活動資訊', rows: [
+      ['日期', EVENT_DATE], ['時間', EVENT_TIME], ['地點', EVENT_VENUE],
+    ]},
+    { title: '📝 需要你做的', rows: [
+      ['回覆確認', '收到請回覆這封信 · 確認入選 + 想上台的時間偏好(前段 / 中段 / 後段)'],
+      ['準備內容', '活動前 3 天可以寄 slide / demo 給主辦預覽(選填)'],
+      ['不克出席', '請最早告知 · 我們好把位子讓給候補'],
+    ]},
+  ];
+  const html = buildHtmlEmail_({
+    hero_tag: '✓ 入選通知',
+    hero_title: EVENT_NAME,
+    greeting: name + ' 您好 · 恭喜 🎉',
+    intro: '您的 Demo 投稿 <strong>已入選</strong> ' + EVENT_NAME + ' 精選講者 · 以下是您的上台安排跟入場券資訊:',
+    sections: sections,
+    cta_text: '查看活動頁',
+    cta_url: EVENT_URL,
+    footer_note: '收到請回覆這封信確認 · 任何問題也直接回覆<br>虎智科技 TigerAI · tiger.ai.tw@gmail.com',
+  });
+  const plain = `${name} 您好\n\n恭喜入選 ${EVENT_NAME} 精選講者!\n\n您的入場券:${data.ticket}\n(現場憑此代碼免費加入 OOPS 晚上派對)\n\n上台時段:14:35-15:35 之間 · 活動前 1 週會寄最終 slot\n\n收到請回覆此信確認。\n\n${SENDER_NAME}`;
   MailApp.sendEmail({ to: data.email, subject, body: plain, htmlBody: html, name: SENDER_NAME });
 }
 

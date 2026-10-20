@@ -1483,6 +1483,194 @@ footer .copy .status .dot{
 
 body.modal-open { overflow: hidden; }
 
+/* ─────── Admin Dashboard(登入後) ─────── */
+.admin-panel{ max-width: 920px !important; }
+.admin-login-view, .admin-dashboard-view{ display: none; }
+.admin-login-view.active, .admin-dashboard-view.active{ display: block; }
+
+.admin-stats{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin: 20px 0;
+}
+.admin-stat-cell{
+  background: var(--bg-elev);
+  padding: 16px 18px;
+}
+.admin-stat-cell .k{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.admin-stat-cell .n{
+  font-family: var(--mono);
+  font-size: 26px;
+  color: var(--cyan);
+  font-weight: 700;
+}
+.admin-stat-cell.highlight .n{ color: var(--green); }
+
+.admin-tabs{
+  display: flex;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+.admin-tab-btn{
+  flex: 1;
+  background: var(--bg-elev);
+  border: none;
+  color: var(--text-mid);
+  padding: 11px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.admin-tab-btn.active{
+  background: var(--bg-card);
+  color: var(--cyan);
+}
+.admin-tab-pane{ display: none; }
+.admin-tab-pane.active{ display: block; }
+
+.admin-note{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  padding: 10px 14px;
+  background: var(--bg);
+  border-left: 2px solid var(--amber);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.admin-list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.admin-row{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  font-size: 13px;
+}
+.admin-row .name{ color: var(--text); font-weight: 700; font-size: 14px; }
+.admin-row .meta{
+  display: flex; gap: 10px; flex-wrap: wrap;
+  color: var(--text-mid); font-family: var(--mono); font-size: 11px;
+  margin-top: 4px;
+}
+.admin-row .proj{ color: var(--cyan); margin-top: 4px; font-size: 13px; }
+.admin-row .desc{ color: var(--text-mid); margin-top: 4px; font-size: 12px; line-height: 1.5; }
+.admin-row .ticket{
+  display: inline-block;
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 2px 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  margin-top: 6px;
+}
+
+.admin-submit-row{
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.admin-submit-row input[type="checkbox"]{
+  width: 20px; height: 20px;
+  accent-color: var(--green);
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.admin-submit-row > div{ flex: 1; min-width: 0; }
+
+.admin-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.admin-actions a, .admin-actions button{
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  padding: 8px 14px;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.admin-actions a:hover, .admin-actions button:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.admin-toast{
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--green);
+  color: var(--text);
+  padding: 12px 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  z-index: 200;
+  animation: toast-in 0.25s ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+}
+.admin-toast.err{ border-color: var(--red); }
+
+/* ─────── FOMO exit-intent modal ─────── */
+.fomo-panel{
+  max-width: 480px !important;
+  text-align: center;
+}
+.fomo-panel h3{
+  font-size: 28px !important;
+  line-height: 1.3 !important;
+}
+.fomo-panel .modal-desc{
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+.fomo-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+.fomo-skip{
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: underline;
+}
+.fomo-skip:hover{ color: var(--text-mid); }
+
 /* ─────── ADMIN LOGIN SECTION (bottom) ─────── */
 .admin-section{
   padding: 80px 0 40px;
@@ -2568,38 +2756,83 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
   </div>
 </div>
 
-<!-- Modal: Admin Login (placeholder · 之後接 Apps Script) -->
-<div class="modal" id="modal-admin" role="dialog" aria-labelledby="modal-admin-title" aria-hidden="true">
-  <div class="modal-panel" style="max-width: 440px;">
+<!-- Modal: Admin · 包含 login view + dashboard view -->
+<div class="modal" id="modal-admin" role="dialog" aria-hidden="true">
+  <div class="modal-panel admin-panel">
     <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
-    <div class="modal-tag" style="color: var(--green);">&gt; admin_console --login</div>
-    <h3 id="modal-admin-title">
-      <span lang="zh">主辦端登入</span>
-      <span lang="en">Host Admin Login</span>
-    </h3>
-    <p class="modal-desc">
-      <span lang="zh">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出晚上派對加報清單。</span>
-      <span lang="en">TigerAI hosts only. Once in: pick featured speakers · view signup list · export Afterparty opt-ins.</span>
-    </p>
 
-    <form id="admin-form" novalidate>
-      <div class="field" style="margin-bottom: 16px;">
-        <label><span lang="zh">管理員密碼</span><span lang="en">Admin passcode</span></label>
-        <input type="password" name="passcode" placeholder="············" autocomplete="current-password" />
-        <div class="hint">
-          <span lang="zh">// 密碼存在 Apps Script PropertiesService · 可隨時更換</span>
-          <span lang="en">// Stored in Apps Script PropertiesService · changeable anytime</span>
+    <!-- Login view -->
+    <div class="admin-login-view active">
+      <div class="modal-tag" style="color: var(--green);">&gt; admin_console --login</div>
+      <h3>主辦端登入</h3>
+      <p class="modal-desc">只有虎智主辦可以進入。登入後可以看報名名單、勾選精選講者(勾了會自動寄入選通知信 + 生成入場券)、打開 Google Sheet。</p>
+      <form id="admin-form" novalidate>
+        <div class="field" style="margin-bottom: 16px;">
+          <label>管理員密碼</label>
+          <input type="password" name="passcode" placeholder="············" autocomplete="current-password" />
+          <div class="hint">// 密碼存在 Apps Script PropertiesService · 不在 code</div>
         </div>
-      </div>
-      <div class="submit-row" style="margin-top: 16px;">
-        <button type="submit" class="btn-submit" style="background: var(--green); color: #000;">&gt; LOGIN</button>
-        <div class="form-note">
-          <span lang="zh">// 登入後重導至管理介面(待後端部署)</span>
-          <span lang="en">// Redirects to admin UI after login (backend pending)</span>
+        <div class="submit-row" style="margin-top: 16px;">
+          <button type="submit" class="btn-submit" style="background: var(--green); color: #000;">&gt; LOGIN</button>
+          <div class="form-note">// 密碼錯會提示 · 不會通知外部</div>
         </div>
+        <div class="form-status" id="admin-status"></div>
+      </form>
+    </div>
+
+    <!-- Dashboard view -->
+    <div class="admin-dashboard-view">
+      <div class="modal-tag" style="color: var(--green);">&gt; admin_console --loggedin</div>
+      <h3>主控台</h3>
+
+      <div class="admin-stats">
+        <div class="admin-stat-cell"><div class="k">// 一般報名</div><div class="n" id="stat-signup">0</div></div>
+        <div class="admin-stat-cell"><div class="k">// 加報派對</div><div class="n" id="stat-afterparty">0</div></div>
+        <div class="admin-stat-cell"><div class="k">// 投稿</div><div class="n" id="stat-submit">0</div></div>
+        <div class="admin-stat-cell highlight"><div class="k">// 已精選</div><div class="n" id="stat-featured">0</div></div>
       </div>
-      <div class="form-status" id="admin-status"></div>
-    </form>
+
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-admin-tab="signups" type="button">一般報名</button>
+        <button class="admin-tab-btn" data-admin-tab="submits" type="button">講者投稿</button>
+      </div>
+
+      <div class="admin-tab-pane active" data-admin-pane="signups">
+        <div id="admin-signup-list"><div class="admin-row" style="color:var(--text-dim)">(載入中...)</div></div>
+      </div>
+
+      <div class="admin-tab-pane" data-admin-pane="submits">
+        <div class="admin-note">勾選「精選」會 ① 寫入 Sheet「精選公開」欄位 ② 自動生成 10 字入場券 ③ 寄入選通知信給該講者(含分享時段 + 入場券)</div>
+        <div id="admin-submit-list"><div class="admin-row" style="color:var(--text-dim)">(載入中...)</div></div>
+      </div>
+
+      <div class="admin-actions">
+        <a href="#" id="admin-sheet-link" target="_blank">&gt; 打開 Google Sheet</a>
+        <button type="button" id="admin-refresh">&gt; 重新整理</button>
+        <button type="button" id="admin-logout" style="margin-left:auto;">&gt; 登出</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: FOMO exit intent · 滑鼠離開頂部時彈 -->
+<div class="modal magenta" id="modal-fomo" role="dialog" aria-hidden="true">
+  <div class="modal-panel fomo-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">&gt; wait_before_you_leave.exe</div>
+    <h3>等等 · 你要忍痛<br/>錯過這場嗎? 🥲</h3>
+    <p class="modal-desc">
+      台北第一場真正硬核的 Local AI 聚會 · <strong style="color:var(--cyan)">10 位玩家現場 Demo</strong> · OOPS 晚上派對 · 只有這場。<br/><br/>
+      <strong style="color:var(--magenta)">現在不報名 · 下次就是半年後</strong> · 真的 OK?
+    </p>
+    <div class="fomo-actions">
+      <button type="button" class="btn-submit magenta" id="fomo-signup-btn">
+        &gt; 好啦 · 幫我報名
+      </button>
+      <button type="button" class="fomo-skip" data-close-modal>
+        我真的不要 · 讓我脫節 AI
+      </button>
+    </div>
   </div>
 </div>
 
@@ -2807,27 +3040,33 @@ const CONFIG = {
   SPEAKERS_CSV_URL: '',
 };
 
-async function submitForm(formEl, webhookUrl, statusEl, successMsg) {
-  window.fireSubmitConfetti?.();   // 送出就 fire 煙火
-  const data = Object.fromEntries(new FormData(formEl));
-  if (!webhookUrl) {
+async function submitForm(formEl, action, statusEl, successMsg) {
+  window.fireSubmitConfetti?.();
+  if (!CONFIG.WEBHOOK) {
     statusEl.className = 'form-status error show';
     statusEl.textContent = '[ ERROR ] 後端尚未串接 · 正式上線前會補上(DEMO 階段)';
     return;
   }
+  const data = Object.fromEntries(new FormData(formEl));
+  data.action = action;
+  data._ua = navigator.userAgent;
   const btn = formEl.querySelector('.btn-submit');
   btn.disabled = true;
   const originalText = btn.textContent;
   btn.textContent = '> 送出中...';
   try {
-    const res = await fetch(webhookUrl, {
+    const res = await fetch(CONFIG.WEBHOOK, {
       method: 'POST',
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error('http ' + res.status);
+    const result = await res.json().catch(() => ({ ok: true }));
+    if (result.ok === false) throw new Error(result.error || 'server error');
     statusEl.className = 'form-status show';
     statusEl.textContent = successMsg;
     formEl.reset();
+    // 標記已報名 · FOMO modal 下次不彈
+    try { localStorage.setItem('local-ai-party-signed-up', 'yes'); } catch (e) {}
   } catch (err) {
     statusEl.className = 'form-status error show';
     statusEl.textContent = '[ ERROR ] 送出失敗 · 請稍後再試 · ' + err.message;
@@ -2840,33 +3079,222 @@ async function submitForm(formEl, webhookUrl, statusEl, successMsg) {
 document.getElementById('speaker-form')?.addEventListener('submit', e => {
   e.preventDefault();
   const status = document.getElementById('speaker-status');
-  submitForm(e.target, CONFIG.SPEAKER_WEBHOOK, status,
+  submitForm(e.target, 'speaker_submit', status,
     '[ OK ] 投稿已收到 · 等待主辦審核 · 入選會以 email 聯繫');
 });
 document.getElementById('signup-form')?.addEventListener('submit', e => {
   e.preventDefault();
   const status = document.getElementById('signup-status');
-  submitForm(e.target, CONFIG.SIGNUP_WEBHOOK, status,
+  submitForm(e.target, 'signup', status,
     '[ OK ] 報名已收到 · 確認信稍後寄出');
 });
-document.getElementById('admin-form')?.addEventListener('submit', e => {
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  ADMIN DASHBOARD · login + stats + tabs + toggle featured
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+let adminPasscode = '';
+
+function escapeHtmlA(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttrA(s) { return escapeHtmlA(s); }
+
+async function adminFetch(action, extra = {}) {
+  if (!CONFIG.WEBHOOK) throw new Error('Apps Script 尚未部署(CONFIG.WEBHOOK 空)');
+  const res = await fetch(CONFIG.WEBHOOK, {
+    method: 'POST',
+    body: JSON.stringify({ action, passcode: adminPasscode, ...extra }),
+  });
+  return res.json();
+}
+
+function adminToast(msg, isErr) {
+  const t = document.createElement('div');
+  t.className = 'admin-toast' + (isErr ? ' err' : '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function renderAdminStats(stats) {
+  if (!stats) return;
+  document.getElementById('stat-signup').textContent     = stats.signup_count ?? 0;
+  document.getElementById('stat-afterparty').textContent = stats.afterparty_count ?? 0;
+  document.getElementById('stat-submit').textContent     = stats.submit_count ?? 0;
+  document.getElementById('stat-featured').textContent   = stats.featured_count ?? 0;
+}
+
+function renderAdminSignups(list) {
+  const el = document.getElementById('admin-signup-list');
+  if (!list || !list.length) {
+    el.innerHTML = '<div class="admin-row" style="color:var(--text-dim)">(尚無報名)</div>';
+    return;
+  }
+  el.innerHTML = '<div class="admin-list">' + list.map(r => `
+    <div class="admin-row">
+      <div class="meta">${escapeHtmlA(r.ts)} ${r.afterparty ? '· <span style="color:var(--magenta)">✓ 加報派對</span>' : ''}</div>
+      <div class="name">${escapeHtmlA(r.name || '-')}</div>
+      <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')}</div>
+      ${(r.company || r.role) ? `<div class="meta">${escapeHtmlA(r.company || '')} ${r.role ? '· ' + escapeHtmlA(r.role) : ''}</div>` : ''}
+      ${r.interest ? `<div class="meta" style="color:var(--text-dim)">想得到:${escapeHtmlA(r.interest)}</div>` : ''}
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderAdminSubmits(list) {
+  const el = document.getElementById('admin-submit-list');
+  if (!list || !list.length) {
+    el.innerHTML = '<div class="admin-row" style="color:var(--text-dim)">(尚無投稿)</div>';
+    return;
+  }
+  el.innerHTML = '<div class="admin-list">' + list.map(r => `
+    <div class="admin-row admin-submit-row">
+      <input type="checkbox" ${r.featured ? 'checked' : ''}
+             data-row="${r.row}" data-name="${escapeAttrA(r.public_name)}"
+             onchange="adminToggleFeatured(this)" />
+      <div>
+        <div class="meta">${escapeHtmlA(r.ts)} · ${r.featured ? '<span style="color:var(--green)">✓ 已精選</span>' : '<span style="color:var(--text-dim)">未精選</span>'}</div>
+        <div class="name">${escapeHtmlA(r.public_name || '-')} <span style="color:var(--text-mid);font-weight:400;font-size:12px">· ${escapeHtmlA(r.title || '')}</span></div>
+        <div class="proj">${escapeHtmlA(r.project || '')}</div>
+        ${r.demo ? `<div class="desc">${escapeHtmlA(r.demo.length > 160 ? r.demo.substring(0, 160) + '…' : r.demo)}</div>` : ''}
+        <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')} ${r.format ? '· ' + escapeHtmlA(r.format) : ''} ${r.duration ? '· ' + escapeHtmlA(r.duration) : ''}</div>
+        ${r.support_url ? `<div class="meta"><a href="${escapeAttrA(r.support_url)}" target="_blank" rel="noopener" style="color:var(--cyan)">↗ 參考資料</a></div>` : ''}
+        ${r.ticket ? `<div class="ticket">🎫 ${escapeHtmlA(r.ticket)}</div>` : ''}
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+async function refreshAdminDashboard() {
+  try {
+    const result = await adminFetch('admin_dashboard');
+    if (!result.ok) {
+      adminToast(result.error || '載入失敗', true);
+      return;
+    }
+    renderAdminStats(result.stats);
+    renderAdminSignups(result.signups);
+    renderAdminSubmits(result.submits);
+    const link = document.getElementById('admin-sheet-link');
+    if (link && result.submit_sheet_url) link.href = result.submit_sheet_url;
+    else if (link && result.sheet_url) link.href = result.sheet_url;
+  } catch (err) {
+    adminToast('網路錯誤:' + err.message, true);
+  }
+}
+
+window.adminToggleFeatured = async function(checkbox) {
+  checkbox.disabled = true;
+  const row = checkbox.dataset.row;
+  const name = checkbox.dataset.name;
+  const featured = checkbox.checked;
+  try {
+    const result = await adminFetch('admin_toggle_featured', { row, featured });
+    if (result.ok) {
+      adminToast((featured ? '✓ 已上架 ' : '✓ 已下架 ') + name + (result.ticket ? ' · 入場券 ' + result.ticket : ''));
+      refreshAdminDashboard();
+      if (featured) window.fireSubmitConfetti?.();
+    } else {
+      checkbox.checked = !featured;
+      adminToast(result.error || '操作失敗', true);
+    }
+  } catch (err) {
+    checkbox.checked = !featured;
+    adminToast('網路錯誤:' + err.message, true);
+  } finally {
+    checkbox.disabled = false;
+  }
+};
+
+/* Admin login form */
+document.getElementById('admin-form')?.addEventListener('submit', async e => {
   e.preventDefault();
   const status = document.getElementById('admin-status');
-  const fd = new FormData(e.target);
-  const passcode = (fd.get('passcode') || '').toString().trim();
-  const ADMIN_PASSCODE = '93489997';   // 虎智統編 · DEMO 階段 client-side 檢查 · 正式版會改成 Apps Script server-side
-  if (passcode === ADMIN_PASSCODE) {
-    status.className = 'form-status show';
-    status.textContent = '[ OK ] 登入成功 · 後台介面建置中 · Apps Script 部署完成會自動接上';
-    window.fireSubmitConfetti?.();
-    e.target.reset();
-  } else if (!passcode) {
+  const passcode = (new FormData(e.target).get('passcode') || '').toString().trim();
+  if (!passcode) {
     status.className = 'form-status error show';
     status.textContent = '[ ERROR ] 請輸入密碼';
-  } else {
-    status.className = 'form-status error show';
-    status.textContent = '[ ERROR ] 密碼錯誤';
+    return;
   }
+  if (!CONFIG.WEBHOOK) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] Apps Script 尚未部署 · 請先把 Web App URL 填到 CONFIG.WEBHOOK';
+    return;
+  }
+  status.className = 'form-status show';
+  status.textContent = '[ ... ] 登入中...';
+  adminPasscode = passcode;
+  try {
+    const result = await adminFetch('admin_login');
+    if (result.ok) {
+      // 切換到 dashboard view
+      document.querySelector('.admin-login-view').classList.remove('active');
+      document.querySelector('.admin-dashboard-view').classList.add('active');
+      renderAdminStats(result.stats);
+      const link = document.getElementById('admin-sheet-link');
+      if (link && result.sheet_url) link.href = result.sheet_url;
+      refreshAdminDashboard();
+      window.fireSubmitConfetti?.();
+      e.target.reset();
+      status.className = 'form-status';
+      status.textContent = '';
+    } else {
+      adminPasscode = '';
+      status.className = 'form-status error show';
+      status.textContent = '[ ERROR ] ' + (result.error || '登入失敗');
+    }
+  } catch (err) {
+    adminPasscode = '';
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 網路錯誤:' + err.message;
+  }
+});
+
+/* Admin tabs */
+document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.adminTab;
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.toggle('active', p.dataset.adminPane === tab));
+  });
+});
+
+/* Refresh / Logout */
+document.getElementById('admin-refresh')?.addEventListener('click', refreshAdminDashboard);
+document.getElementById('admin-logout')?.addEventListener('click', () => {
+  adminPasscode = '';
+  document.querySelector('.admin-dashboard-view').classList.remove('active');
+  document.querySelector('.admin-login-view').classList.add('active');
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  FOMO · exit intent · 滑鼠離開頂部時彈
+ * ═══════════════════════════════════════════════════════════════════════════ */
+(function initFomo(){
+  // 已經報名過 · 不彈
+  try {
+    if (localStorage.getItem('local-ai-party-signed-up') === 'yes') return;
+    if (sessionStorage.getItem('local-ai-party-fomo-shown') === 'yes') return;
+  } catch (e) {}
+
+  const START = Date.now();
+  const MIN_DWELL_MS = 10 * 1000;   // 至少停留 10 秒才會觸發
+
+  function onMouseOut(e) {
+    if (e.relatedTarget || e.toElement) return;   // 還在頁內
+    if (e.clientY > 60) return;                   // 不是從頂部離開
+    if (Date.now() - START < MIN_DWELL_MS) return;
+    try { sessionStorage.setItem('local-ai-party-fomo-shown', 'yes'); } catch (e) {}
+    openModal('fomo');
+    document.removeEventListener('mouseout', onMouseOut);
+  }
+  document.addEventListener('mouseout', onMouseOut);
+})();
+
+/* FOMO 的「幫我報名」按鈕 · 關閉 FOMO 再開 signup */
+document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
+  closeModal(document.getElementById('modal-fomo'));
+  setTimeout(() => openModal('signup'), 150);
 });
 
 /* ─────── 精選講者 · 從 CSV 讀 ─────── */
