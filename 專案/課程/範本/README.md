@@ -50,7 +50,7 @@
 
 User 給的 docx / 範例 = **第一筆 seed data** · 不是唯一。課程可能有多個梯次(嘉義、新竹、台中…)· code **不能把任何場次專屬資訊寫死**。
 
-**梯次目錄 Sheet 應有欄位**(以 `專案/8_AI工作流程/apps-script.js` 為標準):
+**梯次目錄 Sheet 應有欄位**(以 `專案/課程/8_AI工作流程/apps-script.js` 為標準):
 ```
 開課縣市 | 課程日期 | 課程時間 | 課程地點 | 單場講師 | 單場主題 | 交通 | 停車 | 名額
 ```
@@ -124,4 +124,4 @@ Google Cloud Logging ≥ 7 天 · Sheet 全毀也救得回。
 
 ## 參考實作
 
-`專案/8_AI工作流程/apps-script.js` — 三條鐵則都已落實的範本 · 包含 `buildHtmlEmail(opts)` 標準 EDM 函式
+`專案/課程/8_AI工作流程/apps-script.js` — 三條鐵則都已落實的範本 · 包含 `buildHtmlEmail(opts)` 標準 EDM 函式

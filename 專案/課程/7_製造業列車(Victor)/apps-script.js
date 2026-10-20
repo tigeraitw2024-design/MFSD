@@ -15,7 +15,7 @@
  *      執行身份:我  ·  存取權限:任何人
  *      按「部署」→ 拿到 Web App URL
  *   7. 把那串 URL 填到 course-tour-victor/index.html 的 CONFIG.SHEET_WEBHOOK
- *      (同一份也要更新 專案/7_製造業列車(Victor)/2. 產出/index.html)
+ *      (同一份也要更新 專案/課程/7_製造業列車(Victor)/2. 產出/index.html)
  *
  *   ⚠️ 未來改這份程式後要重部署:「管理部署 → 鉛筆編輯 → 版本『新版本』→ 部署」
  *      千萬不要按「新增部署」— 會產生新 URL,前端就抓不到。
