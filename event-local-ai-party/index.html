@@ -208,9 +208,7 @@ code, .mono { font-family: var(--mono); }
   line-height: 0.95;
   letter-spacing: -0.03em;
   margin-bottom: 10px;
-  max-width: 70%;
 }
-@media (max-width: 1180px){ .hero h1{ max-width: 100%; } }
 .hero h1 .en{
   display: block;
   color: var(--text);
@@ -375,17 +373,28 @@ code, .mono { font-family: var(--mono); }
 .cta.magenta:hover .arrow{ color: var(--magenta); }
 
 /* ─────── HERO PROPS · 廣告機 + 機櫃 + cyberpunk 對話框 ─────── */
-.hero .wrap{ position: relative; }
-.hero-props{
-  position: absolute;
-  right: 0;
-  top: 40px;
-  width: 440px;
-  height: 540px;
-  pointer-events: none;
-  z-index: 3;
+/* Hero wrap 用 Grid 強制兩欄:左 1fr 文字 · 右 460px props · 不會蓋到彼此 */
+@media (min-width: 1181px){
+  .hero .wrap{
+    display: grid;
+    grid-template-columns: 1fr 460px;
+    column-gap: 60px;
+    align-items: start;
+  }
+  .hero .wrap > *{ grid-column: 1; }          /* 預設在左欄 */
+  .hero .wrap > .cta-stage{ grid-column: 1 / -1; }   /* CTA 跨兩欄 */
+  .hero-props{
+    grid-column: 2 !important;
+    grid-row: 1 / span 5;         /* 從 eyebrow 開始跨到 meta-strip */
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 540px;
+    pointer-events: none;
+    z-index: 3;
+  }
 }
-@media (max-width: 1180px) { .hero-props { display: none; } }
+@media (max-width: 1180px){ .hero-props{ display: none; } }
 
 .prop{
   position: absolute;
@@ -396,18 +405,18 @@ code, .mono { font-family: var(--mono); }
   height: auto;
   width: 100%;
 }
-/* 廣告機 · 直立 · 偏左上 · 中等尺寸 */
+/* 廣告機 · 直立 · 偏左上(靠近 h1 右側) */
 .prop-kiosk{
   top: 20px;
-  left: 10px;
-  width: 150px;
+  left: 20px;
+  width: 160px;
   filter: drop-shadow(0 0 25px rgba(0, 245, 255, 0.2));
 }
-/* 機櫃 · 方正 · 偏右下 · 大尺寸 */
+/* 機櫃 · 方正 · 偏右下(靠近 meta-strip 右側) */
 .prop-rack{
-  top: 150px;
-  right: 10px;
-  width: 260px;
+  top: 180px;
+  right: 0;
+  width: 280px;
   filter: drop-shadow(0 0 40px rgba(0, 100, 255, 0.35));
 }
 
