@@ -406,17 +406,15 @@ code, .mono { font-family: var(--mono); }
   height: auto;
   width: 100%;
 }
-/* 廣告機 · 直立 · 粉紅發光 */
+/* 廣告機 · 直立 · 淡粉紅發光(10%)· 放大 20%(160 → 192) */
 .prop-kiosk{
-  width: 160px;
-  filter:
-    drop-shadow(0 0 30px rgba(255, 46, 166, 0.5))
-    drop-shadow(0 0 60px rgba(255, 46, 166, 0.25));
+  width: 192px;
+  filter: drop-shadow(0 0 40px rgba(255, 46, 166, 0.1));
 }
-/* 機櫃 · 縮至 40%(從 280 → 168)· 跟廣告機底部對齊 */
+/* 機櫃 · 淡藍色發光(10%)· 放大 20%(168 → 202) · 跟廣告機底部對齊 */
 .prop-rack{
-  width: 168px;
-  filter: drop-shadow(0 0 40px rgba(0, 100, 255, 0.35));
+  width: 202px;
+  filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.1));
 }
 
 /* cyberpunk 對話框 */
@@ -439,19 +437,17 @@ code, .mono { font-family: var(--mono); }
 }
 .prop-bubble.fading{ opacity: 0; }
 
-/* 廣告機 bubble · 右上方(往機櫃方向) */
+/* 廣告機 bubble · 右上方 · 粉色邊框(無發光) */
 .prop-kiosk .prop-bubble{
   left: calc(100% + 28px);
   top: 20px;
-  border: 1px solid var(--cyan);
-  box-shadow: 0 0 24px rgba(0, 245, 255, 0.3);
+  border: 1px solid var(--magenta);
 }
-/* 機櫃 bubble · 左方(往廣告機方向) */
+/* 機櫃 bubble · 左方 · 藍色邊框(無發光) */
 .prop-rack .prop-bubble{
   right: calc(100% + 28px);
   top: 40px;
-  border: 1px solid var(--magenta);
-  box-shadow: 0 0 24px rgba(255, 46, 166, 0.35);
+  border: 1px solid #3B82F6;
   text-align: right;
 }
 
@@ -472,9 +468,13 @@ code, .mono { font-family: var(--mono); }
   bottom: -5px; right: -5px;
   border-left: none; border-top: none;
 }
+.prop-kiosk .prop-bubble::before,
+.prop-kiosk .prop-bubble::after{
+  border-color: var(--magenta);
+}
 .prop-rack .prop-bubble::before,
 .prop-rack .prop-bubble::after{
-  border-color: var(--magenta);
+  border-color: #3B82F6;
 }
 
 /* 對話框→照片 pointer 線 + 圓點 */
@@ -487,10 +487,11 @@ code, .mono { font-family: var(--mono); }
 }
 .prop-kiosk .prop-bubble .pointer{
   left: -26px;
+  background: var(--magenta);
 }
 .prop-rack .prop-bubble .pointer{
   right: -26px;
-  background: var(--magenta);
+  background: #3B82F6;
 }
 .prop-bubble .pointer::before{
   content: '';
@@ -1642,11 +1643,6 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
         <div class="label"><span lang="zh">// 地點</span><span lang="en">// VENUE</span></div>
         <div class="val">OOPS @ <span lang="zh">茹曦</span><span lang="en">Chateau</span></div>
         <div class="val-sub"><span lang="zh">台北松山 15F</span><span lang="en">Taipei Songshan 15F</span></div>
-      </div>
-      <div class="cell">
-        <div class="label"><span lang="zh">// 名額</span><span lang="en">// SEATS</span></div>
-        <div class="val"><span lang="zh">有限</span><span lang="en">LIMITED</span></div>
-        <div class="val-sub"><span lang="zh">詳情待公告</span><span lang="en">TBA</span></div>
       </div>
     </div>
 
