@@ -3096,9 +3096,9 @@ document.querySelectorAll('.faq-item').forEach(item => {
 
 /* ─────── Apps Script 設定 ─────── */
 const CONFIG = {
-  // Apps Script Web App URL(一個 URL 處理所有 action)· 部署後填入
-  WEBHOOK: '',
-  // 「公開精選」分頁發佈成 CSV 的 URL · 設定後填入
+  // Apps Script Web App URL(一個 URL 處理 signup / speaker_submit / admin_login / admin_dashboard / admin_toggle_featured)
+  WEBHOOK: 'https://script.google.com/macros/s/AKfycbyCRqIrVzZ_IamKRQmIf7MfBRuhDzp6Br3CCy78JsuS_r7WICmeUBkbk1D-Ouslyobelg/exec',
+  // 「公開精選」分頁發佈成 CSV 的 URL(到 Sheet → 檔案 → 共用 → 發布到網路 → 選「公開精選」分頁 CSV)
   SPEAKERS_CSV_URL: '',
 };
 
