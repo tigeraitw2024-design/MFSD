@@ -1109,7 +1109,10 @@ footer .copy .status .dot{
   color: var(--cyan);
 }
 .cta-cell.right .mascot{
-  right: -30px;
+  right: -50px;
+  top: -40px;
+  width: 190px;
+  height: 180px;
   color: var(--magenta);
 }
 .cta-cell:hover .mascot,
@@ -1573,57 +1576,71 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 
         <!-- RIGHT · Signup -->
         <div class="cta-cell right">
-          <!-- Mascot: 一群 Ravers · 透視錯位(前大後小)· 報名的人多 -->
-          <svg class="mascot mascot-crowd" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Mascot: 一群 Ravers · 5 人 · 景深錯位(前大後小 · opacity 遞減) -->
+          <svg class="mascot mascot-crowd" viewBox="0 0 180 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 
-            <!-- 遠景小人 A (左後方 · 最小 · 最淡) -->
-            <g opacity="0.4">
-              <circle cx="18" cy="32" r="12" fill="currentColor" opacity="0.3"/>
-              <circle cx="18" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
-              <rect x="7" y="30" width="22" height="4.5" fill="#07070C" stroke="currentColor" stroke-width="1"/>
-              <path d="M8,50 L28,50 L30,84 L6,84 Z" fill="currentColor" opacity="0.22"/>
-              <path d="M8,50 L28,50 L30,84 L6,84 Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <!-- 遠景 1 · 最後排最左 · 最小最淡 (只有頭) -->
+            <g opacity="0.3">
+              <circle cx="15" cy="18" r="9" fill="currentColor" opacity="0.3"/>
+              <circle cx="15" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <rect x="7" y="16.5" width="16" height="3.5" fill="#07070C" stroke="currentColor" stroke-width="0.8"/>
             </g>
 
-            <!-- 遠景小人 B (右後方 · 中偏小 · 稍淡 · 舉手) -->
-            <g opacity="0.6">
-              <circle cx="124" cy="24" r="15" fill="currentColor" opacity="0.28"/>
-              <circle cx="124" cy="24" r="15" fill="none" stroke="currentColor" stroke-width="1.8"/>
-              <rect x="111" y="22" width="26" height="5.5" fill="#07070C" stroke="currentColor" stroke-width="1.2"/>
-              <path d="M118,32 Q124,35 130,32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <path d="M110,46 L138,46 L142,96 L106,96 Z" fill="currentColor" opacity="0.2"/>
-              <path d="M110,46 L138,46 L142,96 L106,96 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <!-- 遠景 2 · 後排右 · 小且淡 (只有頭) -->
+            <g opacity="0.35">
+              <circle cx="165" cy="14" r="10" fill="currentColor" opacity="0.3"/>
+              <circle cx="165" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="156" y="12.5" width="18" height="4" fill="#07070C" stroke="currentColor" stroke-width="0.9"/>
+            </g>
+
+            <!-- 中景 A · 左後方 · 中小 (半身) -->
+            <g opacity="0.55">
+              <circle cx="26" cy="42" r="13" fill="currentColor" opacity="0.28"/>
+              <circle cx="26" cy="42" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="14" y="40" width="24" height="5" fill="#07070C" stroke="currentColor" stroke-width="1.1"/>
+              <path d="M16,60 L36,60 L39,100 L13,100 Z" fill="currentColor" opacity="0.22"/>
+              <path d="M16,60 L36,60 L39,100 L13,100 Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+
+            <!-- 中景 B · 右後方 · 中(半身舉拳) -->
+            <g opacity="0.7">
+              <circle cx="148" cy="36" r="16" fill="currentColor" opacity="0.28"/>
+              <circle cx="148" cy="36" r="16" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="133" y="34" width="30" height="6" fill="#07070C" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M140,45 Q148,49 156,45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M133,60 L163,60 L167,110 L129,110 Z" fill="currentColor" opacity="0.2"/>
+              <path d="M133,60 L163,60 L167,110 L129,110 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
               <!-- 舉拳 -->
-              <line x1="138" y1="50" x2="142" y2="24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <rect x="138" y="18" width="8" height="8" rx="1.5" fill="currentColor"/>
+              <line x1="162" y1="64" x2="168" y2="30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <rect x="163" y="22" width="10" height="10" rx="1.5" fill="currentColor"/>
             </g>
 
-            <!-- 前景大人 (中下 · 原本的 raver · 完整) -->
+            <!-- 前景大人 · 中央下方 · 完整細節 -->
             <g>
-              <circle cx="68" cy="52" r="28" fill="currentColor" opacity="0.15"/>
-              <circle cx="68" cy="52" r="28" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <circle cx="88" cy="62" r="30" fill="currentColor" opacity="0.15"/>
+              <circle cx="88" cy="62" r="30" fill="none" stroke="currentColor" stroke-width="2.5"/>
               <!-- 墨鏡 (長條) -->
-              <path d="M45,50 L91,50 L91,60 L75,60 L71,56 L65,56 L61,60 L45,60 Z"
+              <path d="M63,60 L113,60 L113,71 L95,71 L91,66 L85,66 L81,71 L63,71 Z"
                     fill="#07070C" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              <rect x="50" y="53" width="4" height="2" fill="currentColor"/>
-              <rect x="81" y="53" width="4" height="2" fill="currentColor"/>
+              <rect x="69" y="63" width="4" height="2" fill="currentColor"/>
+              <rect x="103" y="63" width="4" height="2" fill="currentColor"/>
               <!-- 嘴 -->
-              <path d="M59,70 Q68,76 77,70" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M78,82 Q88,88 98,82" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               <!-- 身體 -->
-              <path d="M43,92 L93,92 L98,146 L38,146 Z" fill="currentColor" opacity="0.14"/>
-              <path d="M43,92 L93,92 L98,146 L38,146 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M61,104 L115,104 L120,166 L56,166 Z" fill="currentColor" opacity="0.14"/>
+              <path d="M61,104 L115,104 L120,166 L56,166 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
               <!-- 身體 triangle pattern -->
-              <path d="M61,110 L75,110 L68,122 Z" fill="currentColor" opacity="0.4"/>
-              <!-- 舉手 YO -->
-              <line x1="93" y1="94" x2="104" y2="54" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
-              <rect x="98" y="42" width="12" height="12" rx="2" fill="currentColor"/>
-              <rect x="98" y="40" width="4" height="4" fill="currentColor" opacity="0.6"/>
-              <rect x="104" y="40" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <path d="M80,124 L96,124 L88,138 Z" fill="currentColor" opacity="0.4"/>
+              <!-- 舉手 YO (右手上舉) -->
+              <line x1="115" y1="106" x2="128" y2="60" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
+              <rect x="122" y="48" width="13" height="13" rx="2" fill="currentColor"/>
+              <rect x="122" y="46" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <rect x="129" y="46" width="4" height="4" fill="currentColor" opacity="0.6"/>
               <!-- 耳機 -->
-              <path d="M40,44 Q40,32 54,34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <rect x="37" y="46" width="7" height="10" rx="2" fill="currentColor"/>
-              <path d="M96,44 Q96,32 82,34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <rect x="92" y="46" width="7" height="10" rx="2" fill="currentColor"/>
+              <path d="M57,54 Q57,40 72,42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="54" y="56" width="7" height="11" rx="2" fill="currentColor"/>
+              <path d="M119,54 Q119,40 104,42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="115" y="56" width="7" height="11" rx="2" fill="currentColor"/>
             </g>
           </svg>
           <button type="button" class="cta-btn magenta" data-open-modal="signup">
