@@ -432,14 +432,29 @@ code, .mono { font-family: var(--mono); }
   align-items: center;
   justify-content: center;
   min-height: 44px;
-  transition: opacity 0.3s ease-out;
   z-index: 4;
 }
 .prop-bubble .bubble-text{
   display: inline-block;
   white-space: nowrap;
 }
-.prop-bubble.fading{ opacity: 0; }
+/* glitch 閃動效果(換字時觸發)· 用 LOCAL AI 同套風格 */
+.prop-bubble.glitching .bubble-text{
+  animation: bubble-glitch 0.55s linear forwards;
+}
+@keyframes bubble-glitch{
+  0%   { transform: translate(0); opacity: 1; }
+  10%  { transform: translate(-3px, 1px); opacity: 0.75; }
+  20%  { transform: translate(3px, -1px) skewX(-2deg); opacity: 0.4; }
+  30%  { transform: translate(-2px, 0); opacity: 0.85; }
+  40%  { transform: translate(4px, 1px) skewX(3deg); opacity: 0.3; }
+  50%  { transform: translate(-4px, -1px); opacity: 0.6; }
+  60%  { transform: translate(0, 2px); opacity: 0.1; }    /* 最低點 · 換字時機 */
+  70%  { transform: translate(2px, 0); opacity: 0.55; }
+  80%  { transform: translate(-1px, 1px); opacity: 0.85; }
+  90%  { transform: translate(1px, 0) skewX(-1deg); opacity: 1; }
+  100% { transform: translate(0); opacity: 1; }
+}
 
 /* 廣告機 bubble · 右上方 · 粉色邊框(無發光) */
 .prop-kiosk .prop-bubble{
@@ -2594,18 +2609,25 @@ document.addEventListener('keydown', e => {
     const textEl = el.querySelector('.bubble-text');
     if (!textEl) return;
     let i = 0;
+    // 初始顯示第一條
+    const initLang = document.documentElement.getAttribute('data-lang') || 'zh';
+    textEl.textContent = (b[initLang] || b.zh)[0];
+    i = 1;
     function tick() {
       const lang = document.documentElement.getAttribute('data-lang') || 'zh';
       const msgs = b[lang] || b.zh;
-      el.classList.add('fading');
+      el.classList.add('glitching');
+      // glitch 動畫 60% 處(最低 opacity)換字
       setTimeout(() => {
         textEl.textContent = msgs[i % msgs.length];
-        el.classList.remove('fading');
         i++;
-      }, 300);
+      }, 330);
+      // 動畫結束後移除 class(讓下次 tick 可以重新觸發)
+      setTimeout(() => {
+        el.classList.remove('glitching');
+      }, 600);
     }
-    tick();
-    setInterval(tick, 3500);
+    setInterval(tick, 6000);   // 慢節奏:6 秒換一條
   });
 })();
 
