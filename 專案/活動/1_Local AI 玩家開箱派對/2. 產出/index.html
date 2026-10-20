@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-lang="zh">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -1371,6 +1371,34 @@ body.modal-open { overflow: hidden; }
   color: #000;
 }
 
+/* ─────── I18N · 中英切換 ─────── */
+[lang="en"] { display: none; }
+html[data-lang="en"] [lang="en"] { display: inline; }
+html[data-lang="en"] [lang="zh"] { display: none; }
+/* block-level 翻譯目標(段落、list item 內):保留原本 display */
+[lang="en"].block,
+[lang="zh"].block { display: block; }
+html[data-lang="en"] [lang="en"].block { display: block; }
+html[data-lang="en"] [lang="zh"].block { display: none; }
+
+.lang-switch{
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  margin-left: 8px;
+}
+.lang-switch:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--bg-elev);
+}
+
 /* 禁用動畫使用者 */
 @media (prefers-reduced-motion: reduce) {
   .hero h1 .en::before,
@@ -1389,13 +1417,19 @@ body.modal-open { overflow: hidden; }
 <div class="topbar">
   <div class="wrap">
     <div class="term">
-      <span class="prompt">&gt;</span> ./local_ai_party.sh --date=2026-11-04 --venue=taipei<span class="cursor"></span>
+      <span class="prompt">&gt;</span>
+      <span lang="zh"> ./派對程式.sh --日期=2026-11-04 --地點=台北</span>
+      <span lang="en"> ./local_ai_party.sh --date=2026-11-04 --venue=taipei</span>
+      <span class="cursor"></span>
     </div>
     <nav>
-      <a href="#about">About</a>
-      <a href="#agenda">Agenda</a>
-      <a href="#venue">Venue</a>
-      <a href="#faq">FAQ</a>
+      <a href="#about"><span lang="zh">關於</span><span lang="en">About</span></a>
+      <a href="#agenda"><span lang="zh">流程</span><span lang="en">Agenda</span></a>
+      <a href="#venue"><span lang="zh">場地</span><span lang="en">Venue</span></a>
+      <a href="#faq"><span lang="zh">常見問題</span><span lang="en">FAQ</span></a>
+      <button class="lang-switch" onclick="toggleLang()" aria-label="Switch language">
+        <span lang="zh">EN</span><span lang="en">中文</span>
+      </button>
     </nav>
   </div>
 </div>
@@ -1405,40 +1439,52 @@ body.modal-open { overflow: hidden; }
   <div class="wrap">
     <div class="eyebrow">
       <span class="dot"></span>
-      <span>CONNECTION_ESTABLISHED · 11.04.2026 TAIPEI</span>
+      <span lang="zh">連線建立 · 2026.11.04 · 台北</span>
+      <span lang="en">CONNECTION_ESTABLISHED · 11.04.2026 TAIPEI</span>
     </div>
 
     <h1>
       <span class="en" data-text="LOCAL AI">LOCAL AI</span>
-      <span class="tc">玩家開箱派對</span>
+      <span class="tc">
+        <span lang="zh">玩家開箱派對</span>
+        <span lang="en">Enthusiast Showcase</span>
+      </span>
     </h1>
 
     <p class="sub">
-      一場為 Local AI 玩家、Server 自架者、AI 工程落地實作者準備的開箱夜。<br />
-      <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS Afterparty</span> ──
-      來看最硬核的 Local AI 現場 · 或者 · 把你的作品搬上台。
+      <span lang="zh">
+        一場為 Local AI 玩家、Server 自架者、AI 工程落地實作者準備的開箱夜。<br />
+        <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS Afterparty</span> ──
+        來看最硬核的 Local AI 現場 · 或者 · 把你的作品搬上台。
+      </span>
+      <span lang="en">
+        A night built for Local AI enthusiasts, self-hosted Server builders,
+        and AI engineering practitioners.<br />
+        <span class="accent">Real case demos × Free Token Server experience × OOPS Afterparty</span> ──
+        Come see the hardest-core Local AI scene · or · bring your work on stage.
+      </span>
     </p>
 
     <div class="meta-strip">
       <div class="cell">
-        <div class="label">// DATE</div>
+        <div class="label"><span lang="zh">// 日期</span><span lang="en">// DATE</span></div>
         <div class="val">2026.11.04</div>
-        <div class="val-sub">星期三</div>
+        <div class="val-sub"><span lang="zh">星期三</span><span lang="en">Wednesday</span></div>
       </div>
       <div class="cell">
-        <div class="label">// TIME</div>
+        <div class="label"><span lang="zh">// 時間</span><span lang="en">// TIME</span></div>
         <div class="val">14:00 → 20:00</div>
-        <div class="val-sub">含 Afterparty</div>
+        <div class="val-sub"><span lang="zh">含 Afterparty</span><span lang="en">incl. Afterparty</span></div>
       </div>
       <div class="cell">
-        <div class="label">// VENUE</div>
-        <div class="val">OOPS @ 茹曦</div>
-        <div class="val-sub">台北松山 15F</div>
+        <div class="label"><span lang="zh">// 地點</span><span lang="en">// VENUE</span></div>
+        <div class="val">OOPS @ <span lang="zh">茹曦</span><span lang="en">Chateau</span></div>
+        <div class="val-sub"><span lang="zh">台北松山 15F</span><span lang="en">Taipei Songshan 15F</span></div>
       </div>
       <div class="cell">
-        <div class="label">// SEATS</div>
-        <div class="val">LIMITED</div>
-        <div class="val-sub">名額待公告</div>
+        <div class="label"><span lang="zh">// 名額</span><span lang="en">// SEATS</span></div>
+        <div class="val"><span lang="zh">有限</span><span lang="en">LIMITED</span></div>
+        <div class="val-sub"><span lang="zh">詳情待公告</span><span lang="en">TBA</span></div>
       </div>
     </div>
 
@@ -1478,11 +1524,20 @@ body.modal-open { overflow: hidden; }
             <rect x="26" y="42" width="7" height="10" rx="2" fill="currentColor"/>
           </svg>
           <button type="button" class="cta-btn" data-open-modal="speaker">
-            <span class="tag">&gt; boot_speaker.exe</span>
-            <span class="title">我要上台展示 AI</span>
-            <span class="desc">把你跑過的 Local AI 作品搬上台 · 主辦精選 2–3 位 · 投稿不等於入選</span>
+            <span class="tag">
+              <span lang="zh">&gt; 投稿講者.exe</span>
+              <span lang="en">&gt; boot_speaker.exe</span>
+            </span>
+            <span class="title">
+              <span lang="zh">我要上台展示 AI</span>
+              <span lang="en">I'll Demo My AI</span>
+            </span>
+            <span class="desc">
+              <span lang="zh">把你跑過的 Local AI 作品搬上台 · 主辦精選 2–3 位 · 投稿不等於入選</span>
+              <span lang="en">Bring your Local AI work on stage · 2–3 selected by host · submission ≠ accepted</span>
+            </span>
             <span class="arrow-row">
-              <span>SUBMIT YOUR DEMO</span>
+              <span><span lang="zh">送出你的 Demo</span><span lang="en">SUBMIT YOUR DEMO</span></span>
               <span class="arr">→</span>
             </span>
           </button>
@@ -1521,11 +1576,20 @@ body.modal-open { overflow: hidden; }
             <rect x="79" y="32" width="7" height="10" rx="2" fill="currentColor"/>
           </svg>
           <button type="button" class="cta-btn magenta" data-open-modal="signup">
-            <span class="tag">&gt; join_party.exe</span>
-            <span class="title">我要報名參加</span>
-            <span class="desc">看最硬核的 Local AI 現場 · 可加報 Afterparty · 票價折抵 NT$100</span>
+            <span class="tag">
+              <span lang="zh">&gt; 加入派對.exe</span>
+              <span lang="en">&gt; join_party.exe</span>
+            </span>
+            <span class="title">
+              <span lang="zh">我要報名參加</span>
+              <span lang="en">Count Me In</span>
+            </span>
+            <span class="desc">
+              <span lang="zh">看最硬核的 Local AI 現場 · 可加報 Afterparty · 票價折抵 NT$100</span>
+              <span lang="en">See the hardest-core Local AI scene · optional Afterparty · NT$100 off ticket</span>
+            </span>
             <span class="arrow-row">
-              <span>JOIN THE PARTY</span>
+              <span><span lang="zh">加入派對</span><span lang="en">JOIN THE PARTY</span></span>
               <span class="arr">→</span>
             </span>
           </button>
@@ -2020,6 +2084,22 @@ body.modal-open { overflow: hidden; }
 </div>
 
 <script>
+/* ─────── I18N · 中英切換 ─────── */
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  try { localStorage.setItem('lang', lang); } catch (e) {}
+  document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'zh-Hant');
+}
+function toggleLang() {
+  const cur = document.documentElement.getAttribute('data-lang') || 'zh';
+  setLang(cur === 'zh' ? 'en' : 'zh');
+}
+// init from localStorage
+try {
+  const saved = localStorage.getItem('lang');
+  if (saved === 'en' || saved === 'zh') setLang(saved);
+} catch (e) {}
+
 /* ─────── MODAL ─────── */
 function openModal(id) {
   const el = document.getElementById('modal-' + id);
