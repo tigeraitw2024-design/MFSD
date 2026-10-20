@@ -373,23 +373,21 @@ code, .mono { font-family: var(--mono); }
 .cta.magenta:hover .arrow{ color: var(--magenta); }
 
 /* ─────── HERO PROPS · 廣告機 + 機櫃 + cyberpunk 對話框 ─────── */
-/* Hero wrap 用 Grid 強制兩欄:左 1fr 文字 · 右 460px props · 不會蓋到彼此 */
+/* 兩段式策略:左欄文字限 max-width 讓右邊空出 440px 給 props(absolute 浮動 · 完全脫離 flow) */
 @media (min-width: 1181px){
-  .hero .wrap{
-    display: grid;
-    grid-template-columns: 1fr 460px;
-    column-gap: 60px;
-    align-items: start;
+  .hero .wrap{ position: relative; }
+  .hero .wrap > .eyebrow,
+  .hero .wrap > h1,
+  .hero .wrap > .sub,
+  .hero .wrap > .meta-strip{
+    max-width: calc(100% - 480px);   /* 右邊永遠空 480px */
   }
-  .hero .wrap > *{ grid-column: 1; }          /* 預設在左欄 */
-  .hero .wrap > .cta-stage{ grid-column: 1 / -1; }   /* CTA 跨兩欄 */
   .hero-props{
-    grid-column: 2 !important;
-    grid-row: 1 / span 5;         /* 從 eyebrow 開始跨到 meta-strip */
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 540px;
+    position: absolute;
+    top: 60px;
+    right: 24px;        /* 貼齊 wrap padding */
+    width: 440px;
+    height: 540px;
     pointer-events: none;
     z-index: 3;
   }
@@ -447,10 +445,10 @@ code, .mono { font-family: var(--mono); }
   border: 1px solid var(--cyan);
   box-shadow: 0 0 24px rgba(0, 245, 255, 0.3);
 }
-/* 機櫃 bubble · 左上方 */
+/* 機櫃 bubble · 左方(往廣告機方向) */
 .prop-rack .prop-bubble{
-  right: calc(100% - 20px);
-  top: -10px;
+  right: calc(100% + 28px);
+  top: 40px;
   border: 1px solid var(--magenta);
   box-shadow: 0 0 24px rgba(255, 46, 166, 0.35);
   text-align: right;
