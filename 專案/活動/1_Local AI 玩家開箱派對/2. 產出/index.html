@@ -372,6 +372,113 @@ code, .mono { font-family: var(--mono); }
 .cta:hover .arrow{ color: var(--cyan); transform: translateX(4px); }
 .cta.magenta:hover .arrow{ color: var(--magenta); }
 
+/* ─────── HERO PROPS · 廣告機 + 機櫃 + cyberpunk 對話框 ─────── */
+.hero .wrap{ position: relative; }
+.hero-props{
+  position: absolute;
+  right: 0;
+  top: 180px;
+  display: flex;
+  align-items: flex-end;
+  gap: 40px;
+  pointer-events: none;
+  z-index: 3;
+}
+@media (max-width: 1180px) { .hero-props { display: none; } }
+
+.prop{
+  position: relative;
+  pointer-events: auto;
+}
+.prop img{
+  display: block;
+  height: auto;
+  filter: drop-shadow(0 0 25px rgba(0, 245, 255, 0.12));
+}
+.prop-kiosk img{ width: 95px; }
+.prop-rack img{ width: 170px; filter: drop-shadow(0 0 30px rgba(0, 100, 255, 0.3)); }
+
+/* cyberpunk 對話框 */
+.prop-bubble{
+  position: absolute;
+  background: rgba(14, 14, 24, 0.95);
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: nowrap;
+  min-width: 180px;
+  max-width: 260px;
+  transition: opacity 0.3s ease-out;
+}
+.prop-bubble .bubble-text{
+  display: block;
+  white-space: normal;
+}
+.prop-bubble.fading{ opacity: 0; }
+
+.prop-kiosk .prop-bubble{
+  left: calc(100% + 24px);
+  top: 10px;
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.25);
+}
+.prop-rack .prop-bubble{
+  right: calc(100% + 24px);
+  top: 20px;
+  border: 1px solid var(--magenta);
+  box-shadow: 0 0 20px rgba(255, 46, 166, 0.25);
+  text-align: right;
+}
+
+/* L 形 corner brackets */
+.prop-bubble::before,
+.prop-bubble::after{
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--cyan);
+}
+.prop-bubble::before{
+  top: -4px; left: -4px;
+  border-right: none; border-bottom: none;
+}
+.prop-bubble::after{
+  bottom: -4px; right: -4px;
+  border-left: none; border-top: none;
+}
+.prop-rack .prop-bubble::before,
+.prop-rack .prop-bubble::after{
+  border-color: var(--magenta);
+}
+
+/* 對話框→照片 的 pointer 線 */
+.prop-bubble .pointer{
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: var(--cyan);
+}
+.prop-kiosk .prop-bubble .pointer{
+  left: -22px;
+}
+.prop-rack .prop-bubble .pointer{
+  right: -22px;
+  background: var(--magenta);
+}
+.prop-bubble .pointer::before{
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  background: inherit;
+  border-radius: 50%;
+}
+.prop-kiosk .prop-bubble .pointer::before{ left: -4px; top: -2px; }
+.prop-rack .prop-bubble .pointer::before{ right: -4px; top: -2px; }
+
 /* ─────── SECTION BASICS ─────── */
 section.block {
   padding: 80px 0;
@@ -1664,6 +1771,24 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
         </div>
       </div>
     </div>
+
+    <!-- 右側懸浮:廣告機 + 機櫃 + cyberpunk 對話框輪播 -->
+    <div class="hero-props" aria-hidden="true">
+      <div class="prop prop-kiosk">
+        <div class="prop-bubble" id="kiosk-bubble">
+          <span class="pointer"></span>
+          <span class="bubble-text"></span>
+        </div>
+        <img src="assets/kiosk.png" alt="廣告機" loading="lazy" />
+      </div>
+      <div class="prop prop-rack">
+        <div class="prop-bubble" id="rack-bubble">
+          <span class="pointer"></span>
+          <span class="bubble-text"></span>
+        </div>
+        <img src="assets/rack.png" alt="機櫃" loading="lazy" />
+      </div>
+    </div>
   </div>
 </section>
 
@@ -2413,6 +2538,53 @@ document.querySelectorAll('.modal').forEach(m => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
+
+/* ─────── HERO PROPS · 廣告機 + 機櫃 對話框輪播 ─────── */
+(function initPropBubbles() {
+  const bubbles = [
+    {
+      id: 'kiosk-bubble',
+      zh: ['> 掃我免費領取 Token', '> 最新活動在這裡'],
+      en: ['> Scan me · free Token', '> Latest events here']
+    },
+    {
+      id: 'rack-bubble',
+      zh: [
+        '> 我是超級伺服器',
+        '> 全地端最安全',
+        '> A to A 部署 AI 作品',
+        '> 算力最佳化',
+        '> 免費使用 Token'
+      ],
+      en: [
+        '> I am the super Server',
+        '> Fully on-premise · secure',
+        '> A-to-A deploy AI builds',
+        '> Compute optimized',
+        '> Free Token access'
+      ]
+    }
+  ];
+  bubbles.forEach(b => {
+    const el = document.getElementById(b.id);
+    if (!el) return;
+    const textEl = el.querySelector('.bubble-text');
+    if (!textEl) return;
+    let i = 0;
+    function tick() {
+      const lang = document.documentElement.getAttribute('data-lang') || 'zh';
+      const msgs = b[lang] || b.zh;
+      el.classList.add('fading');
+      setTimeout(() => {
+        textEl.textContent = msgs[i % msgs.length];
+        el.classList.remove('fading');
+        i++;
+      }, 300);
+    }
+    tick();
+    setInterval(tick, 3500);
+  });
+})();
 
 /* ─────── AGENDA scroll reveal · 每項獨立 trigger · 一個一個出 ─────── */
 (function initAgendaReveal() {
