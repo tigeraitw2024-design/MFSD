@@ -569,6 +569,26 @@ section.block .body{
   align-items: start;
 }
 .agenda li:last-child{ border-bottom: none; }
+
+/* scroll-reveal · 滾進 viewport 才滑出 */
+.agenda li{
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(3px);
+  transition:
+    opacity 0.55s ease-out,
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.45s ease-out;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+.agenda li.reveal{
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+@media (prefers-reduced-motion: reduce){
+  .agenda li{ opacity: 1; transform: none; filter: none; transition: none; }
+}
 .agenda .time{
   color: var(--cyan);
   font-weight: 500;
@@ -1602,35 +1622,58 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ ABOUT (3 MODES) ═══════════════ -->
 <section id="about" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">01 /</span> // WHY_YOU_SHOULD_COME.md</h2>
-    <h3 class="lead">一場不裝的 Local AI 聚會 · <span style="white-space: nowrap;">3 種參加方式。</span></h3>
+    <h2><span class="num">01 /</span>
+      <span lang="zh">// 為什麼來.md</span>
+      <span lang="en">// WHY_YOU_SHOULD_COME.md</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">一場不裝的 Local AI 聚會 · <span style="white-space:nowrap;">3 種參加方式。</span></span>
+      <span lang="en">A no-fluff Local AI meetup · <span style="white-space:nowrap;">3 ways to join.</span></span>
+    </h3>
     <p class="body">
-      這不是 keynote 式的研討會。這裡的人在家裡架 llama.cpp、拿顯卡跑 Flux、
-      自己接 vector DB 做 RAG · 想要的是把實作搬出來討論。
-      看你怎麼參加 ──
+      <span lang="zh">這不是 keynote 式的研討會。這裡的人在家裡架 llama.cpp、拿顯卡跑 Flux、
+      自己接 vector DB 做 RAG · 想要的是把實作搬出來討論。看你怎麼參加 ──</span>
+      <span lang="en">This is not a keynote-style conference. People here run llama.cpp at home,
+      drive Flux on their own GPUs, wire up vector DBs for RAG · and want to put
+      their builds on the table for real discussion. Here's how you can join ──</span>
     </p>
 
     <div class="modes">
       <div class="mode">
         <div class="idx">// 01</div>
-        <div class="k">AS SPEAKER</div>
-        <h3>上台展示你的 AI 專案</h3>
-        <p>把你跑過的 Local AI 作品、Agent 流程、RAG 系統、硬體 build 帶來現場。
-        不限主題、不限成熟度 · 只要是你實際做過、能講給人聽的。主辦後台精選最多 3 位。</p>
+        <div class="k"><span lang="zh">當講者</span><span lang="en">AS SPEAKER</span></div>
+        <h3><span lang="zh">上台展示你的 AI 專案</span><span lang="en">Demo your AI project on stage</span></h3>
+        <p>
+          <span lang="zh">把你跑過的 Local AI 作品、Agent 流程、RAG 系統、硬體 build 帶來現場。
+          不限主題、不限成熟度 · 只要是你實際做過、能講給人聽的。主辦後台精選最多 3 位。</span>
+          <span lang="en">Bring your Local AI builds, Agent flows, RAG systems, or hardware setups.
+          Any topic, any maturity · as long as you actually built it and can talk about it.
+          Up to 3 selected by the host.</span>
+        </p>
       </div>
       <div class="mode">
         <div class="idx">// 02</div>
-        <div class="k">AS AUDIENCE</div>
-        <h3>看別人怎麼跑 Local AI</h3>
-        <p>聽案例、看 Server 展示、問問題。重點不是「聽完知道一堆名詞」·
-        是「看完知道自己明天可以動哪一步」。全場有 Free Token Server 可體驗。</p>
+        <div class="k"><span lang="zh">當觀眾</span><span lang="en">AS AUDIENCE</span></div>
+        <h3><span lang="zh">看別人怎麼跑 Local AI</span><span lang="en">See how others run Local AI</span></h3>
+        <p>
+          <span lang="zh">聽案例、看 Server 展示、問問題。重點不是「聽完知道一堆名詞」·
+          是「看完知道自己明天可以動哪一步」。全場有 Free Token Server 可體驗。</span>
+          <span lang="en">Hear real cases, see Server demos, ask questions. The point is not
+          "collecting buzzwords" · it's "knowing what to try tomorrow." Free Token Server
+          hands-on all afternoon.</span>
+        </p>
       </div>
       <div class="mode">
         <div class="idx">// 03</div>
-        <div class="k">AS PARTY GOER</div>
-        <h3>留下來參加 Afterparty</h3>
-        <p>18:00 之後 OOPS 自己辦的 Afterparty · 不限議程、不限話題。
-        報名時勾一下加報就好 · 票價折抵 NT$100。真正的 Networking 在這裡發生。</p>
+        <div class="k"><span lang="zh">當派對人</span><span lang="en">AS PARTY GOER</span></div>
+        <h3><span lang="zh">留下來參加 Afterparty</span><span lang="en">Stay for the Afterparty</span></h3>
+        <p>
+          <span lang="zh">18:00 之後 OOPS 自己辦的 Afterparty · 不限議程、不限話題。
+          報名時勾一下加報就好 · 票價折抵 NT$100。真正的 Networking 在這裡發生。</span>
+          <span lang="en">OOPS-hosted Afterparty from 18:00 · no agenda, no restrictions.
+          Just tick the opt-in when you sign up · NT$100 off the ticket. The real
+          networking happens here.</span>
+        </p>
       </div>
     </div>
   </div>
@@ -1639,16 +1682,29 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ FEATURED SPEAKERS ═══════════════ -->
 <section id="speakers" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">02 /</span> // FEATURED_SPEAKERS</h2>
+    <h2><span class="num">02 /</span>
+      <span lang="zh">// 精選講者</span>
+      <span lang="en">// FEATURED_SPEAKERS</span>
+    </h2>
     <div class="spot-head">
-      <h3 class="lead">精選上台展示 · <span style="color: var(--cyan)">審核中</span></h3>
+      <h3 class="lead">
+        <span lang="zh">精選上台展示 · <span style="color: var(--cyan)">審核中</span></span>
+        <span lang="en">Featured on-stage demos · <span style="color: var(--cyan)">curating</span></span>
+      </h3>
       <div class="spot-count">
-        精選名額 <span class="n">0 / 3</span> · <span style="color: var(--text-dim)">主辦精選後顯示</span>
+        <span lang="zh">精選名額</span><span lang="en">Selected</span>
+        <span class="n">0 / 3</span> ·
+        <span style="color: var(--text-dim)">
+          <span lang="zh">主辦精選後顯示</span>
+          <span lang="en">shown after host picks</span>
+        </span>
       </div>
     </div>
     <p class="body">
-      所有「我要上台展示 AI」投稿都會進審核 · 主辦挑出 2–3 位在這裡公開。
-      送出投稿**不代表入選** · 入選後我們會用你留的聯絡方式通知。
+      <span lang="zh">所有「我要上台展示 AI」投稿都會進審核 · 主辦挑出 2–3 位在這裡公開。
+      送出投稿不代表入選 · 入選後我們會用你留的聯絡方式通知。</span>
+      <span lang="en">All "I'll Demo My AI" submissions go through host review · 2–3 picked
+      shown here. Submission does NOT mean accepted · we'll contact you if selected.</span>
     </p>
 
     <div class="speaker-grid" id="speaker-grid">
@@ -1656,10 +1712,14 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
     </div>
 
     <div class="spot-empty" id="spot-empty">
-      <span class="k">[ AWAITING SELECTION ]</span>
-      主辦正在審核中 · 入選名單確定後會顯示在這裡。
+      <span class="k">[ <span lang="zh">等待審核中</span><span lang="en">AWAITING SELECTION</span> ]</span>
+      <span lang="zh">主辦正在審核中 · 入選名單確定後會顯示在這裡。</span>
+      <span lang="en">Host is reviewing · selected demos will appear here.</span>
       <br /><br />
-      <a href="#" data-open-modal="speaker" style="color: var(--magenta)">&gt; 投稿你的 Demo →</a>
+      <a href="#" data-open-modal="speaker" style="color: var(--magenta)">
+        <span lang="zh">&gt; 投稿你的 Demo →</span>
+        <span lang="en">&gt; Submit your Demo →</span>
+      </a>
     </div>
   </div>
 </section>
@@ -1667,13 +1727,21 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ AGENDA ═══════════════ -->
 <section id="agenda" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">03 /</span> // AGENDA · 2026.11.04</h2>
-    <h3 class="lead">當天時間流程(暫定)</h3>
+    <h2><span class="num">03 /</span>
+      <span lang="zh">// 活動流程 · 2026.11.04</span>
+      <span lang="en">// AGENDA · 2026.11.04</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">當天時間流程(暫定)</span>
+      <span lang="en">Timeline of the day (tentative)</span>
+    </h3>
     <p class="body">
-      以下為流程模型 · 實際時段依場地與合作方確認結果微調。保留晚間 Afterparty。
+      <span lang="zh">以下為流程模型 · 實際時段依場地與合作方確認結果微調。保留晚間 Afterparty。</span>
+      <span lang="en">A model schedule · actual timing adjusts after venue & partner confirmations.
+      Afterparty slot stays.</span>
     </p>
 
-    <div class="agenda">
+    <div class="agenda" id="agenda-list">
       <div class="meta-line">
         <span class="k">$ cat agenda.log</span> &nbsp;·&nbsp; last_updated=2026-10-20 &nbsp;·&nbsp; status=<span style="color: var(--amber)">draft</span>
       </div>
@@ -1681,79 +1749,142 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
         <li class="evt closed">
           <span class="time">13:30 – 14:00</span>
           <span class="evt">
-            <strong>主要合作方會前對齊</strong><span class="tag closed">閉門</span>
-            <span class="desc">OOPS × 虎智 × 撼訊 × 傑少團隊各自確認可公開內容、Demo 負責人、後續行動窗口。</span>
+            <strong>
+              <span lang="zh">主要合作方會前對齊</span>
+              <span lang="en">Partner pre-sync (closed)</span>
+            </strong><span class="tag closed"><span lang="zh">閉門</span><span lang="en">CLOSED</span></span>
+            <span class="desc">
+              <span lang="zh">OOPS × 虎智 × 撼訊 × 傑少團隊各自確認可公開內容、Demo 負責人、後續行動窗口。</span>
+              <span lang="en">OOPS × TigerAI × PowerColor × Mr. Jay team confirm public content, Demo owners, follow-up contacts.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">14:00 – 14:20</span>
           <span class="evt">
-            <strong>開放報到 + 自由看展</strong>
-            <span class="desc">Local AI 案例展示 + OOPS 現有 Server 介紹。虎智設備體驗區開放。</span>
+            <strong>
+              <span lang="zh">開放報到 + 自由看展</span>
+              <span lang="en">Check-in + free walk-through</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">Local AI 案例展示 + OOPS 現有 Server 介紹。虎智設備體驗區開放。</span>
+              <span lang="en">Local AI case showcase + OOPS Server intro. TigerAI hardware zone opens.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">14:20 – 14:35</span>
           <span class="evt">
-            <strong>開場與活動說明</strong>
-            <span class="desc">說明活動定位、精選案例清單、現場參與方式。</span>
+            <strong>
+              <span lang="zh">開場與活動說明</span>
+              <span lang="en">Opening & briefing</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">說明活動定位、精選案例清單、現場參與方式。</span>
+              <span lang="en">Event positioning · selected demo lineup · on-site participation guide.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">14:35 – 15:35</span>
           <span class="evt">
-            <strong>精選講者短講 / 玩家 Demo</strong>
-            <span class="desc">審核選出 2–3 位現場分享「問題、做法、成果」 · 其他玩家交流。</span>
+            <strong>
+              <span lang="zh">精選講者短講 / 玩家 Demo</span>
+              <span lang="en">Featured talks / Enthusiast Demos</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">審核選出 2–3 位現場分享「問題、做法、成果」 · 其他玩家交流。</span>
+              <span lang="en">2–3 selected speakers share "problem · approach · result" · open floor for other enthusiasts.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">15:35 – 16:00</span>
           <span class="evt">
-            <strong>Free Token Server 體驗</strong>
-            <span class="desc">展示 OOPS Server + Token 體驗流程(需技術驗收通過才掃碼體驗)。</span>
+            <strong>
+              <span lang="zh">Free Token Server 體驗</span>
+              <span lang="en">Free Token Server experience</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">展示 OOPS Server + Token 體驗流程(需技術驗收通過才掃碼體驗)。</span>
+              <span lang="en">OOPS Server demo + Token flow (QR hands-on only after tech sign-off).</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">16:00 – 16:30</span>
           <span class="evt">
-            <strong>虎智產品介紹 / 發表</strong>
-            <span class="desc">Server 上展示的虎智產品、使用情境、服務方式。</span>
+            <strong>
+              <span lang="zh">虎智產品介紹 / 發表</span>
+              <span lang="en">TigerAI product unveil</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">Server 上展示的虎智產品、使用情境、服務方式。</span>
+              <span lang="en">Products on the Server · use cases · how we deliver.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">16:30 – 17:00</span>
           <span class="evt">
-            <strong>合作發布 / 撼訊交流</strong>
-            <span class="desc">撼訊設備如何承接虎智 AI 應用 · 既有客戶引介(視當日合作方確認)。</span>
+            <strong>
+              <span lang="zh">合作發布 / 撼訊交流</span>
+              <span lang="en">Collaboration spotlight / PowerColor exchange</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">撼訊設備如何承接虎智 AI 應用 · 既有客戶引介(視當日合作方確認)。</span>
+              <span lang="en">How PowerColor hardware runs TigerAI apps · existing customer intros (pending partner confirmation).</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">17:00 – 17:30</span>
           <span class="evt">
-            <strong>OOPS × 虎智合作流程示範</strong>
-            <span class="desc">客戶情境演示:場租訂單 + Token 體驗 + 設備方案。</span>
+            <strong>
+              <span lang="zh">OOPS × 虎智合作流程示範</span>
+              <span lang="en">OOPS × TigerAI flow walkthrough</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">客戶情境演示:場租訂單 + Token 體驗 + 設備方案。</span>
+              <span lang="en">Live customer scenario: venue booking + Token experience + hardware package.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">17:30 – 18:00</span>
           <span class="evt">
-            <strong>合作方小結 + 自由體驗</strong>
-            <span class="desc">決議列表、待辦窗口、來賓自由體驗 Token / 填寫後續聯繫意願。</span>
+            <strong>
+              <span lang="zh">合作方小結 + 自由體驗</span>
+              <span lang="en">Partner wrap + open experience</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">決議列表、待辦窗口、來賓自由體驗 Token / 填寫後續聯繫意願。</span>
+              <span lang="en">Decisions · action owners · guests freely experience Token / leave follow-up intent.</span>
+            </span>
           </span>
         </li>
         <li>
           <span class="time">18:00 – 20:00</span>
           <span class="evt">
-            <strong>OOPS Afterparty</strong><span class="tag party">加報</span>
-            <span class="desc">OOPS 主辦晚間 Afterparty。可選加報 · 票價折抵 NT$100。</span>
+            <strong>
+              <span lang="zh">OOPS Afterparty</span>
+              <span lang="en">OOPS Afterparty</span>
+            </strong><span class="tag party"><span lang="zh">加報</span><span lang="en">OPT-IN</span></span>
+            <span class="desc">
+              <span lang="zh">OOPS 主辦晚間 Afterparty。可選加報 · 票價折抵 NT$100。</span>
+              <span lang="en">OOPS-hosted evening Afterparty. Optional opt-in · NT$100 off the ticket.</span>
+            </span>
           </span>
         </li>
       </ul>
     </div>
 
     <div class="agenda-note">
-      <strong>// NOTE</strong> &nbsp;時段可能平移 · 實際公告以活動前 1 週 email 通知為準。<br />
-      Token 體驗流程未通過技術驗收前 · 現場以 Server 展示 / 操作影片 / 流程示意呈現 · 不開放掃碼。
+      <strong>// NOTE</strong>&nbsp;
+      <span lang="zh">時段可能平移 · 實際公告以活動前 1 週 email 通知為準。<br />
+      Token 體驗流程未通過技術驗收前 · 現場以 Server 展示 / 操作影片 / 流程示意呈現 · 不開放掃碼。</span>
+      <span lang="en">Timing may shift · final schedule announced via email 1 week before.<br />
+      Until Token flow passes tech sign-off, on-site shows Server demo / operation video / illustrative flow only · no QR scan.</span>
     </div>
   </div>
 </section>
@@ -1761,20 +1892,34 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ VENUE ═══════════════ -->
 <section id="venue" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">04 /</span> // VENUE_INFO</h2>
-    <h3 class="lead">OOPS @ 茹曦酒店 15F</h3>
+    <h2><span class="num">04 /</span>
+      <span lang="zh">// 場地資訊</span>
+      <span lang="en">// VENUE_INFO</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">OOPS @ 茹曦酒店 15F</span>
+      <span lang="en">OOPS @ Chateau de Chine Hotel · 15F</span>
+    </h3>
 
     <div class="venue-grid">
       <div class="venue-info">
-        <div class="pin">● LOCATION_LOCKED</div>
-        <div class="name">茹曦酒店 15F</div>
+        <div class="pin">● <span lang="zh">地點確定</span><span lang="en">LOCATION_LOCKED</span></div>
+        <div class="name">
+          <span lang="zh">茹曦酒店 15F</span>
+          <span lang="en">Chateau de Chine · 15F</span>
+        </div>
         <div class="addr">
-          台北市松山區敦化北路 100 號 15 樓
-          <span class="en">100 Dunhua N. Rd., Songshan Dist., Taipei 15F</span>
+          <span lang="zh">台北市松山區敦化北路 100 號 15 樓</span>
+          <span lang="en">100 Dunhua N. Rd., Songshan Dist., Taipei · 15F</span>
         </div>
         <div class="nearest">
-          <span class="k">[ 捷運 ]</span> 文湖線 南京復興站 · 步行約 10 分<br />
-          <span class="k">[ 停車 ]</span> 茹曦酒店 B2 停車場 · 周邊付費停車場
+          <span class="k">[ <span lang="zh">捷運</span><span lang="en">MRT</span> ]</span>
+          <span lang="zh">文湖線 南京復興站 · 步行約 10 分</span>
+          <span lang="en">Wenhu Line · Nanjing Fuxing Station · 10 min walk</span>
+          <br />
+          <span class="k">[ <span lang="zh">停車</span><span lang="en">PARKING</span> ]</span>
+          <span lang="zh">茹曦酒店 B2 停車場 · 周邊付費停車場</span>
+          <span lang="en">Hotel B2 lot · nearby paid parking</span>
         </div>
         <a class="btn" href="https://www.google.com/maps/search/?api=1&query=%E8%8C%B9%E6%9B%A6%E9%85%92%E5%BA%97+%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF100%E8%99%9F" target="_blank" rel="noopener">
           &gt; open_in_maps.app
@@ -1797,32 +1942,71 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <section id="faq" class="block anchor">
   <div class="wrap">
     <h2><span class="num">05 /</span> // FAQ</h2>
-    <h3 class="lead">常見問題</h3>
+    <h3 class="lead">
+      <span lang="zh">常見問題</span>
+      <span lang="en">Frequently Asked</span>
+    </h3>
 
     <div class="faq-list" id="faq-list">
       <div class="faq-item">
-        <div class="faq-q">活動要收費嗎?</div>
-        <div class="faq-a">一般活動費用與名額依最終公告為準。Afterparty 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</div>
+        <div class="faq-q">
+          <span lang="zh">活動要收費嗎?</span>
+          <span lang="en">Is there a fee?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">一般活動費用與名額依最終公告為準。Afterparty 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</span>
+          <span lang="en">Main event fee & seat count per final announcement. Afterparty price announced by OOPS · NT$100 off via this signup.</span>
+        </div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">我送出「我要上台展示 AI」就會被安排上台嗎?</div>
-        <div class="faq-a">不會。所有投稿會進主辦審核 · 精選名額最多 3 位。入選我們會用你留的 email 聯繫 · 未入選者資料不會公開展示。</div>
+        <div class="faq-q">
+          <span lang="zh">我送出「我要上台展示 AI」就會被安排上台嗎?</span>
+          <span lang="en">Does submitting "I'll Demo My AI" mean I'm on stage?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 3 位。入選我們會用你留的 email 聯繫 · 未入選者資料不會公開展示。</span>
+          <span lang="en">No. All submissions enter host review · up to 3 selected. We'll email you if picked · non-selected submissions stay private.</span>
+        </div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">現場有 Free Token 可以體驗嗎?</div>
-        <div class="faq-a">是。但 Token 體驗流程須通過技術驗收後才會開放現場掃碼。未通過前以 Server 展示、操作影片、流程示意呈現。</div>
+        <div class="faq-q">
+          <span lang="zh">現場有 Free Token 可以體驗嗎?</span>
+          <span lang="en">Can I actually try Free Token on-site?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">是。但 Token 體驗流程須通過技術驗收後才會開放現場掃碼。未通過前以 Server 展示、操作影片、流程示意呈現。</span>
+          <span lang="en">Yes · but QR hands-on only opens after tech sign-off. Until then: Server demo + video + flow illustration.</span>
+        </div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">我不是技術人員 · 也能來嗎?</div>
-        <div class="faq-a">可以。現場有產品介紹、合作流程說明、硬體 Demo · 不需要寫程式。</div>
+        <div class="faq-q">
+          <span lang="zh">我不是技術人員 · 也能來嗎?</span>
+          <span lang="en">I'm non-technical · can I still come?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">可以。現場有產品介紹、合作流程說明、硬體 Demo · 不需要寫程式。</span>
+          <span lang="en">Yes. Product intro · partner flow walkthrough · hardware demo — no coding required.</span>
+        </div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">Afterparty 一定要加報嗎?</div>
-        <div class="faq-a">不一定。Afterparty 是自選加報項目 · 只參加一般活動完全沒問題。</div>
+        <div class="faq-q">
+          <span lang="zh">Afterparty 一定要加報嗎?</span>
+          <span lang="en">Do I have to opt into Afterparty?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">不一定。Afterparty 是自選加報項目 · 只參加一般活動完全沒問題。</span>
+          <span lang="en">No. Afterparty is an optional add-on · joining only the main event is fine.</span>
+        </div>
       </div>
       <div class="faq-item">
-        <div class="faq-q">活動流程會跟報名簡介完全一樣嗎?</div>
-        <div class="faq-a">目前流程為暫定模型 · 實際時段依場地與合作方最終確認結果微調。活動前 1 週會寄 email 通知最終時間表。</div>
+        <div class="faq-q">
+          <span lang="zh">活動流程會跟報名簡介完全一樣嗎?</span>
+          <span lang="en">Will the schedule match the signup page exactly?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">目前流程為暫定模型 · 實際時段依場地與合作方最終確認結果微調。活動前 1 週會寄 email 通知最終時間表。</span>
+          <span lang="en">Current timing is a tentative model · final slots adjust after venue & partner confirmations. Email with final schedule 1 week before.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1832,14 +2016,14 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <section class="block">
   <div class="wrap">
     <div class="partners-head">
-      <span class="k">// HOSTED_BY</span>
+      <span class="k"><span lang="zh">// 主辦單位</span><span lang="en">// HOSTED_BY</span></span>
     </div>
     <div class="partners-row">
       <div class="p"><img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" /></div>
     </div>
 
     <div class="partners-head">
-      <span class="k">// IN_COLLABORATION_WITH</span>
+      <span class="k"><span lang="zh">// 合作夥伴</span><span lang="en">// IN_COLLABORATION_WITH</span></span>
     </div>
     <div class="partners-row">
       <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
@@ -1854,33 +2038,51 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
   <div class="wrap">
     <div class="brand">
       <img src="虎智科技Logo_彩色橫式純英Logo.svg" alt="虎智科技 TigerAI" />
-      <p>LOCAL AI 玩家開箱派對<br />2026.11.04 · 台北 · 茹曦酒店 15F</p>
+      <p>
+        <span lang="zh">LOCAL AI 玩家開箱派對<br />2026.11.04 · 台北 · 茹曦酒店 15F</span>
+        <span lang="en">LOCAL AI Enthusiast Showcase<br />2026.11.04 · Taipei · Chateau de Chine 15F</span>
+      </p>
       <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
-        > powered_by: 虎智科技 TigerAI<br />
-        > in_collab: OOPS × TUL × 小象出海
+        <span lang="zh">
+          &gt; powered_by: 虎智科技 TigerAI<br />
+          &gt; in_collab: OOPS × TUL × 小象出海
+        </span>
+        <span lang="en">
+          &gt; powered_by: TigerAI<br />
+          &gt; in_collab: OOPS × TUL × BabyElephant
+        </span>
       </p>
     </div>
     <div>
-      <h4>// SECTIONS</h4>
+      <h4><span lang="zh">// 章節</span><span lang="en">// SECTIONS</span></h4>
       <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#speakers">Featured Speakers</a></li>
-        <li><a href="#agenda">Agenda</a></li>
-        <li><a href="#venue">Venue</a></li>
+        <li><a href="#about"><span lang="zh">關於</span><span lang="en">About</span></a></li>
+        <li><a href="#speakers"><span lang="zh">精選講者</span><span lang="en">Featured Speakers</span></a></li>
+        <li><a href="#agenda"><span lang="zh">流程</span><span lang="en">Agenda</span></a></li>
+        <li><a href="#venue"><span lang="zh">場地</span><span lang="en">Venue</span></a></li>
       </ul>
     </div>
     <div>
-      <h4>// ACTIONS</h4>
+      <h4><span lang="zh">// 功能</span><span lang="en">// ACTIONS</span></h4>
       <ul>
-        <li><a href="#" data-open-modal="speaker">我要上台展示 AI</a></li>
-        <li><a href="#" data-open-modal="signup">我要報名參加</a></li>
+        <li><a href="#" data-open-modal="speaker"><span lang="zh">我要上台展示 AI</span><span lang="en">I'll Demo My AI</span></a></li>
+        <li><a href="#" data-open-modal="signup"><span lang="zh">我要報名參加</span><span lang="en">Count Me In</span></a></li>
         <li><a href="#faq">FAQ</a></li>
       </ul>
     </div>
     <div class="copy" style="grid-column: 1 / -1;">
-      <span>© 2026 虎智科技 TigerAI · All rights reserved.</span>
-      <span><a href="#" data-open-modal="admin" class="admin-link">&gt; 主辦登入</a></span>
-      <span class="status"><span class="dot"></span>EVENT_STATUS: OPEN_FOR_SIGNUP</span>
+      <span>
+        <span lang="zh">© 2026 虎智科技 TigerAI · 版權所有</span>
+        <span lang="en">© 2026 TigerAI · All rights reserved.</span>
+      </span>
+      <span><a href="#" data-open-modal="admin" class="admin-link">
+        <span lang="zh">&gt; 主辦登入</span>
+        <span lang="en">&gt; admin login</span>
+      </a></span>
+      <span class="status"><span class="dot"></span>
+        <span lang="zh">活動狀態:報名開放中</span>
+        <span lang="en">EVENT_STATUS: OPEN_FOR_SIGNUP</span>
+      </span>
     </div>
   </div>
 </footer>
@@ -1891,92 +2093,117 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <div class="modal" id="modal-speaker" role="dialog" aria-labelledby="modal-speaker-title" aria-hidden="true">
   <div class="modal-panel">
     <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
-    <div class="modal-tag">&gt; boot_speaker.exe</div>
-    <h3 id="modal-speaker-title">我要上台展示 AI</h3>
+    <div class="modal-tag">
+      <span lang="zh">&gt; 投稿講者.exe</span>
+      <span lang="en">&gt; boot_speaker.exe</span>
+    </div>
+    <h3 id="modal-speaker-title">
+      <span lang="zh">我要上台展示 AI</span>
+      <span lang="en">I'll Demo My AI</span>
+    </h3>
     <p class="modal-desc">
-      送出投稿等於主辦開始審核 · 不代表自動入選。主辦精選後會以你留的聯絡方式通知。
-      最多上架 3 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。
+      <span lang="zh">送出投稿等於主辦開始審核 · 不代表自動入選。主辦精選後會以你留的聯絡方式通知。
+      最多上架 3 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。</span>
+      <span lang="en">Submitting starts host review · not automatic acceptance. We'll contact
+      selected demos via the info you provide. Up to 3 shown · the "Featured Speakers"
+      block only shows fields you consent to publish.</span>
     </p>
 
     <form class="form-wrap" id="speaker-form" novalidate>
       <div class="form-grid">
         <div class="field">
-          <label>公開稱呼 <span class="req">*</span></label>
+          <label><span lang="zh">公開稱呼</span><span lang="en">Public name</span> <span class="req">*</span></label>
           <input type="text" name="public_name" required placeholder="e.g. Robin / robin.chen" />
-          <div class="hint">// 入選後會顯示在精選區</div>
+          <div class="hint">
+            <span lang="zh">// 入選後會顯示在精選區</span>
+            <span lang="en">// shown in the Featured block if selected</span>
+          </div>
         </div>
         <div class="field">
-          <label>職稱 / 專長 <span class="req">*</span></label>
-          <input type="text" name="title_or_skill" required placeholder="e.g. ML Eng @ XX / 自架 Server 玩家" />
+          <label><span lang="zh">職稱 / 專長</span><span lang="en">Title / Expertise</span> <span class="req">*</span></label>
+          <input type="text" name="title_or_skill" required placeholder="e.g. ML Eng @ XX / self-hosted Server enthusiast" />
         </div>
         <div class="field">
           <label>Email <span class="req">*</span></label>
           <input type="email" name="email" required placeholder="you@example.com" />
         </div>
         <div class="field">
-          <label>手機</label>
+          <label><span lang="zh">手機</span><span lang="en">Phone</span></label>
           <input type="tel" name="phone" placeholder="0900 000 000" />
         </div>
         <div class="field full">
-          <label>AI 專案 / 應用名稱 <span class="req">*</span></label>
-          <input type="text" name="project_name" required placeholder="e.g. 自架 Llama 3.1 + RAG 財報問答" />
+          <label><span lang="zh">AI 專案 / 應用名稱</span><span lang="en">AI project / app name</span> <span class="req">*</span></label>
+          <input type="text" name="project_name" required placeholder="e.g. Self-hosted Llama 3.1 + RAG for financial reports" />
         </div>
         <div class="field full">
-          <label>你解決了什麼問題? <span class="req">*</span></label>
-          <textarea name="problem" required placeholder="e.g. 內部報告找資料太久 · 想做 100% local 的查詢 bot ..."></textarea>
+          <label><span lang="zh">你解決了什麼問題?</span><span lang="en">What problem did you solve?</span> <span class="req">*</span></label>
+          <textarea name="problem" required placeholder="e.g. Searching internal docs took too long · wanted a 100% local query bot ..."></textarea>
         </div>
         <div class="field full">
-          <label>現場想 Demo 的內容 <span class="req">*</span></label>
-          <textarea name="demo_desc" required placeholder="e.g. 現場跑一個 RAG query 給大家看 · 展示延遲與回答品質 ..."></textarea>
+          <label><span lang="zh">現場想 Demo 的內容</span><span lang="en">What you'll Demo on-site</span> <span class="req">*</span></label>
+          <textarea name="demo_desc" required placeholder="e.g. Run a live RAG query · show latency & answer quality ..."></textarea>
         </div>
         <div class="field">
-          <label>展示形式</label>
+          <label><span lang="zh">展示形式</span><span lang="en">Demo format</span></label>
           <select name="demo_format">
-            <option value="">請選擇</option>
-            <option>Live Demo(現場跑)</option>
-            <option>短講 + 投影片</option>
-            <option>硬體展示 + 介紹</option>
-            <option>其他(備註說明)</option>
+            <option value=""><span lang="zh">請選擇</span></option>
+            <option><span lang="zh">Live Demo(現場跑)</span></option>
+            <option><span lang="zh">短講 + 投影片</span></option>
+            <option><span lang="zh">硬體展示 + 介紹</span></option>
+            <option><span lang="zh">其他(備註說明)</span></option>
           </select>
         </div>
         <div class="field">
-          <label>預計所需時間</label>
+          <label><span lang="zh">預計所需時間</span><span lang="en">Time needed</span></label>
           <select name="duration">
-            <option value="">請選擇</option>
-            <option>5 分鐘</option>
-            <option>10 分鐘</option>
-            <option>15 分鐘</option>
-            <option>20 分鐘以上(需討論)</option>
+            <option value="">—</option>
+            <option>5 min</option>
+            <option>10 min</option>
+            <option>15 min</option>
+            <option>20+ min</option>
           </select>
         </div>
         <div class="field full">
-          <label>設備 / 網路 / 電力需求</label>
-          <textarea name="requirements" placeholder="e.g. 需要 HDMI 轉接 · 自備筆電 · 需要穩定網路 ..."></textarea>
+          <label><span lang="zh">設備 / 網路 / 電力需求</span><span lang="en">Equipment / Network / Power needs</span></label>
+          <textarea name="requirements" placeholder="e.g. HDMI adapter · bringing own laptop · stable internet ..."></textarea>
         </div>
         <div class="field full">
-          <label>支援資料連結(PDF / GitHub / 影片)</label>
+          <label><span lang="zh">支援資料連結(PDF / GitHub / 影片)</span><span lang="en">Reference link (PDF / GitHub / video)</span></label>
           <input type="url" name="support_url" placeholder="https://..." />
-          <div class="hint">// 可留 1 個主要連結 · 多個連結請分行放在備註</div>
+          <div class="hint">
+            <span lang="zh">// 可留 1 個主要連結 · 多個連結請分行放在備註</span>
+            <span lang="en">// 1 main link · put extras in the note field</span>
+          </div>
         </div>
         <div class="field full">
-          <label>備註 / 其他想說的</label>
-          <textarea name="note" placeholder="其他想補充的 ..."></textarea>
+          <label><span lang="zh">備註 / 其他想說的</span><span lang="en">Notes / Anything else</span></label>
+          <textarea name="note" placeholder="..."></textarea>
         </div>
         <div class="field full">
           <label class="chk" style="margin-top: 4px;">
             <input type="checkbox" name="consent_public" required />
             <div>
-              <div class="main">同意主辦精選後公開展示</div>
-              <div class="sub">勾選即代表:(1) 我有權提交以上資料 (2) 若被主辦精選 · 同意上述欄位展示在活動頁與活動宣傳。</div>
+              <div class="main">
+                <span lang="zh">同意主辦精選後公開展示</span>
+                <span lang="en">Consent to public display if selected</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">勾選即代表:(1) 我有權提交以上資料 (2) 若被主辦精選 · 同意上述欄位展示在活動頁與活動宣傳。</span>
+                <span lang="en">By checking: (1) I have the right to submit the above (2) if selected, I agree the above fields can be shown on the event page and in promotion.</span>
+              </div>
             </div>
           </label>
         </div>
       </div>
 
       <div class="submit-row">
-        <button type="submit" class="btn-submit">&gt; 送出投稿</button>
+        <button type="submit" class="btn-submit">
+          <span lang="zh">&gt; 送出投稿</span>
+          <span lang="en">&gt; SUBMIT</span>
+        </button>
         <div class="form-note">
-          // 送出後會收到「已收到 · 等待主辦聯繫」email · 不代表入選。
+          <span lang="zh">// 送出後會收到「已收到 · 等待主辦聯繫」email · 不代表入選。</span>
+          <span lang="en">// You'll get a "received · pending host contact" email · not an acceptance.</span>
         </div>
       </div>
 
@@ -1989,69 +2216,91 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <div class="modal magenta" id="modal-signup" role="dialog" aria-labelledby="modal-signup-title" aria-hidden="true">
   <div class="modal-panel">
     <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
-    <div class="modal-tag">&gt; join_party.exe</div>
-    <h3 id="modal-signup-title">我要報名參加</h3>
+    <div class="modal-tag">
+      <span lang="zh">&gt; 加入派對.exe</span>
+      <span lang="en">&gt; join_party.exe</span>
+    </div>
+    <h3 id="modal-signup-title">
+      <span lang="zh">我要報名參加</span>
+      <span lang="en">Count Me In</span>
+    </h3>
     <p class="modal-desc">
-      一般活動報名表 · 包含是否加報 OOPS Afterparty。
-      Afterparty 原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。
+      <span lang="zh">一般活動報名表 · 包含是否加報 OOPS Afterparty。
+      Afterparty 原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。</span>
+      <span lang="en">Main event signup · includes OOPS Afterparty opt-in.
+      Afterparty price, drinks, payment pending OOPS announcement · currently only NT$100 discount confirmed.</span>
     </p>
 
     <form class="form-wrap" id="signup-form" novalidate>
       <div class="form-grid">
         <div class="field">
-          <label>姓名 <span class="req">*</span></label>
-          <input type="text" name="name" required placeholder="請輸入姓名" />
+          <label><span lang="zh">姓名</span><span lang="en">Name</span> <span class="req">*</span></label>
+          <input type="text" name="name" required />
         </div>
         <div class="field">
           <label>Email <span class="req">*</span></label>
           <input type="email" name="email" required placeholder="you@example.com" />
         </div>
         <div class="field">
-          <label>手機 <span class="req">*</span></label>
+          <label><span lang="zh">手機</span><span lang="en">Phone</span> <span class="req">*</span></label>
           <input type="tel" name="phone" required placeholder="0900 000 000" />
         </div>
         <div class="field">
-          <label>公司 / 單位</label>
-          <input type="text" name="company" placeholder="選填" />
+          <label><span lang="zh">公司 / 單位</span><span lang="en">Company / Org</span></label>
+          <input type="text" name="company" placeholder="optional" />
         </div>
         <div class="field">
-          <label>職稱 / 身份</label>
-          <input type="text" name="role" placeholder="e.g. 工程師 / 創業者 / 學生" />
+          <label><span lang="zh">職稱 / 身份</span><span lang="en">Title / Role</span></label>
+          <input type="text" name="role" placeholder="e.g. Engineer / Founder / Student" />
         </div>
         <div class="field">
-          <label>最想在現場看到 / 得到的?</label>
+          <label><span lang="zh">最想在現場看到 / 得到的?</span><span lang="en">What do you most want from this?</span></label>
           <select name="interest">
-            <option value="">請選擇</option>
-            <option>看別人的 Local AI 實作</option>
-            <option>找自架 Server 的硬體方案</option>
-            <option>認識同好 Networking</option>
-            <option>評估虎智 Server / Token 服務</option>
-            <option>單純來看</option>
+            <option value="">—</option>
+            <option><span lang="zh">看別人的 Local AI 實作 / See others' Local AI builds</span></option>
+            <option><span lang="zh">找自架 Server 的硬體方案 / Hardware for self-hosted Server</span></option>
+            <option><span lang="zh">認識同好 Networking</span></option>
+            <option><span lang="zh">評估虎智 Server / Token 服務 / Evaluate TigerAI Server+Token</span></option>
+            <option><span lang="zh">單純來看 / Just curious</span></option>
           </select>
         </div>
         <div class="field full">
           <label class="chk">
             <input type="checkbox" name="afterparty" value="yes" />
             <div>
-              <div class="main">加報 OOPS Afterparty(18:00–20:00)</div>
-              <div class="sub">加報不影響一般活動報名。選擇後 · OOPS 會確認原價與付款方式再通知你。</div>
+              <div class="main">
+                <span lang="zh">加報 OOPS Afterparty(18:00–20:00)</span>
+                <span lang="en">Opt in to OOPS Afterparty (18:00–20:00)</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">加報不影響一般活動報名。選擇後 · OOPS 會確認原價與付款方式再通知你。</span>
+                <span lang="en">Opt-in does not affect main event signup. If selected, OOPS will confirm price & payment separately.</span>
+              </div>
             </div>
           </label>
           <div class="afterparty-box">
-            <div class="k">// AFTERPARTY_DISCOUNT</div>
-            <div class="d">憑本頁報名 · 票價折抵 <strong style="color: var(--magenta);">NT$100</strong></div>
+            <div class="k"><span lang="zh">// 加報折抵</span><span lang="en">// AFTERPARTY_DISCOUNT</span></div>
+            <div class="d">
+              <span lang="zh">憑本頁報名 · 票價折抵 <strong style="color: var(--magenta);">NT$100</strong></span>
+              <span lang="en">Via this signup · <strong style="color: var(--magenta);">NT$100 off</strong> the ticket</span>
+            </div>
             <div class="n">
-              OOPS 原價、酒水內容、付款方式與退費規則由 OOPS 公告後補齊。<br />
-              資訊未齊前只先記錄意願 · <strong>不收取未核定金額</strong>。
+              <span lang="zh">OOPS 原價、酒水內容、付款方式與退費規則由 OOPS 公告後補齊。<br />
+              資訊未齊前只先記錄意願 · <strong>不收取未核定金額</strong>。</span>
+              <span lang="en">OOPS will announce original price, drinks, payment & refund rules. Until then we only record intent · <strong>no payment collected</strong>.</span>
             </div>
           </div>
         </div>
       </div>
 
       <div class="submit-row">
-        <button type="submit" class="btn-submit magenta">&gt; 送出報名</button>
+        <button type="submit" class="btn-submit magenta">
+          <span lang="zh">&gt; 送出報名</span>
+          <span lang="en">&gt; SIGN UP</span>
+        </button>
         <div class="form-note">
-          // 送出後會收到報名確認信 · 一般活動與 Afterparty 分開記錄。
+          <span lang="zh">// 送出後會收到報名確認信 · 一般活動與 Afterparty 分開記錄。</span>
+          <span lang="en">// Confirmation email will follow · main event & Afterparty are tracked separately.</span>
         </div>
       </div>
 
@@ -2065,18 +2314,30 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
   <div class="modal-panel" style="max-width: 440px;">
     <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
     <div class="modal-tag" style="color: var(--green);">&gt; admin_console --login</div>
-    <h3 id="modal-admin-title">主辦端登入</h3>
-    <p class="modal-desc">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出 Afterparty 加報清單。</p>
+    <h3 id="modal-admin-title">
+      <span lang="zh">主辦端登入</span>
+      <span lang="en">Host Admin Login</span>
+    </h3>
+    <p class="modal-desc">
+      <span lang="zh">只有虎智主辦可以進入。進入後可以勾選精選講者、查看報名名單、匯出 Afterparty 加報清單。</span>
+      <span lang="en">TigerAI hosts only. Once in: pick featured speakers · view signup list · export Afterparty opt-ins.</span>
+    </p>
 
     <form id="admin-form" novalidate>
       <div class="field" style="margin-bottom: 16px;">
-        <label>管理員密碼</label>
+        <label><span lang="zh">管理員密碼</span><span lang="en">Admin passcode</span></label>
         <input type="password" name="passcode" placeholder="············" autocomplete="current-password" />
-        <div class="hint">// 密碼存在 Apps Script PropertiesService · 可隨時更換</div>
+        <div class="hint">
+          <span lang="zh">// 密碼存在 Apps Script PropertiesService · 可隨時更換</span>
+          <span lang="en">// Stored in Apps Script PropertiesService · changeable anytime</span>
+        </div>
       </div>
       <div class="submit-row" style="margin-top: 16px;">
         <button type="submit" class="btn-submit" style="background: var(--green); color: #000;">&gt; LOGIN</button>
-        <div class="form-note">// 登入後重導至管理介面(待後端部署)</div>
+        <div class="form-note">
+          <span lang="zh">// 登入後重導至管理介面(待後端部署)</span>
+          <span lang="en">// Redirects to admin UI after login (backend pending)</span>
+        </div>
       </div>
       <div class="form-status" id="admin-status"></div>
     </form>
@@ -2134,6 +2395,32 @@ document.querySelectorAll('.modal').forEach(m => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
+
+/* ─────── AGENDA scroll-reveal · 滾進 viewport 才滑出 ─────── */
+(function initAgendaReveal() {
+  const items = document.querySelectorAll('.agenda li');
+  if (!items.length) return;
+  // 給每個 li 一個 index 讓 CSS stagger delay 生效
+  items.forEach((el, i) => el.style.setProperty('--i', i));
+
+  if (!('IntersectionObserver' in window)) {
+    // 老瀏覽器 fallback · 直接全部顯示
+    items.forEach(el => el.classList.add('reveal'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('reveal');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -60px 0px',
+  });
+  items.forEach(el => io.observe(el));
+})();
 
 /* ─────── FAQ toggle ─────── */
 document.querySelectorAll('.faq-item').forEach(item => {
