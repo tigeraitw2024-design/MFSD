@@ -1009,6 +1009,17 @@ footer .copy{
 footer .copy .status{
   color: var(--green);
 }
+footer .copy .admin-link{
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.15s;
+}
+footer .copy .admin-link:hover{
+  color: var(--green);
+}
 footer .copy .status .dot{
   display: inline-block;
   width: 7px; height: 7px; border-radius: 50%;
@@ -1774,39 +1785,6 @@ body.modal-open { overflow: hidden; }
   </div>
 </section>
 
-<!-- ═══════════════ ADMIN LOGIN ═══════════════ -->
-<section class="admin-section">
-  <div class="wrap">
-    <div class="admin-card">
-      <!-- Mascot: Admin · 綠色終端機風小人 -->
-      <svg class="mascot-admin" viewBox="0 0 90 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <!-- 頭 -->
-        <circle cx="45" cy="32" r="22" fill="currentColor" opacity="0.15"/>
-        <circle cx="45" cy="32" r="22" fill="none" stroke="currentColor" stroke-width="2"/>
-        <!-- 墨鏡護目鏡(駭客) -->
-        <rect x="26" y="29" width="38" height="7" fill="#07070C" stroke="currentColor" stroke-width="1.5"/>
-        <rect x="30" y="31" width="4" height="2" fill="currentColor"/>
-        <rect x="56" y="31" width="4" height="2" fill="currentColor"/>
-        <!-- 嘴 (-) -->
-        <line x1="38" y1="45" x2="52" y2="45" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <!-- 身體 -->
-        <path d="M22,60 L68,60 L72,106 L18,106 Z" fill="currentColor" opacity="0.1"/>
-        <path d="M22,60 L68,60 L72,106 L18,106 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-        <!-- 鎖頭 icon on body -->
-        <rect x="38" y="75" width="14" height="12" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M40,75 L40,70 Q40,66 45,66 Q50,66 50,70 L50,75" fill="none" stroke="currentColor" stroke-width="1.5"/>
-        <circle cx="45" cy="81" r="1.5" fill="currentColor"/>
-      </svg>
-      <div>
-        <div class="tag">&gt; admin_console</div>
-        <h3>主辦端後台</h3>
-        <p>投稿審核 · 精選勾選 · 一般報名 / Afterparty 名單匯出 · 寄信狀態</p>
-      </div>
-      <button type="button" class="btn-admin" data-open-modal="admin">&gt; 主辦登入</button>
-    </div>
-  </div>
-</section>
-
 <!-- ═══════════════ FOOTER ═══════════════ -->
 <footer>
   <div class="wrap">
@@ -1837,6 +1815,7 @@ body.modal-open { overflow: hidden; }
     </div>
     <div class="copy" style="grid-column: 1 / -1;">
       <span>© 2026 虎智科技 TigerAI · All rights reserved.</span>
+      <span><a href="#" data-open-modal="admin" class="admin-link">&gt; 主辦登入</a></span>
       <span class="status"><span class="dot"></span>EVENT_STATUS: OPEN_FOR_SIGNUP</span>
     </div>
   </div>
