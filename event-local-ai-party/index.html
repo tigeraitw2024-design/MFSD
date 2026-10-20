@@ -49,6 +49,15 @@
 *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
+/* 細版 scrollbar · 拿掉上下箭頭 */
+html{ scrollbar-width: thin; scrollbar-color: var(--line-hi) transparent; }
+::-webkit-scrollbar{ width: 6px; height: 6px; }
+::-webkit-scrollbar-track{ background: transparent; }
+::-webkit-scrollbar-thumb{ background: var(--line-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--cyan); }
+::-webkit-scrollbar-button{ display: none; }
+::-webkit-scrollbar-corner{ background: transparent; }
 body{
   background: var(--bg);
   color: var(--text);
