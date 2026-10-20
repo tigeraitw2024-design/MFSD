@@ -651,6 +651,18 @@ section.block .body{
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.1em;
+  z-index: 2;
+}
+.speaker-card .cover{
+  margin: -24px -24px 16px;    /* 貼齊 card 邊 */
+  background: #000;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+.speaker-card .cover img{
+  width: 100%; height: 100%;
+  object-fit: contain;         /* letterbox · 跟上傳時規則一致 */
+  display: block;
 }
 .speaker-card .label{
   font-family: var(--mono);
@@ -3098,8 +3110,8 @@ document.querySelectorAll('.faq-item').forEach(item => {
 const CONFIG = {
   // Apps Script Web App URL(一個 URL 處理 signup / speaker_submit / admin_login / admin_dashboard / admin_toggle_featured)
   WEBHOOK: 'https://script.google.com/macros/s/AKfycbyCRqIrVzZ_IamKRQmIf7MfBRuhDzp6Br3CCy78JsuS_r7WICmeUBkbk1D-Ouslyobelg/exec',
-  // 「公開精選」分頁發佈成 CSV 的 URL(到 Sheet → 檔案 → 共用 → 發布到網路 → 選「公開精選」分頁 CSV)
-  SPEAKERS_CSV_URL: '',
+  // 「公開精選」分頁 CSV publish URL(gid=767581510)
+  SPEAKERS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4JJZ9GwX7FSUo6hTRZYT-qBwx9KNE7w3kuE0TJxp3BGgRnmp8biCrwFzL-dEt7IdJDStfPMil7tdT/pub?gid=767581510&single=true&output=csv',
 };
 
 async function submitForm(formEl, action, statusEl, successMsg) {
@@ -3421,26 +3433,30 @@ async function resizeToSquare1000_(file) {
   }
 }
 
-/* ─────── 精選講者 · 從 CSV 讀 ─────── */
+/* ─────── 精選講者 · 從 Sheet CSV 讀(cover + QUERY label row 要 skip) ─────── */
 async function loadFeaturedSpeakers() {
   const grid = document.getElementById('speaker-grid');
   const empty = document.getElementById('spot-empty');
-  if (!CONFIG.SPEAKERS_CSV_URL) {
-    // 無 URL · 保持 empty 狀態
-    return;
-  }
+  if (!CONFIG.SPEAKERS_CSV_URL) return;
   try {
-    const res = await fetch(CONFIG.SPEAKERS_CSV_URL);
+    const res = await fetch(CONFIG.SPEAKERS_CSV_URL, { cache: 'no-cache' });
     const csv = await res.text();
-    const rows = csv.trim().split('\n').map(r => r.split(','));
+    const rows = parseCsv_(csv);
     const headers = rows.shift();
     const items = rows.map(r => Object.fromEntries(r.map((v, i) => [headers[i], v])));
-    const featured = items.filter(i => i.is_featured && i.is_featured.toUpperCase() === 'TRUE');
+    // filter 真人入選(QUERY LABEL row 跟空 row 都會被濾掉)
+    const featured = items.filter(s =>
+      s.public_name
+      && s.public_name !== 'public_name'
+      && s.is_featured
+      && String(s.is_featured).toUpperCase() === 'TRUE'
+    );
     if (!featured.length) return;
     empty.style.display = 'none';
     grid.innerHTML = featured.map(s => `
       <article class="speaker-card">
         <div class="badge">SELECTED</div>
+        ${s.cover_url ? `<div class="cover"><img src="${escapeAttr(s.cover_url)}" alt="${escapeAttr(s.public_name)}" loading="lazy" /></div>` : ''}
         <div class="label">// FEATURED_SPEAKER</div>
         <div class="name">${escapeHtml(s.public_name || '')}</div>
         <div class="title-line">${escapeHtml(s.title_or_skill || '')}</div>
@@ -3449,10 +3465,32 @@ async function loadFeaturedSpeakers() {
         ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener">&gt; VIEW RESOURCE</a></div>` : ''}
       </article>
     `).join('');
-    document.querySelector('.spot-count .n').textContent = `${featured.length} / 10`;
+    const n = document.querySelector('.spot-count .n');
+    if (n) n.textContent = `${featured.length} / 10`;
   } catch (err) {
     console.warn('載入精選講者失敗:', err);
   }
+}
+/* 簡易 CSV parser · 支援 "..." quoted + 逗號 */
+function parseCsv_(text) {
+  const rows = [];
+  let cur = [], val = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], n = text[i + 1];
+    if (inQ) {
+      if (c === '"' && n === '"') { val += '"'; i++; }
+      else if (c === '"') inQ = false;
+      else val += c;
+    } else {
+      if (c === '"') inQ = true;
+      else if (c === ',') { cur.push(val); val = ''; }
+      else if (c === '\n') { cur.push(val); rows.push(cur); cur = []; val = ''; }
+      else if (c === '\r') { /* skip */ }
+      else val += c;
+    }
+  }
+  if (val.length || cur.length) { cur.push(val); rows.push(cur); }
+  return rows.filter(r => r.length && r.some(x => x !== ''));
 }
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
