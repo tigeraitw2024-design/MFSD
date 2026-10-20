@@ -3372,6 +3372,21 @@ document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
   setTimeout(() => openModal('signup'), 150);
 });
 
+/* ─────── beforeunload 保險 · 關 tab 時先彈瀏覽器預設 confirm ─────── */
+/* 瀏覽器安全規則 · 文字無法自訂 · 一律顯示「您要離開這個網站嗎?」或「Leave site?」 */
+/* 已報名的不擋 · 停留 <10s 不擋(避免 refresh 煩) */
+(function initBeforeUnloadGuard(){
+  const START = Date.now();
+  window.addEventListener('beforeunload', (e) => {
+    try {
+      if (localStorage.getItem('local-ai-party-signed-up') === 'yes') return;
+    } catch (err) {}
+    if (Date.now() - START < 10000) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
+})();
+
 /* ─────── Cover upload · 前端 resize 1000×1000 letterbox ─────── */
 (function initCoverUpload(){
   const input = document.getElementById('cover-input');
