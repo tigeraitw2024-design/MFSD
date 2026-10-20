@@ -417,23 +417,27 @@ code, .mono { font-family: var(--mono); }
   filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.1));
 }
 
-/* cyberpunk 對話框 */
+/* cyberpunk 對話框 · 字水平+垂直置中 · 不換行 */
 .prop-bubble{
   position: absolute;
   background: rgba(14, 14, 24, 0.95);
-  padding: 12px 16px;
+  padding: 14px 20px;
   font-family: var(--mono);
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.4;
   color: var(--text);
-  min-width: 170px;
-  max-width: 220px;
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   transition: opacity 0.3s ease-out;
   z-index: 4;
 }
 .prop-bubble .bubble-text{
-  display: block;
-  white-space: normal;
+  display: inline-block;
+  white-space: nowrap;
 }
 .prop-bubble.fading{ opacity: 0; }
 
@@ -448,7 +452,6 @@ code, .mono { font-family: var(--mono); }
   right: calc(100% + 28px);
   top: 40px;
   border: 1px solid #3B82F6;
-  text-align: right;
 }
 
 /* L 形 corner brackets */
