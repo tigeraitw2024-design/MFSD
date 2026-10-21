@@ -522,10 +522,7 @@ function sendSignupConfirmEmail_(data) {
       ['想加報', '直接回信告知 · 我們幫您補發 NT$100 折抵券'],
     ]});
   }
-  sections.push({ title: '📝 行前提醒', rows: [
-    ['最終時間表', '活動前 1 週會寄 email 通知'],
-    ['任何問題', '直接回覆這封信件即可'],
-  ]});
+  // 這封信本身就是確認信 · 不再承諾另發行前通知 · 聯絡方式在 footer
   const html = buildHtmlEmail_({
     hero_tag: '報名確認',
     hero_title: EVENT_NAME,
@@ -552,7 +549,7 @@ function sendSpeakerSubmitEmail_(data) {
     ]},
     { title: '⏳ 接下來', rows: [
       ['精選名額', '最多 10 位'],
-      ['公布時間', '活動前 1-2 週'],
+      ['公布時間', '活動前 3 天公布(2026/11/01 週日)'],
       ['通知方式', '若入選 · 我們用這封 email 聯繫您'],
       ['入選福利', '✓ 免費獲得 OOPS 晚上派對入場券'],
     ]},
@@ -592,16 +589,11 @@ function sendSpeakerFeaturedEmail_(data) {
       ['使用方式', '現場出示此 QR Code · 免費加入 OOPS 晚上派對(18:00–20:00)'],
       ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用下方 10 字代碼報身份'],
     ]},
-    { title: '📅 您的上台時段', rows: [
-      ['安排在', '14:35–15:35 的精選講者時段'],
-      ['具體時間', '活動前 1 週會寄最終 slot(例:14:40–14:50)'],
-      ['設備', '現場備 HDMI 投影 · 自備筆電 · 需要穩定網路請提早告知'],
-    ]},
     { title: '📅 活動資訊', rows: [
       ['日期', EVENT_DATE], ['時間', EVENT_TIME], ['地點', EVENT_VENUE],
+      ['到場提醒', '請於 14:30 前到場 · 現場依流程安排上台 · 全程請留在現場'],
     ]},
     { title: '📝 需要你做的', rows: [
-      ['回覆確認', '收到請回覆這封信 · 確認入選 + 想上台的時間偏好(前段 / 中段 / 後段)'],
       ['準備內容', '活動前 3 天可以寄 slide / demo 給主辦預覽(選填)'],
       ['不克出席', '請最早告知 · 我們好把位子讓給候補'],
     ]},
@@ -610,13 +602,13 @@ function sendSpeakerFeaturedEmail_(data) {
     hero_tag: '✓ 入選通知',
     hero_title: EVENT_NAME,
     greeting: name + ' 您好 · 恭喜 🎉',
-    intro: '您的 Demo 投稿 <strong>已入選</strong> ' + EVENT_NAME + ' 精選講者 · 以下是您的上台安排跟入場券資訊:',
+    intro: '您的 Demo 投稿 <strong>已入選</strong> ' + EVENT_NAME + ' 精選講者 · 以下是您的入場券跟現場安排:',
     sections: sections,
     cta_text: '查看活動頁',
     cta_url: EVENT_URL,
-    footer_note: '收到請回覆這封信確認 · 任何問題也直接回覆<br>虎智科技 TigerAI · tiger.ai.tw@gmail.com',
+    footer_note: '任何問題請直接回覆此信件<br>虎智科技 TigerAI · tiger.ai.tw@gmail.com',
   });
-  const plain = `${name} 您好\n\n恭喜入選 ${EVENT_NAME} 精選講者!\n\n您的入場券:${data.ticket}\n(現場憑此代碼免費加入 OOPS 晚上派對)\n\n上台時段:14:35-15:35 之間 · 活動前 1 週會寄最終 slot\n\n收到請回覆此信確認。\n\n${SENDER_NAME}`;
+  const plain = `${name} 您好\n\n恭喜入選 ${EVENT_NAME} 精選講者!\n\n您的入場券:${data.ticket}\n(現場憑此代碼免費加入 OOPS 晚上派對)\n\n請於 14:30 前到場 · 現場依流程安排上台。\n\n${SENDER_NAME}`;
   MailApp.sendEmail({ to: data.email, subject, body: plain, htmlBody: html, name: SENDER_NAME });
 }
 
