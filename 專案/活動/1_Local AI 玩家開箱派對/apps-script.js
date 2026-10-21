@@ -63,7 +63,9 @@ const SUBMIT_HEADERS = [
   '入場券',        // 16 · 精選時自動生成 10 字碼
   '封面圖',        // 17 · Drive 連結(作品主圖 · 1000×1000 letterbox)
   '個人照',        // 18 · Drive 連結(本人去背照 · 保留 PNG 透明)
-  '寄信狀態', 'UA/備註'
+  '寄信狀態', 'UA/備註',
+  '加報晚上派對',  // 21 · 投稿人預設視為會到場 · 加報派對預設 yes
+  '折抵券'         // 22 · 加報派對時自動生成 DISC-XXXXXXXX · 入選後失效(改用入場券)
 ];
 
 const FEATURED_HEADERS = [
@@ -251,6 +253,10 @@ function handleSpeakerSubmit_(data) {
   const bak = ss.getSheetByName(SHEETS.SUBMIT_BAK);
   if (!sh || !bak) throw new Error('分頁不存在 · 請先執行 setupAll()');
 
+  // 投稿人預設加派對 → 自動發 NT$100 折抵券(若入選後 · 由 handleAdminToggleFeatured_ 發新的免費入場券覆蓋)
+  const discountCode = (data.afterparty === 'yes') ? generateDiscountCode_() : '';
+  data.discount_code = discountCode;
+
   const row = [
     new Date(),
     data.public_name || '',
@@ -272,6 +278,8 @@ function handleSpeakerSubmit_(data) {
     '',                          // 18 個人照 · upload 後更新
     '寄信中',                    // 19 寄信狀態
     (data._ua || '').slice(0, 200), // 20 UA
+    data.afterparty === 'yes' ? '✓' : '',  // 21 加報晚上派對
+    discountCode,                            // 22 折抵券
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -374,7 +382,7 @@ function handleAdminDashboard_(data) {
     ok: true,
     stats: {
       signup_count:     sData.length,
-      afterparty_count: sData.filter(r => r[7] === '✓').length,
+      afterparty_count: sData.filter(r => r[7] === '✓').length + tData.filter(r => r[20] === '✓').length,
       submit_count:     tData.length,
       featured_count:   tData.filter(r => r[14] === '✓' || r[14] === true).length,
     },
@@ -396,9 +404,11 @@ function handleAdminDashboard_(data) {
       format: r[8], duration: r[9],
       support_url: r[11], note: r[12],
       featured: r[14] === '✓' || r[14] === true,
-      ticket: r[15] || '',     // 入場券
+      ticket: r[15] || '',     // 入場券(入選者)
       cover: r[16] || '',      // 封面圖
       avatar: r[17] || '',     // 個人照
+      afterparty: r[20] === '✓',  // 加派對(投稿人預設 yes)
+      discount: r[21] || '',   // 折抵券(未入選的加派對者)
     })).reverse(),
   });
 }
@@ -414,7 +424,7 @@ function buildStatsResponse_() {
     ok: true,
     stats: {
       signup_count:     sData.length,
-      afterparty_count: sData.filter(r => r[7] === '✓').length,
+      afterparty_count: sData.filter(r => r[7] === '✓').length + tData.filter(r => r[20] === '✓').length,
       submit_count:     tData.length,
       featured_count:   tData.filter(r => r[14] === '✓' || r[14] === true).length,
     },
@@ -553,10 +563,28 @@ function sendSpeakerSubmitEmail_(data) {
       ['通知方式', '若入選 · 我們用這封 email 聯繫您'],
       ['入選福利', '✓ 免費獲得 OOPS 晚上派對入場券'],
     ]},
+  ];
+  if (data.afterparty === 'yes' && data.discount_code) {
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.discount_code)}&margin=12&bgcolor=12121E&color=FF2EA6&qzone=1`;
+    sections.push({ title: '🎫 您的派對折抵券', rows: [
+      ['QR Code',
+        `<img src="${qrUrl}" alt="折抵券 QR" width="200" height="200" style="display:block;border:1px solid #FF2EA6;padding:4px;background:#12121E;" />
+         <div style="margin-top:8px;color:#FF2EA6;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:1.5px;">${data.discount_code}</div>`],
+      ['使用方式', 'OOPS 晚上派對結帳時出示此 QR Code · 現折 <strong>NT$100</strong>'],
+      ['派對時間', '18:00–20:00 · 白天活動結束後接著'],
+      ['備註', '若入選精選講者 · 本折抵券自動升級為「免費入場券」· 以入選信新發的 QR 為準。QR 刷不到請用 10 字代碼報身份'],
+    ]});
+  } else {
+    sections.push({ title: '🎫 晚上派對', rows: [
+      ['目前狀態', '未加報 · 只參加白天活動'],
+      ['想加報', '直接回信告知 · 我們幫您補發 NT$100 折抵券(入選者則免費)'],
+    ]});
+  }
+  sections.push(
     { title: '📅 活動資訊', rows: [
       ['日期', EVENT_DATE], ['時間', EVENT_TIME], ['地點', EVENT_VENUE],
     ]},
-  ];
+  );
   const html = buildHtmlEmail_({
     hero_tag: '投稿已收到',
     hero_title: EVENT_NAME,
@@ -586,7 +614,8 @@ function sendSpeakerFeaturedEmail_(data) {
       ['QR Code',
         `<img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.ticket)}&margin=12&bgcolor=12121E&color=00FF88&qzone=1" alt="入場券 QR" width="200" height="200" style="display:block;border:1px solid #00FF88;padding:4px;background:#12121E;" />
          <div style="margin-top:8px;color:#00FF88;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:2px;">${data.ticket}</div>`],
-      ['使用方式', '現場出示此 QR Code · 免費加入 OOPS 晚上派對(18:00–20:00)'],
+      ['使用方式', '現場出示此 QR Code · <strong style="color:#00FF88">免費</strong>加入 OOPS 晚上派對(18:00–20:00)'],
+      ['折抵券升級', '如您投稿時曾收到 DISC-xxxxxxxx 的 NT$100 折抵券 · <strong>以此免費入場券為準 · 原折抵券作廢</strong>'],
       ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用下方 10 字代碼報身份'],
     ]},
     { title: '📅 活動資訊', rows: [

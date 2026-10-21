@@ -3099,6 +3099,32 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <textarea name="note" placeholder="..."></textarea>
         </div>
         <div class="field full">
+          <label class="chk">
+            <input type="checkbox" name="afterparty" value="yes" checked />
+            <div>
+              <div class="main">
+                <span lang="zh">加報 OOPS 晚上派對(18:00–20:00)</span>
+                <span lang="en">Opt in to OOPS Afterparty (18:00–20:00)</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">投稿人預設視為會到場 · 建議一起加派對 · 跟其他玩家交流。未入選也用得到。</span>
+                <span lang="en">Submitters are assumed to attend · join the Afterparty too. Still useful even if not selected.</span>
+              </div>
+            </div>
+          </label>
+          <div class="afterparty-box">
+            <div class="k"><span lang="zh">// 加報折抵</span><span lang="en">// AFTERPARTY_DISCOUNT</span></div>
+            <div class="d">
+              <span lang="zh">憑本頁投稿 · 票價折抵 <strong style="color: var(--magenta);">NT$100</strong></span>
+              <span lang="en">Via this submission · <strong style="color: var(--magenta);">NT$100 off</strong> the ticket</span>
+            </div>
+            <div class="n">
+              <span lang="zh">投稿收到信會附上折抵券 QR Code。若入選 · 折抵券會自動升級為「免費入場券」· 以新發的 QR 為準。</span>
+              <span lang="en">The confirmation email includes the discount QR. If selected · the discount upgrades to a free entry ticket (new QR will be sent).</span>
+            </div>
+          </div>
+        </div>
+        <div class="field full">
           <label class="chk" style="margin-top: 4px;">
             <input type="checkbox" name="consent_public" required />
             <div>
@@ -3743,8 +3769,10 @@ function renderAdminSubmits(list) {
         <div class="proj">${escapeHtmlA(r.project || '')}</div>
         ${r.demo ? `<div class="desc">${escapeHtmlA(r.demo.length > 160 ? r.demo.substring(0, 160) + '…' : r.demo)}</div>` : ''}
         <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')} ${r.format ? '· ' + escapeHtmlA(r.format) : ''} ${r.duration ? '· ' + escapeHtmlA(r.duration) : ''}</div>
+        <div class="meta">${r.afterparty ? '<span style="color:var(--magenta)">✓ 加派對</span>' : '<span style="color:var(--text-dim)">未加派對</span>'}</div>
         ${r.support_url ? `<div class="meta"><a href="${escapeAttrA(r.support_url)}" target="_blank" rel="noopener" style="color:var(--cyan)">↗ 參考資料</a></div>` : ''}
-        ${r.ticket ? `<div class="ticket">🎫 ${escapeHtmlA(r.ticket)}</div>` : ''}
+        ${r.ticket ? `<div class="ticket" style="color:var(--green);border-color:var(--green)">🎫 ${escapeHtmlA(r.ticket)} <span style="color:var(--text-dim);font-size:10px">(免費入場券)</span></div>` : ''}
+        ${r.discount && !r.featured ? `<div class="ticket" style="color:var(--magenta);border-color:var(--magenta)">🎫 ${escapeHtmlA(r.discount)} <span style="color:var(--text-dim);font-size:10px">(NT$100 折抵券)</span></div>` : ''}
       </div>
     </div>
   `).join('') + '</div>';
