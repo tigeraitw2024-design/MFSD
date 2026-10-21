@@ -3985,11 +3985,24 @@ function wireImageUpload_(inputId, previewId, hiddenId, resizer) {
 wireImageUpload_('cover-input', 'cover-preview', 'cover-image-data', resizeToSquare1000_);
 wireImageUpload_('avatar-input', 'avatar-preview', 'avatar-image-data', resizeAvatarKeepAlpha_);
 
+/* Google Sheet 單格字元上限 50000 · 留 2K safety margin · 壓到 48000 以下 */
+const CELL_MAX_CHARS = 48000;
+
+/* 遞減 JPEG quality 直到 base64 字串 fit CELL_MAX_CHARS · 強制 fit */
+function compressJpegFit_(canvas, maxLen) {
+  for (let q = 0.75; q >= 0.3; q -= 0.08) {
+    const d = canvas.toDataURL('image/jpeg', q);
+    if (d.length <= maxLen) return d;
+  }
+  return canvas.toDataURL('image/jpeg', 0.3);
+}
+
+/* Cover · 500×500 letterbox JPEG · base64 直接存進 Sheet(走 inline · 不走 Drive hotlink) */
 async function resizeToSquare1000_(file) {
   const url = URL.createObjectURL(file);
   try {
     const img = await loadImageSrc_(url);
-    const SIZE = 1000;
+    const SIZE = 500;
     const canvas = document.createElement('canvas');
     canvas.width = SIZE;
     canvas.height = SIZE;
@@ -4002,18 +4015,19 @@ async function resizeToSquare1000_(file) {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(img, (SIZE - w) / 2, (SIZE - h) / 2, w, h);
-    return canvas.toDataURL('image/jpeg', 0.88);
+    return compressJpegFit_(canvas, CELL_MAX_CHARS);
   } finally {
     URL.revokeObjectURL(url);
   }
 }
 
-/* Avatar · 長邊 fit 800px · 不 letterbox · 保留 PNG 透明 · JPG 存成 JPG */
+/* Avatar · 長邊 320px · PNG 優先(保留透明) · 若 base64 超過 cell 限制 · fallback JPEG + 黑底 */
 async function resizeAvatarKeepAlpha_(file) {
   const url = URL.createObjectURL(file);
+  const isPng = /^image\/png$/i.test(file.type);
   try {
     const img = await loadImageSrc_(url);
-    const MAX = 800;
+    const MAX = 320;
     const ratio = Math.min(1, MAX / Math.max(img.width, img.height));
     const canvas = document.createElement('canvas');
     canvas.width = Math.round(img.width * ratio);
@@ -4021,11 +4035,20 @@ async function resizeAvatarKeepAlpha_(file) {
     const ctx = canvas.getContext('2d');
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    // 不填背景 · 保留 PNG 透明
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    // PNG → PNG(保留 alpha)· JPG → JPG(減檔案大小)
-    const isPng = /^image\/png$/i.test(file.type);
-    return canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', 0.9);
+    if (isPng) {
+      const d = canvas.toDataURL('image/png');
+      if (d.length <= CELL_MAX_CHARS) return d;
+      // PNG 太大 · fallback 黑底 JPEG(放棄透明 · 保證存得進去)
+      const bg = document.createElement('canvas');
+      bg.width = canvas.width; bg.height = canvas.height;
+      const bgCtx = bg.getContext('2d');
+      bgCtx.fillStyle = '#000000';
+      bgCtx.fillRect(0, 0, bg.width, bg.height);
+      bgCtx.drawImage(canvas, 0, 0);
+      return compressJpegFit_(bg, CELL_MAX_CHARS);
+    }
+    return compressJpegFit_(canvas, CELL_MAX_CHARS);
   } finally {
     URL.revokeObjectURL(url);
   }
@@ -4102,14 +4125,15 @@ async function loadFeaturedSpeakers() {
   }
 }
 
-/* Google Drive 各種 URL 格式 → 統一轉成 drive.google.com/uc?export=view&id=XXX
- * 這是老格式但最穩定 · lh3.googleusercontent.com/d/ 跟 drive.google.com/thumbnail
- * 這幾年都有 hotlink 403 問題 */
+/* 現在走 base64 inline(data:image/jpeg;base64,...)· 直接存 Sheet · 完全繞過 Drive hotlink
+ * 舊的 Drive URL 仍 backward compat(但 Google 擋 hotlink · 大概率顯示不出來) */
 function normalizeDriveUrl_(url) {
   if (!url) return '';
-  const m = String(url).match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
+  const s = String(url);
+  if (s.startsWith('data:')) return s;                       // base64 inline · 直接用
+  const m = s.match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
   if (m) return `https://drive.google.com/uc?export=view&id=${m[1] || m[2]}`;
-  return url;
+  return s;
 }
 
 function renderSpeakerCard_(s, dup) {

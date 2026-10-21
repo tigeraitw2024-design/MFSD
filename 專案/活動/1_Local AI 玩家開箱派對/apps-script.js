@@ -295,29 +295,9 @@ function handleSpeakerSubmit_(data) {
     console.error('[SUBMIT_READBACK_FAIL] expected=' + data.public_name + ' got=' + written);
   }
 
-  // 封面圖上傳 Drive(1000×1000 letterbox)
-  if (data.cover_image) {
-    try {
-      const coverUrl = uploadImageToDrive_(data.cover_image, data.public_name, after, 'cover');
-      sh.getRange(after, 17).setValue(coverUrl);
-      console.log(`[COVER_UPLOAD] row=${after} url=${coverUrl}`);
-    } catch (err) {
-      console.error('[COVER_UPLOAD_ERR]', err);
-      sh.getRange(after, 17).setValue('✗ ' + err.message);
-    }
-  }
-
-  // 個人照上傳 Drive(保留 PNG 透明)
-  if (data.avatar_image) {
-    try {
-      const avatarUrl = uploadImageToDrive_(data.avatar_image, data.public_name, after, 'avatar');
-      sh.getRange(after, 18).setValue(avatarUrl);
-      console.log(`[AVATAR_UPLOAD] row=${after} url=${avatarUrl}`);
-    } catch (err) {
-      console.error('[AVATAR_UPLOAD_ERR]', err);
-      sh.getRange(after, 18).setValue('✗ ' + err.message);
-    }
-  }
+  // 封面圖 + 個人照 · 前端已壓到 < 48000 字元 · 直接存 base64 inline(繞過 Drive hotlink block)
+  storeImageToSheet_(sh, after, 17, data.cover_image, 'cover');
+  storeImageToSheet_(sh, after, 18, data.avatar_image, 'avatar');
 
   let mailStatus = '✓';
   try { sendSpeakerSubmitEmail_(data); }
@@ -327,7 +307,27 @@ function handleSpeakerSubmit_(data) {
   return json_({ ok: true, msg: '投稿已收到 · 等待主辦審核' });
 }
 
-/* ─────── 圖片上傳到 Drive(前端 resize 完的 base64 dataURL) ─────── */
+/* ─────── 圖片直接 inline base64 存進 Sheet(繞過 Drive hotlink block) ─────── */
+/* 前端 resize + compress 已經保證字串 < 48000 字元 · 但再 double check · 太大就寫 error */
+function storeImageToSheet_(sh, row, col, dataUrl, kind) {
+  if (!dataUrl) return;
+  const s = String(dataUrl);
+  if (!s.startsWith('data:image/')) {
+    sh.getRange(row, col).setValue('✗ INVALID_DATA_URL');
+    console.error(`[${kind.toUpperCase()}_INVALID] row=${row} prefix=${s.substring(0, 40)}`);
+    return;
+  }
+  // Google Sheet 單格字元上限 50000 · 50100+ 就塞不下
+  if (s.length > 49900) {
+    sh.getRange(row, col).setValue(`✗ IMG_TOO_LARGE_${s.length}_CHARS`);
+    console.error(`[${kind.toUpperCase()}_TOO_LARGE] row=${row} length=${s.length}`);
+    return;
+  }
+  sh.getRange(row, col).setValue(s);
+  console.log(`[${kind.toUpperCase()}_STORED] row=${row} length=${s.length}`);
+}
+
+/* ─────── (legacy)圖片上傳到 Drive · 現在改走 inline base64 · 這個保留備用 ─────── */
 /* kind = 'cover' | 'avatar' · 決定資料夾跟檔名前綴 */
 function uploadImageToDrive_(dataUrl, name, rowIndex, kind) {
   const match = String(dataUrl).match(/^data:image\/(png|jpe?g);base64,([\s\S]+)$/i);
