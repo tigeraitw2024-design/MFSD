@@ -69,7 +69,7 @@ const SUBMIT_HEADERS = [
 ];
 
 const FEATURED_HEADERS = [
-  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'cover_url', 'avatar_url', 'is_featured'
+  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'cover_url', 'avatar_url'
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -87,9 +87,12 @@ function setupAll() {
   // 「公開精選」分頁加 formula · 自動從「講者投稿」撈「精選公開」=✓ 的
   // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured Q=cover R=avatar
   const fs = ss.getSheetByName(SHEETS.FEATURED);
-  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:R, "SELECT B, C, F, H, L, Q, R WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url', Q 'cover_url', R 'avatar_url'", 0), "")`;
+  // 先清掉舊版 bug 留下的 #REF! + H 欄滿滿 TRUE(1000+ 列)
+  fs.getRange(2, 1, Math.max(fs.getMaxRows() - 1, 1), fs.getMaxColumns()).clearContent();
+  // range 從 A 開始(不是 B2:R) · QUERY 的 SELECT 才認得原 sheet 的 column letter · 否則回 #REF!
+  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!A2:R, "SELECT B, C, F, H, L, Q, R WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url', Q 'cover_url', R 'avatar_url'", 0), "")`;
   fs.getRange('A2').setFormula(formula);
-  fs.getRange('H2:H').setValue('TRUE');     // is_featured 從 G 移到 H(多一欄 avatar)
+  // 不再 setValue is_featured 整欄 · WHERE 已經 filter 過 · 前端只要 public_name 非空就是精選
 
   Logger.log('✅ setupAll 完成 · 5 個分頁 ready');
   Logger.log('   接下來:1) 執行 setAdminPasscode("93489997") 設密碼');

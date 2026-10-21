@@ -4043,11 +4043,12 @@ async function loadFeaturedSpeakers() {
     const rows = parseCsv_(csv);
     const headers = rows.shift();
     const items = rows.map(r => Object.fromEntries(r.map((v, i) => [headers[i], v])));
+    // CSV 由「公開精選」分頁 QUERY 輸出 · 只會含 is_featured=TRUE 的 row
+    // 前端只過濾空 row / header / 可能殘留的 #REF! · 不再依賴 is_featured 欄
     const featured = items.filter(s =>
       s.public_name
       && s.public_name !== 'public_name'
-      && s.is_featured
-      && String(s.is_featured).toUpperCase() === 'TRUE'
+      && !String(s.public_name).startsWith('#')
     );
 
     // 更新計數
