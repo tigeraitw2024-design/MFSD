@@ -3681,10 +3681,17 @@ async function submitForm(formEl, action, statusEl, successMsg) {
     const result = await res.json().catch(() => ({ ok: true }));
     if (result.ok === false) throw new Error(result.error || 'server error');
     statusEl.className = 'form-status show';
-    statusEl.textContent = successMsg;
+    statusEl.textContent = successMsg + ' · 3 秒後自動關閉 ·';
     formEl.reset();
     // 標記已報名 · FOMO modal 下次不彈
     try { localStorage.setItem('local-ai-party-signed-up', 'yes'); } catch (e) {}
+    // 送出成功後 · 3 秒讓用戶看完成功訊息 → 自動關 modal + 清掉狀態列
+    setTimeout(() => {
+      const modal = formEl.closest('.modal');
+      if (modal && modal.classList.contains('show')) closeModal(modal);
+      statusEl.className = 'form-status';
+      statusEl.textContent = '';
+    }, 3000);
   } catch (err) {
     statusEl.className = 'form-status error show';
     statusEl.textContent = '[ ERROR ] 送出失敗 · 請稍後再試 · ' + err.message;
