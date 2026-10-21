@@ -4100,18 +4100,19 @@ async function loadFeaturedSpeakers() {
   }
 }
 
-/* Google Drive 的 drive.google.com/thumbnail?id=XXX 現在前端 hotlink 常失敗 ·
- * 轉成 lh3.googleusercontent.com/d/XXX=w1200 這個真正的 CDN URL */
-function normalizeDriveUrl_(url, size) {
+/* Google Drive 各種 URL 格式 → 統一轉成 drive.google.com/uc?export=view&id=XXX
+ * 這是老格式但最穩定 · lh3.googleusercontent.com/d/ 跟 drive.google.com/thumbnail
+ * 這幾年都有 hotlink 403 問題 */
+function normalizeDriveUrl_(url) {
   if (!url) return '';
   const m = String(url).match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
-  if (m) return `https://lh3.googleusercontent.com/d/${m[1] || m[2]}=w${size || 1200}`;
+  if (m) return `https://drive.google.com/uc?export=view&id=${m[1] || m[2]}`;
   return url;
 }
 
 function renderSpeakerCard_(s, dup) {
-  const cover = normalizeDriveUrl_(s.cover_url, 1200);
-  const avatar = normalizeDriveUrl_(s.avatar_url, 800);
+  const cover = normalizeDriveUrl_(s.cover_url);
+  const avatar = normalizeDriveUrl_(s.avatar_url);
   // onerror:圖片載不出來 → 把 cover 變 empty state · 不留壞圖
   const imgErr = "this.style.display='none';this.parentNode.classList.add('empty');";
   const coverHtml = cover

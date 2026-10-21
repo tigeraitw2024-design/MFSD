@@ -342,10 +342,79 @@ function uploadImageToDrive_(dataUrl, name, rowIndex, kind) {
   const folderId = kind === 'avatar' ? AVATAR_FOLDER_ID : COVER_FOLDER_ID;
   const folder = DriveApp.getFolderById(folderId);
   const file = folder.createFile(blob);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  // 用 lh3.googleusercontent.com 真正的 CDN · drive.google.com/thumbnail 這幾年前端 hotlink 常失敗
-  const sz = kind === 'avatar' ? 'w800' : 'w1200';
-  return `https://lh3.googleusercontent.com/d/${file.getId()}=${sz}`;
+  // setSharing 可能被 Google Workspace 限制 · 用 try 包起來 · 失敗不影響 URL 回傳
+  try {
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  } catch (err) {
+    console.warn('[SHARE_WARN] ' + file.getName() + ': ' + err.message + ' · 需要手動公開 or 跑 fixAllDrivePerms()');
+  }
+  // 用 drive.google.com/uc?export=view · 這是 Google Drive 老格式 · 比 lh3 跟 thumbnail 都穩定
+  // (lh3.googleusercontent.com/d/XXX=w1200 在某些帳號會回 403 · uc?export=view 幾乎不會)
+  return `https://drive.google.com/uc?export=view&id=${file.getId()}`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  DEBUG · 診斷用
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 看最後一筆投稿 row 的每一欄實際值 · 排查 cover / avatar 沒顯示 */
+function diagLatestSubmit() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(SHEETS.SUBMIT);
+  const lastRow = sh.getLastRow();
+  if (lastRow < 2) { Logger.log('無投稿資料'); return; }
+  const r = sh.getRange(lastRow, 1, 1, SUBMIT_HEADERS.length).getValues()[0];
+  Logger.log('最後一筆投稿 (row=' + lastRow + ')');
+  SUBMIT_HEADERS.forEach((h, i) => {
+    const v = String(r[i] == null ? '' : r[i]);
+    const preview = v.length > 120 ? v.substring(0, 120) + '…' : v;
+    Logger.log(`  col ${i + 1} ${h.padEnd(14)}: ${preview}`);
+  });
+}
+
+/* 把 Drive folder 內所有檔案強制設成 anyone_with_link · 修歷史上 setSharing 失敗的檔案 */
+function fixAllDrivePerms() {
+  const folder = DriveApp.getFolderById(COVER_FOLDER_ID);
+  const files = folder.getFiles();
+  let ok = 0, fail = 0;
+  while (files.hasNext()) {
+    const f = files.next();
+    try {
+      f.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      ok++;
+    } catch (err) {
+      fail++;
+      Logger.log('[FIX_FAIL] ' + f.getName() + ': ' + err.message);
+    }
+  }
+  Logger.log(`✅ ${ok} 個檔案設為 anyone_with_link · ${fail} 個失敗`);
+}
+
+/* 把「講者投稿」分頁所有舊的 drive.google.com/thumbnail?id=XXX 或 lh3.googleusercontent.com/d/XXX
+ * URL 改成 drive.google.com/uc?export=view&id=XXX(最穩定) */
+function migrateImageUrls() {
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(SHEETS.SUBMIT);
+  if (sh.getLastRow() < 2) { Logger.log('無資料'); return; }
+  const range = sh.getRange(2, 17, sh.getLastRow() - 1, 2);  // col Q (封面) + col R (個人照)
+  const vals = range.getValues();
+  let changed = 0;
+  for (let i = 0; i < vals.length; i++) {
+    for (let j = 0; j < 2; j++) {
+      const v = String(vals[i][j] || '');
+      const m = v.match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
+      if (m) {
+        const newUrl = `https://drive.google.com/uc?export=view&id=${m[1] || m[2]}`;
+        if (newUrl !== v) { vals[i][j] = newUrl; changed++; }
+      }
+    }
+  }
+  if (changed) {
+    range.setValues(vals);
+    Logger.log(`✅ 更新了 ${changed} 個 URL 到 uc?export=view 格式`);
+  } else {
+    Logger.log('沒有需要更新的 URL');
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
