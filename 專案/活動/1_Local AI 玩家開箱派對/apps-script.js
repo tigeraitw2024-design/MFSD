@@ -138,6 +138,11 @@ function setAdminPasscode(code) {
   Logger.log('✅ 密碼已設定 · 長度 ' + String(code).length + ' · 存 PropertiesService(不在 Sheet 不在 code)');
 }
 
+/* 一鍵把管理員密碼設成虎智統編 · 無參數可直接執行 · 不會彈 UI */
+function setupAdminPasscodeDefault() {
+  setAdminPasscode('93489997');
+}
+
 /* 查密碼是否已設定(除錯用 · 不回傳密碼本身) */
 function checkAdminPasscode() {
   const v = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSCODE');
