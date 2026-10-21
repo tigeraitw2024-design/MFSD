@@ -3658,7 +3658,7 @@ const CONFIG = {
   SPEAKERS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4JJZ9GwX7FSUo6hTRZYT-qBwx9KNE7w3kuE0TJxp3BGgRnmp8biCrwFzL-dEt7IdJDStfPMil7tdT/pub?gid=767581510&single=true&output=csv',
 };
 
-async function submitForm(formEl, action, statusEl, successMsg) {
+async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 3000) {
   window.fireSubmitConfetti?.();
   if (!CONFIG.WEBHOOK) {
     statusEl.className = 'form-status error show';
@@ -3681,17 +3681,18 @@ async function submitForm(formEl, action, statusEl, successMsg) {
     const result = await res.json().catch(() => ({ ok: true }));
     if (result.ok === false) throw new Error(result.error || 'server error');
     statusEl.className = 'form-status show';
-    statusEl.textContent = successMsg + ' · 3 秒後自動關閉 ·';
+    statusEl.textContent = successMsg + (autoCloseMs > 0 ? ' · 3 秒後自動關閉 ·' : '');
     formEl.reset();
     // 標記已報名 · FOMO modal 下次不彈
     try { localStorage.setItem('local-ai-party-signed-up', 'yes'); } catch (e) {}
-    // 送出成功後 · 3 秒讓用戶看完成功訊息 → 自動關 modal + 清掉狀態列
-    setTimeout(() => {
-      const modal = formEl.closest('.modal');
+    const modal = formEl.closest('.modal');
+    const clearAndClose = () => {
       if (modal && modal.classList.contains('show')) closeModal(modal);
       statusEl.className = 'form-status';
       statusEl.textContent = '';
-    }, 3000);
+    };
+    if (autoCloseMs > 0) setTimeout(clearAndClose, autoCloseMs);
+    else clearAndClose();   // 0 = 立刻關 · 讓用戶直接看到背景的 confetti
   } catch (err) {
     statusEl.className = 'form-status error show';
     statusEl.textContent = '[ ERROR ] 送出失敗 · 請稍後再試 · ' + err.message;
@@ -3711,7 +3712,7 @@ document.getElementById('signup-form')?.addEventListener('submit', e => {
   e.preventDefault();
   const status = document.getElementById('signup-status');
   submitForm(e.target, 'signup', status,
-    '[ OK ] 報名已收到 · 確認信稍後寄出');
+    '[ OK ] 報名已收到 · 確認信稍後寄出', 0);   // 報名立刻關 modal · 不等 3 秒
 });
 /* ═══════════════════════════════════════════════════════════════════════════
  *  ADMIN DASHBOARD · login + stats + tabs + toggle featured
