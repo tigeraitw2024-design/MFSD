@@ -121,16 +121,16 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
   letter-spacing: 0.15em;
 }
 
-/* 人物照 · 右下角 · 封面 32% 寬(大 30%)· 無框 · 軟陰影 */
+/* 人物照 · 右下角 · 封面 40% 寬 · 無框 · 軟陰影 */
 .avatar{
   position: absolute;
   bottom: 10px;
   right: 10px;
-  width: 32%;
+  width: 40%;
   height: auto;
-  max-height: 60%;
+  max-height: 72%;
   object-fit: contain;
-  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.6))
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.65))
           drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
   pointer-events: none;
 }
@@ -250,13 +250,14 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
 <body>
 
 <div class="wrap">
-  <h1>// FEATURED_SPEAKERS · 輪播 preview</h1>
-  <h2>精選上台展示 · 無限往左輪播</h2>
+  <!-- 以下文字跟正式網站 index.html 一模一樣 · 讓你 preview 看到真實效果 -->
+  <h1>// FEATURED_SPEAKERS</h1>
+  <h2>精選上台展示 · <span style="color: var(--cyan)">審核中</span></h2>
   <p class="lead">
-    卡片一直往左跑 · 滑鼠移上去暫停 · 讓訪客慢慢看。
-    每張 card:封面主圖(1:1 letterbox)+ 人物照右下角(封面 32% 大 · 比上版大 30%)+ 名字 + 職稱(全顯)+ 專案 + Demo + 參考資料。
+    所有「我要上台展示 AI 作品」投稿都會進審核 · 主辦挑出 10 人在這裡公開。
+    送出投稿不代表入選 · 入選後我們會用你留的聯絡方式通知。
   </p>
-  <div class="count">精選名額 <span class="n">5 / 10</span> · 目前上架 5 位 · 滑鼠移到卡片會暫停</div>
+  <div class="count">精選名額 <span class="n">5 / 10</span> · <span style="color: var(--text-dim)">主辦精選後顯示</span></div>
 </div>
 
 <!-- 輪播本身跨出 wrap · 寬度跟整個 viewport 齊 -->
