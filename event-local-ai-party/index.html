@@ -865,82 +865,150 @@ section.block .body{
 }
 .spot-count .n{ color: var(--cyan); font-weight: 700; }
 
-.speaker-grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+/* ─────── 精選講者輪播 · 無限往左 ─────── */
+.speaker-carousel-wrap{
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
+  margin: 20px 0 10px;
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
 }
+.speaker-carousel-track{
+  display: flex;
+  gap: 24px;
+  width: fit-content;
+  animation: speaker-scroll 60s linear infinite;
+}
+.speaker-carousel-track:hover{ animation-play-state: paused; }
+@keyframes speaker-scroll{
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .speaker-carousel-track{ animation: none; }
+}
+/* 無人入選時 · track 空 · 不 render · 顯示 spot-empty */
+.speaker-carousel-wrap.empty{ display: none; }
+
+/* 精選講者卡 */
 .speaker-card{
+  width: 340px;
+  flex-shrink: 0;
   background: var(--bg-elev);
   border: 1px solid var(--line);
-  padding: 24px;
   position: relative;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
 }
-.speaker-card:hover { border-color: var(--cyan); }
+.speaker-card:hover{
+  border-color: var(--cyan);
+  transform: translateY(-4px);
+}
 .speaker-card .badge{
   position: absolute;
-  top: -1px; right: -1px;
+  top: 0; right: 0;
   background: var(--green);
   color: #000;
-  padding: 3px 10px;
+  padding: 4px 12px;
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
-  z-index: 2;
+  letter-spacing: 0.12em;
+  z-index: 3;
 }
+/* 封面主圖 1:1 letterbox */
 .speaker-card .cover{
-  margin: -24px -24px 16px;    /* 貼齊 card 邊 */
-  background: #000;
+  position: relative;
   aspect-ratio: 1 / 1;
+  background: #000;
   overflow: hidden;
 }
-.speaker-card .cover img{
+.speaker-card .cover > .cover-img{
   width: 100%; height: 100%;
-  object-fit: contain;         /* letterbox · 跟上傳時規則一致 */
+  object-fit: contain;
   display: block;
 }
+.speaker-card .cover.empty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0E0E18 0%, #1a1a2e 100%);
+}
+.speaker-card .cover.empty::after{
+  content: 'NO COVER';
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+}
+/* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影 */
+.speaker-card .avatar{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40%;
+  height: auto;
+  max-height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.65))
+          drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+.speaker-card .info{ padding: 18px 20px 20px; }
 .speaker-card .label{
   font-family: var(--mono);
   font-size: 11px;
   color: var(--text-dim);
-  margin-bottom: 10px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
 }
 .speaker-card .name{
   font-family: var(--sans);
   font-size: 22px;
   font-weight: 700;
   color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
   margin-bottom: 4px;
 }
 .speaker-card .title-line{
   font-family: var(--tc);
   font-size: 13px;
   color: var(--cyan);
-  margin-bottom: 16px;
-}
-.speaker-card .demo{
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--text-mid);
+  line-height: 1.6;
   margin-bottom: 14px;
+  word-wrap: break-word;
 }
-.speaker-card .demo .k{ color: var(--magenta); }
+.speaker-card .project{
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+.speaker-card .project .k{
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--magenta);
+  letter-spacing: 0.1em;
+  margin-right: 8px;
+}
 .speaker-card .desc{
   font-family: var(--tc);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-mid);
   line-height: 1.65;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .speaker-card .links{
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 .speaker-card .links a{
+  display: inline-block;
   font-family: var(--mono);
   font-size: 11px;
   color: var(--cyan);
@@ -948,18 +1016,56 @@ section.block .body{
   letter-spacing: 0.08em;
   border: 1px solid var(--line-hi);
   padding: 5px 10px;
+  text-decoration: none;
 }
 .speaker-card .links a:hover{ border-color: var(--cyan); background: var(--bg-card); }
 
+/* 無人入選的 placeholder */
 .spot-empty{
   background: var(--bg-elev);
   border: 1px dashed var(--line-hi);
-  padding: 60px 24px;
+  padding: 40px 24px;
   text-align: center;
   color: var(--text-mid);
   font-family: var(--mono);
+  margin: 20px 0 24px;
 }
+.spot-empty.hidden{ display: none; }
 .spot-empty .k{ color: var(--amber); display: block; margin-bottom: 10px; }
+
+/* 投稿 CTA · 永遠在 */
+.speaker-submit-cta{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 36px;
+}
+.speaker-submit-cta a{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid var(--magenta);
+  color: var(--magenta);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.speaker-submit-cta a:hover{
+  background: var(--magenta);
+  color: #fff;
+}
+.speaker-submit-note{
+  margin-top: 12px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: center;
+}
 
 /* ─────── AGENDA (terminal log) ─────── */
 .agenda{
@@ -2480,25 +2586,37 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       </div>
     </div>
     <p class="body">
-      <span lang="zh">所有「我要上台展示 AI 作品」投稿都會進審核 · 主辦挑出 10 人在這裡公開。
-      送出投稿不代表入選 · 入選後我們會用你留的聯絡方式通知。</span>
-      <span lang="en">All "I'll Demo My AI" submissions go through host review · 10 picked
-      shown here. Submission does NOT mean accepted · we'll contact you if selected.</span>
+      <span lang="zh">每場精選 <strong style="color: var(--cyan)">10 位</strong>現場 Demo · 名單會持續更新在這裡。入選者 email 通知 · 還<strong style="color: var(--green)">免費獲得晚上派對入場券</strong>。</span>
+      <span lang="en"><strong style="color: var(--cyan)">10 slots</strong> per event · list updates live here. Selected get an email · plus <strong style="color: var(--green)">free Afterparty entry</strong>.</span>
     </p>
+  </div>
 
-    <div class="speaker-grid" id="speaker-grid">
-      <!-- 這裡會由 JS 從 Sheet CSV 填充 · 空的時候顯示下面的 empty 狀態 -->
+  <!-- 輪播本身跨出 wrap · 寬度跟整個 viewport 齊 -->
+  <div class="speaker-carousel-wrap">
+    <div class="speaker-carousel-track" id="speaker-carousel-track">
+      <!-- 由 JS 從 CSV render + 複製一份達成無縫 loop -->
     </div>
+  </div>
 
+  <div class="wrap">
+    <!-- 等待審核中 placeholder(無人入選時顯示) -->
     <div class="spot-empty" id="spot-empty">
       <span class="k">[ <span lang="zh">等待審核中</span><span lang="en">AWAITING SELECTION</span> ]</span>
       <span lang="zh">主辦正在審核中 · 入選名單確定後會顯示在這裡。</span>
       <span lang="en">Host is reviewing · selected demos will appear here.</span>
-      <br /><br />
-      <a href="#" data-open-modal="speaker" style="color: var(--magenta)">
-        <span lang="zh">&gt; 投稿你的 Demo →</span>
-        <span lang="en">&gt; Submit your Demo →</span>
+    </div>
+
+    <!-- 投稿 CTA · 不管有沒有入選都在 -->
+    <div class="speaker-submit-cta">
+      <a href="#" data-open-modal="speaker">
+        <span lang="zh">&gt; 投稿你的 Demo</span>
+        <span lang="en">&gt; Submit your Demo</span>
+        <span>→</span>
       </a>
+      <div class="speaker-submit-note">
+        <span lang="zh">// 名額剩 <span id="spot-remaining">10</span> 位 · 入選者免費獲得晚上派對入場券</span>
+        <span lang="en">// <span id="spot-remaining-en">10</span> slots left · selected get free Afterparty entry</span>
+      </div>
     </div>
   </div>
 </section>
@@ -2931,8 +3049,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
         </div>
         <div class="field full">
           <label>
-            <span lang="zh">封面縮圖 · 建議 1000×1000px(PNG/JPG)</span>
-            <span lang="en">Cover thumbnail · recommended 1000×1000px (PNG/JPG)</span>
+            <span lang="zh">作品主圖 · 建議 1000×1000px(PNG/JPG)</span>
+            <span lang="en">Work cover · recommended 1000×1000px (PNG/JPG)</span>
           </label>
           <div class="cover-upload-row">
             <input type="file" id="cover-input" accept="image/png,image/jpeg" />
@@ -2949,6 +3067,27 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
             <span lang="en">// Auto-resized to 1000×1000 · letterboxed if not square · never distorted</span>
           </div>
           <input type="hidden" name="cover_image" id="cover-image-data" />
+        </div>
+        <div class="field full">
+          <label>
+            <span lang="zh">個人照 · 選填(建議去背 PNG · 會疊在主圖右下角)</span>
+            <span lang="en">Personal photo · optional (prefer transparent PNG · overlaid on cover)</span>
+          </label>
+          <div class="cover-upload-row">
+            <input type="file" id="avatar-input" accept="image/png,image/jpeg" />
+            <label for="avatar-input" class="cover-upload-btn">
+              <span lang="zh">&gt; 選擇照片</span><span lang="en">&gt; CHOOSE PHOTO</span>
+            </label>
+            <div class="cover-preview" id="avatar-preview">
+              <span class="cover-preview-hint" lang="zh">尚未選擇</span>
+              <span class="cover-preview-hint" lang="en">no image</span>
+            </div>
+          </div>
+          <div class="hint">
+            <span lang="zh">// PNG 去背會保留透明 · JPG 直接顯示 · 自動縮長邊到 800px · 不變形</span>
+            <span lang="en">// PNG transparency preserved · JPG as-is · long side resized to 800px · never distorted</span>
+          </div>
+          <input type="hidden" name="avatar_image" id="avatar-image-data" />
         </div>
         <div class="field full">
           <label><span lang="zh">備註 / 其他想說的</span><span lang="en">Notes / Anything else</span></label>
@@ -3753,13 +3892,12 @@ document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
   });
 })();
 
-/* ─────── Cover upload · 前端 resize 1000×1000 letterbox ─────── */
-(function initCoverUpload(){
-  const input = document.getElementById('cover-input');
-  const preview = document.getElementById('cover-preview');
-  const hidden = document.getElementById('cover-image-data');
+/* ─────── Cover + Avatar upload · 前端 resize ─────── */
+function wireImageUpload_(inputId, previewId, hiddenId, resizer) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  const hidden = document.getElementById(hiddenId);
   if (!input || !preview || !hidden) return;
-
   input.addEventListener('change', async (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
@@ -3770,87 +3908,145 @@ document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
     }
     try {
       preview.innerHTML = '<span class="cover-preview-hint">處理中...</span>';
-      const dataUrl = await resizeToSquare1000_(file);
+      const dataUrl = await resizer(file);
       hidden.value = dataUrl;
-      preview.innerHTML = `<img src="${dataUrl}" alt="cover preview" />`;
+      preview.innerHTML = `<img src="${dataUrl}" alt="preview" />`;
     } catch (err) {
       preview.innerHTML = '<span class="cover-preview-hint" style="color:var(--red)">處理失敗</span>';
       alert('圖片處理失敗:' + err.message);
       input.value = '';
     }
   });
-})();
+}
+wireImageUpload_('cover-input', 'cover-preview', 'cover-image-data', resizeToSquare1000_);
+wireImageUpload_('avatar-input', 'avatar-preview', 'avatar-image-data', resizeAvatarKeepAlpha_);
 
 async function resizeToSquare1000_(file) {
   const url = URL.createObjectURL(file);
   try {
-    const img = await new Promise((resolve, reject) => {
-      const i = new Image();
-      i.onload = () => resolve(i);
-      i.onerror = () => reject(new Error('圖片讀取失敗'));
-      i.src = url;
-    });
+    const img = await loadImageSrc_(url);
     const SIZE = 1000;
     const canvas = document.createElement('canvas');
     canvas.width = SIZE;
     canvas.height = SIZE;
     const ctx = canvas.getContext('2d');
-    // 黑底(letterbox 背景)
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, SIZE, SIZE);
-    // 等比縮:長邊 fit 1000
     const ratio = Math.min(SIZE / img.width, SIZE / img.height);
     const w = img.width * ratio;
     const h = img.height * ratio;
-    const dx = (SIZE - w) / 2;
-    const dy = (SIZE - h) / 2;
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(img, dx, dy, w, h);
-    // 存 JPEG q0.88(縮大小 · 不變形)
+    ctx.drawImage(img, (SIZE - w) / 2, (SIZE - h) / 2, w, h);
     return canvas.toDataURL('image/jpeg', 0.88);
   } finally {
     URL.revokeObjectURL(url);
   }
 }
 
-/* ─────── 精選講者 · 從 Sheet CSV 讀(cover + QUERY label row 要 skip) ─────── */
+/* Avatar · 長邊 fit 800px · 不 letterbox · 保留 PNG 透明 · JPG 存成 JPG */
+async function resizeAvatarKeepAlpha_(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImageSrc_(url);
+    const MAX = 800;
+    const ratio = Math.min(1, MAX / Math.max(img.width, img.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.width * ratio);
+    canvas.height = Math.round(img.height * ratio);
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    // 不填背景 · 保留 PNG 透明
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // PNG → PNG(保留 alpha)· JPG → JPG(減檔案大小)
+    const isPng = /^image\/png$/i.test(file.type);
+    return canvas.toDataURL(isPng ? 'image/png' : 'image/jpeg', 0.9);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function loadImageSrc_(url) {
+  return new Promise((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = () => reject(new Error('圖片讀取失敗'));
+    i.src = url;
+  });
+}
+
+/* ─────── 精選講者 · 從 Sheet CSV 讀 → 無限輪播 ─────── */
 async function loadFeaturedSpeakers() {
-  const grid = document.getElementById('speaker-grid');
+  const track = document.getElementById('speaker-carousel-track');
+  const wrap = document.querySelector('.speaker-carousel-wrap');
   const empty = document.getElementById('spot-empty');
-  if (!CONFIG.SPEAKERS_CSV_URL) return;
+  const nEl = document.querySelector('.spot-count .n');
+  const remEl = document.getElementById('spot-remaining');
+  const remElEn = document.getElementById('spot-remaining-en');
+  if (!CONFIG.SPEAKERS_CSV_URL || !track) {
+    // 沒設 CSV · 保留 empty state
+    return;
+  }
   try {
     const res = await fetch(CONFIG.SPEAKERS_CSV_URL, { cache: 'no-cache' });
     const csv = await res.text();
     const rows = parseCsv_(csv);
     const headers = rows.shift();
     const items = rows.map(r => Object.fromEntries(r.map((v, i) => [headers[i], v])));
-    // filter 真人入選(QUERY LABEL row 跟空 row 都會被濾掉)
     const featured = items.filter(s =>
       s.public_name
       && s.public_name !== 'public_name'
       && s.is_featured
       && String(s.is_featured).toUpperCase() === 'TRUE'
     );
-    if (!featured.length) return;
-    empty.style.display = 'none';
-    grid.innerHTML = featured.map(s => `
-      <article class="speaker-card">
-        <div class="badge">SELECTED</div>
-        ${s.cover_url ? `<div class="cover"><img src="${escapeAttr(s.cover_url)}" alt="${escapeAttr(s.public_name)}" loading="lazy" /></div>` : ''}
-        <div class="label">// FEATURED_SPEAKER</div>
-        <div class="name">${escapeHtml(s.public_name || '')}</div>
-        <div class="title-line">${escapeHtml(s.title_or_skill || '')}</div>
-        <div class="demo"><span class="k">PROJECT:</span> ${escapeHtml(s.project_name || '')}</div>
-        <div class="desc">${escapeHtml(s.demo_desc || '')}</div>
-        ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener">&gt; VIEW RESOURCE</a></div>` : ''}
-      </article>
-    `).join('');
-    const n = document.querySelector('.spot-count .n');
-    if (n) n.textContent = `${featured.length} / 10`;
+
+    // 更新計數
+    if (nEl)   nEl.textContent = `${featured.length} / 10`;
+    const left = Math.max(0, 10 - featured.length);
+    if (remEl)   remEl.textContent = String(left);
+    if (remElEn) remElEn.textContent = String(left);
+
+    if (!featured.length) {
+      // 無人入選:carousel 隱藏 · spot-empty 顯示
+      wrap.classList.add('empty');
+      return;
+    }
+    wrap.classList.remove('empty');
+    if (empty) empty.classList.add('hidden');
+
+    // Render cards · 複製一份達成無縫 loop
+    const html = featured.map(renderSpeakerCard_).join('');
+    track.innerHTML = html + featured.map(s => renderSpeakerCard_(s, true)).join('');
+    // 卡片數少的話 · animation 太快 · 適時調 duration
+    const totalCards = featured.length * 2;
+    track.style.animationDuration = Math.max(30, totalCards * 7) + 's';
   } catch (err) {
     console.warn('載入精選講者失敗:', err);
   }
+}
+
+function renderSpeakerCard_(s, dup) {
+  const coverHtml = s.cover_url
+    ? `<div class="cover"><img class="cover-img" src="${escapeAttr(s.cover_url)}" alt="${escapeAttr(s.public_name)}" loading="lazy" />
+       ${s.avatar_url ? `<img class="avatar" src="${escapeAttr(s.avatar_url)}" alt="" loading="lazy" />` : ''}
+       </div>`
+    : (s.avatar_url
+        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(s.avatar_url)}" alt="" loading="lazy" style="position:absolute;" /></div>`
+        : `<div class="cover empty"></div>`);
+  return `
+    <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
+      <div class="badge">SELECTED</div>
+      ${coverHtml}
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">${escapeHtml(s.public_name || '')}</div>
+        <div class="title-line">${escapeHtml(s.title_or_skill || '')}</div>
+        <div class="project"><span class="k">PROJECT</span>${escapeHtml(s.project_name || '')}</div>
+        <div class="desc">${escapeHtml(s.demo_desc || '')}</div>
+        ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener">↗ VIEW</a></div>` : ''}
+      </div>
+    </article>`;
 }
 /* 簡易 CSV parser · 支援 "..." quoted + 逗號 */
 function parseCsv_(text) {

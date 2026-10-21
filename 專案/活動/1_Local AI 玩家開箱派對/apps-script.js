@@ -31,7 +31,8 @@
  */
 
 const SHEET_ID    = '1dar-zrj1iZwtDuhsVYeA9Lgxam9EQ9MTWsKsZX9e2QY';
-const COVER_FOLDER_ID = '18727W5wG9fMAp8ajYgPAJL9wFCImosmP';   // 講者投稿封面縮圖存這
+const COVER_FOLDER_ID = '18727W5wG9fMAp8ajYgPAJL9wFCImosmP';   // 封面縮圖存這
+const AVATAR_FOLDER_ID = '18727W5wG9fMAp8ajYgPAJL9wFCImosmP'; // 個人照(先放同一個 Drive · 檔名 avatar_ 開頭區分)
 const EVENT_NAME  = 'Local AI 玩家開箱派對';
 const EVENT_DATE  = '2026/11/04(三)';
 const EVENT_TIME  = '14:00 – 20:00';
@@ -60,12 +61,13 @@ const SUBMIT_HEADERS = [
   '設備需求', '支援資料連結', '備註', '同意公開',
   '精選公開',      // 15 · Admin 在這格打 ✓ 就會上架到前台
   '入場券',        // 16 · 精選時自動生成 10 字碼
-  '封面圖',        // 17 · Drive 連結(前端上傳 · 自動縮到 1000×1000 letterbox)
+  '封面圖',        // 17 · Drive 連結(作品主圖 · 1000×1000 letterbox)
+  '個人照',        // 18 · Drive 連結(本人去背照 · 保留 PNG 透明)
   '寄信狀態', 'UA/備註'
 ];
 
 const FEATURED_HEADERS = [
-  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'cover_url', 'is_featured'
+  'public_name', 'title_or_skill', 'project_name', 'demo_desc', 'support_url', 'cover_url', 'avatar_url', 'is_featured'
 ];
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -81,11 +83,11 @@ function setupAll() {
   ensureSheet_(ss, SHEETS.FEATURED,   FEATURED_HEADERS, false);
 
   // 「公開精選」分頁加 formula · 自動從「講者投稿」撈「精選公開」=✓ 的
-  // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured Q=cover
+  // 投稿欄位 · B=public_name C=title F=project H=demo L=support_url O=featured Q=cover R=avatar
   const fs = ss.getSheetByName(SHEETS.FEATURED);
-  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:Q, "SELECT B, C, F, H, L, Q WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url', Q 'cover_url'", 0), "")`;
+  const formula = `=IFERROR(QUERY('${SHEETS.SUBMIT}'!B2:R, "SELECT B, C, F, H, L, Q, R WHERE O='✓' LABEL B 'public_name', C 'title_or_skill', F 'project_name', H 'demo_desc', L 'support_url', Q 'cover_url', R 'avatar_url'", 0), "")`;
   fs.getRange('A2').setFormula(formula);
-  fs.getRange('G2:G').setValue('TRUE');
+  fs.getRange('H2:H').setValue('TRUE');     // is_featured 從 G 移到 H(多一欄 avatar)
 
   Logger.log('✅ setupAll 完成 · 5 個分頁 ready');
   Logger.log('   接下來:1) 執行 setAdminPasscode("93489997") 設密碼');
@@ -266,9 +268,10 @@ function handleSpeakerSubmit_(data) {
     data.consent_public ? '✓' : '',
     '',                          // 15 精選公開
     '',                          // 16 入場券
-    '',                          // 17 封面圖 · 下面 upload 後更新
-    '寄信中',                    // 18 寄信狀態
-    (data._ua || '').slice(0, 200), // 19 UA
+    '',                          // 17 封面圖 · upload 後更新
+    '',                          // 18 個人照 · upload 後更新
+    '寄信中',                    // 19 寄信狀態
+    (data._ua || '').slice(0, 200), // 20 UA
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -281,10 +284,10 @@ function handleSpeakerSubmit_(data) {
     console.error('[SUBMIT_READBACK_FAIL] expected=' + data.public_name + ' got=' + written);
   }
 
-  // 封面圖上傳 Drive(前端已經 resize 到 1000×1000 letterbox · dataUrl 傳進來)
+  // 封面圖上傳 Drive(1000×1000 letterbox)
   if (data.cover_image) {
     try {
-      const coverUrl = uploadCoverToDrive_(data.cover_image, data.public_name, after);
+      const coverUrl = uploadImageToDrive_(data.cover_image, data.public_name, after, 'cover');
       sh.getRange(after, 17).setValue(coverUrl);
       console.log(`[COVER_UPLOAD] row=${after} url=${coverUrl}`);
     } catch (err) {
@@ -293,28 +296,45 @@ function handleSpeakerSubmit_(data) {
     }
   }
 
+  // 個人照上傳 Drive(保留 PNG 透明)
+  if (data.avatar_image) {
+    try {
+      const avatarUrl = uploadImageToDrive_(data.avatar_image, data.public_name, after, 'avatar');
+      sh.getRange(after, 18).setValue(avatarUrl);
+      console.log(`[AVATAR_UPLOAD] row=${after} url=${avatarUrl}`);
+    } catch (err) {
+      console.error('[AVATAR_UPLOAD_ERR]', err);
+      sh.getRange(after, 18).setValue('✗ ' + err.message);
+    }
+  }
+
   let mailStatus = '✓';
   try { sendSpeakerSubmitEmail_(data); }
   catch (err) { mailStatus = '✗ ' + err.message; console.error('[MAIL_SUBMIT_ERR]', err); }
-  sh.getRange(after, 18).setValue(mailStatus);
+  sh.getRange(after, 19).setValue(mailStatus);
 
   return json_({ ok: true, msg: '投稿已收到 · 等待主辦審核' });
 }
 
-/* ─────── 封面圖上傳到 Drive(前端 resize 完的 base64 dataURL) ─────── */
-function uploadCoverToDrive_(dataUrl, name, rowIndex) {
+/* ─────── 圖片上傳到 Drive(前端 resize 完的 base64 dataURL) ─────── */
+/* kind = 'cover' | 'avatar' · 決定資料夾跟檔名前綴 */
+function uploadImageToDrive_(dataUrl, name, rowIndex, kind) {
   const match = String(dataUrl).match(/^data:image\/(png|jpe?g);base64,([\s\S]+)$/i);
   if (!match) throw new Error('invalid image data url');
   const mime = match[1].toLowerCase() === 'png' ? 'image/png' : 'image/jpeg';
   const ext = mime === 'image/png' ? 'png' : 'jpg';
   const bytes = Utilities.base64Decode(match[2]);
   const safeName = String(name || 'speaker').replace(/[^\w一-鿿]/g, '_').substring(0, 24);
-  const filename = `${safeName}_row${rowIndex}_${Date.now()}.${ext}`;
+  const prefix = kind === 'avatar' ? 'avatar' : 'cover';
+  const filename = `${prefix}_${safeName}_row${rowIndex}_${Date.now()}.${ext}`;
   const blob = Utilities.newBlob(bytes, mime, filename);
-  const folder = DriveApp.getFolderById(COVER_FOLDER_ID);
+  const folderId = kind === 'avatar' ? AVATAR_FOLDER_ID : COVER_FOLDER_ID;
+  const folder = DriveApp.getFolderById(folderId);
   const file = folder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=w1000`;
+  // avatar 要原尺寸(保留透明)· cover 用 w1000
+  const sz = kind === 'avatar' ? 'w800' : 'w1000';
+  return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=${sz}`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -376,8 +396,9 @@ function handleAdminDashboard_(data) {
       format: r[8], duration: r[9],
       support_url: r[11], note: r[12],
       featured: r[14] === '✓' || r[14] === true,
-      ticket: r[15] || '',     // 入場券(10 字碼)· 精選後有
-      cover: r[16] || '',      // 封面圖 Drive URL
+      ticket: r[15] || '',     // 入場券
+      cover: r[16] || '',      // 封面圖
+      avatar: r[17] || '',     // 個人照
     })).reverse(),
   });
 }
