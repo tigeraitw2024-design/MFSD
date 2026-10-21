@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>精選講者卡 · preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --bg:        #07070C;
+  --bg-elev:   #0E0E18;
+  --bg-card:   #12121E;
+  --line:      #1F1F30;
+  --line-hi:   #2E2E48;
+  --text:      #E6E6F0;
+  --text-mid:  #8A8AA3;
+  --text-dim:  #4A4A62;
+  --cyan:      #00F5FF;
+  --magenta:   #FF2EA6;
+  --green:     #00FF88;
+  --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+  --sans: 'Space Grotesk', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --tc:   'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+}
+*{ box-sizing: border-box; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--tc);
+  font-size: 15px;
+  line-height: 1.7;
+  padding: 60px 24px 100px;
+}
+.wrap{ max-width: 1200px; margin: 0 auto; }
+
+h1{ font-family: var(--mono); font-size: 14px; color: var(--cyan); letter-spacing: 0.1em; margin: 0 0 8px; font-weight: 500; }
+h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10px; color: var(--text); }
+.lead{ color: var(--text-mid); margin-bottom: 40px; max-width: 720px; font-size: 15px; }
+.count{ font-family: var(--mono); font-size: 12px; color: var(--text-mid); margin-bottom: 24px; }
+.count .n{ color: var(--cyan); font-weight: 700; }
+
+/* ─────── Grid ─────── */
+.grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* ─────── Speaker card ─────── */
+.card{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 0;
+  position: relative;
+  transition: border-color 0.2s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+.card:hover{
+  border-color: var(--cyan);
+  transform: translateY(-4px);
+}
+.card .badge{
+  position: absolute;
+  top: 0; right: 0;
+  background: var(--green);
+  color: #000;
+  padding: 4px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  z-index: 3;
+}
+
+/* 封面主圖 1:1 letterbox */
+.cover{
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  overflow: hidden;
+}
+.cover > .cover-img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.cover.empty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0E0E18 0%, #1a1a2e 100%);
+}
+.cover.empty::after{
+  content: 'NO COVER';
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+}
+
+/* 人物照 · 右下角 · 封面 20% 大 · 無框 · 軟陰影 */
+.avatar{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 24%;             /* 封面寬度 24%(視覺上接近 20% · 補償 letterbox 可能的空白) */
+  height: auto;
+  max-height: 50%;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))
+          drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+
+/* 下方資訊 */
+.info{
+  padding: 18px 20px 20px;
+}
+.label{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.name{
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.title{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--cyan);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  /* 不截斷 · 全顯 · 自動換行 */
+  word-wrap: break-word;
+}
+.project{
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+.project .k{
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--magenta);
+  letter-spacing: 0.1em;
+  margin-right: 8px;
+}
+.desc{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.links a{
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--line-hi);
+  padding: 5px 10px;
+  text-decoration: none;
+  margin-right: 6px;
+}
+.links a:hover{ border-color: var(--cyan); background: var(--bg-card); }
+
+/* diff:長職稱範例 · 不會被 truncate */
+.notes{
+  margin-top: 60px;
+  padding: 20px;
+  background: var(--bg-elev);
+  border-left: 2px solid var(--amber, #FFB400);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.notes h4{ color: #FFB400; margin: 0 0 8px; font-size: 13px; letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>// FEATURED_SPEAKERS · preview</h1>
+  <h2>精選上台展示 · 卡片特效 preview</h2>
+  <p class="lead">
+    這是「全場有人入選」時 · 前台 Featured 區會長這樣。每張 card:封面主圖(1:1 letterbox)+ 人物照右下角(封面 20% 大、無框、軟陰影)+ 名字 + 職稱(全顯 · 不截)+ 專案 + Demo + 參考資料。
+    <br/><br/>
+    真人入選後 · 這一區的資料來自 Google Sheet 「公開精選」分頁 · 自動撈 is_featured=✓ 的講者。
+  </p>
+  <div class="count">精選名額 <span class="n">5 / 10</span> · 目前已上架 5 位</div>
+
+  <div class="grid">
+    <!-- 卡 1 · 真測試資料(主圖 + 人物) -->
+    <article class="card">
+      <div class="badge">SELECTED</div>
+      <div class="cover">
+        <img class="cover-img" src="主圖.png" alt="SDK 工作流" />
+        <img class="avatar" src="人物.png" alt="凱榮" />
+      </div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">張凱榮</div>
+        <div class="title">AppWorks 創業合夥人 · Local AI 玩家 · 自架 Server 玩家</div>
+        <div class="project"><span class="k">PROJECT</span>把 SDK 變成人人看得懂的 AI 工作流</div>
+        <div class="desc">AI Agent 讀程式、拆流程、做驗證 · 讓工程師的 SDK 轉成企業管得住的 n8n workflow · 現場跑一次完整流程。</div>
+        <div class="links">
+          <a href="#">↗ GitHub</a>
+          <a href="#">↗ 作品</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 卡 2 · 很長的職稱測試(不被截斷) -->
+    <article class="card">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty"></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">林京賢 LEO</div>
+        <div class="title">某科技公司資深 ML 工程師 · 製造業 AI 導入顧問 · AI Agent 系統架構師 · 10 年 Python 經驗 · 熟悉 llama.cpp / vLLM / Ollama / LangChain / vector DB</div>
+        <div class="project"><span class="k">PROJECT</span>自架 Llama 3.1 + RAG 財報問答系統</div>
+        <div class="desc">現場跑一個 RAG query 給大家看 · 展示延遲與回答品質 · 以及用 Mac Mini 架設整套 Server 的過程。</div>
+        <div class="links">
+          <a href="#">↗ 技術文章</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 卡 3 · 只有主圖 · 沒人物照 -->
+    <article class="card">
+      <div class="badge">SELECTED</div>
+      <div class="cover">
+        <img class="cover-img" src="主圖.png" alt="主圖" />
+      </div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">Robin</div>
+        <div class="title">獨立開發者</div>
+        <div class="project"><span class="k">PROJECT</span>ComfyUI 批量生圖自動化</div>
+        <div class="desc">用 ComfyUI + Python workflow · 批量產出 100 張商品圖 · Local GPU 完成 · 全程不上雲。</div>
+        <div class="links">
+          <a href="#">↗ Demo 影片</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 卡 4 · 只有人物照 · 沒主圖(主圖 fallback 用空 placeholder) -->
+    <article class="card">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty">
+        <img class="avatar" src="人物.png" alt="講者 4" style="position:absolute;" />
+      </div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">Alice Chen</div>
+        <div class="title">AI 新創 CTO · 曾經在 Google Research 工作</div>
+        <div class="project"><span class="k">PROJECT</span>端到端 agent framework</div>
+        <div class="desc">分享從 0 到 1 建一個 production-ready 的 AI agent 系統 · 踩過的坑跟解法。</div>
+      </div>
+    </article>
+
+    <!-- 卡 5 · 都沒圖 · 純文字 -->
+    <article class="card">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty"></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">老王</div>
+        <div class="title">退休工程師 · Server 自架 15 年</div>
+        <div class="project"><span class="k">PROJECT</span>家用 NAS 加上 Local LLM</div>
+        <div class="desc">用舊 PC + 二手顯卡 · 架一個全家可用的 Local AI 助理 · 費用壓在 2 萬以內。</div>
+      </div>
+    </article>
+  </div>
+
+  <div class="notes">
+    <h4>// Preview 說明</h4>
+    <strong>卡 1</strong> — 完整版(主圖 + 人物照 + 短職稱 + 2 個連結)· 典型期望狀態。<br />
+    <strong>卡 2</strong> — 職稱超長(10+ 項分 · 列 90 字) · 全顯不截斷。<br />
+    <strong>卡 3</strong> — 只有主圖沒個人照 · 封面乾淨 fit。<br />
+    <strong>卡 4</strong> — 只有個人照沒主圖 · fallback 深底 + 個人照疊在空封面。<br />
+    <strong>卡 5</strong> — 兩圖都沒 · fallback 「NO COVER」(cyberpunk 空封面)。<br />
+    <br/>
+    這份 preview 的 cover.png 跟 avatar.png 都是本地 relative 檔案 · 等 Apps Script 上線後 · 這兩個 URL 從 Google Sheet 的「公開精選」分頁的 cover_url 跟 avatar_url 欄位讀。
+  </div>
+</div>
+
+</body>
+</html>
