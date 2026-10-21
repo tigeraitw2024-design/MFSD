@@ -49,7 +49,9 @@ const SHEETS = {
 
 const SIGNUP_HEADERS = [
   '時間戳', '姓名', 'Email', '手機', '公司/單位', '職稱/身份',
-  '最想得到', '加報晚上派對', '寄信狀態', 'UA/備註'
+  '最想得到', '加報晚上派對',
+  '折抵券',        // 第 9 欄 · 加報派對時自動生成(DISC-XXXXXXXX)· 現場 QR 掃碼
+  '寄信狀態', 'UA/備註'
 ];
 
 const SUBMIT_HEADERS = [
@@ -159,6 +161,9 @@ function handleSignup_(data) {
   const bak = ss.getSheetByName(SHEETS.SIGNUP_BAK);
   if (!sh || !bak) throw new Error('分頁不存在 · 請先執行 setupAll()');
 
+  // 加報派對 → 自動生成 NT$100 折抵券代碼
+  const discountCode = (data.afterparty === 'yes') ? generateDiscountCode_() : '';
+
   const row = [
     new Date(),
     data.name || '',
@@ -168,26 +173,35 @@ function handleSignup_(data) {
     data.role || '',
     data.interest || '',
     data.afterparty === 'yes' ? '✓' : '',
-    '寄信中',
-    (data._ua || '').slice(0, 200),
+    discountCode,          // 第 9 欄 · 折抵券代碼
+    '寄信中',              // 第 10 欄 · 寄信狀態
+    (data._ua || '').slice(0, 200),  // 第 11 欄 · UA
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
   bak.appendRow(row);     // 鐵則 2:同時寫備份
 
   const after = sh.getLastRow();
-  const written = sh.getRange(after, 2).getValue();   // 讀回驗證
-  console.log(`[SIGNUP_DIAG] before=${before} after=${after} name=${data.name} readback=${written}`);
+  const written = sh.getRange(after, 2).getValue();
+  console.log(`[SIGNUP_DIAG] before=${before} after=${after} name=${data.name} readback=${written} discount=${discountCode}`);
   if (written !== data.name) {
     console.error('[SIGNUP_READBACK_FAIL] expected=' + data.name + ' got=' + written);
   }
 
   let mailStatus = '✓';
-  try { sendSignupConfirmEmail_(data); }
+  try { sendSignupConfirmEmail_({ ...data, discount_code: discountCode }); }
   catch (err) { mailStatus = '✗ ' + err.message; console.error('[MAIL_SIGNUP_ERR]', err); }
-  sh.getRange(after, 9).setValue(mailStatus);
+  sh.getRange(after, 10).setValue(mailStatus);
 
   return json_({ ok: true, msg: '報名成功 · 確認信已寄出' });
+}
+
+/* 折抵券代碼 · DISC-XXXXXXXX(8 字 · 不含易混淆的 0 1 I O) */
+function generateDiscountCode_() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let out = 'DISC-';
+  for (let i = 0; i < 8; i++) out += chars.charAt(Math.floor(Math.random() * chars.length));
+  return out;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -312,12 +326,13 @@ function handleAdminDashboard_(data) {
     sheet_url:        `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`,
     submit_sheet_url: `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit#gid=${submitSh.getSheetId()}`,
     signups: sData.map((r, i) => ({
-      row: i + 2,              // 1-indexed · header 佔 row 1
+      row: i + 2,
       ts: formatTs_(r[0]),
       name: r[1], email: r[2], phone: r[3],
       company: r[4], role: r[5], interest: r[6],
       afterparty: r[7] === '✓',
-    })).reverse(),             // 新的在上面
+      discount: r[8] || '',    // 折抵券代碼
+    })).reverse(),
     submits: tData.map((r, i) => ({
       row: i + 2,
       ts: formatTs_(r[0]),
@@ -434,17 +449,27 @@ function sendSignupConfirmEmail_(data) {
       ['日期', EVENT_DATE], ['時間', EVENT_TIME], ['地點', EVENT_VENUE],
       ['票價', '✓ 白天的實體活動 · 免費參加'],
     ]},
-    { title: '🎫 您的加報', rows: data.afterparty === 'yes' ? [
-      ['加報晚上派對', '✓ OOPS 晚上派對(18:00–20:00)'],
-      ['付款', '原價待 OOPS 公告 · 憑本報名可折抵 NT$100'],
-    ] : [
-      ['加報晚上派對', '未加報 · 只參加白天活動(如需加報請回信告知)'],
-    ]},
-    { title: '📝 行前提醒', rows: [
-      ['最終時間表', '活動前 1 週會寄 email 通知'],
-      ['任何問題', '直接回覆這封信件即可'],
-    ]},
   ];
+  if (data.afterparty === 'yes' && data.discount_code) {
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.discount_code)}&margin=12&bgcolor=12121E&color=FF2EA6&qzone=1`;
+    sections.push({ title: '🎫 您的派對折抵券', rows: [
+      ['QR Code',
+        `<img src="${qrUrl}" alt="折抵券 QR" width="200" height="200" style="display:block;border:1px solid #FF2EA6;padding:4px;background:#12121E;" />
+         <div style="margin-top:8px;color:#FF2EA6;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:1.5px;">${data.discount_code}</div>`],
+      ['使用方式', 'OOPS 晚上派對結帳時出示此 QR Code · 現折 <strong>NT$100</strong>'],
+      ['派對時間', '18:00–20:00 · 白天活動結束後接著'],
+      ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用 10 字代碼報身份'],
+    ]});
+  } else {
+    sections.push({ title: '🎫 晚上派對', rows: [
+      ['目前狀態', '未加報 · 只參加白天活動'],
+      ['想加報', '直接回信告知 · 我們幫您補發 NT$100 折抵券'],
+    ]});
+  }
+  sections.push({ title: '📝 行前提醒', rows: [
+    ['最終時間表', '活動前 1 週會寄 email 通知'],
+    ['任何問題', '直接回覆這封信件即可'],
+  ]});
   const html = buildHtmlEmail_({
     hero_tag: '報名確認',
     hero_title: EVENT_NAME,

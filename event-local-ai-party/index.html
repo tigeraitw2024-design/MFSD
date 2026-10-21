@@ -3211,6 +3211,7 @@ function renderAdminSignups(list) {
       <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')}</div>
       ${(r.company || r.role) ? `<div class="meta">${escapeHtmlA(r.company || '')} ${r.role ? '· ' + escapeHtmlA(r.role) : ''}</div>` : ''}
       ${r.interest ? `<div class="meta" style="color:var(--text-dim)">想得到:${escapeHtmlA(r.interest)}</div>` : ''}
+      ${r.discount ? `<div class="ticket" style="color:var(--magenta);border-color:var(--magenta)">🎫 ${escapeHtmlA(r.discount)}</div>` : ''}
     </div>
   `).join('') + '</div>';
 }
