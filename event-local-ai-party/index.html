@@ -962,7 +962,9 @@ section.block .body{
 }
 html[data-lang="zh"] .speaker-card .cover.empty::after{ content: '無封面'; letter-spacing: 0.08em; }
 html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
-/* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影 */
+/* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影
+ * mix-blend-mode: screen 讓黑底 JPEG 的黑色自動變透明 · 跟封面融合 ·
+ * 真的去背的 PNG 也不受影響(透明區本來就不是黑的) */
 .speaker-card .avatar{
   position: absolute;
   bottom: 10px;
@@ -974,6 +976,11 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.65))
           drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
   pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* PNG 已經去背 · 不需要 blend · 用 class 標記避開 */
+.speaker-card .avatar.is-png{
+  mix-blend-mode: normal;
 }
 .speaker-card .info{ padding: 18px 20px 20px; }
 .speaker-card .label{
@@ -4021,34 +4028,44 @@ async function resizeToSquare1000_(file) {
   }
 }
 
-/* Avatar · 長邊 320px · PNG 優先(保留透明) · 若 base64 超過 cell 限制 · fallback JPEG + 黑底 */
+/* 把 image 畫到指定長邊的 canvas · 保留 alpha */
+function drawToCanvas_(img, maxSide) {
+  const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(img.width * ratio);
+  c.height = Math.round(img.height * ratio);
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return c;
+}
+
+/* Avatar · PNG 優先保留透明 · 太大就逐步縮小尺寸再試 PNG · 絕不輕易轉 JPEG 失去透明 */
 async function resizeAvatarKeepAlpha_(file) {
   const url = URL.createObjectURL(file);
   const isPng = /^image\/png$/i.test(file.type);
   try {
     const img = await loadImageSrc_(url);
-    const MAX = 320;
-    const ratio = Math.min(1, MAX / Math.max(img.width, img.height));
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.round(img.width * ratio);
-    canvas.height = Math.round(img.height * ratio);
-    const ctx = canvas.getContext('2d');
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = 'high';
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     if (isPng) {
-      const d = canvas.toDataURL('image/png');
-      if (d.length <= CELL_MAX_CHARS) return d;
-      // PNG 太大 · fallback 黑底 JPEG(放棄透明 · 保證存得進去)
+      // 優先保留透明 · 從 320 一路試到 140 · 都盡量用 PNG
+      for (const size of [320, 280, 240, 200, 170, 140]) {
+        const c = drawToCanvas_(img, size);
+        const d = c.toDataURL('image/png');
+        if (d.length <= CELL_MAX_CHARS) return d;
+      }
+      // 真的太極端(很細緻的非去背 PNG) · 才 fallback 黑底 JPEG
+      const c = drawToCanvas_(img, 320);
       const bg = document.createElement('canvas');
-      bg.width = canvas.width; bg.height = canvas.height;
+      bg.width = c.width; bg.height = c.height;
       const bgCtx = bg.getContext('2d');
       bgCtx.fillStyle = '#000000';
       bgCtx.fillRect(0, 0, bg.width, bg.height);
-      bgCtx.drawImage(canvas, 0, 0);
+      bgCtx.drawImage(c, 0, 0);
       return compressJpegFit_(bg, CELL_MAX_CHARS);
     }
-    return compressJpegFit_(canvas, CELL_MAX_CHARS);
+    // JPG 本來就無透明 · 直接 JPEG
+    return compressJpegFit_(drawToCanvas_(img, 320), CELL_MAX_CHARS);
   } finally {
     URL.revokeObjectURL(url);
   }
@@ -4139,14 +4156,15 @@ function normalizeDriveUrl_(url) {
 function renderSpeakerCard_(s, dup) {
   const cover = normalizeDriveUrl_(s.cover_url);
   const avatar = normalizeDriveUrl_(s.avatar_url);
-  // onerror:圖片載不出來 → 把 cover 變 empty state · 不留壞圖
+  // PNG(真的去背)不要套 mix-blend-mode · JPEG(黑底)用 blend screen 把黑色變透明
+  const avatarClass = avatar.startsWith('data:image/png') ? 'avatar is-png' : 'avatar';
   const imgErr = "this.style.display='none';this.parentNode.classList.add('empty');";
   const coverHtml = cover
     ? `<div class="cover"><img class="cover-img" src="${escapeAttr(cover)}" alt="${escapeAttr(s.public_name)}" loading="lazy" onerror="${imgErr}" />
-       ${avatar ? `<img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
+       ${avatar ? `<img class="${avatarClass}" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
        </div>`
     : (avatar
-        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
+        ? `<div class="cover empty"><img class="${avatarClass}" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
         : `<div class="cover empty"></div>`);
   return `
     <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
