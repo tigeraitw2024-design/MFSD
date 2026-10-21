@@ -390,6 +390,25 @@ function fixAllDrivePerms() {
   Logger.log(`✅ ${ok} 個檔案設為 anyone_with_link · ${fail} 個失敗`);
 }
 
+/* ─────── 一鍵全套修復 ─────── */
+/* 執行這個就等於跑完:setupAll + migrateImageUrls + recoverImageUrlsFromDrive +
+ * fixAllDrivePerms + diagLatestSubmit · 90% 的 bug 都能一次搞定 */
+function masterFix() {
+  Logger.log('════ masterFix 開始 ════');
+  Logger.log('\n[1/5] setupAll · 確保 5 個分頁 + QUERY formula');
+  setupAll();
+  Logger.log('\n[2/5] migrateImageUrls · 把舊 URL 格式統一改成 uc?export=view');
+  migrateImageUrls();
+  Logger.log('\n[3/5] recoverImageUrlsFromDrive · 掃 Drive 補回空的 cover/avatar URL');
+  recoverImageUrlsFromDrive();
+  Logger.log('\n[4/5] fixAllDrivePerms · 確保 Drive 檔案都是 anyone_with_link');
+  fixAllDrivePerms();
+  Logger.log('\n[5/5] diagLatestSubmit · 列出最後一筆投稿狀態');
+  diagLatestSubmit();
+  Logger.log('\n════ masterFix 完成 ════');
+  Logger.log('接下來:等 5 分鐘讓 Google Sheet 的 CSV publish cache 更新 · 再 F5 活動頁');
+}
+
 /* 掃 Drive · 根據檔名的 rowN 自動把 URL 填回 Sheet 對應 row 的 cover / avatar 欄
  * 用來救「DriveApp 權限掉了 · col 17/18 寫 '✗ 存取遭拒'」的那筆投稿
  * 執行這個 function 時 Apps Script 會跳 OAuth · 點允許 → Drive scope 補回來 · 一舉兩得 */

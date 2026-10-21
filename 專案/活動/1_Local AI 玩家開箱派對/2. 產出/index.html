@@ -4053,7 +4053,9 @@ async function loadFeaturedSpeakers() {
     return;
   }
   try {
-    const res = await fetch(CONFIG.SPEAKERS_CSV_URL, { cache: 'no-cache' });
+    // 加 cache buster · 強制繞過 browser cache 跟 Google CDN cache
+    const csvUrl = CONFIG.SPEAKERS_CSV_URL + '&_t=' + Date.now();
+    const res = await fetch(csvUrl, { cache: 'no-store' });
     const csv = await res.text();
     const rows = parseCsv_(csv);
     const headers = rows.shift();
