@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>精選講者卡 · preview</title>
+<title>精選講者卡 · 輪播 preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
@@ -32,28 +32,47 @@ body{
   font-family: var(--tc);
   font-size: 15px;
   line-height: 1.7;
-  padding: 60px 24px 100px;
+  padding: 60px 0 100px;
+  overflow-x: hidden;
 }
-.wrap{ max-width: 1200px; margin: 0 auto; }
+.wrap{ max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
 h1{ font-family: var(--mono); font-size: 14px; color: var(--cyan); letter-spacing: 0.1em; margin: 0 0 8px; font-weight: 500; }
 h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10px; color: var(--text); }
-.lead{ color: var(--text-mid); margin-bottom: 40px; max-width: 720px; font-size: 15px; }
+.lead{ color: var(--text-mid); margin-bottom: 20px; max-width: 720px; font-size: 15px; }
 .count{ font-family: var(--mono); font-size: 12px; color: var(--text-mid); margin-bottom: 24px; }
 .count .n{ color: var(--cyan); font-weight: 700; }
 
-/* ─────── Grid ─────── */
-.grid{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+/* ─────── 輪播(無限往左) ─────── */
+.carousel-wrap{
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
+  /* 左右淡出 · 讓卡片進退看起來自然 */
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+.carousel-track{
+  display: flex;
   gap: 24px;
+  width: fit-content;
+  animation: scroll-left 60s linear infinite;
+}
+.carousel-track:hover{ animation-play-state: paused; }
+@keyframes scroll-left{
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }   /* 複製了一份 · 跑到一半剛好無縫接回 */
+}
+@media (prefers-reduced-motion: reduce){
+  .carousel-track{ animation: none; }
 }
 
 /* ─────── Speaker card ─────── */
 .card{
+  width: 340px;
+  flex-shrink: 0;
   background: var(--bg-elev);
   border: 1px solid var(--line);
-  padding: 0;
   position: relative;
   transition: border-color 0.2s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   overflow: hidden;
@@ -102,16 +121,16 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
   letter-spacing: 0.15em;
 }
 
-/* 人物照 · 右下角 · 封面 20% 大 · 無框 · 軟陰影 */
+/* 人物照 · 右下角 · 封面 32% 寬(大 30%)· 無框 · 軟陰影 */
 .avatar{
   position: absolute;
   bottom: 10px;
   right: 10px;
-  width: 24%;             /* 封面寬度 24%(視覺上接近 20% · 補償 letterbox 可能的空白) */
+  width: 32%;
   height: auto;
-  max-height: 50%;
+  max-height: 60%;
   object-fit: contain;
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.55))
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.6))
           drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
   pointer-events: none;
 }
@@ -142,7 +161,6 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
   color: var(--cyan);
   line-height: 1.6;
   margin-bottom: 14px;
-  /* 不截斷 · 全顯 · 自動換行 */
   word-wrap: break-word;
 }
 .project{
@@ -181,12 +199,46 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
 }
 .links a:hover{ border-color: var(--cyan); background: var(--bg-card); }
 
-/* diff:長職稱範例 · 不會被 truncate */
+/* 下方「投稿你的 Demo」按鈕 */
+.submit-cta{
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+.submit-cta a{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid var(--magenta);
+  color: var(--magenta);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.submit-cta a:hover{
+  background: var(--magenta);
+  color: #fff;
+}
+.submit-cta .note{
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
+/* 預覽說明 */
 .notes{
   margin-top: 60px;
   padding: 20px;
   background: var(--bg-elev);
-  border-left: 2px solid var(--amber, #FFB400);
+  border-left: 2px solid #FFB400;
   color: var(--text-mid);
   font-family: var(--mono);
   font-size: 12px;
@@ -198,17 +250,19 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
 <body>
 
 <div class="wrap">
-  <h1>// FEATURED_SPEAKERS · preview</h1>
-  <h2>精選上台展示 · 卡片特效 preview</h2>
+  <h1>// FEATURED_SPEAKERS · 輪播 preview</h1>
+  <h2>精選上台展示 · 無限往左輪播</h2>
   <p class="lead">
-    這是「全場有人入選」時 · 前台 Featured 區會長這樣。每張 card:封面主圖(1:1 letterbox)+ 人物照右下角(封面 20% 大、無框、軟陰影)+ 名字 + 職稱(全顯 · 不截)+ 專案 + Demo + 參考資料。
-    <br/><br/>
-    真人入選後 · 這一區的資料來自 Google Sheet 「公開精選」分頁 · 自動撈 is_featured=✓ 的講者。
+    卡片一直往左跑 · 滑鼠移上去暫停 · 讓訪客慢慢看。
+    每張 card:封面主圖(1:1 letterbox)+ 人物照右下角(封面 32% 大 · 比上版大 30%)+ 名字 + 職稱(全顯)+ 專案 + Demo + 參考資料。
   </p>
-  <div class="count">精選名額 <span class="n">5 / 10</span> · 目前已上架 5 位</div>
+  <div class="count">精選名額 <span class="n">5 / 10</span> · 目前上架 5 位 · 滑鼠移到卡片會暫停</div>
+</div>
 
-  <div class="grid">
-    <!-- 卡 1 · 真測試資料(主圖 + 人物) -->
+<!-- 輪播本身跨出 wrap · 寬度跟整個 viewport 齊 -->
+<div class="carousel-wrap">
+  <div class="carousel-track">
+    <!-- ─── 第一組(5 cards) ─── -->
     <article class="card">
       <div class="badge">SELECTED</div>
       <div class="cover">
@@ -221,14 +275,10 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
         <div class="title">AppWorks 創業合夥人 · Local AI 玩家 · 自架 Server 玩家</div>
         <div class="project"><span class="k">PROJECT</span>把 SDK 變成人人看得懂的 AI 工作流</div>
         <div class="desc">AI Agent 讀程式、拆流程、做驗證 · 讓工程師的 SDK 轉成企業管得住的 n8n workflow · 現場跑一次完整流程。</div>
-        <div class="links">
-          <a href="#">↗ GitHub</a>
-          <a href="#">↗ 作品</a>
-        </div>
+        <div class="links"><a href="#">↗ GitHub</a><a href="#">↗ 作品</a></div>
       </div>
     </article>
 
-    <!-- 卡 2 · 很長的職稱測試(不被截斷) -->
     <article class="card">
       <div class="badge">SELECTED</div>
       <div class="cover empty"></div>
@@ -238,13 +288,10 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
         <div class="title">某科技公司資深 ML 工程師 · 製造業 AI 導入顧問 · AI Agent 系統架構師 · 10 年 Python 經驗 · 熟悉 llama.cpp / vLLM / Ollama / LangChain / vector DB</div>
         <div class="project"><span class="k">PROJECT</span>自架 Llama 3.1 + RAG 財報問答系統</div>
         <div class="desc">現場跑一個 RAG query 給大家看 · 展示延遲與回答品質 · 以及用 Mac Mini 架設整套 Server 的過程。</div>
-        <div class="links">
-          <a href="#">↗ 技術文章</a>
-        </div>
+        <div class="links"><a href="#">↗ 技術文章</a></div>
       </div>
     </article>
 
-    <!-- 卡 3 · 只有主圖 · 沒人物照 -->
     <article class="card">
       <div class="badge">SELECTED</div>
       <div class="cover">
@@ -256,13 +303,10 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
         <div class="title">獨立開發者</div>
         <div class="project"><span class="k">PROJECT</span>ComfyUI 批量生圖自動化</div>
         <div class="desc">用 ComfyUI + Python workflow · 批量產出 100 張商品圖 · Local GPU 完成 · 全程不上雲。</div>
-        <div class="links">
-          <a href="#">↗ Demo 影片</a>
-        </div>
+        <div class="links"><a href="#">↗ Demo 影片</a></div>
       </div>
     </article>
 
-    <!-- 卡 4 · 只有人物照 · 沒主圖(主圖 fallback 用空 placeholder) -->
     <article class="card">
       <div class="badge">SELECTED</div>
       <div class="cover empty">
@@ -277,7 +321,6 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
       </div>
     </article>
 
-    <!-- 卡 5 · 都沒圖 · 純文字 -->
     <article class="card">
       <div class="badge">SELECTED</div>
       <div class="cover empty"></div>
@@ -289,17 +332,92 @@ h2{ font-family: var(--sans); font-size: 32px; font-weight: 700; margin: 0 0 10p
         <div class="desc">用舊 PC + 二手顯卡 · 架一個全家可用的 Local AI 助理 · 費用壓在 2 萬以內。</div>
       </div>
     </article>
+
+    <!-- ─── 第二組(複製 · 讓輪播無縫銜接) ─── -->
+    <article class="card" aria-hidden="true">
+      <div class="badge">SELECTED</div>
+      <div class="cover">
+        <img class="cover-img" src="主圖.png" alt="" />
+        <img class="avatar" src="人物.png" alt="" />
+      </div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">張凱榮</div>
+        <div class="title">AppWorks 創業合夥人 · Local AI 玩家 · 自架 Server 玩家</div>
+        <div class="project"><span class="k">PROJECT</span>把 SDK 變成人人看得懂的 AI 工作流</div>
+        <div class="desc">AI Agent 讀程式、拆流程、做驗證 · 讓工程師的 SDK 轉成企業管得住的 n8n workflow · 現場跑一次完整流程。</div>
+        <div class="links"><a href="#">↗ GitHub</a><a href="#">↗ 作品</a></div>
+      </div>
+    </article>
+    <article class="card" aria-hidden="true">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty"></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">林京賢 LEO</div>
+        <div class="title">某科技公司資深 ML 工程師 · 製造業 AI 導入顧問 · AI Agent 系統架構師 · 10 年 Python 經驗 · 熟悉 llama.cpp / vLLM / Ollama / LangChain / vector DB</div>
+        <div class="project"><span class="k">PROJECT</span>自架 Llama 3.1 + RAG 財報問答系統</div>
+        <div class="desc">現場跑一個 RAG query 給大家看 · 展示延遲與回答品質 · 以及用 Mac Mini 架設整套 Server 的過程。</div>
+        <div class="links"><a href="#">↗ 技術文章</a></div>
+      </div>
+    </article>
+    <article class="card" aria-hidden="true">
+      <div class="badge">SELECTED</div>
+      <div class="cover"><img class="cover-img" src="主圖.png" alt="" /></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">Robin</div>
+        <div class="title">獨立開發者</div>
+        <div class="project"><span class="k">PROJECT</span>ComfyUI 批量生圖自動化</div>
+        <div class="desc">用 ComfyUI + Python workflow · 批量產出 100 張商品圖 · Local GPU 完成 · 全程不上雲。</div>
+        <div class="links"><a href="#">↗ Demo 影片</a></div>
+      </div>
+    </article>
+    <article class="card" aria-hidden="true">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty"><img class="avatar" src="人物.png" alt="" style="position:absolute;" /></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">Alice Chen</div>
+        <div class="title">AI 新創 CTO · 曾經在 Google Research 工作</div>
+        <div class="project"><span class="k">PROJECT</span>端到端 agent framework</div>
+        <div class="desc">分享從 0 到 1 建一個 production-ready 的 AI agent 系統 · 踩過的坑跟解法。</div>
+      </div>
+    </article>
+    <article class="card" aria-hidden="true">
+      <div class="badge">SELECTED</div>
+      <div class="cover empty"></div>
+      <div class="info">
+        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="name">老王</div>
+        <div class="title">退休工程師 · Server 自架 15 年</div>
+        <div class="project"><span class="k">PROJECT</span>家用 NAS 加上 Local LLM</div>
+        <div class="desc">用舊 PC + 二手顯卡 · 架一個全家可用的 Local AI 助理 · 費用壓在 2 萬以內。</div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- 下方「投稿你的 Demo」按鈕 · 不管有沒有人入選都要在 -->
+  <div class="submit-cta">
+    <a href="#">
+      &gt; 投稿你的 Demo
+      <span>→</span>
+    </a>
+  </div>
+  <div class="submit-cta">
+    <span class="note">// 名額剩 5 位 · 入選者免費獲得晚上派對入場券</span>
   </div>
 
   <div class="notes">
     <h4>// Preview 說明</h4>
-    <strong>卡 1</strong> — 完整版(主圖 + 人物照 + 短職稱 + 2 個連結)· 典型期望狀態。<br />
-    <strong>卡 2</strong> — 職稱超長(10+ 項分 · 列 90 字) · 全顯不截斷。<br />
-    <strong>卡 3</strong> — 只有主圖沒個人照 · 封面乾淨 fit。<br />
-    <strong>卡 4</strong> — 只有個人照沒主圖 · fallback 深底 + 個人照疊在空封面。<br />
-    <strong>卡 5</strong> — 兩圖都沒 · fallback 「NO COVER」(cyberpunk 空封面)。<br />
-    <br/>
-    這份 preview 的 cover.png 跟 avatar.png 都是本地 relative 檔案 · 等 Apps Script 上線後 · 這兩個 URL 從 Google Sheet 的「公開精選」分頁的 cover_url 跟 avatar_url 欄位讀。
+    <strong>變更:</strong><br/>
+    1. 從 grid 改成無限往左輪播(10 cards = 原 5 複製一份 · 無縫 loop · 60 秒跑完一圈)<br/>
+    2. 滑鼠移到任一卡片 → 整個輪播**暫停**(animation-play-state: paused)· 看完移開繼續跑<br/>
+    3. 人物照大小 24% → 32%(放大 30%+)<br/>
+    4. 下方加「&gt; 投稿你的 Demo」按鈕(magenta border + hover 實心)<br/>
+    5. 不管有沒有入選者 · 這個 CTA 一直在
   </div>
 </div>
 
