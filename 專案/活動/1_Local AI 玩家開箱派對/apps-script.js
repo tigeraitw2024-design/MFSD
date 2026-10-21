@@ -112,10 +112,40 @@ function ensureSheet_(ss, name, headers, hidden) {
   }
 }
 
+/**
+ * 設定管理員密碼
+ * 兩種用法:
+ *   A. 直接在編輯器點「執行」 → 彈 Sheet 的 prompt 讓你輸入
+ *   B. 改成 setAdminPasscode('93489997') 執行 → 直接 set
+ * 密碼存在 PropertiesService · 不會在 Sheet · 不會在 code
+ */
 function setAdminPasscode(code) {
-  if (!code) throw new Error('請傳密碼 · 例:setAdminPasscode("93489997")');
+  if (!code) {
+    try {
+      const ui = SpreadsheetApp.getUi();
+      const res = ui.prompt('設定管理員密碼', '輸入新密碼(建議 6 字以上):', ui.ButtonSet.OK_CANCEL);
+      if (res.getSelectedButton() !== ui.Button.OK) {
+        Logger.log('取消 · 密碼沒變');
+        return;
+      }
+      code = res.getResponseText().trim();
+    } catch (err) {
+      throw new Error('無 UI · 請用 setAdminPasscode("你的密碼") 傳參執行 · 或先打開 Sheet 再執行這個函式');
+    }
+  }
+  if (!code) throw new Error('密碼不能是空的');
   PropertiesService.getScriptProperties().setProperty('ADMIN_PASSCODE', String(code));
-  Logger.log('✅ 密碼已設定(存在 PropertiesService · 不在 Sheet · 不在 code)');
+  Logger.log('✅ 密碼已設定 · 長度 ' + String(code).length + ' · 存 PropertiesService(不在 Sheet 不在 code)');
+}
+
+/* 查密碼是否已設定(除錯用 · 不回傳密碼本身) */
+function checkAdminPasscode() {
+  const v = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSCODE');
+  if (!v) {
+    Logger.log('❌ 密碼尚未設定 · 請執行 setAdminPasscode()');
+  } else {
+    Logger.log('✅ 已設定 · 長度 ' + v.length + ' 字');
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
