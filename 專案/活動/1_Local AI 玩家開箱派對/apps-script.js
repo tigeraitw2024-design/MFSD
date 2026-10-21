@@ -390,6 +390,38 @@ function fixAllDrivePerms() {
   Logger.log(`✅ ${ok} 個檔案設為 anyone_with_link · ${fail} 個失敗`);
 }
 
+/* 掃 Drive · 根據檔名的 rowN 自動把 URL 填回 Sheet 對應 row 的 cover / avatar 欄
+ * 用來救「DriveApp 權限掉了 · col 17/18 寫 '✗ 存取遭拒'」的那筆投稿
+ * 執行這個 function 時 Apps Script 會跳 OAuth · 點允許 → Drive scope 補回來 · 一舉兩得 */
+function recoverImageUrlsFromDrive() {
+  const folder = DriveApp.getFolderById(COVER_FOLDER_ID);
+  const files = folder.getFiles();
+  const ss = SpreadsheetApp.openById(SHEET_ID);
+  const sh = ss.getSheetByName(SHEETS.SUBMIT);
+  let fixed = 0;
+  while (files.hasNext()) {
+    const f = files.next();
+    const name = f.getName();
+    // 檔名格式:cover_XXX_rowN_TS.ext 或 avatar_XXX_rowN_TS.ext
+    const m = name.match(/^(cover|avatar)_.+_row(\d+)_/);
+    if (!m) continue;
+    const kind = m[1];
+    const row = Number(m[2]);
+    if (row < 2 || row > sh.getLastRow()) continue;
+    const col = kind === 'cover' ? 17 : 18;
+    const current = String(sh.getRange(row, col).getValue() || '');
+    // 只覆蓋空值 or 錯誤值(✗ 開頭)· 不動已有正常 URL 的
+    if (!current || current.startsWith('✗')) {
+      const url = `https://drive.google.com/uc?export=view&id=${f.getId()}`;
+      sh.getRange(row, col).setValue(url);
+      try { f.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW); } catch (e) {}
+      fixed++;
+      Logger.log(`✓ row ${row} ${kind}: ${name} → ${url}`);
+    }
+  }
+  Logger.log(`✅ 修了 ${fixed} 筆空的 cover/avatar URL · Drive 權限也已重新授權`);
+}
+
 /* 把「講者投稿」分頁所有舊的 drive.google.com/thumbnail?id=XXX 或 lh3.googleusercontent.com/d/XXX
  * URL 改成 drive.google.com/uc?export=view&id=XXX(最穩定) */
 function migrateImageUrls() {
