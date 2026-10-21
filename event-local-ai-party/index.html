@@ -955,12 +955,13 @@ section.block .body{
   background: linear-gradient(135deg, #0E0E18 0%, #1a1a2e 100%);
 }
 .speaker-card .cover.empty::after{
-  content: 'NO COVER';
   font-family: var(--mono);
   font-size: 11px;
   color: var(--text-dim);
   letter-spacing: 0.15em;
 }
+html[data-lang="zh"] .speaker-card .cover.empty::after{ content: '無封面'; letter-spacing: 0.08em; }
+html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
 /* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影 */
 .speaker-card .avatar{
   position: absolute;
@@ -4122,15 +4123,15 @@ function renderSpeakerCard_(s, dup) {
         : `<div class="cover empty"></div>`);
   return `
     <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
-      <div class="badge">SELECTED</div>
+      <div class="badge"><span lang="zh">已精選</span><span lang="en">SELECTED</span></div>
       ${coverHtml}
       <div class="info">
-        <div class="label">// FEATURED_SPEAKER</div>
+        <div class="label"><span lang="zh">// 精選講者</span><span lang="en">// FEATURED_SPEAKER</span></div>
         <div class="name">${escapeHtml(s.public_name || '')}</div>
         <div class="title-line">${escapeHtml(s.title_or_skill || '')}</div>
-        <div class="project"><span class="k">PROJECT</span>${escapeHtml(s.project_name || '')}</div>
+        <div class="project"><span class="k"><span lang="zh">專案</span><span lang="en">PROJECT</span></span>${escapeHtml(s.project_name || '')}</div>
         <div class="desc">${escapeHtml(s.demo_desc || '')}</div>
-        ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener">↗ VIEW</a></div>` : ''}
+        ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener"><span lang="zh">↗ 看作品</span><span lang="en">↗ VIEW</span></a></div>` : ''}
       </div>
     </article>`;
 }
