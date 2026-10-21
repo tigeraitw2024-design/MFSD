@@ -1045,8 +1045,8 @@ section.block .body{
   align-items: center;
   gap: 12px;
   background: transparent;
-  border: 1px solid var(--magenta);
-  color: var(--magenta);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
   font-family: var(--mono);
   font-size: 14px;
   font-weight: 700;
@@ -1056,8 +1056,8 @@ section.block .body{
   transition: background 0.15s, color 0.15s;
 }
 .speaker-submit-cta a:hover{
-  background: var(--magenta);
-  color: #fff;
+  background: var(--cyan);
+  color: #000;
 }
 .speaker-submit-note{
   margin-top: 12px;
@@ -2291,9 +2291,9 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 
     <p class="sub">
       <span lang="zh">
-        一場為 Local AI 玩家、Server 自架者、AI 工程落地實作者準備的開箱夜。<br />
+        <span style="white-space: nowrap;">一場為 Local AI 玩家、</span><span style="white-space: nowrap;">Server 自架者、</span><span style="white-space: nowrap;">AI 工程落地實作者</span><span style="white-space: nowrap;">準備的開箱夜。</span><br />
         <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS 晚上派對</span>。<br />
-        參加 Local AI 現場 · 或者 · 把你的作品搬上台。
+        <span style="white-space: nowrap;">參加 Local AI 現場</span> · 或者 · <span style="white-space: nowrap;">把你的作品搬上台。</span>
       </span>
       <span lang="en">
         A night built for Local AI enthusiasts, self-hosted Server builders,
@@ -2366,8 +2366,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
               <span lang="en">I'll Demo My AI</span>
             </span>
             <span class="desc">
-              <span lang="zh">你用 AI 做的東西都可以拿來跑 · 主辦精選 10 人。入選會寄 email 通知你 · 資料也會顯示在這頁的精選區 · <strong style="color: var(--green);">並免費獲得晚上派對入場券</strong>。</span>
-              <span lang="en">Anything you built with AI works. Host picks 10. If selected we'll email you · your info shows in the Featured block · <strong style="color: var(--green);">plus free Afterparty entry</strong>.</span>
+              <span lang="zh">你用 AI 做的東西都可以拿來跑 · 主辦精選 10 人。入選會寄 email 通知你 · 資料也會顯示在這頁的精選區 · <strong style="color: var(--green); white-space: nowrap;">並免費獲得晚上派對入場券</strong>。</span>
+              <span lang="en">Anything you built with AI works. Host picks 10. If selected we'll email you · your info shows in the Featured block · <strong style="color: var(--green); white-space: nowrap;">plus free Afterparty entry</strong>.</span>
             </span>
             <span class="arrow-row">
               <span><span lang="zh">送出你的 Demo</span><span lang="en">SUBMIT YOUR DEMO</span></span>
@@ -2586,8 +2586,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       </div>
     </div>
     <p class="body">
-      <span lang="zh">每場精選 <strong style="color: var(--cyan)">10 位</strong>現場 Demo · 名單會持續更新在這裡。入選者 email 通知 · 還<strong style="color: var(--green)">免費獲得晚上派對入場券</strong>。</span>
-      <span lang="en"><strong style="color: var(--cyan)">10 slots</strong> per event · list updates live here. Selected get an email · plus <strong style="color: var(--green)">free Afterparty entry</strong>.</span>
+      <span lang="zh">每場精選 <strong style="color: var(--cyan)">10 位</strong>現場 Demo · 名單會持續更新在這裡。入選者 email 通知 · 還<strong style="color: var(--green); white-space: nowrap;">免費獲得晚上派對入場券</strong>。</span>
+      <span lang="en"><strong style="color: var(--cyan)">10 slots</strong> per event · list updates live here. Selected get an email · plus <strong style="color: var(--green); white-space: nowrap;">free Afterparty entry</strong>.</span>
     </p>
   </div>
 
@@ -2614,8 +2614,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
         <span>→</span>
       </a>
       <div class="speaker-submit-note">
-        <span lang="zh">// 名額剩 <span id="spot-remaining">10</span> 位 · 入選者免費獲得晚上派對入場券</span>
-        <span lang="en">// <span id="spot-remaining-en">10</span> slots left · selected get free Afterparty entry</span>
+        <span lang="zh">// 名額剩 <span id="spot-remaining">10</span> 位 · <span style="white-space: nowrap;">入選者免費獲得晚上派對入場券</span></span>
+        <span lang="en">// <span id="spot-remaining-en">10</span> slots left · <span style="white-space: nowrap;">selected get free Afterparty entry</span></span>
       </div>
     </div>
   </div>
@@ -2848,7 +2848,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <span lang="en">Does submitting "I'll Demo My AI" mean I'm on stage?</span>
         </div>
         <div class="faq-a">
-          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 10 人。入選我們會用你留的 email 聯繫 · 入選者可免費獲得晚上派對入場券 · 未入選者資料不會公開展示。</span>
+          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 10 人。入選我們會用你留的 email 聯繫 · <span style="white-space: nowrap;">入選者可免費獲得晚上派對入場券</span> · 未入選者資料不會公開展示。</span>
           <span lang="en">No. All submissions enter host review · up to 3 selected. We'll email you if picked · non-selected submissions stay private.</span>
         </div>
       </div>
