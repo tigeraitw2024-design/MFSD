@@ -215,10 +215,13 @@ code, .mono { font-family: var(--mono); }
 .hero h1{
   font-family: var(--sans);
   font-weight: 700;
-  font-size: clamp(52px, 9.5vw, 128px);
+  font-size: clamp(68px, 12vw, 164px);
   line-height: 0.95;
   letter-spacing: -0.03em;
   margin-bottom: 10px;
+}
+@media (max-width: 820px){
+  .hero h1{ font-size: 18vw; }    /* mobile 滿版 · 90vw 剛好 fit "LOCAL AI" */
 }
 .hero h1 .en{
   display: block;
@@ -534,6 +537,136 @@ code, .mono { font-family: var(--mono); }
 }
 .prop-kiosk .prop-bubble .pointer::before{ left: -4px; }
 .prop-rack .prop-bubble .pointer::before{ right: -4px; }
+
+/* ─────── FLOOR HIGHLIGHT · 全場亮點 section ─────── */
+.highlight-stage{
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 50px;
+  align-items: center;
+  padding: 40px 0;
+  min-height: 540px;
+  position: relative;
+}
+@media (max-width: 820px){
+  .highlight-stage{
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 20px 0;
+    min-height: 0;
+  }
+}
+
+/* 兩邊照片 · 初始位置從外推進來 */
+.highlight-prop{
+  opacity: 0;
+  transition:
+    opacity 0.9s ease-out,
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.highlight-prop img{ display: block; width: 100%; height: auto; }
+.highlight-kiosk{
+  transform: translateX(-120px) scale(0.9);
+  filter: drop-shadow(0 0 40px rgba(255, 46, 166, 0.25));
+}
+.highlight-rack{
+  transform: translateX(120px) scale(0.9);
+  filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.3));
+}
+.highlight-stage.in-view .highlight-prop{
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+@media (max-width: 820px){
+  .highlight-kiosk, .highlight-rack{
+    max-width: 170px;
+    margin: 0 auto;
+    transform: translateY(30px);
+  }
+  .highlight-stage.in-view .highlight-prop{ transform: translateY(0); }
+}
+
+/* 中間字 */
+.highlight-center{
+  text-align: center;
+  position: relative;
+}
+.highlight-title{
+  margin-bottom: 18px;
+  display: block;
+}
+.glitch-text{
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  position: relative;
+}
+.glitch-text::before,
+.glitch-text::after{
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  color: var(--text);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.glitch-text::before{
+  color: var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  transform: translateX(-2px);
+  animation: glitch-top 3.5s infinite steps(1);
+}
+.glitch-text::after{
+  color: var(--magenta);
+  clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+  transform: translateX(2px);
+  animation: glitch-bot 2.8s infinite steps(1);
+}
+
+.highlight-sub{
+  font-family: var(--mono);
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+/* 跑數據 terminal · 中間下方 */
+.data-stream{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 14px 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  line-height: 1.55;
+  text-align: left;
+  height: 160px;
+  overflow: hidden;
+  position: relative;
+  mask-image: linear-gradient(to bottom, transparent 0, #000 15%, #000 85%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 15%, #000 85%, transparent 100%);
+}
+.data-stream .ds-line{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.85;
+  animation: ds-fade-in 0.3s;
+}
+.data-stream .ds-line .ds-method{ color: var(--cyan); }
+.data-stream .ds-line .ds-ok{ color: var(--green); }
+.data-stream .ds-line .ds-warn{ color: var(--amber); }
+.data-stream .ds-line .ds-dim{ color: var(--text-dim); }
+@keyframes ds-fade-in{
+  from { opacity: 0; transform: translateY(-4px); }
+}
 
 /* ─────── SECTION BASICS ─────── */
 section.block {
@@ -2204,10 +2337,45 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
   </div>
 </section>
 
+<!-- ═══════════════ FLOOR HIGHLIGHT · 全場亮點 ═══════════════ -->
+<section id="highlight" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">02 /</span>
+      <span lang="zh">// 全場亮點</span>
+      <span lang="en">// FLOOR_HIGHLIGHT</span>
+    </h2>
+
+    <div class="highlight-stage">
+      <!-- 左:廣告機從左滑入 -->
+      <div class="highlight-prop highlight-kiosk">
+        <img src="assets/kiosk.png" alt="廣告機" loading="lazy" />
+      </div>
+
+      <!-- 中:大字 + 副標 + 跑數據 -->
+      <div class="highlight-center">
+        <div class="highlight-title">
+          <span class="glitch-text" data-text="全場亮點" lang="zh">全場亮點</span>
+          <span class="glitch-text" data-text="FLOOR HIGHLIGHT" lang="en">FLOOR HIGHLIGHT</span>
+        </div>
+        <div class="highlight-sub">
+          <span lang="zh">現場掃描 · 領取免費使用 Token</span>
+          <span lang="en">Scan on-site · Get free Token access</span>
+        </div>
+        <div class="data-stream" id="data-stream" aria-hidden="true"></div>
+      </div>
+
+      <!-- 右:機櫃從右滑入 -->
+      <div class="highlight-prop highlight-rack">
+        <img src="assets/rack.png" alt="機櫃" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════════════ FEATURED SPEAKERS ═══════════════ -->
 <section id="speakers" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">02 /</span>
+    <h2><span class="num">03 /</span>
       <span lang="zh">// 精選講者</span>
       <span lang="en">// FEATURED_SPEAKERS</span>
     </h2>
@@ -2252,7 +2420,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ AGENDA ═══════════════ -->
 <section id="agenda" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">03 /</span>
+    <h2><span class="num">04 /</span>
       <span lang="zh">// 活動流程 · 2026.11.04</span>
       <span lang="en">// AGENDA · 2026.11.04</span>
     </h2>
@@ -2404,7 +2572,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ VENUE ═══════════════ -->
 <section id="venue" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">04 /</span>
+    <h2><span class="num">05 /</span>
       <span lang="zh">// 場地資訊</span>
       <span lang="en">// VENUE_INFO</span>
     </h2>
@@ -2453,7 +2621,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ FAQ ═══════════════ -->
 <section id="faq" class="block anchor">
   <div class="wrap">
-    <h2><span class="num">05 /</span> // FAQ</h2>
+    <h2><span class="num">06 /</span> // FAQ</h2>
     <h3 class="lead">
       <span lang="zh">常見問題</span>
       <span lang="en">Frequently Asked</span>
@@ -3072,6 +3240,75 @@ document.addEventListener('keydown', e => {
     }
     setInterval(tick, 6000);   // 慢節奏:6 秒換一條
   });
+})();
+
+/* ─────── FLOOR HIGHLIGHT · 兩邊照片 reveal + 中間跑數據 ─────── */
+(function initHighlight(){
+  const stage = document.querySelector('.highlight-stage');
+  if (!stage) return;
+  // Reveal on scroll
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          stage.classList.add('in-view');
+          io.unobserve(e.target);
+          startDataStream();   // 進畫面才開始跑 · 不然浪費 CPU
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(stage);
+  } else {
+    stage.classList.add('in-view');
+    startDataStream();
+  }
+
+  let streamStarted = false;
+  function startDataStream(){
+    if (streamStarted) return;
+    streamStarted = true;
+    const el = document.getElementById('data-stream');
+    if (!el) return;
+
+    const methods  = ['POST', 'GET', 'STREAM', 'EXCHANGE', 'INFER', 'EMBED', 'RETRIEVE'];
+    const paths    = ['/v1/token/mint', '/v1/completion', '/v1/embed', '/v1/stream', '/v1/model/load', '/v1/exchange/signal', '/v1/retrieve/doc', '/v1/kv/scan'];
+    const models   = ['llama-3.1-70b', 'qwen-2.5-32b', 'mistral-7b', 'phi-4', 'deepseek-v3'];
+    const hex = '0123456789ABCDEF';
+
+    function rand(a){ return a[Math.floor(Math.random() * a.length)]; }
+    function pad2(n){ return n < 10 ? '0' + n : '' + n; }
+    function timestamp(){
+      const d = new Date();
+      return `${pad2(d.getHours())}:${pad2(d.getMinutes())}:${pad2(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+    }
+    function id(n){
+      let s = '';
+      for (let i = 0; i < n; i++) s += hex.charAt(Math.floor(Math.random() * 16));
+      return s;
+    }
+    function genLine(){
+      const ok = Math.random() < 0.88;
+      const method = rand(methods);
+      const path = rand(paths);
+      const status = ok ? '200' : (Math.random() < 0.5 ? '429' : '503');
+      const statusClass = ok ? 'ds-ok' : 'ds-warn';
+      const latency = Math.floor(Math.random() * 220 + 20);
+      const model = Math.random() < 0.5 ? ` model=${rand(models)}` : '';
+      const tok = Math.floor(Math.random() * 2000 + 50);
+      const idstr = id(10);
+      return `<span class="ds-dim">[${timestamp()}]</span> <span class="ds-method">${method}</span> ${path} → <span class="${statusClass}">${status}</span> <span class="ds-dim">${latency}ms</span>${model} <span class="ds-dim">tok=${tok} id=${idstr}</span>`;
+    }
+    function tick(){
+      const line = document.createElement('div');
+      line.className = 'ds-line';
+      line.innerHTML = genLine();
+      el.appendChild(line);
+      while (el.children.length > 10) el.removeChild(el.firstChild);
+    }
+    // 立刻填 6 行 · 之後每 ~500ms 新增一行
+    for (let i = 0; i < 6; i++) tick();
+    setInterval(tick, 500 + Math.random() * 300);
+  }
 })();
 
 /* ─────── AGENDA scroll reveal · 每項獨立 trigger · 一個一個出 ─────── */
