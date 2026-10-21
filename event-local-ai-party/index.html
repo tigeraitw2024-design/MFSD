@@ -562,11 +562,14 @@ code, .mono { font-family: var(--mono); }
 .highlight-prop{
   opacity: 0;
   position: relative;
+  z-index: 2;
   cursor: default;
   transition:
     opacity 0.9s ease-out,
     transform 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
+/* hover 時整個 prop 浮到最上層 · 讓對話框蓋過中央文字跟 packet-flow */
+.highlight-prop:hover{ z-index: 50; }
 .highlight-prop img{ display: block; width: 100%; height: auto; }
 .highlight-kiosk{
   transform: translateX(-120px) scale(0.9);
@@ -603,7 +606,7 @@ code, .mono { font-family: var(--mono); }
 /* hover 時彈出的 cyberpunk 對話框 · 每次 hover 換一條 */
 .hl-bubble{
   position: absolute;
-  background: rgba(14, 14, 24, 0.95);
+  background: rgba(7, 7, 12, 0.98);
   padding: 12px 18px;
   font-family: var(--mono);
   font-size: 13px;
@@ -611,7 +614,8 @@ code, .mono { font-family: var(--mono); }
   border: 1px solid currentColor;
   opacity: 0;
   pointer-events: none;
-  z-index: 5;
+  z-index: 60;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
   transition:
     opacity 0.25s ease-out,
     transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
