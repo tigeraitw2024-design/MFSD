@@ -343,9 +343,9 @@ function uploadImageToDrive_(dataUrl, name, rowIndex, kind) {
   const folder = DriveApp.getFolderById(folderId);
   const file = folder.createFile(blob);
   file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-  // avatar 要原尺寸(保留透明)· cover 用 w1000
-  const sz = kind === 'avatar' ? 'w800' : 'w1000';
-  return `https://drive.google.com/thumbnail?id=${file.getId()}&sz=${sz}`;
+  // 用 lh3.googleusercontent.com 真正的 CDN · drive.google.com/thumbnail 這幾年前端 hotlink 常失敗
+  const sz = kind === 'avatar' ? 'w800' : 'w1200';
+  return `https://lh3.googleusercontent.com/d/${file.getId()}=${sz}`;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

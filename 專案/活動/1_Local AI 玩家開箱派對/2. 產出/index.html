@@ -896,6 +896,19 @@ section.block .body{
 }
 /* 無人入選時 · track 空 · 不 render · 顯示 spot-empty */
 .speaker-carousel-wrap.empty{ display: none; }
+/* 卡片數少於 5 時 · 不輪播 · 置中靜態顯示 · 取消 mask 邊緣淡出 */
+.speaker-carousel-wrap.static{
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+.speaker-carousel-wrap.static .speaker-carousel-track{
+  animation: none;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
 
 /* 精選講者卡 */
 .speaker-card{
@@ -4061,29 +4074,51 @@ async function loadFeaturedSpeakers() {
     if (!featured.length) {
       // 無人入選:carousel 隱藏 · spot-empty 顯示
       wrap.classList.add('empty');
+      wrap.classList.remove('static');
       return;
     }
     wrap.classList.remove('empty');
     if (empty) empty.classList.add('hidden');
 
-    // Render cards · 複製一份達成無縫 loop
-    const html = featured.map(renderSpeakerCard_).join('');
-    track.innerHTML = html + featured.map(s => renderSpeakerCard_(s, true)).join('');
-    // 卡片數少的話 · animation 太快 · 適時調 duration
-    const totalCards = featured.length * 2;
-    track.style.animationDuration = Math.max(30, totalCards * 7) + 's';
+    // 卡片數 < 5:不輪播 · 置中靜態顯示 · 不複製一份
+    // 卡片數 ≥ 5:啟動輪播 · render 兩份達成無縫 loop
+    const SCROLL_THRESHOLD = 5;
+    if (featured.length < SCROLL_THRESHOLD) {
+      wrap.classList.add('static');
+      track.innerHTML = featured.map(s => renderSpeakerCard_(s, false)).join('');
+      track.style.animationDuration = '';
+    } else {
+      wrap.classList.remove('static');
+      const html = featured.map(s => renderSpeakerCard_(s, false)).join('');
+      track.innerHTML = html + featured.map(s => renderSpeakerCard_(s, true)).join('');
+      const totalCards = featured.length * 2;
+      track.style.animationDuration = Math.max(30, totalCards * 7) + 's';
+    }
   } catch (err) {
     console.warn('載入精選講者失敗:', err);
   }
 }
 
+/* Google Drive 的 drive.google.com/thumbnail?id=XXX 現在前端 hotlink 常失敗 ·
+ * 轉成 lh3.googleusercontent.com/d/XXX=w1200 這個真正的 CDN URL */
+function normalizeDriveUrl_(url, size) {
+  if (!url) return '';
+  const m = String(url).match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://lh3.googleusercontent.com/d/${m[1] || m[2]}=w${size || 1200}`;
+  return url;
+}
+
 function renderSpeakerCard_(s, dup) {
-  const coverHtml = s.cover_url
-    ? `<div class="cover"><img class="cover-img" src="${escapeAttr(s.cover_url)}" alt="${escapeAttr(s.public_name)}" loading="lazy" />
-       ${s.avatar_url ? `<img class="avatar" src="${escapeAttr(s.avatar_url)}" alt="" loading="lazy" />` : ''}
+  const cover = normalizeDriveUrl_(s.cover_url, 1200);
+  const avatar = normalizeDriveUrl_(s.avatar_url, 800);
+  // onerror:圖片載不出來 → 把 cover 變 empty state · 不留壞圖
+  const imgErr = "this.style.display='none';this.parentNode.classList.add('empty');";
+  const coverHtml = cover
+    ? `<div class="cover"><img class="cover-img" src="${escapeAttr(cover)}" alt="${escapeAttr(s.public_name)}" loading="lazy" onerror="${imgErr}" />
+       ${avatar ? `<img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
        </div>`
-    : (s.avatar_url
-        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(s.avatar_url)}" alt="" loading="lazy" style="position:absolute;" /></div>`
+    : (avatar
+        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
         : `<div class="cover empty"></div>`);
   return `
     <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
