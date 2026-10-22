@@ -1551,12 +1551,15 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   opacity: 0.75;
   transition: opacity 0.2s;
 }
+/* Ai4 NEXT 原檔 LOGO 本身留白較多 · 視覺上看起來比別人小 · 單獨放大 */
+.partners-row .p img[alt="Ai4 NEXT"]{ max-height: 58px; }
 .partners-row .p:hover img{ opacity: 1; }
 /* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
 @media (max-width: 720px){
   .partners-row{ grid-template-columns: repeat(3, 1fr); }
   .partners-row .p{ padding: 14px 8px; min-height: 72px; }
   .partners-row .p img{ max-height: 36px; }
+  .partners-row .p img[alt="Ai4 NEXT"]{ max-height: 50px; }
 }
 @media (max-width: 420px){
   .partners-row{ grid-template-columns: repeat(2, 1fr); }
