@@ -963,8 +963,8 @@ section.block .body{
 html[data-lang="zh"] .speaker-card .cover.empty::after{ content: '無封面'; letter-spacing: 0.08em; }
 html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
 /* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影
- * mix-blend-mode: screen 讓黑底 JPEG 的黑色自動變透明 · 跟封面融合 ·
- * 真的去背的 PNG 也不受影響(透明區本來就不是黑的) */
+ * 不加 mix-blend-mode · 真人彩照會變半透明穿透(blend screen 的副作用) ·
+ * 請投稿人直接上傳去背 PNG · 顯示才乾淨 · 帶背景就會看到完整矩形 */
 .speaker-card .avatar{
   position: absolute;
   bottom: 10px;
@@ -976,11 +976,6 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.65))
           drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
   pointer-events: none;
-  mix-blend-mode: screen;
-}
-/* PNG 已經去背 · 不需要 blend · 用 class 標記避開 */
-.speaker-card .avatar.is-png{
-  mix-blend-mode: normal;
 }
 .speaker-card .info{ padding: 18px 20px 20px; }
 .speaker-card .label{
@@ -4165,15 +4160,13 @@ function normalizeDriveUrl_(url) {
 function renderSpeakerCard_(s, dup) {
   const cover = normalizeDriveUrl_(s.cover_url);
   const avatar = normalizeDriveUrl_(s.avatar_url);
-  // PNG(真的去背)不要套 mix-blend-mode · JPEG(黑底)用 blend screen 把黑色變透明
-  const avatarClass = avatar.startsWith('data:image/png') ? 'avatar is-png' : 'avatar';
   const imgErr = "this.style.display='none';this.parentNode.classList.add('empty');";
   const coverHtml = cover
     ? `<div class="cover"><img class="cover-img" src="${escapeAttr(cover)}" alt="${escapeAttr(s.public_name)}" loading="lazy" onerror="${imgErr}" />
-       ${avatar ? `<img class="${avatarClass}" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
+       ${avatar ? `<img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
        </div>`
     : (avatar
-        ? `<div class="cover empty"><img class="${avatarClass}" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
+        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
         : `<div class="cover empty"></div>`);
   return `
     <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
