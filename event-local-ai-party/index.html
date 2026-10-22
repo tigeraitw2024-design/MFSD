@@ -3420,20 +3420,18 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 })();
 
 /* ─────── I18N · 中英切換 ─────── */
+/* 不記憶 user 選擇 · 每次進來都是中文(預設 html data-lang="zh")·
+ * 要看英文的 user 自己按 EN 按鈕臨時切 · 關掉頁面就 reset 回中文 */
 function setLang(lang) {
   document.documentElement.setAttribute('data-lang', lang);
-  try { localStorage.setItem('lang', lang); } catch (e) {}
   document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'zh-Hant');
 }
 function toggleLang() {
   const cur = document.documentElement.getAttribute('data-lang') || 'zh';
   setLang(cur === 'zh' ? 'en' : 'zh');
 }
-// init from localStorage
-try {
-  const saved = localStorage.getItem('lang');
-  if (saved === 'en' || saved === 'zh') setLang(saved);
-} catch (e) {}
+/* 清掉舊版遺留在 user 瀏覽器的 lang 設定 · 保證預設回中文 */
+try { localStorage.removeItem('lang'); } catch (e) {}
 
 /* ─────── MODAL ─────── */
 function openModal(id) {
