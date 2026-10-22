@@ -3035,8 +3035,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <input type="email" name="email" required placeholder="you@example.com" />
         </div>
         <div class="field">
-          <label><span lang="zh">手機</span><span lang="en">Phone</span></label>
-          <input type="tel" name="phone" placeholder="0900 000 000" />
+          <label><span lang="zh">手機</span><span lang="en">Phone</span> <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="0900 000 000" />
         </div>
         <div class="field full">
           <label><span lang="zh">AI 專案 / 應用名稱</span><span lang="en">AI project / app name</span> <span class="req">*</span></label>
@@ -3051,8 +3051,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <textarea name="demo_desc" required placeholder="e.g. Run a live RAG query · show latency & answer quality ..."></textarea>
         </div>
         <div class="field">
-          <label><span lang="zh">展示形式</span><span lang="en">Demo format</span></label>
-          <select name="demo_format">
+          <label><span lang="zh">展示形式</span><span lang="en">Demo format</span> <span class="req">*</span></label>
+          <select name="demo_format" required>
             <option value=""><span lang="zh">請選擇</span></option>
             <option><span lang="zh">Live Demo(現場跑)</span></option>
             <option><span lang="zh">短講 + 投影片</span></option>
@@ -3061,8 +3061,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           </select>
         </div>
         <div class="field">
-          <label><span lang="zh">預計所需時間</span><span lang="en">Time needed</span></label>
-          <select name="duration">
+          <label><span lang="zh">預計所需時間</span><span lang="en">Time needed</span> <span class="req">*</span></label>
+          <select name="duration" required>
             <option value="">—</option>
             <option>5 min</option>
             <option>10 min</option>
@@ -3075,8 +3075,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <textarea name="requirements" placeholder="e.g. HDMI adapter · bringing own laptop · stable internet ..."></textarea>
         </div>
         <div class="field full">
-          <label><span lang="zh">支援資料連結(PDF / GitHub / 影片)</span><span lang="en">Reference link (PDF / GitHub / video)</span></label>
-          <input type="url" name="support_url" placeholder="https://..." />
+          <label><span lang="zh">支援資料連結(PDF / GitHub / 影片)</span><span lang="en">Reference link (PDF / GitHub / video)</span> <span class="req">*</span></label>
+          <input type="url" name="support_url" required placeholder="https://..." />
           <div class="hint">
             <span lang="zh">// 可留 1 個主要連結 · 多個連結請分行放在備註</span>
             <span lang="en">// 1 main link · put extras in the note field</span>
@@ -3086,6 +3086,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <label>
             <span lang="zh">作品主圖 · 建議 1000×1000px(PNG/JPG)</span>
             <span lang="en">Work cover · recommended 1000×1000px (PNG/JPG)</span>
+            <span class="req">*</span>
           </label>
           <div class="cover-upload-row">
             <input type="file" id="cover-input" accept="image/png,image/jpeg" />
@@ -3221,16 +3222,16 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           <input type="tel" name="phone" required placeholder="0900 000 000" />
         </div>
         <div class="field">
-          <label><span lang="zh">公司 / 單位</span><span lang="en">Company / Org</span></label>
-          <input type="text" name="company" placeholder="optional" />
+          <label><span lang="zh">公司 / 單位</span><span lang="en">Company / Org</span> <span class="req">*</span></label>
+          <input type="text" name="company" required placeholder="e.g. TigerAI / 自己玩" />
         </div>
         <div class="field">
-          <label><span lang="zh">職稱 / 身份</span><span lang="en">Title / Role</span></label>
-          <input type="text" name="role" placeholder="e.g. Engineer / Founder / Student" />
+          <label><span lang="zh">職稱 / 身份</span><span lang="en">Title / Role</span> <span class="req">*</span></label>
+          <input type="text" name="role" required placeholder="e.g. Engineer / Founder / Student" />
         </div>
         <div class="field">
-          <label><span lang="zh">最想在現場看到 / 得到的?</span><span lang="en">What do you most want from this?</span></label>
-          <select name="interest">
+          <label><span lang="zh">最想在現場看到 / 得到的?</span><span lang="en">What do you most want from this?</span> <span class="req">*</span></label>
+          <select name="interest" required>
             <option value="">—</option>
             <option><span lang="zh">看別人的 Local AI 實作 / See others' Local AI builds</span></option>
             <option><span lang="zh">找自架 Server 的硬體方案 / Hardware for self-hosted Server</span></option>
@@ -3726,6 +3727,14 @@ async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 30
 document.getElementById('speaker-form')?.addEventListener('submit', e => {
   e.preventDefault();
   const status = document.getElementById('speaker-status');
+  // 作品主圖是 hidden input · html5 required 不生效 · 手動檢查
+  const coverData = document.getElementById('cover-image-data')?.value || '';
+  if (!coverData.startsWith('data:image/')) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 請上傳作品主圖 · 這是必填項';
+    document.getElementById('cover-input')?.focus();
+    return;
+  }
   submitForm(e.target, 'speaker_submit', status,
     '[ OK ] 投稿已收到 · 等待主辦審核 · 入選會以 email 聯繫');
 });
