@@ -1530,7 +1530,7 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
 }
 .partners-row{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -1538,20 +1538,29 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
 }
 .partners-row .p{
   background: var(--bg-elev);
-  padding: 32px 20px;
+  padding: 18px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 110px;
+  min-height: 90px;
 }
 .partners-row .p img{
   max-width: 100%;
-  max-height: 50px;
+  max-height: 42px;
   filter: brightness(0) invert(1);
   opacity: 0.75;
   transition: opacity 0.2s;
 }
 .partners-row .p:hover img{ opacity: 1; }
+/* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
+@media (max-width: 720px){
+  .partners-row{ grid-template-columns: repeat(3, 1fr); }
+  .partners-row .p{ padding: 14px 8px; min-height: 72px; }
+  .partners-row .p img{ max-height: 36px; }
+}
+@media (max-width: 420px){
+  .partners-row{ grid-template-columns: repeat(2, 1fr); }
+}
 
 /* ─────── FOOTER ─────── */
 footer{
@@ -2926,6 +2935,8 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
       <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
       <div class="p"><img src="assets/無界聯盟.webp" alt="無界聯盟" /></div>
+      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
+      <div class="p"><img src="assets/vbim LOGO.png" alt="vbim" /></div>
     </div>
   </div>
 </section>
@@ -2942,7 +2953,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
         <span lang="zh">
           &gt; powered_by: 虎智科技 TigerAI<br />
-          &gt; in_collab: OOPS × TUL × 無界聯盟
+          &gt; in_collab: OOPS × TUL × 無界聯盟 × Ai4 NEXT × vbim
         </span>
         <span lang="en">
           &gt; powered_by: TigerAI<br />
