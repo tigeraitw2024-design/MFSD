@@ -154,8 +154,8 @@ code, .mono { font-family: var(--mono); }
   gap: 14px;
 }
 .topbar .brand-pair img{
-  height: 22px;
-  max-width: 130px;
+  height: 33px;
+  max-width: 190px;
   object-fit: contain;
   filter: brightness(0) invert(1);
   opacity: 0.9;
@@ -163,13 +163,14 @@ code, .mono { font-family: var(--mono); }
 .topbar .brand-pair .brand-x{
   color: var(--cyan);
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 600;
   opacity: 0.55;
 }
 @media (max-width: 720px){
-  .topbar .brand-pair img{ height: 18px; max-width: 100px; }
+  .topbar .brand-pair img{ height: 26px; max-width: 140px; }
   .topbar .brand-pair{ gap: 10px; }
+  .topbar .brand-pair .brand-x{ font-size: 18px; }
 }
 .topbar .term{
   color: var(--text-mid);
@@ -1575,12 +1576,15 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   opacity: 0.75;
   transition: opacity 0.2s;
 }
+/* 第 6 個協辦 LOGO 原檔外圍留白較多 · 看起來偏小 · 單獨放大視覺平衡 */
+.partners-row .p img[alt="協辦夥伴"]{ max-height: 62px; }
 .partners-row .p:hover img{ opacity: 1; }
 /* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
 @media (max-width: 720px){
   .partners-row{ grid-template-columns: repeat(3, 1fr); }
   .partners-row .p{ padding: 14px 8px; min-height: 72px; }
   .partners-row .p img{ max-height: 36px; }
+  .partners-row .p img[alt="協辦夥伴"]{ max-height: 54px; }
 }
 @media (max-width: 420px){
   .partners-row{ grid-template-columns: repeat(2, 1fr); }
