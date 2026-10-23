@@ -1,0 +1,4241 @@
+<!doctype html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>LOCAL AI 玩家開箱派對 · 2026.11.04 · 虎智科技</title>
+<meta name="description" content="2026/11/04 台北茹曦酒店 15F · Local AI 玩家案例 × Server 體驗 × Afterparty。想上台展示 AI 專案 or 來看最硬核的本地 AI 現場 · 兩個入口直接進。" />
+<meta property="og:title" content="LOCAL AI 玩家開箱派對 · 2026.11.04" />
+<meta property="og:description" content="Local AI 玩家案例 × Server 體驗 × OOPS Afterparty。11/04 台北茹曦酒店 15F。" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="https://mfsd.pages.dev/event-local-ai-party/assets/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://mfsd.pages.dev/event-local-ai-party/" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+
+<!-- canvas-confetti · 全站點擊 + 送出表單時觸發彩屑 -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+
+<style>
+/* ─────── TOKENS ─────── */
+:root{
+  --bg:         #07070C;
+  --bg-elev:    #0E0E18;
+  --bg-card:    #12121E;
+  --line:       #1F1F30;
+  --line-hi:    #2E2E48;
+
+  --text:       #E6E6F0;
+  --text-mid:   #8A8AA3;
+  --text-dim:   #4A4A62;
+
+  --cyan:       #00F5FF;
+  --magenta:    #FF2EA6;
+  --purple:     #9D4EDD;
+  --green:      #00FF88;
+  --amber:      #FFB400;
+  --red:        #FF3860;
+
+  --accent:     var(--cyan);
+  --accent-2:   var(--magenta);
+
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
+  --sans: 'Space Grotesk', 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --tc:   'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+
+  --maxw: 1200px;
+  --radius: 2px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* 細版 scrollbar · 拿掉上下箭頭 */
+html{ scrollbar-width: thin; scrollbar-color: var(--line-hi) transparent; }
+::-webkit-scrollbar{ width: 6px; height: 6px; }
+::-webkit-scrollbar-track{ background: transparent; }
+::-webkit-scrollbar-thumb{ background: var(--line-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover{ background: var(--cyan); }
+::-webkit-scrollbar-button{ display: none; }
+::-webkit-scrollbar-corner{ background: transparent; }
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--tc);
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* grid 背景 */
+body::before{
+  content:'';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(0, 245, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 245, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at top, black 20%, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+/* scan lines */
+body::after{
+  content:'';
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent 0,
+    transparent 3px,
+    rgba(255,255,255,0.012) 3px,
+    rgba(255,255,255,0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+main, nav, footer, section { position: relative; z-index: 2; }
+
+a { color: var(--cyan); text-decoration: none; }
+a:hover { color: var(--magenta); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, h4 {
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--text);
+}
+
+code, .mono { font-family: var(--mono); }
+
+/* ─────── NAV ─────── */
+.topbar{
+  position: sticky;
+  top: 0;
+  background: rgba(7,7,12,0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  z-index: 50;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.topbar .wrap{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+/* top bar 主辦 × 合辦 LOGO 對(取代原本的 ./派對程式.sh terminal 字串)*/
+.topbar .brand-pair{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.topbar .brand-pair img{
+  height: 33px;
+  max-width: 190px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+/* Ai4 NEXT 版 top bar · LOGO 稍微放大 · 跟虎智 LOGO 視覺平衡(原檔 content 比例較小) */
+.topbar .brand-pair.ai4next-brand img{ height: 46px; max-width: 240px; }
+@media (max-width: 720px){
+  .topbar .brand-pair.ai4next-brand img{ height: 36px; max-width: 180px; }
+}
+.topbar .brand-pair .brand-x{
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 600;
+  opacity: 0.55;
+}
+@media (max-width: 720px){
+  .topbar .brand-pair img{ height: 26px; max-width: 140px; }
+  .topbar .brand-pair{ gap: 10px; }
+  .topbar .brand-pair .brand-x{ font-size: 18px; }
+}
+.topbar .term{
+  color: var(--text-mid);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.topbar .term .prompt{ color: var(--green); }
+.topbar .term .cursor {
+  display: inline-block;
+  width: 7px; height: 12px;
+  background: var(--green);
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.topbar nav{ display: flex; gap: 20px; }
+.topbar nav a{
+  color: var(--text-mid);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.topbar nav a:hover{ color: var(--cyan); }
+@media (max-width: 720px){
+  .topbar .term { font-size: 11px; }
+  .topbar nav { display: none; }
+}
+
+/* ─────── HERO ─────── */
+.hero{
+  padding: 80px 0 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before{
+  content:'';
+  position: absolute;
+  top: 10%; left: 50%;
+  width: 800px; height: 800px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(0,245,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.eyebrow{
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow .dot{
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.2); }
+}
+
+.hero h1{
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(68px, 12vw, 164px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+@media (max-width: 820px){
+  .hero h1{ font-size: 18vw; }    /* mobile 滿版 · 90vw 剛好 fit "LOCAL AI" */
+}
+.hero h1 .en{
+  display: block;
+  color: var(--text);
+  position: relative;
+  white-space: nowrap;    /* LOCAL AI 永遠不斷行 */
+}
+.hero h1 .en::before,
+.hero h1 .en::after{
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+  color: var(--text);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.hero h1 .en::before{
+  color: var(--cyan);
+  animation: glitch-top 3.5s infinite steps(1);
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  transform: translateX(-2px);
+}
+.hero h1 .en::after{
+  color: var(--magenta);
+  animation: glitch-bot 2.8s infinite steps(1);
+  clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+  transform: translateX(2px);
+}
+@keyframes glitch-top {
+  0%, 94%, 100% { transform: translateX(-2px); }
+  95% { transform: translateX(-4px) translateY(-1px); }
+  96% { transform: translateX(0px); }
+  97% { transform: translateX(-3px); }
+}
+@keyframes glitch-bot {
+  0%, 91%, 100% { transform: translateX(2px); }
+  93% { transform: translateX(4px) translateY(1px); }
+  94% { transform: translateX(0px); }
+  95% { transform: translateX(3px); }
+}
+.hero h1 .tc{
+  display: block;
+  font-family: var(--tc);
+  font-size: clamp(26px, 4.5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-top: 8px;
+}
+
+.hero .sub{
+  font-family: var(--mono);
+  color: var(--text-mid);
+  font-size: clamp(14px, 1.6vw, 18px);
+  margin-top: 28px;
+  margin-bottom: 44px;
+  max-width: 720px;
+  line-height: 1.6;
+}
+.hero .sub .accent { color: var(--cyan); }
+
+.meta-strip{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 48px;
+}
+.meta-strip .cell{
+  background: var(--bg-elev);
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.meta-strip .label{
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.meta-strip .val{
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--cyan);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.meta-strip .val-sub {
+  font-family: var(--tc);
+  font-size: 12px;
+  color: var(--text-mid);
+  margin-top: 2px;
+}
+@media (max-width: 820px){ .meta-strip{ grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px){ .meta-strip{ grid-template-columns: 1fr; } }
+
+/* CTA PAIR */
+.cta-pair{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 760px;
+}
+@media (max-width: 640px){ .cta-pair{ grid-template-columns: 1fr; } }
+.cta{
+  display: block;
+  padding: 28px 24px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  position: relative;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+  overflow: hidden;
+}
+.cta::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.cta:hover{
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+  background: var(--bg-card);
+}
+.cta:hover::before{ transform: scaleX(1); }
+.cta.magenta::before{ background: var(--magenta); }
+.cta.magenta:hover{ border-color: var(--magenta); }
+
+.cta .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.cta.magenta .tag { color: var(--magenta); }
+.cta .title{
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.cta .desc{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--text-mid);
+}
+.cta .arrow{
+  position: absolute;
+  top: 24px; right: 24px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 20px;
+  transition: transform 0.2s, color 0.2s;
+}
+.cta:hover .arrow{ color: var(--cyan); transform: translateX(4px); }
+.cta.magenta:hover .arrow{ color: var(--magenta); }
+
+/* ─────── HERO PROPS · 廣告機 + 機櫃 放在 Hero 右半邊(absolute) · 跟文字共存 ─────── */
+@media (min-width: 1181px){
+  .hero .wrap{ position: relative; }
+  /* 文字限左半邊 · 右半邊空出來給 props */
+  .hero .wrap > .eyebrow,
+  .hero .wrap > h1,
+  .hero .wrap > .sub,
+  .hero .wrap > .meta-strip{
+    max-width: 55%;
+  }
+  .hero-props{
+    position: absolute;
+    top: 60px;
+    right: 24px;
+    width: 420px;
+    pointer-events: none;
+    z-index: 3;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;    /* 兩個底部對齊 */
+    gap: 24px;
+    transform: scale(0.9);     /* 整組縮 10% */
+    transform-origin: top right;
+  }
+}
+@media (max-width: 1180px){ .hero-props{ display: none; } }
+
+.prop{
+  position: relative;
+  pointer-events: auto;
+}
+.prop img{
+  display: block;
+  height: auto;
+  width: 100%;
+}
+/* 廣告機 · 直立 · 淡粉紅發光(10%)· 放大 20%(160 → 192) */
+.prop-kiosk{
+  width: 192px;
+  filter: drop-shadow(0 0 40px rgba(255, 46, 166, 0.1));
+}
+/* 機櫃 · 淡藍色發光(10%)· 放大 20%(168 → 202) · 跟廣告機底部對齊 */
+.prop-rack{
+  width: 202px;
+  filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.1));
+}
+
+/* cyberpunk 對話框 · 字水平+垂直置中 · 不換行 */
+.prop-bubble{
+  position: absolute;
+  background: rgba(14, 14, 24, 0.95);
+  padding: 14px 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--text);
+  white-space: nowrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  z-index: 4;
+}
+.prop-bubble .bubble-text{
+  display: inline-block;
+  white-space: nowrap;
+}
+/* glitch 閃動效果(換字時觸發)· 用 LOCAL AI 同套風格 */
+.prop-bubble.glitching .bubble-text{
+  animation: bubble-glitch 0.55s linear forwards;
+}
+@keyframes bubble-glitch{
+  0%   { transform: translate(0); opacity: 1; }
+  10%  { transform: translate(-3px, 1px); opacity: 0.75; }
+  20%  { transform: translate(3px, -1px) skewX(-2deg); opacity: 0.4; }
+  30%  { transform: translate(-2px, 0); opacity: 0.85; }
+  40%  { transform: translate(4px, 1px) skewX(3deg); opacity: 0.3; }
+  50%  { transform: translate(-4px, -1px); opacity: 0.6; }
+  60%  { transform: translate(0, 2px); opacity: 0.1; }    /* 最低點 · 換字時機 */
+  70%  { transform: translate(2px, 0); opacity: 0.55; }
+  80%  { transform: translate(-1px, 1px); opacity: 0.85; }
+  90%  { transform: translate(1px, 0) skewX(-1deg); opacity: 1; }
+  100% { transform: translate(0); opacity: 1; }
+}
+
+/* 廣告機 bubble · 右上方 · 粉色邊框(無發光) */
+.prop-kiosk .prop-bubble{
+  left: calc(100% + 28px);
+  top: 20px;
+  border: 1px solid var(--magenta);
+}
+/* 機櫃 bubble · 左方 · 藍色邊框(無發光) */
+.prop-rack .prop-bubble{
+  right: calc(100% + 28px);
+  top: 40px;
+  border: 1px solid #3B82F6;
+}
+
+/* L 形 corner brackets */
+.prop-bubble::before,
+.prop-bubble::after{
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--cyan);
+}
+.prop-bubble::before{
+  top: -5px; left: -5px;
+  border-right: none; border-bottom: none;
+}
+.prop-bubble::after{
+  bottom: -5px; right: -5px;
+  border-left: none; border-top: none;
+}
+.prop-kiosk .prop-bubble::before,
+.prop-kiosk .prop-bubble::after{
+  border-color: var(--magenta);
+}
+.prop-rack .prop-bubble::before,
+.prop-rack .prop-bubble::after{
+  border-color: #3B82F6;
+}
+
+/* 對話框→照片 pointer 線 + 圓點 */
+.prop-bubble .pointer{
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 1px;
+  background: var(--cyan);
+}
+.prop-kiosk .prop-bubble .pointer{
+  left: -26px;
+  background: var(--magenta);
+}
+.prop-rack .prop-bubble .pointer{
+  right: -26px;
+  background: #3B82F6;
+}
+.prop-bubble .pointer::before{
+  content: '';
+  position: absolute;
+  width: 6px; height: 6px;
+  background: inherit;
+  border-radius: 50%;
+  top: -2.5px;
+}
+.prop-kiosk .prop-bubble .pointer::before{ left: -4px; }
+.prop-rack .prop-bubble .pointer::before{ right: -4px; }
+
+/* ─────── FLOOR HIGHLIGHT · 全場亮點 section ─────── */
+.highlight-stage{
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 50px;
+  align-items: center;
+  padding: 40px 0;
+  min-height: 540px;
+  position: relative;
+}
+@media (max-width: 820px){
+  .highlight-stage{
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 20px 0;
+    min-height: 0;
+  }
+}
+
+/* 兩邊照片 · 初始位置從外推進來 */
+.highlight-prop{
+  opacity: 0;
+  position: relative;
+  z-index: 2;
+  cursor: default;
+  transition:
+    opacity 0.9s ease-out,
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* hover 時整個 prop 浮到最上層 · 讓對話框蓋過中央文字跟 packet-flow */
+.highlight-prop:hover{ z-index: 50; }
+.highlight-prop img{ display: block; width: 100%; height: auto; }
+.highlight-kiosk{
+  transform: translateX(-120px) scale(0.9);
+  filter: drop-shadow(0 0 40px rgba(255, 46, 166, 0.25));
+}
+.highlight-rack{
+  transform: translateX(120px) scale(0.9);
+  filter: drop-shadow(0 0 40px rgba(59, 130, 246, 0.3));
+}
+.highlight-stage.in-view .highlight-prop{
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition:
+    opacity 0.9s ease-out,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);   /* reveal 後 hover 用這條 */
+}
+/* hover 時傾斜(reveal 完成後) · 跟 Hero CTA 同款 */
+.highlight-stage.in-view .highlight-kiosk:hover{
+  transform: translateX(0) scale(1.03) rotate(-5deg);
+}
+.highlight-stage.in-view .highlight-rack:hover{
+  transform: translateX(0) scale(1.03) rotate(5deg);
+}
+@media (max-width: 820px){
+  .highlight-kiosk, .highlight-rack{
+    max-width: 170px;
+    margin: 0 auto;
+    transform: translateY(30px);
+  }
+  .highlight-stage.in-view .highlight-prop{ transform: translateY(0); }
+  /* mobile 沒 hover · 不觸發 rotate */
+}
+
+/* hover 時彈出的 cyberpunk 對話框 · 每次 hover 換一條 */
+.hl-bubble{
+  position: absolute;
+  background: rgba(7, 7, 12, 0.98);
+  padding: 12px 18px;
+  font-family: var(--mono);
+  font-size: 13px;
+  white-space: nowrap;
+  border: 1px solid currentColor;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 60;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.6);
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.highlight-kiosk .hl-bubble{
+  color: var(--magenta);
+  top: 20%;
+  left: calc(100% + 20px);
+  transform: translateX(-10px);
+}
+.highlight-rack .hl-bubble{
+  color: #3B82F6;
+  top: 20%;
+  right: calc(100% + 20px);
+  transform: translateX(10px);
+}
+.highlight-prop:hover .hl-bubble{
+  opacity: 1;
+  transform: translateX(0);
+}
+.hl-bubble::before,
+.hl-bubble::after{
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  border: 2px solid currentColor;
+}
+.hl-bubble::before{ top: -4px; left: -4px; border-right: none; border-bottom: none; }
+.hl-bubble::after{ bottom: -4px; right: -4px; border-left: none; border-top: none; }
+/* pointer 線指向照片 */
+.hl-bubble .arr{
+  position: absolute;
+  top: 50%;
+  width: 20px;
+  height: 1px;
+  background: currentColor;
+}
+.highlight-kiosk .hl-bubble .arr{ left: -22px; }
+.highlight-rack .hl-bubble .arr{ right: -22px; }
+.hl-bubble .arr::before{
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+  top: -2px;
+}
+.highlight-kiosk .hl-bubble .arr::before{ left: -4px; }
+.highlight-rack .hl-bubble .arr::before{ right: -4px; }
+@media (max-width: 820px){ .hl-bubble{ display: none; } }
+
+/* 中間字 */
+.highlight-center{
+  text-align: center;
+  position: relative;
+}
+.highlight-title{
+  margin-bottom: 18px;
+  display: block;
+}
+.glitch-text{
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+  position: relative;
+}
+.glitch-text::before,
+.glitch-text::after{
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  color: var(--text);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.glitch-text::before{
+  color: var(--cyan);
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  transform: translateX(-2px);
+  animation: glitch-top 3.5s infinite steps(1);
+}
+.glitch-text::after{
+  color: var(--magenta);
+  clip-path: polygon(0 66%, 100% 66%, 100% 100%, 0 100%);
+  transform: translateX(2px);
+  animation: glitch-bot 2.8s infinite steps(1);
+}
+
+.highlight-sub{
+  font-family: var(--mono);
+  font-size: clamp(14px, 1.5vw, 18px);
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+}
+
+/* 封包左右對流 · 從左廣告機 → 右機櫃(cyan)· 從右機櫃 → 左廣告機(magenta) */
+.packet-flow{
+  position: relative;
+  margin-top: 24px;
+  height: 220px;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  /* 左右兩端淡出 · 看起來像從機器裡冒出來、進到機器裡消失 */
+  mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+}
+.packet-lane{
+  position: absolute;
+  left: 0; right: 0;
+  height: 36px;
+}
+.packet{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  white-space: nowrap;
+  background: rgba(14, 14, 24, 0.9);
+  border: 1px solid currentColor;
+  letter-spacing: 0.03em;
+  will-change: transform, left, right;
+}
+.packet .arr{
+  margin-right: 6px;
+  opacity: 0.7;
+  font-weight: 700;
+}
+.packet.pkt-r{
+  color: var(--cyan);
+  animation: pkt-r linear forwards;
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.3);
+}
+.packet.pkt-l{
+  color: var(--magenta);
+  animation: pkt-l linear forwards;
+  box-shadow: 0 0 12px rgba(255, 46, 166, 0.3);
+}
+@keyframes pkt-r{
+  from { left: -220px; }
+  to   { left: calc(100% + 20px); }
+}
+@keyframes pkt-l{
+  from { right: -220px; }
+  to   { right: calc(100% + 20px); }
+}
+
+/* ─────── SECTION BASICS ─────── */
+section.block {
+  padding: 80px 0;
+  border-top: 1px solid var(--line);
+}
+section.block h2{
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+section.block h2 .num { color: var(--text-dim); }
+section.block .lead{
+  font-family: var(--sans);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 24px;
+  max-width: 800px;
+}
+section.block .body{
+  font-family: var(--tc);
+  font-size: 16px;
+  color: var(--text-mid);
+  line-height: 1.75;
+  word-break: keep-all;
+  line-break: strict;
+  overflow-wrap: break-word;
+  max-width: 720px;
+  margin-bottom: 48px;
+}
+
+/* ─────── 3 MODES ─────── */
+.modes{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+@media (max-width: 820px){ .modes{ grid-template-columns: 1fr; } }
+.mode{
+  background: var(--bg-elev);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 260px;
+}
+.mode .idx{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+.mode h3{
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+}
+.mode .k{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.mode p{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ─────── FEATURED SPEAKERS ─────── */
+.spot-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.spot-count{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.spot-count .n{ color: var(--cyan); font-weight: 700; }
+
+/* ─────── 精選講者輪播 · 無限往左 ─────── */
+.speaker-carousel-wrap{
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
+  margin: 20px 0 10px;
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+.speaker-carousel-track{
+  display: flex;
+  gap: 24px;
+  width: fit-content;
+  animation: speaker-scroll 60s linear infinite;
+}
+.speaker-carousel-track:hover{ animation-play-state: paused; }
+@keyframes speaker-scroll{
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce){
+  .speaker-carousel-track{ animation: none; }
+}
+/* 無人入選時 · track 空 · 不 render · 顯示 spot-empty */
+.speaker-carousel-wrap.empty{ display: none; }
+/* 卡片數少於 5 時 · 不輪播 · 置中靜態顯示 · 取消 mask 邊緣淡出 */
+.speaker-carousel-wrap.static{
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+.speaker-carousel-wrap.static .speaker-carousel-track{
+  animation: none;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+/* 精選講者卡 */
+.speaker-card{
+  width: 340px;
+  flex-shrink: 0;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  position: relative;
+  transition: border-color 0.2s, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+.speaker-card:hover{
+  border-color: var(--cyan);
+  transform: translateY(-4px);
+}
+.speaker-card .badge{
+  position: absolute;
+  top: 0; right: 0;
+  background: var(--green);
+  color: #000;
+  padding: 4px 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  z-index: 3;
+}
+/* 封面主圖 1:1 letterbox */
+.speaker-card .cover{
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #000;
+  overflow: hidden;
+}
+.speaker-card .cover > .cover-img{
+  width: 100%; height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.speaker-card .cover.empty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0E0E18 0%, #1a1a2e 100%);
+}
+.speaker-card .cover.empty::after{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+}
+html[data-lang="zh"] .speaker-card .cover.empty::after{ content: '無封面'; letter-spacing: 0.08em; }
+html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
+/* 個人照 · 右下角 · 封面 40% 寬 · 無框 軟陰影
+ * 不加 mix-blend-mode · 真人彩照會變半透明穿透(blend screen 的副作用) ·
+ * 請投稿人直接上傳去背 PNG · 顯示才乾淨 · 帶背景就會看到完整矩形 */
+.speaker-card .avatar{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40%;
+  height: auto;
+  max-height: 72%;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.65))
+          drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+  pointer-events: none;
+}
+.speaker-card .info{ padding: 18px 20px 20px; }
+.speaker-card .label{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.speaker-card .name{
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.speaker-card .title-line{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--cyan);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  word-wrap: break-word;
+}
+.speaker-card .project{
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.005em;
+}
+.speaker-card .project .k{
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--magenta);
+  letter-spacing: 0.1em;
+  margin-right: 8px;
+}
+.speaker-card .desc{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.speaker-card .links{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.speaker-card .links a{
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--line-hi);
+  padding: 5px 10px;
+  text-decoration: none;
+}
+.speaker-card .links a:hover{ border-color: var(--cyan); background: var(--bg-card); }
+
+/* 無人入選的 placeholder */
+.spot-empty{
+  background: var(--bg-elev);
+  border: 1px dashed var(--line-hi);
+  padding: 40px 24px;
+  text-align: center;
+  color: var(--text-mid);
+  font-family: var(--mono);
+  margin: 20px 0 24px;
+}
+.spot-empty.hidden{ display: none; }
+.spot-empty .k{ color: var(--amber); display: block; margin-bottom: 10px; }
+
+/* 投稿 CTA · 永遠在 */
+.speaker-submit-cta{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 36px;
+}
+.speaker-submit-cta a{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+.speaker-submit-cta a:hover{
+  background: var(--cyan);
+  color: #000;
+}
+.speaker-submit-note{
+  margin-top: 12px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-align: center;
+}
+
+/* ─────── AGENDA (terminal log) ─────── */
+.agenda{
+  font-family: var(--mono);
+  font-size: 14px;
+}
+.agenda .meta-line{
+  color: var(--text-dim);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 16px 24px;
+  margin-bottom: 12px;
+}
+.agenda .meta-line .k{ color: var(--green); }
+.agenda ul{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;        /* 方塊之間的縫 */
+}
+/* 每個時段都是獨立方塊 */
+.agenda li{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 22px 26px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 20px;
+  align-items: start;
+  /* scroll reveal: 從下滑上去「貼」到上面的方塊 */
+  opacity: 0;
+  transform: translateY(60px);
+  transition:
+    opacity 0.5s ease-out,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.2s;
+}
+.agenda li.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+.agenda li:hover{ border-color: var(--line-hi); }
+@media (prefers-reduced-motion: reduce){
+  .agenda li{ opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+.agenda .time{
+  color: var(--cyan);
+  font-weight: 500;
+}
+.agenda .evt{
+  color: var(--text);
+}
+.agenda .evt .desc{
+  font-family: var(--tc);
+  display: block;
+  color: var(--text-mid);
+  font-size: 13px;
+  margin-top: 4px;
+  line-height: 1.65;
+}
+.agenda .evt.closed .time{ color: var(--text-dim); }
+.agenda .evt .tag{
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  background: var(--line-hi);
+  color: var(--text-mid);
+  margin-left: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.agenda .evt .tag.party{ background: var(--magenta); color: #fff; }
+.agenda .evt .tag.closed{ background: var(--amber); color: #000; }
+
+@media (max-width: 640px){
+  .agenda{ font-size: 13px; }
+  .agenda .meta-line{ padding: 14px 18px; }
+  .agenda li{ grid-template-columns: 1fr; gap: 6px; padding: 18px 20px; }
+}
+
+.agenda-note{
+  margin-top: 18px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  padding-left: 12px;
+  border-left: 2px solid var(--amber);
+}
+
+/* ─────── VENUE ─────── */
+.venue-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+@media (max-width: 820px){ .venue-grid{ grid-template-columns: 1fr; } }
+.venue-info{
+  background: var(--bg-elev);
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+.venue-info .pin{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+}
+.venue-info .name{
+  font-family: var(--sans);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+.venue-info .addr{
+  font-family: var(--tc);
+  font-size: 15px;
+  color: var(--text-mid);
+}
+.venue-info .addr .en{
+  display: block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+.venue-info .nearest{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-mid);
+  padding-top: 16px;
+  border-top: 1px dashed var(--line-hi);
+}
+.venue-info .nearest .k { color: var(--cyan); }
+.venue-info .btn{
+  display: inline-block;
+  margin-top: 8px;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+  width: fit-content;
+}
+.venue-info .btn:hover{ background: var(--cyan); color: #000; }
+.venue-map{
+  background: var(--bg-elev);
+  min-height: 340px;
+}
+.venue-map iframe{
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  border: 0;
+  filter: invert(0.9) hue-rotate(180deg) brightness(0.9);
+}
+
+/* ─────── FORMS (submit / signup) ─────── */
+.form-head{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.form-head .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+}
+.form-head.magenta .tag { color: var(--magenta); border-color: var(--magenta); }
+
+.form-wrap{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 36px;
+}
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.form-grid .full{ grid-column: 1 / -1; }
+@media (max-width: 640px){ .form-grid{ grid-template-columns: 1fr; } }
+
+.field label{
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.field label .req{ color: var(--magenta); }
+.field input,
+.field select,
+.field textarea{
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--line-hi);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+  font-feature-settings: 'tnum' 1;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color: var(--cyan);
+}
+.field textarea{ min-height: 100px; resize: vertical; font-family: var(--tc); line-height: 1.65; }
+
+.field .hint{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 6px;
+}
+
+.chk{
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px;
+  background: var(--bg);
+  border: 1px solid var(--line-hi);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.chk:hover{ border-color: var(--cyan); }
+.chk input[type="checkbox"]{
+  width: 16px; height: 16px;
+  accent-color: var(--cyan);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.chk .main{
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+}
+.chk .sub{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-top: 4px;
+}
+
+.afterparty-box{
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(255,46,166,0.08), rgba(157,78,221,0.05));
+  border: 1px solid var(--magenta);
+  padding: 20px;
+  position: relative;
+}
+.afterparty-box .k{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--magenta);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.afterparty-box .d{
+  font-family: var(--sans);
+  font-size: 20px;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.afterparty-box .n{
+  font-family: var(--tc);
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+.afterparty-box .n strong{ color: var(--magenta); }
+
+.submit-row{
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.btn-submit{
+  background: var(--cyan);
+  color: #000;
+  border: none;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 14px 32px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-transform: uppercase;
+}
+.btn-submit:hover{ background: var(--text); }
+.btn-submit:active{ transform: translateY(1px); }
+.btn-submit.magenta{ background: var(--magenta); color: #fff; }
+.btn-submit.magenta:hover{ background: #ff5bbb; }
+.btn-submit:disabled{ opacity: 0.4; cursor: wait; }
+
+.form-note{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.form-status{
+  display: none;
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--bg);
+  border-left: 3px solid var(--green);
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--green);
+}
+.form-status.error{ border-color: var(--red); color: var(--red); }
+.form-status.show{ display: block; }
+
+/* ─────── Cover upload(講者投稿封面縮圖) ─────── */
+.cover-upload-row{
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.cover-upload-row input[type="file"]{
+  position: absolute;
+  width: 1px; height: 1px; opacity: 0;
+}
+.cover-upload-btn{
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 10px 16px;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.cover-upload-btn:hover{ border-color: var(--cyan); color: var(--cyan); }
+.cover-preview{
+  width: 100px;
+  height: 100px;
+  border: 1px dashed var(--line-hi);
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.cover-preview img{ width: 100%; height: 100%; display: block; }
+.cover-preview-hint{
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+/* ─────── FAQ ─────── */
+.faq-list{ border-top: 1px solid var(--line); }
+.faq-item{
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+}
+.faq-q{
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.faq-q::before{
+  content: 'Q.';
+  font-family: var(--mono);
+  color: var(--cyan);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.faq-q::after{
+  content: '+';
+  font-family: var(--mono);
+  color: var(--text-dim);
+  font-size: 24px;
+  font-weight: 300;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-left: auto;   /* 推 + 到最右 · 問題文字靠左 */
+}
+.faq-item.open .faq-q::after{ transform: rotate(45deg); color: var(--cyan); }
+.faq-a{
+  display: none;
+  padding: 14px 0 4px 36px;
+  color: var(--text-mid);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.faq-item.open .faq-a{ display: block; }
+
+/* ─────── PARTNERS ─────── */
+.partners-head{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.partners-head .k{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 0.1em;
+}
+.partners-row{
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.partners-row .p{
+  background: var(--bg-elev);
+  padding: 18px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+}
+.partners-row .p img{
+  max-width: 100%;
+  max-height: 42px;
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+  transition: opacity 0.2s;
+}
+/* 第 6 個協辦 LOGO 原檔外圍留白較多 · 看起來偏小 · 單獨放大視覺平衡 */
+.partners-row .p img[alt="協辦夥伴"]{ max-height: 74px; }
+.partners-row .p:hover img{ opacity: 1; }
+/* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
+@media (max-width: 720px){
+  .partners-row{ grid-template-columns: repeat(3, 1fr); }
+  .partners-row .p{ padding: 14px 8px; min-height: 72px; }
+  .partners-row .p img{ max-height: 36px; }
+  .partners-row .p img[alt="協辦夥伴"]{ max-height: 65px; }
+}
+@media (max-width: 420px){
+  .partners-row{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ─────── FOOTER ─────── */
+footer{
+  padding: 60px 0 40px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev);
+  margin-top: 60px;
+}
+footer .wrap{
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 40px;
+}
+@media (max-width: 820px){ footer .wrap{ grid-template-columns: 1fr; gap: 32px; } }
+footer .brand{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-mid);
+}
+footer .brand img{
+  max-width: 160px;
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+  margin-bottom: 16px;
+  display: block;
+}
+footer .brand p{
+  line-height: 1.65;
+  color: var(--text-dim);
+  margin: 10px 0;
+}
+footer h4{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-mid);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+footer ul{ list-style: none; padding: 0; margin: 0; }
+footer ul li{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  margin-bottom: 8px;
+}
+footer ul li a{ color: var(--text-mid); }
+footer ul li a:hover{ color: var(--cyan); }
+
+footer .copy{
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+footer .copy .status{
+  color: var(--green);
+}
+footer .copy .admin-link{
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.15s;
+}
+footer .copy .admin-link:hover{
+  color: var(--green);
+}
+footer .copy .status .dot{
+  display: inline-block;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  margin-right: 6px;
+  box-shadow: 0 0 6px var(--green);
+}
+
+/* 隱藏 anchor offset */
+.anchor { scroll-margin-top: 80px; }
+
+/* ─────── CTA v2 · tilt + mascot ─────── */
+.cta-stage{
+  position: relative;
+  padding: 20px 60px;
+  margin-top: 48px;
+}
+@media (max-width: 820px){ .cta-stage{ padding: 20px 20px; } }
+.cta-stage .divider{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1px;
+  height: 80%;
+  background: linear-gradient(to bottom, transparent, var(--line-hi) 20%, var(--line-hi) 80%, transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+@media (max-width: 820px){ .cta-stage .divider{ display: none; } }
+
+.cta-pair-v2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: stretch;
+  position: relative;
+}
+@media (max-width: 820px){ .cta-pair-v2{ grid-template-columns: 1fr; gap: 24px; } }
+
+.cta-cell{
+  position: relative;
+  min-height: 260px;
+  perspective: 1000px;
+}
+.cta-cell .mascot{
+  position: absolute;
+  top: -24px;
+  width: 110px;
+  height: 140px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+  transition: opacity 0.3s ease-out, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+  z-index: 1;
+  filter: drop-shadow(0 0 20px currentColor);
+}
+.cta-cell.left .mascot{
+  left: -30px;
+  color: var(--cyan);
+}
+.cta-cell.right .mascot{
+  right: -50px;
+  top: -40px;
+  width: 190px;
+  height: 180px;
+  color: var(--magenta);
+}
+.cta-cell:hover .mascot,
+.cta-cell:focus-within .mascot{
+  opacity: 1;
+  transform: translateY(-10px) scale(1);
+}
+.cta-cell.left:hover .mascot{ transform: translateY(-10px) translateX(-6px) scale(1); }
+.cta-cell.right:hover .mascot{ transform: translateY(-10px) translateX(6px) scale(1); }
+
+.cta-btn{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 260px;
+  padding: 36px 32px;
+  background: var(--bg-elev);
+  border: 1px solid var(--line-hi);
+  color: inherit;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.2s,
+              background 0.2s,
+              box-shadow 0.3s;
+  overflow: hidden;
+}
+.cta-btn::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.cta-btn.magenta::before{ background: var(--magenta); }
+
+.cta-cell.left:hover .cta-btn,
+.cta-cell.left:focus-within .cta-btn{
+  transform: rotate(-5deg) translateY(-4px);
+  border-color: var(--cyan);
+  background: var(--bg-card);
+  box-shadow: 0 20px 40px -20px rgba(0, 245, 255, 0.4);
+}
+.cta-cell.right:hover .cta-btn,
+.cta-cell.right:focus-within .cta-btn{
+  transform: rotate(5deg) translateY(-4px);
+  border-color: var(--magenta);
+  background: var(--bg-card);
+  box-shadow: 0 20px 40px -20px rgba(255, 46, 166, 0.4);
+}
+.cta-cell:hover .cta-btn::before,
+.cta-cell:focus-within .cta-btn::before{ transform: scaleX(1); }
+
+.cta-btn .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+.cta-btn.magenta .tag{ color: var(--magenta); }
+.cta-btn .title{
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  margin: 0;
+}
+.cta-btn .desc{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  margin: 0;
+}
+.cta-btn .arrow-row{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-mid);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cta-cell.left:hover .cta-btn .arrow-row{ color: var(--cyan); }
+.cta-cell.right:hover .cta-btn .arrow-row{ color: var(--magenta); }
+.cta-btn .arrow-row .arr{ transition: transform 0.3s; }
+.cta-cell:hover .cta-btn .arrow-row .arr{ transform: translateX(6px); }
+
+/* ─────── MODAL ─────── */
+.modal{
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal.show{ display: flex; }
+.modal::before{
+  content:'';
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 7, 12, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: -1;
+  animation: modal-fade 0.2s ease-out;
+}
+@keyframes modal-fade { from { opacity: 0; } }
+
+.modal-panel{
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  background: var(--bg-elev);
+  border: 1px solid var(--cyan);
+  box-shadow: 0 0 40px -10px rgba(0, 245, 255, 0.3);
+  padding: 40px;
+  animation: modal-rise 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.modal.magenta .modal-panel{
+  border-color: var(--magenta);
+  box-shadow: 0 0 40px -10px rgba(255, 46, 166, 0.3);
+}
+@keyframes modal-rise {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+}
+@media (max-width: 640px){
+  .modal{ padding: 20px 12px; }
+  .modal-panel{ padding: 28px 20px; }
+}
+
+.modal-close{
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+  line-height: 1;
+}
+.modal-close:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.modal.magenta .modal-close:hover{
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+
+.modal-tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.modal.magenta .modal-tag{ color: var(--magenta); }
+.modal h3{
+  font-family: var(--sans);
+  font-size: clamp(26px, 3.4vw, 36px);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin: 0 0 10px;
+}
+.modal .modal-desc{
+  font-family: var(--tc);
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+.modal .form-wrap{
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+body.modal-open { overflow: hidden; }
+
+/* ─────── Admin Dashboard(登入後) ─────── */
+.admin-panel{ max-width: 920px !important; }
+.admin-login-view, .admin-dashboard-view{ display: none; }
+.admin-login-view.active, .admin-dashboard-view.active{ display: block; }
+
+.admin-stats{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin: 20px 0;
+}
+.admin-stat-cell{
+  background: var(--bg-elev);
+  padding: 16px 18px;
+}
+.admin-stat-cell .k{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+.admin-stat-cell .n{
+  font-family: var(--mono);
+  font-size: 26px;
+  color: var(--cyan);
+  font-weight: 700;
+}
+.admin-stat-cell.highlight .n{ color: var(--green); }
+
+.admin-tabs{
+  display: flex;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 14px;
+}
+.admin-tab-btn{
+  flex: 1;
+  background: var(--bg-elev);
+  border: none;
+  color: var(--text-mid);
+  padding: 11px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.admin-tab-btn.active{
+  background: var(--bg-card);
+  color: var(--cyan);
+}
+.admin-tab-pane{ display: none; }
+.admin-tab-pane.active{ display: block; }
+
+.admin-note{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--amber);
+  padding: 10px 14px;
+  background: var(--bg);
+  border-left: 2px solid var(--amber);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.admin-list{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.admin-row{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  font-size: 13px;
+}
+.admin-row .name{ color: var(--text); font-weight: 700; font-size: 14px; }
+.admin-row .meta{
+  display: flex; gap: 10px; flex-wrap: wrap;
+  color: var(--text-mid); font-family: var(--mono); font-size: 11px;
+  margin-top: 4px;
+}
+.admin-row .proj{ color: var(--cyan); margin-top: 4px; font-size: 13px; }
+.admin-row .desc{ color: var(--text-mid); margin-top: 4px; font-size: 12px; line-height: 1.5; }
+.admin-row .ticket{
+  display: inline-block;
+  font-family: var(--mono);
+  background: var(--bg);
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 2px 8px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  margin-top: 6px;
+}
+
+.admin-submit-row{
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.admin-submit-row input[type="checkbox"]{
+  width: 20px; height: 20px;
+  accent-color: var(--green);
+  margin-top: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.admin-submit-row > div{ flex: 1; min-width: 0; }
+
+.admin-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.admin-actions a, .admin-actions button{
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  padding: 8px 14px;
+  font-size: 11px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+.admin-actions a:hover, .admin-actions button:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+.admin-toast{
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--green);
+  color: var(--text);
+  padding: 12px 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  z-index: 200;
+  animation: toast-in 0.25s ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+}
+.admin-toast.err{ border-color: var(--red); }
+
+/* ─────── FOMO exit-intent modal ─────── */
+.fomo-panel{
+  max-width: 480px !important;
+  text-align: center;
+}
+.fomo-panel h3{
+  font-size: 28px !important;
+  line-height: 1.3 !important;
+}
+.fomo-panel .modal-desc{
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+.fomo-actions{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+.fomo-skip{
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 8px;
+  text-decoration: underline;
+}
+.fomo-skip:hover{ color: var(--text-mid); }
+
+/* ─────── ADMIN LOGIN SECTION (bottom) ─────── */
+.admin-section{
+  padding: 80px 0 40px;
+  border-top: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.admin-section::before{
+  content:'';
+  position: absolute;
+  top: 0; left: 50%;
+  width: 400px; height: 400px;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.admin-card{
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  padding: 36px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  position: relative;
+  overflow: visible;
+}
+@media (max-width: 640px){
+  .admin-card{ grid-template-columns: 1fr; text-align: center; }
+}
+.admin-card .mascot-admin{
+  position: absolute;
+  bottom: -2px;
+  right: 30px;
+  width: 90px;
+  height: 110px;
+  color: var(--green);
+  filter: drop-shadow(0 0 15px var(--green));
+  pointer-events: none;
+}
+@media (max-width: 640px){ .admin-card .mascot-admin{ display: none; } }
+
+.admin-card .tag{
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.admin-card h3{
+  font-family: var(--sans);
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.admin-card p{
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 0;
+  line-height: 1.6;
+}
+.admin-card .btn-admin{
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  z-index: 2;
+  position: relative;
+}
+.admin-card .btn-admin:hover{
+  background: var(--green);
+  color: #000;
+}
+
+/* ─────── I18N · 中英切換 ─────── */
+/* :not(html) 防止 html 元素本身被 lang="en" 選到而整頁 display:none */
+[lang="en"]:not(html) { display: none; }
+html[data-lang="en"] [lang="en"] { display: inline; }
+html[data-lang="en"] [lang="zh"] { display: none; }
+/* block-level 翻譯目標(段落、list item 內):保留原本 display */
+[lang="en"].block,
+[lang="zh"].block { display: block; }
+html[data-lang="en"] [lang="en"].block { display: block; }
+html[data-lang="en"] [lang="zh"].block { display: none; }
+
+.lang-switch{
+  background: transparent;
+  border: 1px solid var(--line-hi);
+  color: var(--text-mid);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  margin-left: 8px;
+}
+.lang-switch:hover{
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: var(--bg-elev);
+}
+
+/* Nav 右邊「立即報名」按鈕 · magenta 突出 */
+.topbar .nav-cta{
+  background: var(--magenta);
+  color: #fff;
+  border: none;
+  padding: 7px 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-left: 12px;
+}
+.topbar .nav-cta:hover{ background: #ff5bbb; }
+.topbar .nav-cta:active{ transform: translateY(1px); }
+
+/* 側邊 sticky 直立「立即報名」pill */
+.side-cta{
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--magenta);
+  color: #fff;
+  padding: 22px 10px;
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  text-decoration: none;
+  z-index: 50;
+  box-shadow: 0 0 24px rgba(255, 46, 166, 0.4), 0 0 60px rgba(255, 46, 166, 0.15);
+  transition: background 0.15s, padding-right 0.2s;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+.side-cta:hover{
+  background: #ff5bbb;
+  color: #fff;
+  padding-right: 14px;
+}
+.side-cta .arr{
+  writing-mode: horizontal-tb;
+  display: block;
+  font-size: 11px;
+  margin-top: 8px;
+  letter-spacing: 0;
+}
+@media (max-width: 640px){
+  .side-cta{ padding: 18px 8px; font-size: 13px; letter-spacing: 0.25em; }
+}
+@media (prefers-reduced-motion: reduce){
+  .side-cta{ transition: none; }
+}
+
+/* 禁用動畫使用者 */
+@media (prefers-reduced-motion: reduce) {
+  .hero h1 .en::before,
+  .hero h1 .en::after,
+  .topbar .term .cursor,
+  .eyebrow .dot,
+  .cta-btn,
+  .mascot { animation: none; transition: none; }
+  .cta-cell:hover .cta-btn { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ TOP BAR ═══════════════ -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand-pair ai4next-brand">
+      <img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" />
+    </div>
+    <nav>
+      <a href="#about"><span lang="zh">關於</span><span lang="en">About</span></a>
+      <a href="#agenda"><span lang="zh">流程</span><span lang="en">Agenda</span></a>
+      <a href="#venue"><span lang="zh">場地</span><span lang="en">Venue</span></a>
+      <a href="#faq"><span lang="zh">常見問題</span><span lang="en">FAQ</span></a>
+      <button class="nav-cta" type="button" data-open-modal="signup">
+        <span lang="zh">立即報名</span><span lang="en">SIGN UP</span>
+      </button>
+      <button class="lang-switch" onclick="toggleLang()" aria-label="Switch language">
+        <span lang="zh">EN</span><span lang="en">中文</span>
+      </button>
+    </nav>
+  </div>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      <span lang="zh">連線建立 · 2026.11.04 · 台北</span>
+      <span lang="en">CONNECTION_ESTABLISHED · 11.04.2026 TAIPEI</span>
+    </div>
+
+    <h1>
+      <span class="en" data-text="LOCAL AI">LOCAL AI</span>
+      <span class="tc">
+        <span lang="zh">玩家開箱派對</span>
+        <span lang="en">Enthusiast Showcase</span>
+      </span>
+    </h1>
+
+    <p class="sub">
+      <span lang="zh">
+        <span style="white-space: nowrap;">一場為 Local AI 玩家、</span><span style="white-space: nowrap;">Server 自架者、</span><span style="white-space: nowrap;">n8n 自架者、</span><span style="white-space: nowrap;">AI 工程落地實作者</span><span style="white-space: nowrap;">準備的開箱夜。</span><br />
+        <span class="accent">真實案例展演 × Free Token Server 體驗 × OOPS 晚上派對</span>。<br />
+        <span style="white-space: nowrap;">參加 Local AI 現場</span> · 或者 · <span style="white-space: nowrap;">把你的作品搬上台。</span>
+      </span>
+      <span lang="en">
+        A night built for Local AI enthusiasts, self-hosted Server builders,
+        n8n self-hosters, and AI engineering practitioners.<br />
+        <span class="accent">Real case demos × Free Token Server experience × OOPS Afterparty</span>.<br />
+        Join the Local AI scene · or · bring your work on stage.
+      </span>
+    </p>
+
+    <div class="meta-strip">
+      <div class="cell">
+        <div class="label"><span lang="zh">// 日期</span><span lang="en">// DATE</span></div>
+        <div class="val">2026.11.04</div>
+        <div class="val-sub"><span lang="zh">星期三</span><span lang="en">Wednesday</span></div>
+      </div>
+      <div class="cell">
+        <div class="label"><span lang="zh">// 時間</span><span lang="en">// TIME</span></div>
+        <div class="val">14:00 → 20:00</div>
+        <div class="val-sub"><span lang="zh">含晚上派對</span><span lang="en">incl. Afterparty</span></div>
+      </div>
+      <div class="cell">
+        <div class="label"><span lang="zh">// 地點</span><span lang="en">// VENUE</span></div>
+        <div class="val">OOPS @ <span lang="zh">茹曦</span><span lang="en">Chateau</span></div>
+        <div class="val-sub"><span lang="zh">台北松山 15F</span><span lang="en">Taipei Songshan 15F</span></div>
+      </div>
+      <div class="cell">
+        <div class="label"><span lang="zh">// 票價</span><span lang="en">// PRICE</span></div>
+        <div class="val"><span lang="zh">白天 <span style="color: var(--green)">免費</span></span><span lang="en"><span style="color: var(--green)">FREE</span> daytime</span></div>
+        <div class="val-sub"><span lang="zh">派對自費 NT$100</span><span lang="en">Party NT$100</span></div>
+      </div>
+    </div>
+
+    <div class="cta-stage">
+      <div class="divider" aria-hidden="true"></div>
+      <div class="cta-pair-v2">
+        <!-- LEFT · Speaker -->
+        <div class="cta-cell left">
+          <!-- Mascot: Hacker · 戴帽子+耳機+螢光眼 -->
+          <svg class="mascot" viewBox="0 0 110 140" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- 連帽 / hood -->
+            <path d="M18,38 Q18,10 55,8 Q92,10 92,38 L92,55 Q55,42 18,55 Z"
+                  fill="currentColor" opacity="0.18"/>
+            <path d="M18,38 Q18,10 55,8 Q92,10 92,38"
+                  fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+            <!-- 臉 shadow -->
+            <ellipse cx="55" cy="48" rx="26" ry="22" fill="#07070C"/>
+            <ellipse cx="55" cy="48" rx="26" ry="22" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <!-- 螢光眼 (pixel LED) -->
+            <rect x="40" y="43" width="7" height="4" fill="currentColor"/>
+            <rect x="63" y="43" width="7" height="4" fill="currentColor"/>
+            <!-- 嘴 (pixel bar) -->
+            <rect x="48" y="56" width="14" height="2" fill="currentColor" opacity="0.7"/>
+            <!-- 身體 -->
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="currentColor" opacity="0.15"/>
+            <path d="M30,78 L80,78 L85,132 L25,132 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <!-- 身體 circuit 線 -->
+            <line x1="42" y1="92" x2="68" y2="92" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <line x1="55" y1="92" x2="55" y2="110" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            <circle cx="55" cy="110" r="2.5" fill="currentColor"/>
+            <!-- 麥克風 (右手舉起) -->
+            <line x1="80" y1="80" x2="96" y2="52" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <rect x="92" y="40" width="8" height="12" rx="4" fill="currentColor"/>
+            <rect x="94" y="52" width="4" height="4" fill="currentColor"/>
+            <!-- 耳機 -->
+            <path d="M22,42 Q22,28 36,30" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <rect x="26" y="42" width="7" height="10" rx="2" fill="currentColor"/>
+          </svg>
+          <button type="button" class="cta-btn" data-open-modal="speaker">
+            <span class="tag">
+              <span lang="zh">&gt; 投稿講者.exe</span>
+              <span lang="en">&gt; boot_speaker.exe</span>
+            </span>
+            <span class="title">
+              <span lang="zh">我要上台展示 AI 作品</span>
+              <span lang="en">I'll Demo My AI</span>
+            </span>
+            <span class="desc">
+              <span lang="zh">你用 AI 做的東西都可以拿來跑 · 主辦精選 10 人。入選會寄 email 通知你 · 資料也會顯示在這頁的精選區 · <strong style="color: var(--green); white-space: nowrap;">並免費獲得晚上派對入場券</strong>。</span>
+              <span lang="en">Anything you built with AI works. Host picks 10. If selected we'll email you · your info shows in the Featured block · <strong style="color: var(--green); white-space: nowrap;">plus free Afterparty entry</strong>.</span>
+            </span>
+            <span class="arrow-row">
+              <span><span lang="zh">送出你的 Demo</span><span lang="en">SUBMIT YOUR DEMO</span></span>
+              <span class="arr">→</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- RIGHT · Signup -->
+        <div class="cta-cell right">
+          <!-- Mascot: 一群 Ravers · 5 人 · 景深錯位(前大後小 · opacity 遞減) -->
+          <svg class="mascot mascot-crowd" viewBox="0 0 180 170" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+            <!-- 遠景 1 · 最後排最左 · 最小最淡 (只有頭) -->
+            <g opacity="0.3">
+              <circle cx="15" cy="18" r="9" fill="currentColor" opacity="0.3"/>
+              <circle cx="15" cy="18" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <rect x="7" y="16.5" width="16" height="3.5" fill="#07070C" stroke="currentColor" stroke-width="0.8"/>
+            </g>
+
+            <!-- 遠景 2 · 後排右 · 小且淡 (只有頭) -->
+            <g opacity="0.35">
+              <circle cx="165" cy="14" r="10" fill="currentColor" opacity="0.3"/>
+              <circle cx="165" cy="14" r="10" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <rect x="156" y="12.5" width="18" height="4" fill="#07070C" stroke="currentColor" stroke-width="0.9"/>
+            </g>
+
+            <!-- 中景 A · 左後方 · 中小 (半身) -->
+            <g opacity="0.55">
+              <circle cx="26" cy="42" r="13" fill="currentColor" opacity="0.28"/>
+              <circle cx="26" cy="42" r="13" fill="none" stroke="currentColor" stroke-width="1.6"/>
+              <rect x="14" y="40" width="24" height="5" fill="#07070C" stroke="currentColor" stroke-width="1.1"/>
+              <path d="M16,60 L36,60 L39,100 L13,100 Z" fill="currentColor" opacity="0.22"/>
+              <path d="M16,60 L36,60 L39,100 L13,100 Z" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+
+            <!-- 中景 B · 右後方 · 中(半身舉拳) -->
+            <g opacity="0.7">
+              <circle cx="148" cy="36" r="16" fill="currentColor" opacity="0.28"/>
+              <circle cx="148" cy="36" r="16" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <rect x="133" y="34" width="30" height="6" fill="#07070C" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M140,45 Q148,49 156,45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M133,60 L163,60 L167,110 L129,110 Z" fill="currentColor" opacity="0.2"/>
+              <path d="M133,60 L163,60 L167,110 L129,110 Z" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <!-- 舉拳 -->
+              <line x1="162" y1="64" x2="168" y2="30" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+              <rect x="163" y="22" width="10" height="10" rx="1.5" fill="currentColor"/>
+            </g>
+
+            <!-- 前景大人 · 中央下方 · 完整細節 -->
+            <g>
+              <circle cx="88" cy="62" r="30" fill="currentColor" opacity="0.15"/>
+              <circle cx="88" cy="62" r="30" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <!-- 墨鏡 (長條) -->
+              <path d="M63,60 L113,60 L113,71 L95,71 L91,66 L85,66 L81,71 L63,71 Z"
+                    fill="#07070C" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <rect x="69" y="63" width="4" height="2" fill="currentColor"/>
+              <rect x="103" y="63" width="4" height="2" fill="currentColor"/>
+              <!-- 嘴 -->
+              <path d="M78,82 Q88,88 98,82" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <!-- 身體 -->
+              <path d="M61,104 L115,104 L120,166 L56,166 Z" fill="currentColor" opacity="0.14"/>
+              <path d="M61,104 L115,104 L120,166 L56,166 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <!-- 身體 triangle pattern -->
+              <path d="M80,124 L96,124 L88,138 Z" fill="currentColor" opacity="0.4"/>
+              <!-- 舉手 YO (右手上舉) -->
+              <line x1="115" y1="106" x2="128" y2="60" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/>
+              <rect x="122" y="48" width="13" height="13" rx="2" fill="currentColor"/>
+              <rect x="122" y="46" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <rect x="129" y="46" width="4" height="4" fill="currentColor" opacity="0.6"/>
+              <!-- 耳機 -->
+              <path d="M57,54 Q57,40 72,42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="54" y="56" width="7" height="11" rx="2" fill="currentColor"/>
+              <path d="M119,54 Q119,40 104,42" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <rect x="115" y="56" width="7" height="11" rx="2" fill="currentColor"/>
+            </g>
+          </svg>
+          <button type="button" class="cta-btn magenta" data-open-modal="signup">
+            <span class="tag">
+              <span lang="zh">&gt; 加入派對.exe</span>
+              <span lang="en">&gt; join_party.exe</span>
+            </span>
+            <span class="title">
+              <span lang="zh">我要報名參加</span>
+              <span lang="en">Count Me In</span>
+            </span>
+            <span class="desc">
+              <span lang="zh">看最硬核的 Local AI 現場 · 可加報晚上派對 · 票價折抵 NT$100</span>
+              <span lang="en">See the hardest-core Local AI scene · optional Afterparty · NT$100 off ticket</span>
+            </span>
+            <span class="arrow-row">
+              <span><span lang="zh">加入派對</span><span lang="en">JOIN THE PARTY</span></span>
+              <span class="arr">→</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ ABOUT (3 MODES) ═══════════════ -->
+<section id="about" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">01 /</span>
+      <span lang="zh">// 為什麼來.md</span>
+      <span lang="en">// WHY_YOU_SHOULD_COME.md</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">要上台? 在底下看? 留到最後喝一杯?</span>
+      <span lang="en">Demo on stage? Watch from the floor? Stay for a drink?</span>
+    </h3>
+    <p class="body">
+      <span lang="zh">這不是 keynote 式的研討會。這裡的人在家裡架 llama.cpp、拿顯卡跑 Flux、
+      自己接 vector DB 做 RAG · 想要的是把實作搬出來討論。看你怎麼參加:</span>
+      <span lang="en">This is not a keynote-style conference. People here run llama.cpp at home,
+      drive Flux on their own GPUs, wire up vector DBs for RAG · and want to put
+      their builds on the table for real discussion. Here's how to join:</span>
+    </p>
+
+    <div class="modes">
+      <div class="mode">
+        <div class="idx">// 01</div>
+        <div class="k"><span lang="zh">當講者</span><span lang="en">AS SPEAKER</span></div>
+        <h3><span lang="zh">上台展示你的 AI 專案</span><span lang="en">Demo your AI project on stage</span></h3>
+        <p>
+          <span lang="zh">把你跑過的 Local AI 作品、Agent 流程、RAG 系統、硬體 build 帶來現場。
+          不限主題、不限成熟度 · 只要是你實際做過、能講給人聽的。主辦後台精選最多 3 位。</span>
+          <span lang="en">Bring your Local AI builds, Agent flows, RAG systems, or hardware setups.
+          Any topic, any maturity · as long as you actually built it and can talk about it.
+          Up to 10 selected by the host.</span>
+        </p>
+      </div>
+      <div class="mode">
+        <div class="idx">// 02</div>
+        <div class="k"><span lang="zh">當觀眾</span><span lang="en">AS AUDIENCE</span></div>
+        <h3><span lang="zh">看別人怎麼跑 Local AI</span><span lang="en">See how others run Local AI</span></h3>
+        <p>
+          <span lang="zh">聽案例、看 Server 展示、問問題。重點不是「聽完知道一堆名詞」·
+          是「看完知道自己明天可以動哪一步」。全場有 Free Token Server 可體驗。</span>
+          <span lang="en">Hear real cases, see Server demos, ask questions. The point is not
+          "collecting buzzwords" · it's "knowing what to try tomorrow." Free Token Server
+          hands-on all afternoon.</span>
+        </p>
+      </div>
+      <div class="mode">
+        <div class="idx">// 03</div>
+        <div class="k"><span lang="zh">當派對人</span><span lang="en">AS PARTY GOER</span></div>
+        <h3><span lang="zh">留下來參加晚上派對</span><span lang="en">Stay for the Afterparty</span></h3>
+        <p>
+          <span lang="zh">17:00 之後 OOPS 自己辦的晚上派對 · 不限議程、不限話題。
+          報名時勾一下加報就好 · 票價折抵 NT$100。真正的交流在這裡發生。</span>
+          <span lang="en">OOPS-hosted Afterparty from 17:00 · no agenda, no restrictions.
+          Just tick the opt-in when you sign up · NT$100 off the ticket. The real
+          networking happens here.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FLOOR HIGHLIGHT · 全場亮點 ═══════════════ -->
+<section id="highlight" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">02 /</span>
+      <span lang="zh">// SHOWSTOPPER · 全場亮點</span>
+      <span lang="en">// SHOWSTOPPER</span>
+    </h2>
+
+    <div class="highlight-stage">
+      <!-- 左:廣告機從左滑入 -->
+      <div class="highlight-prop highlight-kiosk">
+        <img src="assets/kiosk.png" alt="廣告機" loading="lazy" />
+      </div>
+
+      <!-- 中:大字 + 副標 + 跑數據 -->
+      <div class="highlight-center">
+        <div class="highlight-title">
+          <span class="glitch-text" data-text="SHOWSTOPPER">SHOWSTOPPER</span>
+        </div>
+        <div class="highlight-sub">
+          <span lang="zh">全場亮點 · 現場掃描 · 領取免費使用 Token</span>
+          <span lang="en">The showstopper · Scan on-site · Get free Token access</span>
+        </div>
+        <div class="packet-flow" id="packet-flow" aria-hidden="true"></div>
+      </div>
+
+      <!-- 右:機櫃從右滑入 -->
+      <div class="highlight-prop highlight-rack">
+        <img src="assets/rack.png" alt="機櫃" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FEATURED SPEAKERS ═══════════════ -->
+<section id="speakers" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">03 /</span>
+      <span lang="zh">// 精選講者</span>
+      <span lang="en">// FEATURED_SPEAKERS</span>
+    </h2>
+    <div class="spot-head">
+      <h3 class="lead">
+        <span lang="zh">精選上台展示 · <span style="color: var(--cyan)">審核中</span></span>
+        <span lang="en">Featured on-stage demos · <span style="color: var(--cyan)">curating</span></span>
+      </h3>
+      <div class="spot-count">
+        <span lang="zh">精選名額</span><span lang="en">Selected</span>
+        <span class="n">0 / 10</span> ·
+        <span style="color: var(--text-dim)">
+          <span lang="zh">主辦精選後顯示</span>
+          <span lang="en">shown after host picks</span>
+        </span>
+      </div>
+    </div>
+    <p class="body">
+      <span lang="zh">每場精選 <strong style="color: var(--cyan)">10 位</strong>現場 Demo · 名單會持續更新在這裡。入選者 email 通知 · 還<strong style="color: var(--green); white-space: nowrap;">免費獲得晚上派對入場券</strong>。</span>
+      <span lang="en"><strong style="color: var(--cyan)">10 slots</strong> per event · list updates live here. Selected get an email · plus <strong style="color: var(--green); white-space: nowrap;">free Afterparty entry</strong>.</span>
+    </p>
+  </div>
+
+  <!-- 輪播本身跨出 wrap · 寬度跟整個 viewport 齊 -->
+  <div class="speaker-carousel-wrap">
+    <div class="speaker-carousel-track" id="speaker-carousel-track">
+      <!-- 由 JS 從 CSV render + 複製一份達成無縫 loop -->
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- 等待審核中 placeholder(無人入選時顯示) -->
+    <div class="spot-empty" id="spot-empty">
+      <span class="k">[ <span lang="zh">等待審核中</span><span lang="en">AWAITING SELECTION</span> ]</span>
+      <span lang="zh">主辦正在審核中 · 入選名單確定後會顯示在這裡。</span>
+      <span lang="en">Host is reviewing · selected demos will appear here.</span>
+    </div>
+
+    <!-- 投稿 CTA · 不管有沒有入選都在 -->
+    <div class="speaker-submit-cta">
+      <a href="#" data-open-modal="speaker">
+        <span lang="zh">&gt; 投稿你的 Demo</span>
+        <span lang="en">&gt; Submit your Demo</span>
+        <span>→</span>
+      </a>
+      <div class="speaker-submit-note">
+        <span lang="zh">// 名額剩 <span id="spot-remaining">10</span> 位 · <span style="white-space: nowrap;">入選者免費獲得晚上派對入場券</span></span>
+        <span lang="en">// <span id="spot-remaining-en">10</span> slots left · <span style="white-space: nowrap;">selected get free Afterparty entry</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ AGENDA ═══════════════ -->
+<section id="agenda" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">04 /</span>
+      <span lang="zh">// 活動流程 · 2026.11.04</span>
+      <span lang="en">// AGENDA · 2026.11.04</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">當天時間流程</span>
+      <span lang="en">Timeline of the day</span>
+    </h3>
+    <p class="body">
+      <span lang="zh">以下為流程模型 · 實際時段依場地與合作方確認結果微調。保留晚上派對。</span>
+      <span lang="en">A model schedule · actual timing adjusts after venue & partner confirmations.
+      Afterparty slot stays.</span>
+    </p>
+
+    <div class="agenda" id="agenda-list">
+      <div class="meta-line">
+        <span class="k">$ cat agenda.log</span> &nbsp;·&nbsp; last_updated=2026-10-20 &nbsp;·&nbsp; status=<span style="color: var(--amber)">draft</span>
+      </div>
+      <ul>
+        <li>
+          <span class="time">14:00 – 14:20</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">開放報到 + 自由看展</span>
+              <span lang="en">Check-in + free walk-through</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">Local AI 案例展示 + OOPS 現有 Server 介紹。虎智設備體驗區開放。</span>
+              <span lang="en">Local AI case showcase + OOPS Server intro. TigerAI hardware zone opens.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">14:20 – 14:30</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">開場與活動說明</span>
+              <span lang="en">Opening & briefing</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">說明活動定位、精選案例清單、現場參與方式。</span>
+              <span lang="en">Event positioning · selected demo lineup · on-site participation guide.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">14:30 – 15:00</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">虎智產品介紹 / 發表</span>
+              <span lang="en">TigerAI product unveil</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">Server 上展示的虎智產品、使用情境、服務方式。</span>
+              <span lang="en">Products on the Server · use cases · how we deliver.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">15:00 – 16:00</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">精選講者短講 / 玩家 Demo</span>
+              <span lang="en">Featured talks / Enthusiast Demos</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">審核選出 10 人現場分享「問題、做法、成果」 · 其他玩家交流。</span>
+              <span lang="en">10 selected speakers share "problem · approach · result" · open floor for other enthusiasts.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">16:00 – 16:30</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">Free Token Server 體驗</span>
+              <span lang="en">Free Token Server experience</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">展示 OOPS Server + Token 體驗流程(需技術驗收通過才掃碼體驗)。</span>
+              <span lang="en">OOPS Server demo + Token flow (QR hands-on only after tech sign-off).</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">16:30 – 16:45</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">合作發布 / 撼訊交流</span>
+              <span lang="en">Collaboration spotlight / PowerColor exchange</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">撼訊設備如何承接虎智 AI 應用 · 現場交流實際導入案例。</span>
+              <span lang="en">How PowerColor hardware runs TigerAI apps · live chat on real deployment cases.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">16:45 – 17:00</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">OOPS × 虎智合作流程示範</span>
+              <span lang="en">OOPS × TigerAI flow walkthrough</span>
+            </strong>
+            <span class="desc">
+              <span lang="zh">客戶情境演示:場租訂單 + Token 體驗 + 設備方案。</span>
+              <span lang="en">Live customer scenario: venue booking + Token experience + hardware package.</span>
+            </span>
+          </span>
+        </li>
+        <li>
+          <span class="time">17:00 – 20:00</span>
+          <span class="evt">
+            <strong>
+              <span lang="zh">OOPS 晚上派對</span>
+              <span lang="en">OOPS Afterparty</span>
+            </strong><span class="tag party"><span lang="zh">加報</span><span lang="en">OPT-IN</span></span>
+            <span class="desc">
+              <span lang="zh">OOPS 主辦的晚上派對。可選加報 · 票價折抵 NT$100。</span>
+              <span lang="en">OOPS-hosted evening Afterparty. Optional opt-in · NT$100 off the ticket.</span>
+            </span>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════ VENUE ═══════════════ -->
+<section id="venue" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">05 /</span>
+      <span lang="zh">// 場地資訊</span>
+      <span lang="en">// VENUE_INFO</span>
+    </h2>
+    <h3 class="lead">
+      <span lang="zh">OOPS @ 茹曦酒店 15F</span>
+      <span lang="en">OOPS @ Chateau de Chine Hotel · 15F</span>
+    </h3>
+
+    <div class="venue-grid">
+      <div class="venue-info">
+        <div class="pin">● <span lang="zh">地點確定</span><span lang="en">LOCATION_LOCKED</span></div>
+        <div class="name">
+          <span lang="zh">茹曦酒店 15F</span>
+          <span lang="en">Chateau de Chine · 15F</span>
+        </div>
+        <div class="addr">
+          <span lang="zh">台北市松山區敦化北路 100 號 15 樓</span>
+          <span lang="en">100 Dunhua N. Rd., Songshan Dist., Taipei · 15F</span>
+        </div>
+        <div class="nearest">
+          <span class="k">[ <span lang="zh">捷運</span><span lang="en">MRT</span> ]</span>
+          <span lang="zh">文湖線 南京復興站 · 步行約 10 分</span>
+          <span lang="en">Wenhu Line · Nanjing Fuxing Station · 10 min walk</span>
+          <br />
+          <span class="k">[ <span lang="zh">停車</span><span lang="en">PARKING</span> ]</span>
+          <span lang="zh">茹曦酒店 B2 停車場 · 周邊付費停車場</span>
+          <span lang="en">Hotel B2 lot · nearby paid parking</span>
+        </div>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&query=%E8%8C%B9%E6%9B%A6%E9%85%92%E5%BA%97+%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF100%E8%99%9F" target="_blank" rel="noopener">
+          &gt; open_in_maps.app
+        </a>
+      </div>
+      <div class="venue-map">
+        <iframe
+          src="https://www.google.com/maps?q=%E8%8C%B9%E6%9B%A6%E9%85%92%E5%BA%97+%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF100%E8%99%9F&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="茹曦酒店 Google Maps"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- (前 #submit / #signup section 已改為 modal · 由 Hero 的 CTA 開啟) -->
+
+<!-- ═══════════════ FAQ ═══════════════ -->
+<section id="faq" class="block anchor">
+  <div class="wrap">
+    <h2><span class="num">06 /</span> // FAQ</h2>
+    <h3 class="lead">
+      <span lang="zh">常見問題</span>
+      <span lang="en">Frequently Asked</span>
+    </h3>
+
+    <div class="faq-list" id="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">活動要收費嗎?</span>
+          <span lang="en">Is there a fee?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">白天的實體活動<strong style="color: var(--green);">免費</strong>參加 · 名額依最終公告為準。晚上派對由 OOPS 主辦 · 需付費參加 · 原價由 OOPS 公告 · 憑本頁報名可折抵 NT$100。</span>
+          <span lang="en">Daytime event is <strong style="color: var(--green);">free</strong> · seat count per final announcement. Afterparty is paid (hosted by OOPS, price TBA) · NT$100 off via this signup.</span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">我送出「我要上台展示 AI 作品」就會被安排上台嗎?</span>
+          <span lang="en">Does submitting "I'll Demo My AI" mean I'm on stage?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">不會。所有投稿會進主辦審核 · 精選名額最多 10 人。入選我們會用你留的 email 聯繫 · <span style="white-space: nowrap;">入選者可免費獲得晚上派對入場券</span> · 未入選者資料不會公開展示。</span>
+          <span lang="en">No. All submissions enter host review · up to 3 selected. We'll email you if picked · non-selected submissions stay private.</span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">n8n / Dify / Ollama 這類 workflow 工具的 Demo 可以嗎?</span>
+          <span lang="en">Can I Demo workflow tools like n8n / Dify / Ollama?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">歡迎。只要是跑在你自己機器 / Server / 顯卡上 · 不是純叫 OpenAI API 就好。<strong style="color: var(--cyan);">自架 n8n + 接 Local LLM</strong> 其實是這場的典型玩法之一 · 現場也歡迎分享你的 workflow 檔。</span>
+          <span lang="en">Yes · as long as it runs on your own machine / Server / GPU · not just calling the OpenAI API. <strong style="color: var(--cyan);">Self-hosted n8n + Local LLM</strong> is actually a typical pattern we're hoping to see.</span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">現場有 Free Token 可以體驗嗎?</span>
+          <span lang="en">Can I actually try Free Token on-site?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">是。現場會依當日系統狀態 · 提供掃碼體驗或 Server 展示 / 操作影片 · 兩者都能看到實際運作。</span>
+          <span lang="en">Yes. Depending on system readiness that day · either live QR hands-on or Server demo + walkthrough video — both show real behavior.</span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">我不是技術人員 · 也能來嗎?</span>
+          <span lang="en">I'm non-technical · can I still come?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">可以。現場有產品介紹、合作流程說明、硬體 Demo · 不需要寫程式。</span>
+          <span lang="en">Yes. Product intro · partner flow walkthrough · hardware demo — no coding required.</span>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">
+          <span lang="zh">晚上派對一定要加報嗎?</span>
+          <span lang="en">Do I have to opt into Afterparty?</span>
+        </div>
+        <div class="faq-a">
+          <span lang="zh">不一定。晚上派對是自選加報項目 · 只參加一般活動完全沒問題。</span>
+          <span lang="en">No. Afterparty is an optional add-on · joining only the main event is fine.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PARTNERS ═══════════════ -->
+<section class="block">
+  <div class="wrap">
+    <div class="partners-head">
+      <span class="k"><span lang="zh">// 協辦單位</span><span lang="en">// CO_ORGANIZERS</span></span>
+    </div>
+    <div class="partners-row">
+      <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
+      <div class="p"><img src="assets/無界聯盟.webp" alt="無界聯盟" /></div>
+      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
+      <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
+      <div class="p"><img src="assets/vbim LOGO.png" alt="vbim" /></div>
+      <div class="p"><img src="assets/12(1).png" alt="協辦夥伴" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="brand">
+      <img src="虎智科技Logo_白色橫式純英Logo.svg" alt="虎智科技 TigerAI" />
+      <p>
+        <span lang="zh">LOCAL AI 玩家開箱派對<br />2026.11.04 · 台北 · 茹曦酒店 15F</span>
+        <span lang="en">LOCAL AI Enthusiast Showcase<br />2026.11.04 · Taipei · Chateau de Chine 15F</span>
+      </p>
+      <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
+        <span lang="zh">
+          &gt; powered_by: 虎智科技 TigerAI<br />
+          &gt; in_collab: TUL × 無界聯盟 × Ai4 NEXT × OOPS × vbim × +1
+        </span>
+        <span lang="en">
+          &gt; powered_by: TigerAI<br />
+          &gt; in_collab: OOPS × TUL × BabyElephant
+        </span>
+      </p>
+    </div>
+    <div>
+      <h4><span lang="zh">// 章節</span><span lang="en">// SECTIONS</span></h4>
+      <ul>
+        <li><a href="#about"><span lang="zh">關於</span><span lang="en">About</span></a></li>
+        <li><a href="#speakers"><span lang="zh">精選講者</span><span lang="en">Featured Speakers</span></a></li>
+        <li><a href="#agenda"><span lang="zh">流程</span><span lang="en">Agenda</span></a></li>
+        <li><a href="#venue"><span lang="zh">場地</span><span lang="en">Venue</span></a></li>
+      </ul>
+    </div>
+    <div>
+      <h4><span lang="zh">// 功能</span><span lang="en">// ACTIONS</span></h4>
+      <ul>
+        <li><a href="#" data-open-modal="speaker"><span lang="zh">我要上台展示 AI 作品</span><span lang="en">I'll Demo My AI</span></a></li>
+        <li><a href="#" data-open-modal="signup"><span lang="zh">我要報名參加</span><span lang="en">Count Me In</span></a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="copy" style="grid-column: 1 / -1;">
+      <span>
+        <span lang="zh">© 2026 虎智科技 TigerAI · 版權所有</span>
+        <span lang="en">© 2026 TigerAI · All rights reserved.</span>
+      </span>
+      <span><a href="#" data-open-modal="admin" class="admin-link">
+        <span lang="zh">&gt; 主辦登入</span>
+        <span lang="en">&gt; admin login</span>
+      </a></span>
+      <span class="status"><span class="dot"></span>
+        <span lang="zh">活動狀態:報名開放中</span>
+        <span lang="en">EVENT_STATUS: OPEN_FOR_SIGNUP</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<!-- 側邊 sticky 立即報名 -->
+<a class="side-cta" href="#" data-open-modal="signup" aria-label="立即報名">
+  <span lang="zh">立即報名</span><span lang="en">SIGN UP</span>
+</a>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+
+<!-- Modal: Speaker Submit -->
+<div class="modal" id="modal-speaker" role="dialog" aria-labelledby="modal-speaker-title" aria-hidden="true">
+  <div class="modal-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">
+      <span lang="zh">&gt; 投稿講者.exe</span>
+      <span lang="en">&gt; boot_speaker.exe</span>
+    </div>
+    <h3 id="modal-speaker-title">
+      <span lang="zh">我要上台展示 AI 作品</span>
+      <span lang="en">I'll Demo My AI</span>
+    </h3>
+    <p class="modal-desc">
+      <span lang="zh">送出投稿等於主辦開始審核 · 不代表自動入選。主辦精選後會以你留的聯絡方式通知。
+      最多上架 10 位 · 前台「Featured Speakers」區只顯示你同意公開的欄位。</span>
+      <span lang="en">Submitting starts host review · not automatic acceptance. We'll contact
+      selected demos via the info you provide. Up to 10 shown · the "Featured Speakers"
+      block only shows fields you consent to publish.</span>
+    </p>
+
+    <form class="form-wrap" id="speaker-form" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label><span lang="zh">公開稱呼</span><span lang="en">Public name</span> <span class="req">*</span></label>
+          <input type="text" name="public_name" required placeholder="e.g. Robin / robin.chen" />
+          <div class="hint">
+            <span lang="zh">// 入選後會顯示在精選區</span>
+            <span lang="en">// shown in the Featured block if selected</span>
+          </div>
+        </div>
+        <div class="field">
+          <label><span lang="zh">職稱 / 專長</span><span lang="en">Title / Expertise</span> <span class="req">*</span></label>
+          <input type="text" name="title_or_skill" required placeholder="e.g. ML Eng @ XX / self-hosted Server enthusiast" />
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label><span lang="zh">手機</span><span lang="en">Phone</span> <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="0900 000 000" />
+        </div>
+        <div class="field full">
+          <label><span lang="zh">AI 專案 / 應用名稱</span><span lang="en">AI project / app name</span> <span class="req">*</span></label>
+          <input type="text" name="project_name" required placeholder="e.g. 自架 n8n + Ollama 本地 agent workflow / Self-hosted Llama 3.1 + RAG" />
+        </div>
+        <div class="field full">
+          <label><span lang="zh">你解決了什麼問題?</span><span lang="en">What problem did you solve?</span> <span class="req">*</span></label>
+          <textarea name="problem" required placeholder="e.g. Searching internal docs took too long · wanted a 100% local query bot ..."></textarea>
+        </div>
+        <div class="field full">
+          <label><span lang="zh">現場想 Demo 的內容</span><span lang="en">What you'll Demo on-site</span> <span class="req">*</span></label>
+          <textarea name="demo_desc" required placeholder="e.g. Run a live RAG query · show latency & answer quality ..."></textarea>
+        </div>
+        <div class="field">
+          <label><span lang="zh">展示形式</span><span lang="en">Demo format</span> <span class="req">*</span></label>
+          <select name="demo_format" required>
+            <option value=""><span lang="zh">請選擇</span></option>
+            <option><span lang="zh">Live Demo(現場跑)</span></option>
+            <option><span lang="zh">短講 + 投影片</span></option>
+            <option><span lang="zh">硬體展示 + 介紹</span></option>
+            <option><span lang="zh">其他(備註說明)</span></option>
+          </select>
+        </div>
+        <div class="field">
+          <label><span lang="zh">預計所需時間</span><span lang="en">Time needed</span> <span class="req">*</span></label>
+          <select name="duration" required>
+            <option value="">—</option>
+            <option>5 min</option>
+            <option>10 min</option>
+            <option>15 min</option>
+            <option>20+ min</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label><span lang="zh">設備 / 網路 / 電力需求</span><span lang="en">Equipment / Network / Power needs</span></label>
+          <textarea name="requirements" placeholder="e.g. HDMI adapter · bringing own laptop · stable internet ..."></textarea>
+        </div>
+        <div class="field full">
+          <label><span lang="zh">支援資料連結(PDF / GitHub / 影片)</span><span lang="en">Reference link (PDF / GitHub / video)</span> <span class="req">*</span></label>
+          <input type="url" name="support_url" required placeholder="https://..." />
+          <div class="hint">
+            <span lang="zh">// 可留 1 個主要連結 · 多個連結請分行放在備註</span>
+            <span lang="en">// 1 main link · put extras in the note field</span>
+          </div>
+        </div>
+        <div class="field full">
+          <label>
+            <span lang="zh">作品主圖 · 建議 1000×1000px(PNG/JPG)</span>
+            <span lang="en">Work cover · recommended 1000×1000px (PNG/JPG)</span>
+            <span class="req">*</span>
+          </label>
+          <div class="cover-upload-row">
+            <input type="file" id="cover-input" accept="image/png,image/jpeg" />
+            <label for="cover-input" class="cover-upload-btn">
+              <span lang="zh">&gt; 選擇圖片</span><span lang="en">&gt; CHOOSE FILE</span>
+            </label>
+            <div class="cover-preview" id="cover-preview">
+              <span class="cover-preview-hint" lang="zh">尚未選擇</span>
+              <span class="cover-preview-hint" lang="en">no image</span>
+            </div>
+          </div>
+          <div class="hint">
+            <span lang="zh">// 自動縮到 1000×1000 · 不是正方形的會上下留黑(letterbox) · 不會變形</span>
+            <span lang="en">// Auto-resized to 1000×1000 · letterboxed if not square · never distorted</span>
+          </div>
+          <input type="hidden" name="cover_image" id="cover-image-data" />
+        </div>
+        <div class="field full">
+          <label>
+            <span lang="zh">個人照 · 選填(建議去背 PNG · 會疊在主圖右下角)</span>
+            <span lang="en">Personal photo · optional (prefer transparent PNG · overlaid on cover)</span>
+          </label>
+          <div class="cover-upload-row">
+            <input type="file" id="avatar-input" accept="image/png,image/jpeg" />
+            <label for="avatar-input" class="cover-upload-btn">
+              <span lang="zh">&gt; 選擇照片</span><span lang="en">&gt; CHOOSE PHOTO</span>
+            </label>
+            <div class="cover-preview" id="avatar-preview">
+              <span class="cover-preview-hint" lang="zh">尚未選擇</span>
+              <span class="cover-preview-hint" lang="en">no image</span>
+            </div>
+          </div>
+          <div class="hint">
+            <span lang="zh">// PNG 去背會保留透明 · JPG 直接顯示 · 自動縮長邊到 800px · 不變形</span>
+            <span lang="en">// PNG transparency preserved · JPG as-is · long side resized to 800px · never distorted</span>
+          </div>
+          <input type="hidden" name="avatar_image" id="avatar-image-data" />
+        </div>
+        <div class="field full">
+          <label><span lang="zh">備註 / 其他想說的</span><span lang="en">Notes / Anything else</span></label>
+          <textarea name="note" placeholder="..."></textarea>
+        </div>
+        <div class="field full">
+          <label class="chk">
+            <input type="checkbox" name="afterparty" value="yes" checked />
+            <div>
+              <div class="main">
+                <span lang="zh">加報 OOPS 晚上派對(17:00–20:00)</span>
+                <span lang="en">Opt in to OOPS Afterparty (17:00–20:00)</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">投稿人預設視為會到場 · 建議一起加派對 · 跟其他玩家交流。未入選也用得到。</span>
+                <span lang="en">Submitters are assumed to attend · join the Afterparty too. Still useful even if not selected.</span>
+              </div>
+            </div>
+          </label>
+          <div class="afterparty-box">
+            <div class="k"><span lang="zh">// 加報折抵</span><span lang="en">// AFTERPARTY_DISCOUNT</span></div>
+            <div class="d">
+              <span lang="zh">憑本頁投稿 · 票價折抵 <strong style="color: var(--magenta);">NT$100</strong></span>
+              <span lang="en">Via this submission · <strong style="color: var(--magenta);">NT$100 off</strong> the ticket</span>
+            </div>
+            <div class="n">
+              <span lang="zh">投稿收到信會附上折抵券 QR Code。若入選 · 折抵券會自動升級為「免費入場券」· 以新發的 QR 為準。</span>
+              <span lang="en">The confirmation email includes the discount QR. If selected · the discount upgrades to a free entry ticket (new QR will be sent).</span>
+            </div>
+          </div>
+        </div>
+        <div class="field full">
+          <label class="chk" style="margin-top: 4px;">
+            <input type="checkbox" name="consent_public" required />
+            <div>
+              <div class="main">
+                <span lang="zh">同意主辦精選後公開展示</span>
+                <span lang="en">Consent to public display if selected</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">勾選即代表:(1) 我有權提交以上資料 (2) 若被主辦精選 · 同意上述欄位展示在活動頁與活動宣傳。</span>
+                <span lang="en">By checking: (1) I have the right to submit the above (2) if selected, I agree the above fields can be shown on the event page and in promotion.</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit">
+          <span lang="zh">&gt; 送出投稿</span>
+          <span lang="en">&gt; SUBMIT</span>
+        </button>
+        <div class="form-note">
+          <span lang="zh">// 送出後會收到「已收到 · 等待主辦聯繫」email · 不代表入選。</span>
+          <span lang="en">// You'll get a "received · pending host contact" email · not an acceptance.</span>
+        </div>
+      </div>
+
+      <div class="form-status" id="speaker-status"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Signup -->
+<div class="modal magenta" id="modal-signup" role="dialog" aria-labelledby="modal-signup-title" aria-hidden="true">
+  <div class="modal-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">
+      <span lang="zh">&gt; 加入派對.exe</span>
+      <span lang="en">&gt; join_party.exe</span>
+    </div>
+    <h3 id="modal-signup-title">
+      <span lang="zh">我要報名參加</span>
+      <span lang="en">Count Me In</span>
+    </h3>
+    <p class="modal-desc">
+      <span lang="zh">一般活動報名表 · 包含是否加報 OOPS 晚上派對。
+      晚上派對原價、酒水內容、付款方式待 OOPS 公告 · 目前只確認折抵 NT$100。</span>
+      <span lang="en">Main event signup · includes OOPS Afterparty opt-in.
+      Afterparty price, drinks, payment pending OOPS announcement · currently only NT$100 discount confirmed.</span>
+    </p>
+
+    <form class="form-wrap" id="signup-form" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label><span lang="zh">姓名</span><span lang="en">Name</span> <span class="req">*</span></label>
+          <input type="text" name="name" required />
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <input type="email" name="email" required placeholder="you@example.com" />
+        </div>
+        <div class="field">
+          <label><span lang="zh">手機</span><span lang="en">Phone</span> <span class="req">*</span></label>
+          <input type="tel" name="phone" required placeholder="0900 000 000" />
+        </div>
+        <div class="field">
+          <label><span lang="zh">公司 / 單位</span><span lang="en">Company / Org</span> <span class="req">*</span></label>
+          <input type="text" name="company" required placeholder="e.g. TigerAI / 自己玩" />
+        </div>
+        <div class="field">
+          <label><span lang="zh">職稱 / 身份</span><span lang="en">Title / Role</span> <span class="req">*</span></label>
+          <input type="text" name="role" required placeholder="e.g. Engineer / Founder / Student" />
+        </div>
+        <div class="field">
+          <label><span lang="zh">最想在現場看到 / 得到的?</span><span lang="en">What do you most want from this?</span> <span class="req">*</span></label>
+          <select name="interest" required>
+            <option value="">—</option>
+            <option><span lang="zh">看別人的 Local AI 實作 / See others' Local AI builds</span></option>
+            <option><span lang="zh">找自架 Server 的硬體方案 / Hardware for self-hosted Server</span></option>
+            <option><span lang="zh">認識同好 Networking</span></option>
+            <option><span lang="zh">評估虎智 Server / Token 服務 / Evaluate TigerAI Server+Token</span></option>
+            <option><span lang="zh">單純來看 / Just curious</span></option>
+          </select>
+        </div>
+        <div class="field full">
+          <label class="chk">
+            <input type="checkbox" name="afterparty" value="yes" />
+            <div>
+              <div class="main">
+                <span lang="zh">加報 OOPS 晚上派對(17:00–20:00)</span>
+                <span lang="en">Opt in to OOPS Afterparty (17:00–20:00)</span>
+              </div>
+              <div class="sub">
+                <span lang="zh">加報不影響一般活動報名。選擇後 · OOPS 會確認原價與付款方式再通知你。</span>
+                <span lang="en">Opt-in does not affect main event signup. If selected, OOPS will confirm price & payment separately.</span>
+              </div>
+            </div>
+          </label>
+          <div class="afterparty-box">
+            <div class="k"><span lang="zh">// 加報折抵</span><span lang="en">// AFTERPARTY_DISCOUNT</span></div>
+            <div class="d">
+              <span lang="zh">憑本頁報名 · 票價折抵 <strong style="color: var(--magenta);">NT$100</strong></span>
+              <span lang="en">Via this signup · <strong style="color: var(--magenta);">NT$100 off</strong> the ticket</span>
+            </div>
+            <div class="n">
+              <span lang="zh">OOPS 原價、酒水內容、付款方式與退費規則由 OOPS 公告後補齊。<br />
+              資訊未齊前只先記錄意願 · <strong>不收取未核定金額</strong>。</span>
+              <span lang="en">OOPS will announce original price, drinks, payment & refund rules. Until then we only record intent · <strong>no payment collected</strong>.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <button type="submit" class="btn-submit magenta">
+          <span lang="zh">&gt; 送出報名</span>
+          <span lang="en">&gt; SIGN UP</span>
+        </button>
+        <div class="form-note">
+          <span lang="zh">// 送出後會收到報名確認信 · 一般活動與晚上派對分開記錄。</span>
+          <span lang="en">// Confirmation email will follow · main event & Afterparty are tracked separately.</span>
+        </div>
+      </div>
+
+      <div class="form-status" id="signup-status"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Admin · 包含 login view + dashboard view -->
+<div class="modal" id="modal-admin" role="dialog" aria-hidden="true">
+  <div class="modal-panel admin-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+
+    <!-- Login view -->
+    <div class="admin-login-view active">
+      <div class="modal-tag" style="color: var(--green);">&gt; admin_console --login</div>
+      <h3>主辦端登入</h3>
+      <p class="modal-desc">只有虎智主辦可以進入。登入後可以看報名名單、勾選精選講者(勾了會自動寄入選通知信 + 生成入場券)、打開 Google Sheet。</p>
+      <form id="admin-form" novalidate>
+        <div class="field" style="margin-bottom: 16px;">
+          <label>管理員密碼</label>
+          <input type="password" name="passcode" placeholder="············" autocomplete="current-password" />
+          <div class="hint">// 密碼存在 Apps Script PropertiesService · 不在 code</div>
+        </div>
+        <div class="submit-row" style="margin-top: 16px;">
+          <button type="submit" class="btn-submit" style="background: var(--green); color: #000;">&gt; LOGIN</button>
+          <div class="form-note">// 密碼錯會提示 · 不會通知外部</div>
+        </div>
+        <div class="form-status" id="admin-status"></div>
+      </form>
+    </div>
+
+    <!-- Dashboard view -->
+    <div class="admin-dashboard-view">
+      <div class="modal-tag" style="color: var(--green);">&gt; admin_console --loggedin</div>
+      <h3>主控台</h3>
+
+      <div class="admin-stats">
+        <div class="admin-stat-cell"><div class="k">// 一般報名</div><div class="n" id="stat-signup">0</div></div>
+        <div class="admin-stat-cell"><div class="k">// 加報派對</div><div class="n" id="stat-afterparty">0</div></div>
+        <div class="admin-stat-cell"><div class="k">// 投稿</div><div class="n" id="stat-submit">0</div></div>
+        <div class="admin-stat-cell highlight"><div class="k">// 已精選</div><div class="n" id="stat-featured">0</div></div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-admin-tab="signups" type="button">一般報名</button>
+        <button class="admin-tab-btn" data-admin-tab="submits" type="button">講者投稿</button>
+      </div>
+
+      <div class="admin-tab-pane active" data-admin-pane="signups">
+        <div id="admin-signup-list"><div class="admin-row" style="color:var(--text-dim)">(載入中...)</div></div>
+      </div>
+
+      <div class="admin-tab-pane" data-admin-pane="submits">
+        <div class="admin-note">勾選「精選」會 ① 寫入 Sheet「精選公開」欄位 ② 自動生成 10 字入場券 ③ 寄入選通知信給該講者(含分享時段 + 入場券)</div>
+        <div id="admin-submit-list"><div class="admin-row" style="color:var(--text-dim)">(載入中...)</div></div>
+      </div>
+
+      <div class="admin-actions">
+        <a href="#" id="admin-sheet-link" target="_blank">&gt; 打開 Google Sheet</a>
+        <button type="button" id="admin-refresh">&gt; 重新整理</button>
+        <button type="button" id="admin-logout" style="margin-left:auto;">&gt; 登出</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: FOMO exit intent · 滑鼠離開頂部時彈 -->
+<div class="modal magenta" id="modal-fomo" role="dialog" aria-hidden="true">
+  <div class="modal-panel fomo-panel">
+    <button type="button" class="modal-close" data-close-modal aria-label="關閉">×</button>
+    <div class="modal-tag">&gt; wait_before_you_leave.exe</div>
+    <h3>等等 · 你要忍痛<br/>錯過這場嗎?</h3>
+    <p class="modal-desc">
+      台北第一場 Local AI 玩家聚會 · <strong style="color:var(--cyan)">10 位玩家現場 Demo</strong> + Free Token Server + OOPS 晚上派對。<br/><br/>
+      <strong style="color:var(--magenta)">今年只這一場。</strong>
+    </p>
+    <div class="fomo-actions">
+      <button type="button" class="btn-submit magenta" id="fomo-signup-btn">
+        &gt; 好啦 · 幫我報名
+      </button>
+      <button type="button" class="fomo-skip" data-close-modal>
+        我真的不要 · 讓我脫節 AI
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─────── CONFETTI · 全站點擊小彩屑 + 送出表單煙火 ─────── */
+(function waitConfetti(){
+  if (typeof confetti !== 'function') {
+    return setTimeout(waitConfetti, 100);
+  }
+  const COLORS = ['#00F5FF', '#FF2EA6', '#00FF88', '#FFFFFF', '#3B82F6'];
+
+  // 判斷是否為填寫表單的欄位(這些 click 不觸發 confetti)
+  function isFormField(el){
+    if (!el || !el.closest) return false;
+    const tag = (el.tagName || '').toLowerCase();
+    if (['input', 'textarea', 'select', 'option'].includes(tag)) return true;
+    if (el.isContentEditable) return true;
+    // label 跟 .field 內的 click 也不觸發(避免打字時誤發)
+    if (el.closest('label.chk')) return true;
+    if (el.closest('.field')) return true;
+    return false;
+  }
+
+  document.addEventListener('click', (e) => {
+    if (isFormField(e.target)) return;
+    confetti({
+      particleCount: 32,
+      spread: 60,
+      startVelocity: 28,
+      ticks: 70,
+      gravity: 0.9,
+      scalar: 0.9,
+      colors: COLORS,
+      origin: {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      },
+      disableForReducedMotion: true,
+    });
+  });
+
+  // 送出表單時從兩側發射煙火
+  window.fireSubmitConfetti = function(){
+    const duration = 2000;
+    const end = Date.now() + duration;
+    (function frame(){
+      if (Date.now() > end) return;
+      confetti({
+        particleCount: 4, angle: 60, spread: 55, startVelocity: 55,
+        origin: { x: 0, y: 0.65 }, colors: COLORS,
+        disableForReducedMotion: true,
+      });
+      confetti({
+        particleCount: 4, angle: 120, spread: 55, startVelocity: 55,
+        origin: { x: 1, y: 0.65 }, colors: COLORS,
+        disableForReducedMotion: true,
+      });
+      requestAnimationFrame(frame);
+    })();
+  };
+})();
+
+/* ─────── I18N · 中英切換 ─────── */
+/* 不記憶 user 選擇 · 每次進來都是中文(預設 html data-lang="zh")·
+ * 要看英文的 user 自己按 EN 按鈕臨時切 · 關掉頁面就 reset 回中文 */
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'zh-Hant');
+}
+function toggleLang() {
+  const cur = document.documentElement.getAttribute('data-lang') || 'zh';
+  setLang(cur === 'zh' ? 'en' : 'zh');
+}
+/* 清掉舊版遺留在 user 瀏覽器的 lang 設定 · 保證預設回中文 */
+try { localStorage.removeItem('lang'); } catch (e) {}
+
+/* ─────── MODAL ─────── */
+function openModal(id) {
+  const el = document.getElementById('modal-' + id);
+  if (!el) return;
+  el.classList.add('show');
+  el.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('modal-open');
+  // focus 第一個 input
+  setTimeout(() => el.querySelector('input, select, textarea')?.focus(), 50);
+}
+function closeModal(el) {
+  el = el || document.querySelector('.modal.show');
+  if (!el) return;
+  el.classList.remove('show');
+  el.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('modal-open');
+}
+document.querySelectorAll('[data-open-modal]').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    openModal(btn.dataset.openModal);
+  });
+});
+document.querySelectorAll('[data-close-modal]').forEach(btn => {
+  btn.addEventListener('click', () => closeModal(btn.closest('.modal')));
+});
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', e => {
+    if (e.target === m) closeModal(m);   // 點背景關
+  });
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ─────── HERO PROPS · 廣告機 + 機櫃 對話框輪播 ─────── */
+(function initPropBubbles() {
+  const bubbles = [
+    {
+      id: 'kiosk-bubble',
+      zh: ['> 掃我免費領取 Token', '> 最新活動在這裡'],
+      en: ['> Scan me · free Token', '> Latest events here']
+    },
+    {
+      id: 'rack-bubble',
+      zh: [
+        '> 我是超級伺服器',
+        '> 全地端最安全',
+        '> A to A 部署 AI 作品',
+        '> 算力最佳化',
+        '> 免費使用 Token'
+      ],
+      en: [
+        '> I am the super Server',
+        '> Fully on-premise · secure',
+        '> A-to-A deploy AI builds',
+        '> Compute optimized',
+        '> Free Token access'
+      ]
+    }
+  ];
+  bubbles.forEach(b => {
+    const el = document.getElementById(b.id);
+    if (!el) return;
+    const textEl = el.querySelector('.bubble-text');
+    if (!textEl) return;
+    let i = 0;
+    // 初始顯示第一條
+    const initLang = document.documentElement.getAttribute('data-lang') || 'zh';
+    textEl.textContent = (b[initLang] || b.zh)[0];
+    i = 1;
+    function tick() {
+      const lang = document.documentElement.getAttribute('data-lang') || 'zh';
+      const msgs = b[lang] || b.zh;
+      el.classList.add('glitching');
+      // glitch 動畫 60% 處(最低 opacity)換字
+      setTimeout(() => {
+        textEl.textContent = msgs[i % msgs.length];
+        i++;
+      }, 330);
+      // 動畫結束後移除 class(讓下次 tick 可以重新觸發)
+      setTimeout(() => {
+        el.classList.remove('glitching');
+      }, 600);
+    }
+    setInterval(tick, 6000);   // 慢節奏:6 秒換一條
+  });
+})();
+
+/* ─────── FLOOR HIGHLIGHT · 兩邊照片 reveal + hover bubble + 中間跑數據 ─────── */
+(function initHighlight(){
+  const stage = document.querySelector('.highlight-stage');
+  if (!stage) return;
+
+  // Hover bubble · 每次 hover 顯示下一條(mouseleave 時 i++)
+  const KIOSK_MSGS = {
+    zh: ['> 掃我免費領取 Token', '> 最新活動在這裡'],
+    en: ['> Scan me · free Token', '> Latest events here'],
+  };
+  const RACK_MSGS = {
+    zh: ['> 我是超級伺服器', '> 全地端最安全', '> A to A 部署 AI 作品', '> 算力最佳化', '> 免費使用 Token'],
+    en: ['> I am the super Server', '> Fully on-premise · secure', '> A-to-A deploy AI', '> Compute optimized', '> Free Token access'],
+  };
+  function wireBubble(propSel, msgSet){
+    const prop = stage.querySelector(propSel);
+    if (!prop) return;
+    const bubble = document.createElement('div');
+    bubble.className = 'hl-bubble';
+    bubble.innerHTML = '<span class="arr"></span><span class="bubble-text"></span>';
+    const textEl = bubble.querySelector('.bubble-text');
+    prop.appendChild(bubble);
+    let i = 0;
+    prop.addEventListener('mouseenter', () => {
+      const lang = document.documentElement.getAttribute('data-lang') || 'zh';
+      const msgs = msgSet[lang] || msgSet.zh;
+      textEl.textContent = msgs[i % msgs.length];
+    });
+    prop.addEventListener('mouseleave', () => { i++; });
+  }
+  wireBubble('.highlight-kiosk', KIOSK_MSGS);
+  wireBubble('.highlight-rack', RACK_MSGS);
+
+  // Reveal on scroll
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          stage.classList.add('in-view');
+          io.unobserve(e.target);
+          startDataStream();   // 進畫面才開始跑 · 不然浪費 CPU
+        }
+      });
+    }, { threshold: 0.3 });
+    io.observe(stage);
+  } else {
+    stage.classList.add('in-view');
+    startDataStream();
+  }
+
+  let streamStarted = false;
+  function startDataStream(){
+    if (streamStarted) return;
+    streamStarted = true;
+    const el = document.getElementById('packet-flow');
+    if (!el) return;
+
+    const PACKETS = [
+      'TOKEN mint · 1832 tok',
+      'POST /v1/completion',
+      'EMBED /v1/embed · 512d',
+      'INFER llama-3.1-70b',
+      'STREAM chunk · 142ms',
+      'EXCHANGE signal · 24ms',
+      'RETRIEVE 24 docs · 47ms',
+      'KV scan · 1.2k rows',
+      'MINT token · tok=720',
+      'MODEL load phi-4',
+      'INFER mistral-7b · 89ms',
+      'COMPLETION 2048 tok',
+      'EMBED 384d · 32ms',
+      'STREAM 中 · 1.6s',
+      'MODEL qwen-2.5-32b',
+      'TOKEN exchange · OK',
+    ];
+
+    const LANES = 5;              // 5 條水平通道
+    // 建 lanes · 平均垂直分布
+    for (let i = 0; i < LANES; i++) {
+      const lane = document.createElement('div');
+      lane.className = 'packet-lane';
+      // 平均垂直分布 · container 220px 高 · packet 36px
+      lane.style.top = `${(i / (LANES - 1)) * (220 - 36)}px`;
+      lane.dataset.dir = (i % 2 === 0) ? 'r' : 'l';   // 奇偶交錯方向
+      el.appendChild(lane);
+    }
+    const lanes = Array.from(el.querySelectorAll('.packet-lane'));
+
+    function spawn(laneEl){
+      const dir = laneEl.dataset.dir;
+      const text = PACKETS[Math.floor(Math.random() * PACKETS.length)];
+      const p = document.createElement('div');
+      p.className = 'packet pkt-' + dir;
+      const dur = 5 + Math.random() * 3.5;    // 5-8.5 秒
+      p.style.animationDuration = dur + 's';
+      p.innerHTML = (dir === 'r'
+        ? '<span class="arr">→</span>'
+        : '<span class="arr">←</span>') + text;
+      laneEl.appendChild(p);
+      setTimeout(() => p.remove(), dur * 1000 + 200);
+      // 下一個 spawn · 隨機 1.2-3.5 秒
+      setTimeout(() => spawn(laneEl), 1200 + Math.random() * 2300);
+    }
+
+    // 錯開啟動 · 不會所有 lane 同時 spawn
+    lanes.forEach((lane, i) => {
+      setTimeout(() => spawn(lane), i * 400 + Math.random() * 500);
+    });
+  }
+})();
+
+/* ─────── AGENDA scroll reveal · 每項獨立 trigger · 一個一個出 ─────── */
+(function initAgendaReveal() {
+  const items = document.querySelectorAll('.agenda li');
+  if (!items.length) return;
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('show'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        io.unobserve(entry.target);   // 顯示後就不再觀察 · 不會往回縮
+      }
+    });
+  }, {
+    threshold: 0,
+    rootMargin: '0px 0px -25% 0px',   // 項目要滾到 viewport 下方 75% 位置才 trigger
+  });
+  items.forEach(el => io.observe(el));
+})();
+
+/* ─────── FAQ toggle ─────── */
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    item.classList.toggle('open');
+  });
+});
+
+/* ─────── 時間流動的 agenda cursor ─────── */
+// (未來可加:根據當前時間在流程表上高亮正在進行的環節)
+
+/* ─────── Apps Script 設定 ─────── */
+const CONFIG = {
+  // Apps Script Web App URL(一個 URL 處理 signup / speaker_submit / admin_login / admin_dashboard / admin_toggle_featured)
+  WEBHOOK: 'https://script.google.com/macros/s/AKfycbyCRqIrVzZ_IamKRQmIf7MfBRuhDzp6Br3CCy78JsuS_r7WICmeUBkbk1D-Ouslyobelg/exec',
+  // 「公開精選」分頁 CSV publish URL(gid=767581510)
+  SPEAKERS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4JJZ9GwX7FSUo6hTRZYT-qBwx9KNE7w3kuE0TJxp3BGgRnmp8biCrwFzL-dEt7IdJDStfPMil7tdT/pub?gid=767581510&single=true&output=csv',
+};
+
+async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 3000) {
+  window.fireSubmitConfetti?.();
+  if (!CONFIG.WEBHOOK) {
+    statusEl.className = 'form-status error show';
+    statusEl.textContent = '[ ERROR ] 後端尚未串接 · 正式上線前會補上(DEMO 階段)';
+    return;
+  }
+  const data = Object.fromEntries(new FormData(formEl));
+  data.action = action;
+  data._ua = navigator.userAgent;
+  const btn = formEl.querySelector('.btn-submit');
+  btn.disabled = true;
+  const originalText = btn.textContent;
+  btn.textContent = '> 送出中...';
+  try {
+    const res = await fetch(CONFIG.WEBHOOK, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('http ' + res.status);
+    const result = await res.json().catch(() => ({ ok: true }));
+    if (result.ok === false) throw new Error(result.error || 'server error');
+    statusEl.className = 'form-status show';
+    statusEl.textContent = successMsg + (autoCloseMs > 0 ? ' · 3 秒後自動關閉 ·' : '');
+    formEl.reset();
+    // 標記已報名 · FOMO modal 下次不彈
+    try { localStorage.setItem('local-ai-party-signed-up', 'yes'); } catch (e) {}
+    const modal = formEl.closest('.modal');
+    const clearAndClose = () => {
+      if (modal && modal.classList.contains('show')) closeModal(modal);
+      statusEl.className = 'form-status';
+      statusEl.textContent = '';
+    };
+    if (autoCloseMs > 0) setTimeout(clearAndClose, autoCloseMs);
+    else clearAndClose();   // 0 = 立刻關 · 讓用戶直接看到背景的 confetti
+  } catch (err) {
+    statusEl.className = 'form-status error show';
+    statusEl.textContent = '[ ERROR ] 送出失敗 · 請稍後再試 · ' + err.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
+document.getElementById('speaker-form')?.addEventListener('submit', e => {
+  e.preventDefault();
+  const status = document.getElementById('speaker-status');
+  // 作品主圖是 hidden input · html5 required 不生效 · 手動檢查
+  const coverData = document.getElementById('cover-image-data')?.value || '';
+  if (!coverData.startsWith('data:image/')) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 請上傳作品主圖 · 這是必填項';
+    document.getElementById('cover-input')?.focus();
+    return;
+  }
+  submitForm(e.target, 'speaker_submit', status,
+    '[ OK ] 投稿已收到 · 等待主辦審核 · 入選會以 email 聯繫');
+});
+document.getElementById('signup-form')?.addEventListener('submit', e => {
+  e.preventDefault();
+  const status = document.getElementById('signup-status');
+  submitForm(e.target, 'signup', status,
+    '[ OK ] 報名已收到 · 確認信稍後寄出', 0);   // 報名立刻關 modal · 不等 3 秒
+});
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  ADMIN DASHBOARD · login + stats + tabs + toggle featured
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+let adminPasscode = '';
+
+function escapeHtmlA(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttrA(s) { return escapeHtmlA(s); }
+
+async function adminFetch(action, extra = {}) {
+  if (!CONFIG.WEBHOOK) throw new Error('Apps Script 尚未部署(CONFIG.WEBHOOK 空)');
+  const res = await fetch(CONFIG.WEBHOOK, {
+    method: 'POST',
+    body: JSON.stringify({ action, passcode: adminPasscode, ...extra }),
+  });
+  return res.json();
+}
+
+function adminToast(msg, isErr) {
+  const t = document.createElement('div');
+  t.className = 'admin-toast' + (isErr ? ' err' : '');
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3500);
+}
+
+function renderAdminStats(stats) {
+  if (!stats) return;
+  document.getElementById('stat-signup').textContent     = stats.signup_count ?? 0;
+  document.getElementById('stat-afterparty').textContent = stats.afterparty_count ?? 0;
+  document.getElementById('stat-submit').textContent     = stats.submit_count ?? 0;
+  document.getElementById('stat-featured').textContent   = stats.featured_count ?? 0;
+}
+
+function renderAdminSignups(list) {
+  const el = document.getElementById('admin-signup-list');
+  if (!list || !list.length) {
+    el.innerHTML = '<div class="admin-row" style="color:var(--text-dim)">(尚無報名)</div>';
+    return;
+  }
+  el.innerHTML = '<div class="admin-list">' + list.map(r => `
+    <div class="admin-row">
+      <div class="meta">${escapeHtmlA(r.ts)} ${r.afterparty ? '· <span style="color:var(--magenta)">✓ 加報派對</span>' : ''}</div>
+      <div class="name">${escapeHtmlA(r.name || '-')}</div>
+      <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')}</div>
+      ${(r.company || r.role) ? `<div class="meta">${escapeHtmlA(r.company || '')} ${r.role ? '· ' + escapeHtmlA(r.role) : ''}</div>` : ''}
+      ${r.interest ? `<div class="meta" style="color:var(--text-dim)">想得到:${escapeHtmlA(r.interest)}</div>` : ''}
+      ${r.discount ? `<div class="ticket" style="color:var(--magenta);border-color:var(--magenta)">🎫 ${escapeHtmlA(r.discount)}</div>` : ''}
+    </div>
+  `).join('') + '</div>';
+}
+
+function renderAdminSubmits(list) {
+  const el = document.getElementById('admin-submit-list');
+  if (!list || !list.length) {
+    el.innerHTML = '<div class="admin-row" style="color:var(--text-dim)">(尚無投稿)</div>';
+    return;
+  }
+  el.innerHTML = '<div class="admin-list">' + list.map(r => `
+    <div class="admin-row admin-submit-row">
+      <input type="checkbox" ${r.featured ? 'checked' : ''}
+             data-row="${r.row}" data-name="${escapeAttrA(r.public_name)}"
+             onchange="adminToggleFeatured(this)" />
+      ${r.cover ? `<img src="${escapeAttrA(r.cover)}" alt="cover" style="width:60px;height:60px;object-fit:cover;border:1px solid var(--line-hi);flex-shrink:0;" />` : ''}
+      <div>
+        <div class="meta">${escapeHtmlA(r.ts)} · ${r.featured ? '<span style="color:var(--green)">✓ 已精選</span>' : '<span style="color:var(--text-dim)">未精選</span>'}</div>
+        <div class="name">${escapeHtmlA(r.public_name || '-')} <span style="color:var(--text-mid);font-weight:400;font-size:12px">· ${escapeHtmlA(r.title || '')}</span></div>
+        <div class="proj">${escapeHtmlA(r.project || '')}</div>
+        ${r.demo ? `<div class="desc">${escapeHtmlA(r.demo.length > 160 ? r.demo.substring(0, 160) + '…' : r.demo)}</div>` : ''}
+        <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')} ${r.format ? '· ' + escapeHtmlA(r.format) : ''} ${r.duration ? '· ' + escapeHtmlA(r.duration) : ''}</div>
+        <div class="meta">${r.afterparty ? '<span style="color:var(--magenta)">✓ 加派對</span>' : '<span style="color:var(--text-dim)">未加派對</span>'}</div>
+        ${r.support_url ? `<div class="meta"><a href="${escapeAttrA(r.support_url)}" target="_blank" rel="noopener" style="color:var(--cyan)">↗ 參考資料</a></div>` : ''}
+        ${r.ticket ? `<div class="ticket" style="color:var(--green);border-color:var(--green)">🎫 ${escapeHtmlA(r.ticket)} <span style="color:var(--text-dim);font-size:10px">(免費入場券)</span></div>` : ''}
+        ${r.discount && !r.featured ? `<div class="ticket" style="color:var(--magenta);border-color:var(--magenta)">🎫 ${escapeHtmlA(r.discount)} <span style="color:var(--text-dim);font-size:10px">(NT$100 折抵券)</span></div>` : ''}
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+async function refreshAdminDashboard() {
+  try {
+    const result = await adminFetch('admin_dashboard');
+    if (!result.ok) {
+      adminToast(result.error || '載入失敗', true);
+      return;
+    }
+    renderAdminStats(result.stats);
+    renderAdminSignups(result.signups);
+    renderAdminSubmits(result.submits);
+    const link = document.getElementById('admin-sheet-link');
+    if (link && result.submit_sheet_url) link.href = result.submit_sheet_url;
+    else if (link && result.sheet_url) link.href = result.sheet_url;
+  } catch (err) {
+    adminToast('網路錯誤:' + err.message, true);
+  }
+}
+
+window.adminToggleFeatured = async function(checkbox) {
+  checkbox.disabled = true;
+  const row = checkbox.dataset.row;
+  const name = checkbox.dataset.name;
+  const featured = checkbox.checked;
+  try {
+    const result = await adminFetch('admin_toggle_featured', { row, featured });
+    if (result.ok) {
+      adminToast((featured ? '✓ 已上架 ' : '✓ 已下架 ') + name + (result.ticket ? ' · 入場券 ' + result.ticket : ''));
+      refreshAdminDashboard();
+      if (featured) window.fireSubmitConfetti?.();
+    } else {
+      checkbox.checked = !featured;
+      adminToast(result.error || '操作失敗', true);
+    }
+  } catch (err) {
+    checkbox.checked = !featured;
+    adminToast('網路錯誤:' + err.message, true);
+  } finally {
+    checkbox.disabled = false;
+  }
+};
+
+/* Admin login form */
+document.getElementById('admin-form')?.addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = document.getElementById('admin-status');
+  const passcode = (new FormData(e.target).get('passcode') || '').toString().trim();
+  if (!passcode) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 請輸入密碼';
+    return;
+  }
+  if (!CONFIG.WEBHOOK) {
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] Apps Script 尚未部署 · 請先把 Web App URL 填到 CONFIG.WEBHOOK';
+    return;
+  }
+  status.className = 'form-status show';
+  status.textContent = '[ ... ] 登入中...';
+  adminPasscode = passcode;
+  try {
+    const result = await adminFetch('admin_login');
+    if (result.ok) {
+      // 切換到 dashboard view
+      document.querySelector('.admin-login-view').classList.remove('active');
+      document.querySelector('.admin-dashboard-view').classList.add('active');
+      renderAdminStats(result.stats);
+      const link = document.getElementById('admin-sheet-link');
+      if (link && result.sheet_url) link.href = result.sheet_url;
+      refreshAdminDashboard();
+      window.fireSubmitConfetti?.();
+      e.target.reset();
+      status.className = 'form-status';
+      status.textContent = '';
+    } else {
+      adminPasscode = '';
+      status.className = 'form-status error show';
+      status.textContent = '[ ERROR ] ' + (result.error || '登入失敗');
+    }
+  } catch (err) {
+    adminPasscode = '';
+    status.className = 'form-status error show';
+    status.textContent = '[ ERROR ] 網路錯誤:' + err.message;
+  }
+});
+
+/* Admin tabs */
+document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.adminTab;
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.admin-tab-pane').forEach(p => p.classList.toggle('active', p.dataset.adminPane === tab));
+  });
+});
+
+/* Refresh / Logout */
+document.getElementById('admin-refresh')?.addEventListener('click', refreshAdminDashboard);
+document.getElementById('admin-logout')?.addEventListener('click', () => {
+  adminPasscode = '';
+  document.querySelector('.admin-dashboard-view').classList.remove('active');
+  document.querySelector('.admin-login-view').classList.add('active');
+});
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ *  FOMO · exit intent · 滑鼠離開頂部時彈
+ * ═══════════════════════════════════════════════════════════════════════════ */
+(function initFomo(){
+  // 已經報名過 · 不彈
+  try {
+    if (localStorage.getItem('local-ai-party-signed-up') === 'yes') return;
+    if (sessionStorage.getItem('local-ai-party-fomo-shown') === 'yes') return;
+  } catch (e) {}
+
+  const START = Date.now();
+  const MIN_DWELL_MS = 10 * 1000;   // 至少停留 10 秒才會觸發
+
+  function onMouseOut(e) {
+    if (e.relatedTarget || e.toElement) return;   // 還在頁內
+    if (e.clientY > 60) return;                   // 不是從頂部離開
+    if (Date.now() - START < MIN_DWELL_MS) return;
+    try { sessionStorage.setItem('local-ai-party-fomo-shown', 'yes'); } catch (e) {}
+    openModal('fomo');
+    document.removeEventListener('mouseout', onMouseOut);
+  }
+  document.addEventListener('mouseout', onMouseOut);
+})();
+
+/* FOMO 的「幫我報名」按鈕 · 關閉 FOMO 再開 signup */
+document.getElementById('fomo-signup-btn')?.addEventListener('click', () => {
+  closeModal(document.getElementById('modal-fomo'));
+  setTimeout(() => openModal('signup'), 150);
+});
+
+/* ─────── beforeunload 保險 · 關 tab 時先彈瀏覽器預設 confirm ─────── */
+/* 瀏覽器安全規則 · 文字無法自訂 · 一律顯示「您要離開這個網站嗎?」或「Leave site?」 */
+/* 已報名的不擋 · 停留 <10s 不擋(避免 refresh 煩) */
+(function initBeforeUnloadGuard(){
+  const START = Date.now();
+  window.addEventListener('beforeunload', (e) => {
+    try {
+      if (localStorage.getItem('local-ai-party-signed-up') === 'yes') return;
+    } catch (err) {}
+    if (Date.now() - START < 10000) return;
+    e.preventDefault();
+    e.returnValue = '';
+  });
+})();
+
+/* ─────── Cover + Avatar upload · 前端 resize ─────── */
+function wireImageUpload_(inputId, previewId, hiddenId, resizer) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  const hidden = document.getElementById(hiddenId);
+  if (!input || !preview || !hidden) return;
+  input.addEventListener('change', async (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    if (!/^image\/(png|jpeg)$/i.test(file.type)) {
+      alert('請選 PNG 或 JPG 圖片');
+      input.value = '';
+      return;
+    }
+    try {
+      preview.innerHTML = '<span class="cover-preview-hint">處理中...</span>';
+      const dataUrl = await resizer(file);
+      hidden.value = dataUrl;
+      preview.innerHTML = `<img src="${dataUrl}" alt="preview" />`;
+    } catch (err) {
+      preview.innerHTML = '<span class="cover-preview-hint" style="color:var(--red)">處理失敗</span>';
+      alert('圖片處理失敗:' + err.message);
+      input.value = '';
+    }
+  });
+}
+wireImageUpload_('cover-input', 'cover-preview', 'cover-image-data', resizeToSquare1000_);
+wireImageUpload_('avatar-input', 'avatar-preview', 'avatar-image-data', resizeAvatarKeepAlpha_);
+
+/* Google Sheet 單格字元上限 50000 · 留 2K safety margin · 壓到 48000 以下 */
+const CELL_MAX_CHARS = 48000;
+
+/* 遞減 JPEG quality 直到 base64 字串 fit CELL_MAX_CHARS · 強制 fit */
+function compressJpegFit_(canvas, maxLen) {
+  for (let q = 0.75; q >= 0.3; q -= 0.08) {
+    const d = canvas.toDataURL('image/jpeg', q);
+    if (d.length <= maxLen) return d;
+  }
+  return canvas.toDataURL('image/jpeg', 0.3);
+}
+
+/* Cover · 500×500 letterbox JPEG · base64 直接存進 Sheet(走 inline · 不走 Drive hotlink) */
+async function resizeToSquare1000_(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImageSrc_(url);
+    const SIZE = 500;
+    const canvas = document.createElement('canvas');
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, SIZE, SIZE);
+    const ratio = Math.min(SIZE / img.width, SIZE / img.height);
+    const w = img.width * ratio;
+    const h = img.height * ratio;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, (SIZE - w) / 2, (SIZE - h) / 2, w, h);
+    return compressJpegFit_(canvas, CELL_MAX_CHARS);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+/* 把 image 畫到指定長邊的 canvas · 保留 alpha */
+function drawToCanvas_(img, maxSide) {
+  const ratio = Math.min(1, maxSide / Math.max(img.width, img.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(img.width * ratio);
+  c.height = Math.round(img.height * ratio);
+  const ctx = c.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, 0, 0, c.width, c.height);
+  return c;
+}
+
+/* Avatar · PNG 優先保留透明 · 太大就逐步縮小尺寸再試 PNG · 絕不輕易轉 JPEG 失去透明 */
+async function resizeAvatarKeepAlpha_(file) {
+  const url = URL.createObjectURL(file);
+  const isPng = /^image\/png$/i.test(file.type);
+  try {
+    const img = await loadImageSrc_(url);
+    if (isPng) {
+      // 優先保留透明 · 從 320 一路試到 140 · 都盡量用 PNG
+      for (const size of [320, 280, 240, 200, 170, 140]) {
+        const c = drawToCanvas_(img, size);
+        const d = c.toDataURL('image/png');
+        if (d.length <= CELL_MAX_CHARS) return d;
+      }
+      // 真的太極端(很細緻的非去背 PNG) · 才 fallback 黑底 JPEG
+      const c = drawToCanvas_(img, 320);
+      const bg = document.createElement('canvas');
+      bg.width = c.width; bg.height = c.height;
+      const bgCtx = bg.getContext('2d');
+      bgCtx.fillStyle = '#000000';
+      bgCtx.fillRect(0, 0, bg.width, bg.height);
+      bgCtx.drawImage(c, 0, 0);
+      return compressJpegFit_(bg, CELL_MAX_CHARS);
+    }
+    // JPG 本來就無透明 · 直接 JPEG
+    return compressJpegFit_(drawToCanvas_(img, 320), CELL_MAX_CHARS);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function loadImageSrc_(url) {
+  return new Promise((resolve, reject) => {
+    const i = new Image();
+    i.onload = () => resolve(i);
+    i.onerror = () => reject(new Error('圖片讀取失敗'));
+    i.src = url;
+  });
+}
+
+/* ─────── 精選講者 · 從 Sheet CSV 讀 → 無限輪播 ─────── */
+async function loadFeaturedSpeakers() {
+  const track = document.getElementById('speaker-carousel-track');
+  const wrap = document.querySelector('.speaker-carousel-wrap');
+  const empty = document.getElementById('spot-empty');
+  const nEl = document.querySelector('.spot-count .n');
+  const remEl = document.getElementById('spot-remaining');
+  const remElEn = document.getElementById('spot-remaining-en');
+  if (!CONFIG.SPEAKERS_CSV_URL || !track) {
+    // 沒設 CSV · 保留 empty state
+    return;
+  }
+  try {
+    // 加 cache buster · 強制繞過 browser cache 跟 Google CDN cache
+    const csvUrl = CONFIG.SPEAKERS_CSV_URL + '&_t=' + Date.now();
+    const res = await fetch(csvUrl, { cache: 'no-store' });
+    const csv = await res.text();
+    const rows = parseCsv_(csv);
+    const headers = rows.shift();
+    const items = rows.map(r => Object.fromEntries(r.map((v, i) => [headers[i], v])));
+    // CSV 由「公開精選」分頁 QUERY 輸出 · 只會含 is_featured=TRUE 的 row
+    // 前端只過濾空 row / header / 可能殘留的 #REF! · 不再依賴 is_featured 欄
+    const featured = items.filter(s =>
+      s.public_name
+      && s.public_name !== 'public_name'
+      && !String(s.public_name).startsWith('#')
+    );
+
+    // 更新計數
+    if (nEl)   nEl.textContent = `${featured.length} / 10`;
+    const left = Math.max(0, 10 - featured.length);
+    if (remEl)   remEl.textContent = String(left);
+    if (remElEn) remElEn.textContent = String(left);
+
+    if (!featured.length) {
+      // 無人入選:carousel 隱藏 · spot-empty 顯示
+      wrap.classList.add('empty');
+      wrap.classList.remove('static');
+      return;
+    }
+    wrap.classList.remove('empty');
+    if (empty) empty.classList.add('hidden');
+
+    // 卡片數 < 5:不輪播 · 置中靜態顯示 · 不複製一份
+    // 卡片數 ≥ 5:啟動輪播 · render 兩份達成無縫 loop
+    const SCROLL_THRESHOLD = 5;
+    if (featured.length < SCROLL_THRESHOLD) {
+      wrap.classList.add('static');
+      track.innerHTML = featured.map(s => renderSpeakerCard_(s, false)).join('');
+      track.style.animationDuration = '';
+    } else {
+      wrap.classList.remove('static');
+      const html = featured.map(s => renderSpeakerCard_(s, false)).join('');
+      track.innerHTML = html + featured.map(s => renderSpeakerCard_(s, true)).join('');
+      const totalCards = featured.length * 2;
+      track.style.animationDuration = Math.max(30, totalCards * 7) + 's';
+    }
+  } catch (err) {
+    console.warn('載入精選講者失敗:', err);
+  }
+}
+
+/* 現在走 base64 inline(data:image/jpeg;base64,...)· 直接存 Sheet · 完全繞過 Drive hotlink
+ * 舊的 Drive URL 仍 backward compat(但 Google 擋 hotlink · 大概率顯示不出來) */
+function normalizeDriveUrl_(url) {
+  if (!url) return '';
+  const s = String(url);
+  if (s.startsWith('data:')) return s;                       // base64 inline · 直接用
+  const m = s.match(/[?&]id=([a-zA-Z0-9_-]+)|\/d\/([a-zA-Z0-9_-]+)/);
+  if (m) return `https://drive.google.com/uc?export=view&id=${m[1] || m[2]}`;
+  return s;
+}
+
+function renderSpeakerCard_(s, dup) {
+  const cover = normalizeDriveUrl_(s.cover_url);
+  const avatar = normalizeDriveUrl_(s.avatar_url);
+  const imgErr = "this.style.display='none';this.parentNode.classList.add('empty');";
+  const coverHtml = cover
+    ? `<div class="cover"><img class="cover-img" src="${escapeAttr(cover)}" alt="${escapeAttr(s.public_name)}" loading="lazy" onerror="${imgErr}" />
+       ${avatar ? `<img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" onerror="this.style.display='none'" />` : ''}
+       </div>`
+    : (avatar
+        ? `<div class="cover empty"><img class="avatar" src="${escapeAttr(avatar)}" alt="" loading="lazy" style="position:absolute;" onerror="this.style.display='none'" /></div>`
+        : `<div class="cover empty"></div>`);
+  return `
+    <article class="speaker-card"${dup ? ' aria-hidden="true"' : ''}>
+      <div class="badge"><span lang="zh">已精選</span><span lang="en">SELECTED</span></div>
+      ${coverHtml}
+      <div class="info">
+        <div class="label"><span lang="zh">// 精選講者</span><span lang="en">// FEATURED_SPEAKER</span></div>
+        <div class="name">${escapeHtml(s.public_name || '')}</div>
+        <div class="title-line">${escapeHtml(s.title_or_skill || '')}</div>
+        <div class="project"><span class="k"><span lang="zh">專案</span><span lang="en">PROJECT</span></span>${escapeHtml(s.project_name || '')}</div>
+        <div class="desc">${escapeHtml(s.demo_desc || '')}</div>
+        ${s.support_url ? `<div class="links"><a href="${escapeAttr(s.support_url)}" target="_blank" rel="noopener"><span lang="zh">↗ 看作品</span><span lang="en">↗ VIEW</span></a></div>` : ''}
+      </div>
+    </article>`;
+}
+/* 簡易 CSV parser · 支援 "..." quoted + 逗號 */
+function parseCsv_(text) {
+  const rows = [];
+  let cur = [], val = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], n = text[i + 1];
+    if (inQ) {
+      if (c === '"' && n === '"') { val += '"'; i++; }
+      else if (c === '"') inQ = false;
+      else val += c;
+    } else {
+      if (c === '"') inQ = true;
+      else if (c === ',') { cur.push(val); val = ''; }
+      else if (c === '\n') { cur.push(val); rows.push(cur); cur = []; val = ''; }
+      else if (c === '\r') { /* skip */ }
+      else val += c;
+    }
+  }
+  if (val.length || cur.length) { cur.push(val); rows.push(cur); }
+  return rows.filter(r => r.length && r.some(x => x !== ''));
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function escapeAttr(s) { return escapeHtml(s); }
+loadFeaturedSpeakers();
+</script>
+
+</body>
+</html>
