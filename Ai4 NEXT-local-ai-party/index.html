@@ -3716,6 +3716,8 @@ const CONFIG = {
   WEBHOOK: 'https://script.google.com/macros/s/AKfycbyCRqIrVzZ_IamKRQmIf7MfBRuhDzp6Br3CCy78JsuS_r7WICmeUBkbk1D-Ouslyobelg/exec',
   // 「公開精選」分頁 CSV publish URL(gid=767581510)
   SPEAKERS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS4JJZ9GwX7FSUo6hTRZYT-qBwx9KNE7w3kuE0TJxp3BGgRnmp8biCrwFzL-dEt7IdJDStfPMil7tdT/pub?gid=767581510&single=true&output=csv',
+  // 來源追蹤 · 送到 Apps Script · 寫進 Sheet 區分哪個 landing page 進來的
+  SITE_SOURCE: 'ai4next',
 };
 
 async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 3000) {
@@ -3728,6 +3730,7 @@ async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 30
   const data = Object.fromEntries(new FormData(formEl));
   data.action = action;
   data._ua = navigator.userAgent;
+  data.source = CONFIG.SITE_SOURCE || 'tigerai';
   const btn = formEl.querySelector('.btn-submit');
   btn.disabled = true;
   const originalText = btn.textContent;
@@ -3818,6 +3821,11 @@ function renderAdminStats(stats) {
   document.getElementById('stat-featured').textContent   = stats.featured_count ?? 0;
 }
 
+function sourceTag_(src) {
+  if (src === 'ai4next') return '<span style="padding:2px 8px;background:var(--green);color:#000;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.08em;margin-left:8px;">AI4 NEXT</span>';
+  return '<span style="padding:2px 8px;background:var(--cyan);color:#000;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.08em;margin-left:8px;">TIGERAI</span>';
+}
+
 function renderAdminSignups(list) {
   const el = document.getElementById('admin-signup-list');
   if (!list || !list.length) {
@@ -3826,7 +3834,7 @@ function renderAdminSignups(list) {
   }
   el.innerHTML = '<div class="admin-list">' + list.map(r => `
     <div class="admin-row">
-      <div class="meta">${escapeHtmlA(r.ts)} ${r.afterparty ? '· <span style="color:var(--magenta)">✓ 加報派對</span>' : ''}</div>
+      <div class="meta">${escapeHtmlA(r.ts)} ${r.afterparty ? '· <span style="color:var(--magenta)">✓ 加報派對</span>' : ''} ${sourceTag_(r.source)}</div>
       <div class="name">${escapeHtmlA(r.name || '-')}</div>
       <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')}</div>
       ${(r.company || r.role) ? `<div class="meta">${escapeHtmlA(r.company || '')} ${r.role ? '· ' + escapeHtmlA(r.role) : ''}</div>` : ''}
@@ -3849,7 +3857,7 @@ function renderAdminSubmits(list) {
              onchange="adminToggleFeatured(this)" />
       ${r.cover ? `<img src="${escapeAttrA(r.cover)}" alt="cover" style="width:60px;height:60px;object-fit:cover;border:1px solid var(--line-hi);flex-shrink:0;" />` : ''}
       <div>
-        <div class="meta">${escapeHtmlA(r.ts)} · ${r.featured ? '<span style="color:var(--green)">✓ 已精選</span>' : '<span style="color:var(--text-dim)">未精選</span>'}</div>
+        <div class="meta">${escapeHtmlA(r.ts)} · ${r.featured ? '<span style="color:var(--green)">✓ 已精選</span>' : '<span style="color:var(--text-dim)">未精選</span>'} ${sourceTag_(r.source)}</div>
         <div class="name">${escapeHtmlA(r.public_name || '-')} <span style="color:var(--text-mid);font-weight:400;font-size:12px">· ${escapeHtmlA(r.title || '')}</span></div>
         <div class="proj">${escapeHtmlA(r.project || '')}</div>
         ${r.demo ? `<div class="desc">${escapeHtmlA(r.demo.length > 160 ? r.demo.substring(0, 160) + '…' : r.demo)}</div>` : ''}

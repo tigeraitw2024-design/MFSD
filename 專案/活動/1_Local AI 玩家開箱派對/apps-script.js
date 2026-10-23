@@ -52,7 +52,8 @@ const SIGNUP_HEADERS = [
   '時間戳', '姓名', 'Email', '手機', '公司/單位', '職稱/身份',
   '最想得到', '加報晚上派對',
   '折抵券',        // 第 9 欄 · 加報派對時自動生成(DISC-XXXXXXXX)· 現場 QR 掃碼
-  '寄信狀態', 'UA/備註'
+  '寄信狀態', 'UA/備註',
+  '來源'           // 第 12 欄 · tigerai = 從虎智站 · ai4next = 從 Ai4 NEXT 站
 ];
 
 const SUBMIT_HEADERS = [
@@ -65,7 +66,8 @@ const SUBMIT_HEADERS = [
   '個人照',        // 18 · Drive 連結(本人去背照 · 保留 PNG 透明)
   '寄信狀態', 'UA/備註',
   '加報晚上派對',  // 21 · 投稿人預設視為會到場 · 加報派對預設 yes
-  '折抵券'         // 22 · 加報派對時自動生成 DISC-XXXXXXXX · 入選後失效(改用入場券)
+  '折抵券',        // 22 · 加報派對時自動生成 DISC-XXXXXXXX · 入選後失效(改用入場券)
+  '來源'           // 23 · tigerai = 從虎智站 · ai4next = 從 Ai4 NEXT 站
 ];
 
 const FEATURED_HEADERS = [
@@ -218,6 +220,7 @@ function handleSignup_(data) {
     discountCode,          // 第 9 欄 · 折抵券代碼
     '寄信中',              // 第 10 欄 · 寄信狀態
     (data._ua || '').slice(0, 200),  // 第 11 欄 · UA
+    data.source || 'tigerai',        // 第 12 欄 · 來源
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -283,6 +286,7 @@ function handleSpeakerSubmit_(data) {
     (data._ua || '').slice(0, 200), // 20 UA
     data.afterparty === 'yes' ? '✓' : '',  // 21 加報晚上派對
     discountCode,                            // 22 折抵券
+    data.source || 'tigerai',                // 23 來源
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -518,6 +522,7 @@ function handleAdminDashboard_(data) {
       company: r[4], role: r[5], interest: r[6],
       afterparty: r[7] === '✓',
       discount: r[8] || '',    // 折抵券代碼
+      source: r[11] || 'tigerai',  // 來源 · tigerai / ai4next
     })).reverse(),
     submits: tData.map((r, i) => ({
       row: i + 2,
@@ -532,6 +537,7 @@ function handleAdminDashboard_(data) {
       avatar: r[17] || '',     // 個人照
       afterparty: r[20] === '✓',  // 加派對(投稿人預設 yes)
       discount: r[21] || '',   // 折抵券(未入選的加派對者)
+      source: r[22] || 'tigerai',  // 來源
     })).reverse(),
   });
 }
