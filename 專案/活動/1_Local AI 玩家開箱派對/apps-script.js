@@ -646,7 +646,7 @@ function sendSignupConfirmEmail_(data) {
         `<img src="${qrUrl}" alt="折抵券 QR" width="200" height="200" style="display:block;border:1px solid #FF2EA6;padding:4px;background:#12121E;" />
          <div style="margin-top:8px;color:#FF2EA6;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:1.5px;">${data.discount_code}</div>`],
       ['使用方式', 'OOPS 晚上派對結帳時出示此 QR Code · 現折 <strong>NT$100</strong>'],
-      ['派對時間', '18:00–20:00 · 白天活動結束後接著'],
+      ['派對時間', '17:00–20:00 · 白天活動結束後接著'],
       ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用 10 字代碼報身份'],
     ]});
   } else {
@@ -694,7 +694,7 @@ function sendSpeakerSubmitEmail_(data) {
         `<img src="${qrUrl}" alt="折抵券 QR" width="200" height="200" style="display:block;border:1px solid #FF2EA6;padding:4px;background:#12121E;" />
          <div style="margin-top:8px;color:#FF2EA6;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:1.5px;">${data.discount_code}</div>`],
       ['使用方式', 'OOPS 晚上派對結帳時出示此 QR Code · 現折 <strong>NT$100</strong>'],
-      ['派對時間', '18:00–20:00 · 白天活動結束後接著'],
+      ['派對時間', '17:00–20:00 · 白天活動結束後接著'],
       ['備註', '若入選精選講者 · 本折抵券自動升級為「免費入場券」· 以入選信新發的 QR 為準。QR 刷不到請用 10 字代碼報身份'],
     ]});
   } else {
@@ -737,7 +737,7 @@ function sendSpeakerFeaturedEmail_(data) {
       ['QR Code',
         `<img src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(data.ticket)}&margin=12&bgcolor=12121E&color=00FF88&qzone=1" alt="入場券 QR" width="200" height="200" style="display:block;border:1px solid #00FF88;padding:4px;background:#12121E;" />
          <div style="margin-top:8px;color:#00FF88;font-family:'JetBrains Mono',Consolas,monospace;font-size:14px;letter-spacing:2px;">${data.ticket}</div>`],
-      ['使用方式', '現場出示此 QR Code · <strong style="color:#00FF88">免費</strong>加入 OOPS 晚上派對(18:00–20:00)'],
+      ['使用方式', '現場出示此 QR Code · <strong style="color:#00FF88">免費</strong>加入 OOPS 晚上派對(17:00–20:00)'],
       ['折抵券升級', '如您投稿時曾收到 DISC-xxxxxxxx 的 NT$100 折抵券 · <strong>以此免費入場券為準 · 原折抵券作廢</strong>'],
       ['備註', '原價待 OOPS 公告 · 本券完全免費兌換 · QR 刷不到請用下方 10 字代碼報身份'],
     ]},
