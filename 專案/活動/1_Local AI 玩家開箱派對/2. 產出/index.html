@@ -147,6 +147,30 @@ code, .mono { font-family: var(--mono); }
   padding-top: 12px;
   padding-bottom: 12px;
 }
+/* top bar 主辦 × 合辦 LOGO 對(取代原本的 ./派對程式.sh terminal 字串)*/
+.topbar .brand-pair{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.topbar .brand-pair img{
+  height: 22px;
+  max-width: 130px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+.topbar .brand-pair .brand-x{
+  color: var(--cyan);
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 0.55;
+}
+@media (max-width: 720px){
+  .topbar .brand-pair img{ height: 18px; max-width: 100px; }
+  .topbar .brand-pair{ gap: 10px; }
+}
 .topbar .term{
   color: var(--text-mid);
   white-space: nowrap;
@@ -1530,7 +1554,7 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
 }
 .partners-row{
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -2282,11 +2306,10 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
 <!-- ═══════════════ TOP BAR ═══════════════ -->
 <div class="topbar">
   <div class="wrap">
-    <div class="term">
-      <span class="prompt">&gt;</span>
-      <span lang="zh"> ./派對程式.sh --日期=2026-11-04 --地點=台北</span>
-      <span lang="en"> ./local_ai_party.sh --date=2026-11-04 --venue=taipei</span>
-      <span class="cursor"></span>
+    <div class="brand-pair">
+      <img src="虎智科技Logo_白色橫式純英Logo.svg" alt="虎智科技 TigerAI" />
+      <span class="brand-x">×</span>
+      <img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" />
     </div>
     <nav>
       <a href="#about"><span lang="zh">關於</span><span lang="en">About</span></a>
@@ -2919,11 +2942,12 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <span class="k"><span lang="zh">// 協辦單位</span><span lang="en">// CO_ORGANIZERS</span></span>
     </div>
     <div class="partners-row">
-      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
       <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
       <div class="p"><img src="assets/無界聯盟.webp" alt="無界聯盟" /></div>
+      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
       <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
       <div class="p"><img src="assets/vbim LOGO.png" alt="vbim" /></div>
+      <div class="p"><img src="assets/12(1).png" alt="協辦夥伴" /></div>
     </div>
   </div>
 </section>
@@ -2940,7 +2964,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
         <span lang="zh">
           &gt; powered_by: 虎智科技 TigerAI<br />
-          &gt; in_collab: Ai4 NEXT × TUL × 無界聯盟 × OOPS × vbim
+          &gt; in_collab: TUL × 無界聯盟 × Ai4 NEXT × OOPS × vbim × +1
         </span>
         <span lang="en">
           &gt; powered_by: TigerAI<br />
