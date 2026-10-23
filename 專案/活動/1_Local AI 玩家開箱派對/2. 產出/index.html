@@ -1551,15 +1551,12 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   opacity: 0.75;
   transition: opacity 0.2s;
 }
-/* Ai4 NEXT 原檔 LOGO 本身留白較多 · 視覺上看起來比別人小 · 單獨放大 */
-.partners-row .p img[alt="Ai4 NEXT"]{ max-height: 58px; }
 .partners-row .p:hover img{ opacity: 1; }
 /* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
 @media (max-width: 720px){
   .partners-row{ grid-template-columns: repeat(3, 1fr); }
   .partners-row .p{ padding: 14px 8px; min-height: 72px; }
   .partners-row .p img{ max-height: 36px; }
-  .partners-row .p img[alt="Ai4 NEXT"]{ max-height: 50px; }
 }
 @media (max-width: 420px){
   .partners-row{ grid-template-columns: repeat(2, 1fr); }
@@ -2922,10 +2919,10 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <span class="k"><span lang="zh">// 協辦單位</span><span lang="en">// CO_ORGANIZERS</span></span>
     </div>
     <div class="partners-row">
+      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
       <div class="p"><img src="assets/TUL logo.png" alt="TUL" /></div>
       <div class="p"><img src="assets/無界聯盟.webp" alt="無界聯盟" /></div>
       <div class="p"><img src="assets/OOPS LOGO.png" alt="OOPS" /></div>
-      <div class="p"><img src="assets/Ai4 NEXT LOGO.png" alt="Ai4 NEXT" /></div>
       <div class="p"><img src="assets/vbim LOGO.png" alt="vbim" /></div>
     </div>
   </div>
@@ -2943,7 +2940,7 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
       <p style="margin-top: 20px; font-family: var(--mono); font-size: 11px; color: var(--text-dim)">
         <span lang="zh">
           &gt; powered_by: 虎智科技 TigerAI<br />
-          &gt; in_collab: TUL × 無界聯盟 × OOPS × Ai4 NEXT × vbim
+          &gt; in_collab: Ai4 NEXT × TUL × 無界聯盟 × OOPS × vbim
         </span>
         <span lang="en">
           &gt; powered_by: TigerAI<br />
