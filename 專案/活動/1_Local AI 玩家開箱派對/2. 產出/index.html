@@ -1577,14 +1577,14 @@ html[data-lang="en"] .speaker-card .cover.empty::after{ content: 'NO COVER'; }
   transition: opacity 0.2s;
 }
 /* 第 6 個協辦 LOGO 原檔外圍留白較多 · 看起來偏小 · 單獨放大視覺平衡 */
-.partners-row .p img[alt="協辦夥伴"]{ max-height: 62px; }
+.partners-row .p img[alt="協辦夥伴"]{ max-height: 74px; }
 .partners-row .p:hover img{ opacity: 1; }
 /* 窄螢幕退讓 · 保證桌機 5 排一行 · 手機自動換 2 行 */
 @media (max-width: 720px){
   .partners-row{ grid-template-columns: repeat(3, 1fr); }
   .partners-row .p{ padding: 14px 8px; min-height: 72px; }
   .partners-row .p img{ max-height: 36px; }
-  .partners-row .p img[alt="協辦夥伴"]{ max-height: 54px; }
+  .partners-row .p img[alt="協辦夥伴"]{ max-height: 65px; }
 }
 @media (max-width: 420px){
   .partners-row{ grid-template-columns: repeat(2, 1fr); }
