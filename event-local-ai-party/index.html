@@ -4172,6 +4172,18 @@ async function loadFeaturedSpeakers() {
       && !String(s.public_name).startsWith('#')
     );
 
+    // 排序：依 Sheet 的 sort_order 欄位(數字小的在前) · 空值放最後 · 同值保持原序
+    featured.sort((a, b) => {
+      const ao = parseInt(a.sort_order, 10);
+      const bo = parseInt(b.sort_order, 10);
+      const aHas = !Number.isNaN(ao);
+      const bHas = !Number.isNaN(bo);
+      if (aHas && bHas) return ao - bo;
+      if (aHas) return -1;
+      if (bHas) return 1;
+      return 0;
+    });
+
     // 更新計數
     if (nEl)   nEl.textContent = `${featured.length} / 10`;
     const left = Math.max(0, 10 - featured.length);
