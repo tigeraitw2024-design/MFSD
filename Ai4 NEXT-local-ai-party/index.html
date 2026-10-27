@@ -3282,6 +3282,22 @@ html[data-lang="en"] [lang="zh"].block { display: none; }
           </select>
         </div>
         <div class="field full">
+          <label><span lang="zh">推薦人(選填)</span><span lang="en">Referred by (optional)</span></label>
+          <select name="referrer" onchange="toggleReferrerOther_(this)">
+            <option value="">— 無</option>
+            <option>TigerAI 虎智科技</option>
+            <option>TUL 撼訊科技</option>
+            <option>無界聯盟</option>
+            <option>Ai4 NEXT</option>
+            <option>OOPS</option>
+            <option>Aiii VBIM</option>
+            <option>CHINATOWN</option>
+            <option>元宇宙在臺協會</option>
+            <option value="__other"><span lang="zh">其他(自行輸入)</span><span lang="en">Other (type below)</span></option>
+          </select>
+          <input type="text" name="referrer_other" placeholder="請輸入推薦人姓名 / 單位" style="display:none;margin-top:10px;" />
+        </div>
+        <div class="field full">
           <label class="chk">
             <input type="checkbox" name="afterparty" value="yes" />
             <div>
@@ -3732,6 +3748,9 @@ async function submitForm(formEl, action, statusEl, successMsg, autoCloseMs = 30
   data.action = action;
   data._ua = navigator.userAgent;
   data.source = CONFIG.SITE_SOURCE || 'tigerai';
+  // 推薦人:若選「其他」· 用自行輸入的字串覆蓋 · 否則就是下拉選項文字
+  if (data.referrer === '__other') data.referrer = (data.referrer_other || '').trim();
+  delete data.referrer_other;
   const btn = formEl.querySelector('.btn-submit');
   btn.disabled = true;
   const originalText = btn.textContent;
@@ -3822,6 +3841,15 @@ function renderAdminStats(stats) {
   document.getElementById('stat-featured').textContent   = stats.featured_count ?? 0;
 }
 
+/* 推薦人下拉選到「其他」才顯示手填 input */
+function toggleReferrerOther_(sel) {
+  const other = sel.parentNode.querySelector('[name="referrer_other"]');
+  if (!other) return;
+  const isOther = sel.value === '__other';
+  other.style.display = isOther ? 'block' : 'none';
+  if (!isOther) other.value = '';
+}
+
 function sourceTag_(src) {
   if (src === 'ai4next') return '<span style="padding:2px 8px;background:var(--green);color:#000;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.08em;margin-left:8px;">AI4 NEXT</span>';
   return '<span style="padding:2px 8px;background:var(--cyan);color:#000;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.08em;margin-left:8px;">TIGERAI</span>';
@@ -3840,6 +3868,7 @@ function renderAdminSignups(list) {
       <div class="meta">${escapeHtmlA(r.email || '')} · ${escapeHtmlA(r.phone || '')}</div>
       ${(r.company || r.role) ? `<div class="meta">${escapeHtmlA(r.company || '')} ${r.role ? '· ' + escapeHtmlA(r.role) : ''}</div>` : ''}
       ${r.interest ? `<div class="meta" style="color:var(--text-dim)">想得到:${escapeHtmlA(r.interest)}</div>` : ''}
+      ${r.referrer ? `<div class="meta" style="color:var(--magenta)">推薦人:${escapeHtmlA(r.referrer)}</div>` : ''}
       ${r.discount ? `<div class="ticket" style="color:var(--magenta);border-color:var(--magenta)">🎫 ${escapeHtmlA(r.discount)}</div>` : ''}
     </div>
   `).join('') + '</div>';

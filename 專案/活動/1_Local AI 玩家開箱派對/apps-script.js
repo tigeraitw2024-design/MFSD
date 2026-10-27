@@ -53,7 +53,8 @@ const SIGNUP_HEADERS = [
   '最想得到', '加報晚上派對',
   '折抵券',        // 第 9 欄 · 加報派對時自動生成(DISC-XXXXXXXX)· 現場 QR 掃碼
   '寄信狀態', 'UA/備註',
-  '來源'           // 第 12 欄 · tigerai = 從虎智站 · ai4next = 從 Ai4 NEXT 站
+  '來源',          // 第 12 欄 · tigerai = 從虎智站 · ai4next = 從 Ai4 NEXT 站
+  '推薦人'         // 第 13 欄 · 下拉選 or 自行輸入 · 選填
 ];
 
 const SUBMIT_HEADERS = [
@@ -221,6 +222,7 @@ function handleSignup_(data) {
     '寄信中',              // 第 10 欄 · 寄信狀態
     (data._ua || '').slice(0, 200),  // 第 11 欄 · UA
     data.source || 'tigerai',        // 第 12 欄 · 來源
+    data.referrer || '',             // 第 13 欄 · 推薦人
   ];
   const before = sh.getLastRow();
   sh.appendRow(row);
@@ -523,6 +525,7 @@ function handleAdminDashboard_(data) {
       afterparty: r[7] === '✓',
       discount: r[8] || '',    // 折抵券代碼
       source: r[11] || 'tigerai',  // 來源 · tigerai / ai4next
+      referrer: r[12] || '',   // 推薦人
     })).reverse(),
     submits: tData.map((r, i) => ({
       row: i + 2,
