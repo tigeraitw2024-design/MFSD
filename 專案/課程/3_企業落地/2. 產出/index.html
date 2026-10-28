@@ -1516,10 +1516,7 @@ const CONFIG = {
 };
 
 // 讀不到 CSV 時的佔位(用實際 2 梯次)
-const COHORTS_FALLBACK = [
-  { city: '新竹', date: '9月30日 · 10月1日 · 10月6日 · 10月7日', time: '另行通知', location: '新竹縣工業會 · 竹北市縣政八街 77 號 101 會議室', capacity: 30 },
-  { city: '台中', date: '10月13日 · 10月14日 · 10月22日 · 10月23日', time: '另行通知', location: '工研院台中學習中心 4F R401 · 大雅區中科路 6 號', capacity: 30 }
-];
+const COHORTS_FALLBACK = [];
 const REG_CUTOFF_DAYS = 0;
 
 // ══════════════════════ 統編:只格式限制 ══════════════════════
@@ -1679,6 +1676,14 @@ function renderCohorts(cohorts, counts) {
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+  if (!cohorts || cohorts.length === 0) {
+    list.innerHTML = '<div style="padding:40px 24px;text-align:center;opacity:0.75;font-size:14px;line-height:1.9;">目前暫無開放報名的梯次 · 請洽窗口 <strong style="opacity:1;">Robin · 0911-436-467</strong> 或 <a href="mailto:tiger.ai.tw@gmail.com" style="color:inherit;text-decoration:underline;">tiger.ai.tw@gmail.com</a></div>';
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— 目前無開放梯次 —'; opt.disabled = true;
+    select.appendChild(opt);
+    return;
+  }
+
 
   const normCounts = {};
   Object.keys(counts).forEach(k => {

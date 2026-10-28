@@ -1311,9 +1311,7 @@ const CONFIG = {
   COHORTS_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaWi-qfyTMTiDRlBur2vDshdFS6I1Wq0Qd5WyVOHYhfjqFJQjbW7Sibed7T8LYgfWBkx82TTiFVdPd/pub?gid=0&single=true&output=csv'
 };
 
-const COHORTS_FALLBACK = [
-  { city: '場次待公布', date: '日期待公布', time: '時間待公布', location: '地點待公布', capacity: 30 }
-];
+const COHORTS_FALLBACK = [];
 const REG_CUTOFF_DAYS = 0;
 
 // ── 統編:輸入時自動過濾非數字並限 8 碼(必填) ──
@@ -1518,6 +1516,14 @@ function renderCohorts(cohorts, counts) {
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+  if (!cohorts || cohorts.length === 0) {
+    list.innerHTML = '<div style="padding:40px 24px;text-align:center;opacity:0.75;font-size:14px;line-height:1.9;">目前暫無開放報名的梯次 · 請洽窗口 <strong style="opacity:1;">Robin · 0911-436-467</strong> 或 <a href="mailto:tiger.ai.tw@gmail.com" style="color:inherit;text-decoration:underline;">tiger.ai.tw@gmail.com</a></div>';
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— 目前無開放梯次 —'; opt.disabled = true;
+    select.appendChild(opt);
+    return;
+  }
+
 
   const normCounts = {};
   Object.keys(counts).forEach(k => {

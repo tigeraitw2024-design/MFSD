@@ -2681,9 +2681,7 @@ const CONFIG = {
 };
 
 // ── 開課梯次：讀不到 CSV 時的佔位資料 ──
-const COHORTS_FALLBACK = [
-  { city: '縣市待定', date: '日期待定', time: '時間待定', location: '地點待定', capacity: 20 }
-];
+const COHORTS_FALLBACK = [];
 
 // 報名截止：開課當天起停止報名（前一天 23:59 仍可報）
 const REG_CUTOFF_DAYS = 0;
@@ -2812,6 +2810,14 @@ function renderCohorts(cohorts, counts) {
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+  if (!cohorts || cohorts.length === 0) {
+    list.innerHTML = '<div style="padding:40px 24px;text-align:center;opacity:0.75;font-size:14px;line-height:1.9;">目前暫無開放報名的梯次 · 請洽窗口 <strong style="opacity:1;">Robin · 0911-436-467</strong> 或 <a href="mailto:tiger.ai.tw@gmail.com" style="color:inherit;text-decoration:underline;">tiger.ai.tw@gmail.com</a></div>';
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— 目前無開放梯次 —'; opt.disabled = true;
+    select.appendChild(opt);
+    return;
+  }
+
 
   // 把後端回傳的報名人數正規化：key 內的日期格式不同也能對到同一梯次
   const normCounts = {};

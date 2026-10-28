@@ -1563,9 +1563,7 @@ const CONFIG = {
 };
 const REG_CUTOFF_DAYS = 3;
 
-const COHORTS_FALLBACK = [
-  { city: '嘉義', date: '11月9日~11月17日(四日)', time: '每日 09:00-17:30 · 共 30h', location: '嘉義市西區國華街 245 號 5 樓', soloInstructor: '', soloTopic: '', capacity: 30 }
-];
+const COHORTS_FALLBACK = [];
 
 // ── 統編 · 必填 · 自動濾非數字並限 8 碼 ──
 const taxIdInput = document.getElementById('f_taxId');
@@ -1728,6 +1726,14 @@ function renderCohorts(cohorts, counts) {
   const select = document.getElementById('f_cohort');
   list.innerHTML = '';
   select.querySelectorAll('option:not([value=""])').forEach(o => o.remove());
+  if (!cohorts || cohorts.length === 0) {
+    list.innerHTML = '<div style="padding:40px 24px;text-align:center;opacity:0.75;font-size:14px;line-height:1.9;">目前暫無開放報名的梯次 · 請洽窗口 <strong style="opacity:1;">Robin · 0911-436-467</strong> 或 <a href="mailto:tiger.ai.tw@gmail.com" style="color:inherit;text-decoration:underline;">tiger.ai.tw@gmail.com</a></div>';
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = '— 目前無開放梯次 —'; opt.disabled = true;
+    select.appendChild(opt);
+    return;
+  }
+
 
   const normCounts = {};
   Object.keys(counts).forEach(k => {
